@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Instead Launcher</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_update_repo">Обновить репозиторий</string>
+
+    <string name="repository_activity_title">Добавить игру</string>
+    <string name="repository_not_updated">Список игр пуст. Нажмите на кнопку Обновить.</string>
+
+    <string name="game_activity_title">Игра</string>
+    <string name="game_activity_button_install">Установить</string>
+    <string name="game_activity_button_uninstall">Удалить</string>
+    <string name="game_activity_button_update">Обновить</string>
+    <string name="game_activity_button_run">Играть</string>
+    <string name="game_activity_label_author">Автор: %s</string>
+    <string name="game_activity_label_version">Версия: %d</string>
+    <string name="game_activity_label_size">Размер: %s</string>
+
+    <string name="notification_download_and_install_game">Скачиваю игру, подождите&#8230;</string>
+    <string name="notification_delete_game">Удаляю игру, подождите&#8230;</string>
+    <string name="notification_updating_repository">Обновляю репозиторий, подождите&#8230;</string>
+
+    <string name="channel_install_game">Установка игр</string>
+    <string name="channel_delete_game">Удаление игр</string>
+    <string name="channel_update_repo">Обновление репозитория</string>
+
+    <string name="error">Ошибка</string>
+</resources>

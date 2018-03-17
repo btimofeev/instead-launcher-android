@@ -1,0 +1,47 @@
+package org.emunix.insteadlauncher.helpers
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import com.squareup.picasso.Picasso
+import org.apache.commons.io.IOUtils
+import java.io.File
+import java.util.zip.ZipFile
+import java.io.BufferedOutputStream
+import java.io.FileOutputStream
+import java.util.zip.ZipException
+
+
+fun ViewGroup.inflate(layoutRes: Int): View {
+    return LayoutInflater.from(context).inflate(layoutRes, this, false)
+}
+
+fun ImageView.loadUrl(url: String) {
+    Picasso.with(context).load(url).into(this)
+}
+
+fun View.visible(visible: Boolean) {
+    if (visible)
+        this.visibility = View.VISIBLE
+    else
+        this.visibility = View.GONE
+}
+
+@Throws (ZipException::class)
+fun File.unzip(dir: File) {
+    val zip = ZipFile(this)
+    val entries = zip.entries()
+    while (entries.hasMoreElements()) {
+        val entry = entries.nextElement()
+        if (entry.isDirectory) {
+            File(dir, entry.name).mkdirs()
+        } else {
+            val fos = FileOutputStream(File(dir, entry.name))
+            val bos = BufferedOutputStream(fos)
+            IOUtils.copy(zip.getInputStream(entry), bos)
+            IOUtils.closeQuietly(bos, fos)
+        }
+    }
+    IOUtils.closeQuietly(zip)
+}

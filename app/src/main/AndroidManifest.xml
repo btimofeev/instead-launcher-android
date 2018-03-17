@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="org.emunix.insteadlauncher">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name=".InsteadLauncher"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="org.emunix.insteadlauncher.ui.installedgames.InstalledGamesActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="org.emunix.insteadlauncher.ui.repository.RepositoryActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <service android:name=".services.UpdateRepository"/>
+        <service android:name=".services.InstallGame"/>
+        <service android:name=".services.DeleteGame"/>
+
+        <activity
+            android:name="org.emunix.insteadlauncher.ui.game.GameActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+    </application>
+
+</manifest>
