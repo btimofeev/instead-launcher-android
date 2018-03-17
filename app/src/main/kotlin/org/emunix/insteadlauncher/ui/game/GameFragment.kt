@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_game.*
+import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.loadUrl
@@ -49,17 +50,19 @@ class GameFragment : Fragment() {
         activity.supportActionBar?.title = game.title
 
         name.text = game.title
-        author.text = getString(R.string.game_activity_label_author, game.author)
-        version.text = game.version
+        author.text = game.author
+        version.text = getString(R.string.game_activity_label_version, game.version)
+        size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
         image.loadUrl(game.image)
         description.text = game.description
 
         if (game.installed) {
-            installButton.text = getText(R.string.game_activity_button_uninstall)
-            runButton.visible(true)
+            installButton.text = getText(R.string.game_activity_button_run)
+            deleteButton.visible(true)
+            progressBar.visible(false)
         } else {
             installButton.text = getText(R.string.game_activity_button_install)
-            runButton.visible(false)
+            deleteButton.visible(false)
         }
 
         installButton.setOnClickListener({
@@ -68,7 +71,14 @@ class GameFragment : Fragment() {
                 installGame.putExtra("game_url", game.url)
                 installGame.putExtra("game_name", game.name)
                 activity.startService(installGame)
+                progressBar.visible(true)
             } else {
+                // todo run game
+            }
+        })
+
+        deleteButton.setOnClickListener({
+            if (game.installed) {
                 val deleteGame = Intent(activity, DeleteGame::class.java)
                 deleteGame.putExtra("game_name", game.name)
                 activity.startService(deleteGame)

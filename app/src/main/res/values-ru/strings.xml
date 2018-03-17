@@ -12,7 +12,7 @@
     <string name="game_activity_button_update">Обновить</string>
     <string name="game_activity_button_run">Играть</string>
     <string name="game_activity_label_author">Автор: %s</string>
-    <string name="game_activity_label_version">Версия: %d</string>
+    <string name="game_activity_label_version">Версия: %s</string>
     <string name="game_activity_label_size">Размер: %s</string>
 
     <string name="notification_download_and_install_game">Скачиваю игру, подождите&#8230;</string>

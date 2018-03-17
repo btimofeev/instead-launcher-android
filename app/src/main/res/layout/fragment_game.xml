@@ -3,12 +3,22 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".ui.game.GameFragment">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/name"
@@ -17,44 +27,97 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_weight="1"
             android:text="name"
             android:textAllCaps="false"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:textStyle="bold"
+            android:textAppearance="@android:style/TextAppearance.Material.Headline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image"/>
 
         <ImageView
-            android:id="@+id/image"
-            android:layout_width="0dp"
+            android:id="@+id/authorImage"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="8dp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:srcCompat="@drawable/ic_account_circle_red_24dp"
+            />
 
         <TextView
             android:id="@+id/author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
             android:text="@string/game_activity_label_author"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1"
+            app:layout_constraintBottom_toBottomOf="@+id/authorImage"
+            app:layout_constraintStart_toEndOf="@+id/authorImage"
+            app:layout_constraintTop_toTopOf="@+id/authorImage"/>
+
+        <ImageView
+            android:id="@+id/versionImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name"/>
+            app:layout_constraintTop_toBottomOf="@+id/authorImage"
+            app:srcCompat="@drawable/ic_file_compare_blue_24dp"/>
 
         <TextView
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/game_activity_label_version"
+            app:layout_constraintBottom_toBottomOf="@+id/versionImage"
+            app:layout_constraintStart_toEndOf="@+id/versionImage"
+            app:layout_constraintTop_toTopOf="@+id/versionImage"/>
+
+        <ImageView
+            android:id="@+id/sizeImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/versionImage"
+            app:layout_constraintStart_toEndOf="@+id/version"
+            app:layout_constraintTop_toTopOf="@+id/versionImage"
+            app:srcCompat="@drawable/ic_math_compass_purple_24dp"/>
+
+        <TextView
+            android:id="@+id/size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/game_activity_label_size"
+            app:layout_constraintBottom_toBottomOf="@+id/sizeImage"
+            app:layout_constraintStart_toEndOf="@+id/sizeImage"
+            app:layout_constraintTop_toTopOf="@+id/sizeImage"/>
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/game_activity_button_uninstall"
+            android:theme="@style/AppTheme.ColoredButton.Accent"
+            android:visibility="gone"
+            app:layout_constraintBaseline_toBaselineOf="@+id/installButton"
+            app:layout_constraintEnd_toStartOf="@+id/installButton"/>
+
+        <Button
+            android:id="@+id/installButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:text="version"
-            app:layout_constraintBaseline_toBaselineOf="@+id/author"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:layout_marginTop="8dp"
+            android:text="@string/game_activity_button_install"
+            android:theme="@style/AppTheme.ColoredButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/versionImage"/>
 
         <TextView
             android:id="@+id/description"
@@ -63,32 +126,26 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/installButton"/>
 
-        <Button
-            android:id="@+id/installButton"
-            android:layout_width="wrap_content"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:text="@string/game_activity_button_install"
-            app:layout_constraintBaseline_toBaselineOf="@+id/runButton"
-            app:layout_constraintEnd_toStartOf="@+id/runButton"/>
-
-        <Button
-            android:id="@+id/runButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/game_activity_button_run"
+            android:layout_marginStart="16dp"
+            android:indeterminate="true"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/version"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/installButton"/>
+
 
     </android.support.constraint.ConstraintLayout>
 
