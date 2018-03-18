@@ -45,3 +45,13 @@ fun File.unzip(dir: File) {
     }
     IOUtils.closeQuietly(zip)
 }
+
+//todo переписать когда-нибудь
+fun String.unescapeHtmlCodes(): String {
+    var s = this.replace("&lt;", "<")
+    s = s.replace("&gt;", ">")
+    s = s.replace("&#039;", "\'")
+    s = s.replace("&quot;", "\"")
+    s = s.replace("&amp;", "&")
+    return s
+}
