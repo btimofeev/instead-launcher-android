@@ -99,6 +99,6 @@ class InstallGame: IntentService("InstallGame") {
         val game = InsteadLauncher.gamesDB.gameDao().getGameByName(name)
         game.installedVersion = game.version
         game.installed = true
-        InsteadLauncher.gamesDB.gameDao().insert(game)
+        InsteadLauncher.gamesDB.gameDao().update(game)
     }
 }

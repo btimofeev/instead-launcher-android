@@ -62,6 +62,6 @@ class DeleteGame: IntentService("DeleteGame") {
         val game = InsteadLauncher.gamesDB.gameDao().getGameByName(name)
         game.installedVersion = ""
         game.installed = false
-        InsteadLauncher.gamesDB.gameDao().insert(game)
+        InsteadLauncher.gamesDB.gameDao().update(game)
     }
 }

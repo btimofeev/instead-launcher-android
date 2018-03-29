@@ -45,6 +45,7 @@ class UpdateRepository: IntentService("UpdateRepository") {
 
         val games: List<Game> = parseXML(xml)
 
+        InsteadLauncher.gamesDB.gameDao().deleteAll()
         InsteadLauncher.gamesDB.gameDao().insertAll(games)
 
         stopForeground(true)

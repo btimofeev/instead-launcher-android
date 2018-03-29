@@ -24,6 +24,12 @@ interface GameDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(games: List<Game>)
 
+    @Update
+    fun update(game: Game)
+
     @Delete
     fun delete(game: Game)
+
+    @Query("DELETE FROM games")
+    fun deleteAll()
 }
