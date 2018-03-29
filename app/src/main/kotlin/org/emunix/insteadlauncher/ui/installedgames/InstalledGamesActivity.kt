@@ -1,7 +1,6 @@
 package org.emunix.insteadlauncher.ui.installedgames
 
 import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,22 +9,17 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
-import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_installed_games.*
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
-import org.emunix.insteadlauncher.ui.repository.RepositoryView
 
 
-class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner, RepositoryView {
-
-    private val mRegistry = LifecycleRegistry(this)
-
-    override fun getLifecycle(): LifecycleRegistry = mRegistry
+class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +39,7 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner, RepositoryVi
                         //todo show empty view
                     } else
                         list.adapter = InstalledGamesAdapter(games){
-                            showError("Представь, что игра запустилась")
+                            showToast("Представь, что игра запустилась")
 //                            val intent = Intent(this, GameActivity::class.java)
 //                            val gameName = it.name
 //                            intent.putExtra("game_name", gameName)
@@ -69,22 +63,6 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner, RepositoryVi
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun setLoadingIndicator(isActive: Boolean) {
-
-    }
-
-    override fun showGames(games: List<Game>) {
-
-    }
-
-    override fun showError(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-    }
-
-    override fun showEmptyView(isActive: Boolean) {
-
     }
 
     /**

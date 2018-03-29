@@ -1,9 +1,11 @@
 package org.emunix.insteadlauncher.helpers
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -26,6 +28,10 @@ fun View.visible(visible: Boolean) {
         this.visibility = View.VISIBLE
     else
         this.visibility = View.GONE
+}
+
+fun Context.showToast(msg: String, length: Int = Toast.LENGTH_LONG) {
+    Toast.makeText(this, msg, length).show()
 }
 
 @Throws (ZipException::class)
