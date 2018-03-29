@@ -7,7 +7,7 @@ import io.reactivex.Flowable
 @Dao
 interface GameDao {
     @Query("SELECT * FROM games")
-    fun getAll(): Flowable<List<Game>>
+    fun getAll(): LiveData<List<Game>>
 
     @Query("SELECT * FROM games WHERE name LIKE :name LIMIT 1")
     fun getByName(name: String): LiveData<Game>
