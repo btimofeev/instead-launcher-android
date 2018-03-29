@@ -60,6 +60,7 @@ class GameFragment : Fragment() {
             installButton.text = getText(R.string.game_activity_button_run)
             deleteButton.visible(true)
             progressBar.visible(false)
+            installMessage.visible(false)
         } else {
             installButton.text = getText(R.string.game_activity_button_install)
             deleteButton.visible(false)
@@ -72,6 +73,7 @@ class GameFragment : Fragment() {
                 installGame.putExtra("game_name", game.name)
                 activity.startService(installGame)
                 progressBar.visible(true)
+                installMessage.visible(true)
             } else {
                 // todo run game
             }
