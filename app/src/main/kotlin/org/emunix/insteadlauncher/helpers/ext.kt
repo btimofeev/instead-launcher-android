@@ -20,7 +20,7 @@ fun ViewGroup.inflate(layoutRes: Int): View {
 }
 
 fun ImageView.loadUrl(url: String) {
-    Picasso.with(context).load(url).into(this)
+    Picasso.get().load(url).into(this)
 }
 
 fun View.visible(visible: Boolean) {
