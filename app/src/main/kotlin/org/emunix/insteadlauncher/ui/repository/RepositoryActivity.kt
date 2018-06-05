@@ -20,6 +20,7 @@ class RepositoryActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.repository_activity_title)
 
         viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
+        viewModel.init()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

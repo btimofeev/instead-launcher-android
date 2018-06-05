@@ -30,7 +30,7 @@ class RepositoryFragment : Fragment() {
         val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
         list.addItemDecoration(dividerItemDecoration)
 
-        viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(RepositoryViewModel::class.java)
 
         viewModel.getGames().observe(this, Observer { games ->
             showEmptyView(true)
@@ -47,11 +47,10 @@ class RepositoryFragment : Fragment() {
             }
         })
 
-        viewModel.getProgressState().observe(this, Observer { value ->
-            if (value != null) {
-                progress.visible(value)
-            } else {
-                progress.visible(false)
+        viewModel.getProgressState().observe(this, Observer { state ->
+            if (state != null) {
+                progress.visible(state)
+
             }
         })
     }

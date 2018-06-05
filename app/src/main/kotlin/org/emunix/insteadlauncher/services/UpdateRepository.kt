@@ -11,7 +11,9 @@ import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UPDATE_REPOS
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UPDATE_REPOSITORY_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.InsteadGamesXMLParser
+import org.emunix.insteadlauncher.helpers.RxBus
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
 import java.io.IOException
 
@@ -26,6 +28,8 @@ class UpdateRepository: IntentService("UpdateRepository") {
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+        RxBus.publish(UpdateRepoEvent(true))
+
         val notification = NotificationCompat.Builder(this, CHANNEL_UPDATE_REPOSITORY)
                 .setContentTitle(getText(R.string.app_name))
                 .setContentText(getText(R.string.notification_updating_repository))
@@ -39,7 +43,8 @@ class UpdateRepository: IntentService("UpdateRepository") {
         try {
             xml = fetchXML()
         } catch (e: IOException) {
-            // TODO show error
+            // TODO show better error
+            RxBus.publish(UpdateRepoEvent(false, true, e.localizedMessage))
             return
         }
 
@@ -47,6 +52,8 @@ class UpdateRepository: IntentService("UpdateRepository") {
 
         InsteadLauncher.gamesDB.gameDao().deleteAll()
         InsteadLauncher.gamesDB.gameDao().insertAll(games)
+
+        RxBus.publish(UpdateRepoEvent(false))
 
         stopForeground(true)
     }
