@@ -74,7 +74,7 @@ class InsteadGamesXMLParser {
         }
         gTitle = gTitle.unescapeHtmlCodes()
         gDescription = gDescription.unescapeHtmlCodes()
-        return Game(gName, gTitle, gAuthor, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl, false, "")
+        return Game(gName, gTitle, gAuthor, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl,"", Game.State.NO_INSTALLED)
     }
 
     private fun readTag(tag: String, parser: XmlPullParser): String {

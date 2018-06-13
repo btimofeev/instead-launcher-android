@@ -15,7 +15,7 @@ interface GameDao {
     @Query("SELECT * FROM games WHERE name LIKE :name LIMIT 1")
     fun getGameByName(name: String): Game
 
-    @Query("SELECT * FROM games WHERE installed = 1")
+    @Query("SELECT * FROM games WHERE state = 1")
     fun getInstalledGames(): Flowable<List<Game>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

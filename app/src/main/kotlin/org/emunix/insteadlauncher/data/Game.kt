@@ -17,7 +17,15 @@ data class Game (
         val lang: String,
         val description: String,
         val descurl: String,
-        var installed: Boolean,
         @ColumnInfo(name = "installed_version")
-        var installedVersion: String
-)
+        var installedVersion: String,
+        var state: State
+) {
+    enum class State {
+        NO_INSTALLED,
+        INSTALLED,
+        IS_INSTALL,
+        IS_DELETE,
+        IS_UPDATE
+    }
+}

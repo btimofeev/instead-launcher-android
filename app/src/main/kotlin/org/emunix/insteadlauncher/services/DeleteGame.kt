@@ -10,7 +10,10 @@ import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UNINSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UNINSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.data.Game.State.IS_DELETE
+import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.helpers.StorageHelper
+import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import java.io.File
 import java.io.IOException
@@ -19,6 +22,7 @@ class DeleteGame: IntentService("DeleteGame") {
 
     override fun onHandleIntent(intent: Intent?) {
         val gameName = intent?.getStringExtra("game_name") ?: return
+        val game = InsteadLauncher.gamesDB.gameDao().getGameByName(gameName)
 
         val notificationIntent = Intent(this, GameActivity::class.java)
         notificationIntent.putExtra("game_name", gameName)
@@ -35,11 +39,13 @@ class DeleteGame: IntentService("DeleteGame") {
         startForeground(UNINSTALL_NOTIFICATION_ID, notification)
 
         try {
+            game.saveStateToDB(IS_DELETE)
             val gameDir = File(StorageHelper(this).getGamesDirectory(), gameName)
             gameDir.deleteRecursively()
-            updateDB(gameName)
+            game.saveStateToDB(NO_INSTALLED)
         } catch (e: IOException) {
             sendNotification(getString(R.string.error), e.localizedMessage)
+            game.saveStateToDB(NO_INSTALLED)
             return
         }
 
@@ -56,12 +62,5 @@ class DeleteGame: IntentService("DeleteGame") {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(2, notification.build())
-    }
-
-    private fun updateDB(name: String) {
-        val game = InsteadLauncher.gamesDB.gameDao().getGameByName(name)
-        game.installedVersion = ""
-        game.installed = false
-        InsteadLauncher.gamesDB.gameDao().update(game)
     }
 }

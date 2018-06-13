@@ -11,8 +11,6 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.helpers.StorageHelper
-import org.emunix.insteadlauncher.helpers.unzip
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -20,6 +18,8 @@ import java.util.zip.ZipException
 import android.app.PendingIntent
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_INSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
+import org.emunix.insteadlauncher.data.Game.State.*
+import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.ui.game.GameActivity
 
 
@@ -28,6 +28,7 @@ class InstallGame: IntentService("InstallGame") {
     override fun onHandleIntent(intent: Intent?) {
         val url = intent?.getStringExtra("game_url")
         val gameName = intent?.getStringExtra("game_name") ?: return
+        val game = InsteadLauncher.gamesDB.gameDao().getGameByName(gameName)
 
         val notificationIntent = Intent(this, GameActivity::class.java)
         notificationIntent.putExtra("game_name", gameName)
@@ -45,20 +46,25 @@ class InstallGame: IntentService("InstallGame") {
 
         if (url != null) {
             try {
+                game.saveStateToDB(IS_INSTALL)
                 val zipfile = File(externalCacheDir, extractFilename(url))
                 download(url, zipfile)
                 zipfile.unzip(StorageHelper(this).getGamesDirectory())
                 FileUtils.deleteQuietly(zipfile)
-                updateDB(gameName)
+                game.saveStateToDB(INSTALLED)
+                game.saveInstalledVersionToDB(game.version)
             } catch (e: IndexOutOfBoundsException) {
                 // invalid url (exception from String.substring)
                 sendNotification(getString(R.string.error), "Bad url: $url")
+                game.saveStateToDB(NO_INSTALLED)
                 return
             } catch (e: IOException) {
                 sendNotification(getString(R.string.error), e.localizedMessage)
+                game.saveStateToDB(NO_INSTALLED)
                 return
             } catch (e: ZipException) {
                 sendNotification(getString(R.string.error), e.localizedMessage)
+                game.saveStateToDB(NO_INSTALLED)
                 return
             }
         }
@@ -93,12 +99,5 @@ class InstallGame: IntentService("InstallGame") {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(2, notification.build())
-    }
-
-    private fun updateDB(name: String) {
-        val game = InsteadLauncher.gamesDB.gameDao().getGameByName(name)
-        game.installedVersion = game.version
-        game.installed = true
-        InsteadLauncher.gamesDB.gameDao().update(game)
     }
 }

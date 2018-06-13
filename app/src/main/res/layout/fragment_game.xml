@@ -128,12 +128,26 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:text="description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/installButton"/>
+            />
+
+        <TextView
+            android:id="@+id/installMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/notification_download_and_install_game"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/progressBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/size"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -144,25 +158,11 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:indeterminate="true"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/description"
-            app:layout_constraintEnd_toStartOf="@+id/installButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            />
-
-        <TextView
-            android:id="@+id/installMessage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:text="@string/notification_download_and_install_game"
-            android:textSize="12sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/progressBar"
-            app:layout_constraintEnd_toStartOf="@+id/installButton"
-            app:layout_constraintStart_toStartOf="parent"/>
-
+            app:layout_constraintTop_toBottomOf="@+id/installButton"/>
 
     </android.support.constraint.ConstraintLayout>
 

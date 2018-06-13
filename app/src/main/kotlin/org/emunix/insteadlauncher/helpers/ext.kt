@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.squareup.picasso.Picasso
 import org.apache.commons.io.IOUtils
+import org.emunix.insteadlauncher.InsteadLauncher
+import org.emunix.insteadlauncher.data.Game
 import java.io.File
 import java.util.zip.ZipFile
 import java.io.BufferedOutputStream
@@ -60,4 +62,14 @@ fun String.unescapeHtmlCodes(): String {
     s = s.replace("&quot;", "\"")
     s = s.replace("&amp;", "&")
     return s
+}
+
+fun Game.saveStateToDB(state: Game.State) {
+    this.state = state
+    InsteadLauncher.gamesDB.gameDao().update(this)
+}
+
+fun Game.saveInstalledVersionToDB(version: String) {
+    this.installedVersion = version
+    InsteadLauncher.gamesDB.gameDao().update(this)
 }

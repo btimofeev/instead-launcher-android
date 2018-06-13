@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_game.*
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.data.Game.State.*
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.services.DeleteGame
@@ -56,35 +57,55 @@ class GameFragment : Fragment() {
         image.loadUrl(game.image)
         description.text = game.description
 
-        if (game.installed) {
+        if (game.state == INSTALLED) {
             installButton.text = getText(R.string.game_activity_button_run)
-            deleteButton.visible(true)
+            showProgress(false)
+        }
+
+        if (game.state == NO_INSTALLED) {
+            installButton.text = getText(R.string.game_activity_button_install)
+            installButton.visible(true)
+            deleteButton.visible(false)
             progressBar.visible(false)
             installMessage.visible(false)
-        } else {
-            installButton.text = getText(R.string.game_activity_button_install)
-            deleteButton.visible(false)
+        }
+
+        if (game.state == IS_INSTALL) {
+            installMessage.text = getString(R.string.notification_download_and_install_game)
+            showProgress(true)
+        }
+
+        if (game.state == IS_DELETE) {
+            installMessage.text = getString(R.string.notification_delete_game)
+            showProgress(true)
         }
 
         installButton.setOnClickListener({
-            if (!game.installed) {
+            if (game.state == NO_INSTALLED) {
                 val installGame = Intent(activity, InstallGame::class.java)
                 installGame.putExtra("game_url", game.url)
                 installGame.putExtra("game_name", game.name)
                 activity.startService(installGame)
-                progressBar.visible(true)
-                installMessage.visible(true)
-            } else {
+            }
+
+            if (game.state == INSTALLED) {
                 // todo run game
             }
         })
 
         deleteButton.setOnClickListener({
-            if (game.installed) {
+            if (game.state == INSTALLED) {
                 val deleteGame = Intent(activity, DeleteGame::class.java)
                 deleteGame.putExtra("game_name", game.name)
                 activity.startService(deleteGame)
             }
         })
+    }
+
+    private fun showProgress(flag: Boolean) {
+        installMessage.visible(flag)
+        progressBar.visible(flag)
+        installButton.visible(!flag)
+        deleteButton.visible(!flag)
     }
 }
