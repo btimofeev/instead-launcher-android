@@ -4,7 +4,7 @@ import android.annotation.TargetApi
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import android.content.Context
 import android.os.Build
 import org.emunix.insteadlauncher.data.GameDatabase

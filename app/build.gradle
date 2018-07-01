@@ -4,15 +4,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.0'
     defaultConfig {
         applicationId "org.emunix.insteadlauncher"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "0.0.1"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {
             cmake {
@@ -32,7 +32,7 @@ android {
     }
     externalNativeBuild {
         cmake {
-            path "CMakeLists.txt"
+            path "src/main/cpp/CMakeLists.txt"
         }
     }
     compileOptions {
@@ -42,27 +42,26 @@ android {
 }
 
 dependencies {
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha3', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testImplementation 'junit:junit:4.12'
 
     // Support libraries
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:exifinterface:27.1.1' // todo удалтить эту строку, пока проект не собирается без неё (в какой-то библиотеке определена её старая версия)
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0-alpha3'
+    implementation 'com.google.android.material:material:1.0.0-alpha3'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha3'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.41"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.50"
 
     // Architecture components
-    implementation "android.arch.lifecycle:extensions:1.1.1"
-    kapt "android.arch.lifecycle:compiler:1.1.1"
-    implementation "android.arch.persistence.room:runtime:1.1.1-rc1"
-    kapt "android.arch.persistence.room:compiler:1.1.1-rc1"
-    implementation "android.arch.persistence.room:rxjava2:1.1.1-rc1"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0-alpha1"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0-alpha1"
+    implementation "androidx.room:room-runtime:2.0.0-alpha1"
+    kapt "androidx.room:room-compiler:2.0.0-alpha1"
+    implementation "androidx.room:room-rxjava2:2.0.0-alpha1"
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
@@ -74,10 +73,6 @@ dependencies {
 
     // Files
     implementation 'commons-io:commons-io:2.6'
-}
-
-kapt {
-    generateStubs = true
 }
 
 repositories {

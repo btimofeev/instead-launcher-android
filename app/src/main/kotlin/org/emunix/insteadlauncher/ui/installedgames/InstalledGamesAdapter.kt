@@ -1,9 +1,9 @@
 package org.emunix.insteadlauncher.ui.installedgames
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_repository_list_item.view.*
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game

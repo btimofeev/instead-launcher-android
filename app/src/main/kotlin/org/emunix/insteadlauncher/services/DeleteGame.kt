@@ -5,7 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UNINSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UNINSTALL_NOTIFICATION_ID

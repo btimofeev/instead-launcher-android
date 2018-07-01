@@ -1,14 +1,14 @@
 package org.emunix.insteadlauncher.ui.game
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_game.*
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
@@ -80,7 +80,7 @@ class GameFragment : Fragment() {
             showProgress(true)
         }
 
-        installButton.setOnClickListener({
+        installButton.setOnClickListener {
             if (game.state == NO_INSTALLED) {
                 val installGame = Intent(activity, InstallGame::class.java)
                 installGame.putExtra("game_url", game.url)
@@ -91,15 +91,15 @@ class GameFragment : Fragment() {
             if (game.state == INSTALLED) {
                 // todo run game
             }
-        })
+        }
 
-        deleteButton.setOnClickListener({
+        deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
                 val deleteGame = Intent(activity, DeleteGame::class.java)
                 deleteGame.putExtra("game_name", game.name)
                 activity.startService(deleteGame)
             }
-        })
+        }
     }
 
     private fun showProgress(flag: Boolean) {

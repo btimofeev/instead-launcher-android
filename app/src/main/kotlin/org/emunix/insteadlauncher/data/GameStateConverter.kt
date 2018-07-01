@@ -1,6 +1,6 @@
 package org.emunix.insteadlauncher.data
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 
 class GameStateConverter {
     @TypeConverter

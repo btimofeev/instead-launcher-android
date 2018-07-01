@@ -1,10 +1,10 @@
 package org.emunix.insteadlauncher.ui.repository
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_repository.*
 import org.emunix.insteadlauncher.R
 

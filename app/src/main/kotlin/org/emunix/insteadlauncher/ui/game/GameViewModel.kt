@@ -1,7 +1,7 @@
 package org.emunix.insteadlauncher.ui.game
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.data.Game
 

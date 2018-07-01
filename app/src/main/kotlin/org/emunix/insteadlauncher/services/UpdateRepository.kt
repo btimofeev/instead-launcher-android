@@ -3,7 +3,7 @@ package org.emunix.insteadlauncher.services
 import android.app.IntentService
 import android.app.PendingIntent
 import android.content.Intent
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.emunix.insteadlauncher.InsteadLauncher

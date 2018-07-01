@@ -2,8 +2,8 @@ package org.emunix.insteadlauncher.helpers
 
 import android.content.Context
 import android.os.Environment
+import androidx.core.os.EnvironmentCompat
 import java.io.File
-import android.support.v4.os.EnvironmentCompat
 
 class StorageHelper(val context: Context) {
 

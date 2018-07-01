@@ -1,10 +1,10 @@
 package org.emunix.insteadlauncher.ui.repository
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.data.Game
