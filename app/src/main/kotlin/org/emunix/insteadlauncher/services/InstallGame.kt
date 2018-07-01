@@ -80,9 +80,9 @@ class InstallGame: IntentService("InstallGame") {
         if (!response.isSuccessful) {
             throw IOException("Failed to download file: " + response)
         }
-        val fos = FileOutputStream(file)
-        IOUtils.copy(response.body()?.byteStream(), fos)
-        IOUtils.closeQuietly(fos)
+        FileOutputStream(file).use { toFile ->
+            IOUtils.copy(response.body()?.byteStream(), toFile)
+        }
     }
 
     private fun extractFilename(url: String): String {

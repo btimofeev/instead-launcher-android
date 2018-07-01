@@ -12,7 +12,6 @@ import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.data.Game
 import java.io.File
 import java.util.zip.ZipFile
-import java.io.BufferedOutputStream
 import java.io.FileOutputStream
 import java.util.zip.ZipException
 
@@ -36,22 +35,22 @@ fun Context.showToast(msg: String, length: Int = Toast.LENGTH_LONG) {
     Toast.makeText(this, msg, length).show()
 }
 
-@Throws (ZipException::class)
+@Throws(ZipException::class)
 fun File.unzip(dir: File) {
-    val zip = ZipFile(this)
-    val entries = zip.entries()
-    while (entries.hasMoreElements()) {
-        val entry = entries.nextElement()
-        if (entry.isDirectory) {
-            File(dir, entry.name).mkdirs()
-        } else {
-            val fos = FileOutputStream(File(dir, entry.name))
-            val bos = BufferedOutputStream(fos)
-            IOUtils.copy(zip.getInputStream(entry), bos)
-            IOUtils.closeQuietly(bos, fos)
-        }
-    }
-    IOUtils.closeQuietly(zip)
+    ZipFile(this)
+            .use { zip ->
+                val entries = zip.entries()
+                while (entries.hasMoreElements()) {
+                    val entry = entries.nextElement()
+                    if (entry.isDirectory) {
+                        File(dir, entry.name).mkdirs()
+                    } else {
+                        FileOutputStream(File(dir, entry.name)).use {
+                            IOUtils.copy(zip.getInputStream(entry), it)
+                        }
+                    }
+                }
+            }
 }
 
 //todo переписать когда-нибудь
