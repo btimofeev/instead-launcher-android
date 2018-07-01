@@ -3,7 +3,9 @@ package org.emunix.insteadlauncher.helpers
 import android.content.Context
 import android.os.Environment
 import androidx.core.os.EnvironmentCompat
+import org.apache.commons.io.FileUtils
 import java.io.File
+import java.io.IOException
 
 class StorageHelper(val context: Context) {
 
@@ -22,5 +24,20 @@ class StorageHelper(val context: Context) {
     }
 
     fun getGamesDirectory(): File = getAppSubDirectory("games")
+
+    fun getSavesDirectory(): File = getAppSubDirectory("saves")
+
+    fun getThemesDirectory(): File = getAppSubDirectory("themes")
+
+    fun makeDirs() {
+        val dirs = arrayOf(getGamesDirectory(), getSavesDirectory(), getThemesDirectory())
+        for (dir in dirs) {
+            try {
+                FileUtils.forceMkdir(dir)
+            } catch (e: IOException) {
+                context.showToast("Cannot create directory ${dir.absolutePath}")
+            }
+        }
+    }
 
 }

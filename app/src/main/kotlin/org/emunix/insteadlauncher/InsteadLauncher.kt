@@ -8,6 +8,7 @@ import androidx.room.Room
 import android.content.Context
 import android.os.Build
 import org.emunix.insteadlauncher.data.GameDatabase
+import org.emunix.insteadlauncher.helpers.StorageHelper
 
 class InsteadLauncher: Application() {
 
@@ -27,6 +28,7 @@ class InsteadLauncher: Application() {
         super.onCreate()
         createNotificationChannels()
         gamesDB =  Room.databaseBuilder(this, GameDatabase::class.java, "games.db").build()
+        StorageHelper(this).makeDirs()
     }
 
     @TargetApi(26)
