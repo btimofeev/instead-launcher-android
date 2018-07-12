@@ -17,7 +17,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
-
+import org.emunix.insteadlauncher.services.UpdateResources
 
 class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
 
@@ -48,6 +48,8 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
                 }
 
         fab.setOnClickListener { view -> startActivity(Intent(view.context, RepositoryActivity::class.java)) }
+
+        UpdateResources.startActionUpdate(this, false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -18,10 +18,12 @@
     <string name="notification_download_and_install_game">Download the game, please wait&#8230;</string>
     <string name="notification_delete_game">Delete the game, please wait&#8230;</string>
     <string name="notification_updating_repository">Updating the repository, please wait&#8230;</string>
+    <string name="notification_updating_resources">Updating the application resources, please wait&#8230;</string>
 
     <string name="channel_install_game">Install game</string>
     <string name="channel_delete_game">Delete game</string>
     <string name="channel_update_repo">Update repository</string>
+    <string name="channel_update_resources">Update the application resources</string>
 
     <string name="error">Error</string>
 </resources>

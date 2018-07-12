@@ -78,3 +78,42 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+task copyLangs(type: Copy) {
+    description = 'Copies langs from Instead to assets'
+    from 'src/main/cpp/Instead/Instead/lang/'
+    into 'src/main/assets/lang/'
+    include '*.ini'
+}
+
+task copyThemes(type: Copy) {
+    description = 'Copies themes from Instead to assets'
+    from 'src/main/cpp/Instead/Instead/themes/'
+    into 'src/main/assets/themes/'
+    exclude 'CMakeLists.txt', 'Makefile'
+}
+
+task copyStead(type: Copy) {
+    description = 'Copies stead folder from Instead to assets'
+    from 'src/main/cpp/Instead/Instead/stead/'
+    into 'src/main/assets/stead/'
+    exclude '**/CMakeLists.txt', 'Makefile'
+}
+
+task cleanAssets(type: Delete) {
+    delete 'src/main/assets/lang/', 'src/main/assets/themes/', 'src/main/assets/stead/'
+}
+
+preBuild.dependsOn copyLangs, copyThemes, copyStead
+
+afterEvaluate {
+    if (project.hasProperty("packageRelease")) {
+        packageRelease.finalizedBy(cleanAssets)
+    }
+    if (project.hasProperty("packageDebug")) {
+        packageDebug.finalizedBy(cleanAssets)
+    }
+    if (project.hasProperty("clean")) {
+        clean.finalizedBy(cleanAssets)
+    }
+}

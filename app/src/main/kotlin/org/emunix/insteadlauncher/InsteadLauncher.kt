@@ -18,10 +18,12 @@ class InsteadLauncher: Application() {
         const val UPDATE_REPOSITORY_NOTIFICATION_ID: Int = 1000
         const val INSTALL_NOTIFICATION_ID: Int = 1001
         const val UNINSTALL_NOTIFICATION_ID: Int = 1002
+        const val UPDATE_RESOURCES_NOTIFICATION_ID: Int = 1004
 
-        const val CHANNEL_UPDATE_REPOSITORY = "org.emunix.insteadlauncher.update_repo"
-        const val CHANNEL_INSTALL = "org.emunix.insteadlauncher.install_game"
-        const val CHANNEL_UNINSTALL = "org.emunix.insteadlauncher.delete_game"
+        const val CHANNEL_UPDATE_REPOSITORY = "org.emunix.insteadlauncher.channel.update_repo"
+        const val CHANNEL_INSTALL = "org.emunix.insteadlauncher.channel.install_game"
+        const val CHANNEL_UNINSTALL = "org.emunix.insteadlauncher.channel.delete_game"
+        const val CHANNEL_UPDATE_RESOURCES = "org.emunix.insteadlauncher.channel.update_resources"
     }
 
     override fun onCreate() {
@@ -49,6 +51,21 @@ class InsteadLauncher: Application() {
             name = getString(R.string.channel_update_repo)
             channel = NotificationChannel(CHANNEL_UPDATE_REPOSITORY, name, importance)
             notificationManager.createNotificationChannel(channel)
+
+            name = getString(R.string.channel_update_resources)
+            channel = NotificationChannel(CHANNEL_UPDATE_RESOURCES, name, importance)
+            notificationManager.createNotificationChannel(channel)
         }
+    }
+
+    fun getVersionCode(): Long {
+        var version: Long = 0
+        try {
+            val info = this.packageManager.getPackageInfo(this.packageName, 0)
+            version = info.versionCode.toLong()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return version
     }
 }

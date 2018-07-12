@@ -18,10 +18,13 @@
     <string name="notification_download_and_install_game">Скачиваю игру, подождите&#8230;</string>
     <string name="notification_delete_game">Удаляю игру, подождите&#8230;</string>
     <string name="notification_updating_repository">Обновляю репозиторий, подождите&#8230;</string>
+    <string name="notification_updating_resources">Обновляю ресурсы приложения, подождите&#8230;</string>
 
     <string name="channel_install_game">Установка игр</string>
     <string name="channel_delete_game">Удаление игр</string>
     <string name="channel_update_repo">Обновление репозитория</string>
+    <string name="channel_update_resources">Обновление ресурсов приложения</string>
+
 
     <string name="error">Ошибка</string>
 </resources>

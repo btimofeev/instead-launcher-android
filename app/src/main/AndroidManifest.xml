@@ -30,6 +30,7 @@
         <service android:name=".services.UpdateRepository"/>
         <service android:name=".services.InstallGame"/>
         <service android:name=".services.DeleteGame"/>
+        <service android:name=".services.UpdateResources"/>
 
         <activity
             android:name="org.emunix.insteadlauncher.ui.game.GameActivity"

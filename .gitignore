@@ -54,3 +54,6 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+# langs and themes from instead sources
+app/src/main/assets/instead/
