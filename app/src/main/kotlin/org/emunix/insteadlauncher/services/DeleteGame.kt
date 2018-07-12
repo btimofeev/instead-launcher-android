@@ -53,7 +53,7 @@ class DeleteGame: IntentService("DeleteGame") {
     }
 
     private fun sendNotification(title: String, body: String){
-        val notification = NotificationCompat.Builder(this)
+        val notification = NotificationCompat.Builder(this, InsteadLauncher.CHANNEL_UNINSTALL)
                 .setSmallIcon(R.drawable.ic_alert_white_24dp)
                 .setContentTitle(title)
                 .setContentText(body)
