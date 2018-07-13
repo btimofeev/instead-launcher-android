@@ -53,20 +53,20 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // Support libraries
-    implementation 'androidx.appcompat:appcompat:1.0.0-alpha3'
-    implementation 'com.google.android.material:material:1.0.0-alpha3'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha3'
+    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'com.google.android.material:material:1.0.0-beta01'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.50"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.51"
 
     // Architecture components
-    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0-alpha1"
-    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0-alpha1"
-    implementation "androidx.room:room-runtime:2.0.0-alpha1"
-    kapt "androidx.room:room-compiler:2.0.0-alpha1"
-    implementation "androidx.room:room-rxjava2:2.0.0-alpha1"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0-beta01"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0-beta01"
+    implementation "androidx.room:room-runtime:2.0.0-beta01"
+    kapt "androidx.room:room-compiler:2.0.0-beta01"
+    implementation "androidx.room:room-rxjava2:2.0.0-beta01"
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
