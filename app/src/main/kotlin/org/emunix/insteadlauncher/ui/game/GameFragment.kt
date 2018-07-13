@@ -18,6 +18,7 @@ import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.services.DeleteGame
 import org.emunix.insteadlauncher.services.InstallGame
+import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 
 class GameFragment : Fragment() {
 
@@ -89,7 +90,9 @@ class GameFragment : Fragment() {
             }
 
             if (game.state == INSTALLED) {
-                // todo run game
+                val runGame = Intent(activity, InsteadActivity::class.java)
+                runGame.putExtra("game_name", game.name)
+                startActivity(runGame)
             }
         }
 

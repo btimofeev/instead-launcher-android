@@ -10,13 +10,18 @@ android {
         applicationId "org.emunix.insteadlauncher"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "0.0.1"
+        versionCode 20
+        versionName "0.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
+        }
         externalNativeBuild {
             cmake {
                 cppFlags ""
+                arguments "-DANDROID_PLATFORM=android-21", "-DCMAKE_BUILD_TYPE=Release",
+                         "-DANDROID_ARM_MODE=arm"
             }
         }
     }

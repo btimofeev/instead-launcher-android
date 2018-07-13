@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_installed_games.*
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.helpers.showToast
+import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
 import org.emunix.insteadlauncher.services.UpdateResources
 
@@ -39,11 +39,10 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
                         //todo show empty view
                     } else
                         list.adapter = InstalledGamesAdapter(games){
-                            showToast("Представь, что игра запустилась")
-        //                            val intent = Intent(this, GameActivity::class.java)
-        //                            val gameName = it.name
-        //                            intent.putExtra("game_name", gameName)
-        //                            startActivity(intent)
+                            val intent = Intent(this, InsteadActivity::class.java)
+                            val gameName = it.name
+                            intent.putExtra("game_name", gameName)
+                            startActivity(intent)
                         }
                 }
 
