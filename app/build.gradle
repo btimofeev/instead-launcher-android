@@ -79,6 +79,90 @@ repositories {
     mavenCentral()
 }
 
+task deleteDependencies(type: Delete) {
+    delete 'src/main/cpp/Instead/Instead', 'src/main/cpp/Lua/Lua'
+    delete 'src/main/cpp/SDL2/SDL2', 'src/main/cpp/SDL2_image/SDL2_image'
+    delete 'src/main/cpp/SDL2_mixer/SDL2_mixer', 'src/main/cpp/SDL2_ttf/SDL2_ttf'
+}
+
+task downloadDependencies(dependsOn: deleteDependencies) {
+    def Instead = '3.2.1'
+    def Lua = '5.3.5'
+    def SDL2 = '2.0.8'
+    def SDL2_image = '2.0.3'
+    def SDL2_mixer = '2.0.2'
+    def SDL2_ttf = '2.0.14'
+
+    doLast {
+        download {
+            src "https://github.com/instead-hub/instead/archive/${Instead}.tar.gz"
+            dest new File(buildDir, "instead-${Instead}.tar.gz")
+        }
+        copy {
+            from tarTree(resources.gzip("${buildDir}/instead-${Instead}.tar.gz"))
+            into 'src/main/cpp/Instead/'
+        }
+        file("src/main/cpp/Instead/instead-${Instead}").renameTo(file('src/main/cpp/Instead/Instead'))
+        delete("src/main/cpp/Instead/instead-${Instead}")
+        delete("src/main/cpp/Instead/pax_global_header")
+
+        download {
+            src "https://www.lua.org/ftp/lua-${Lua}.tar.gz"
+            dest buildDir
+        }
+        copy {
+            from tarTree(resources.gzip("${buildDir}/lua-${Lua}.tar.gz"))
+            into 'src/main/cpp/Lua/'
+        }
+        file("src/main/cpp/Lua/lua-${Lua}").renameTo(file('src/main/cpp/Lua/Lua'))
+        delete("src/main/cpp/Lua/lua-${Lua}")
+
+        download {
+            src "https://www.libsdl.org/release/SDL2-${SDL2}.tar.gz"
+            dest buildDir
+        }
+        copy {
+            from tarTree(resources.gzip("${buildDir}/SDL2-${SDL2}.tar.gz"))
+            into 'src/main/cpp/SDL2/'
+        }
+        file("src/main/cpp/SDL2/SDL2-${SDL2}").renameTo(file('src/main/cpp/SDL2/SDL2'))
+        delete("src/main/cpp/SDL2/SDL2-${SDL2}")
+
+        download {
+            src "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${SDL2_image}.tar.gz"
+            dest buildDir
+        }
+        copy {
+            from tarTree(resources.gzip("${buildDir}/SDL2_image-${SDL2_image}.tar.gz"))
+            into 'src/main/cpp/SDL2_image/'
+        }
+        file("src/main/cpp/SDL2_image/SDL2_image-${SDL2_image}").renameTo(file('src/main/cpp/SDL2_image/SDL2_image'))
+        delete("src/main/cpp/SDL2_image/SDL2_image-${SDL2_image}")
+
+        download {
+            src "https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-${SDL2_mixer}.tar.gz"
+            dest buildDir
+        }
+        copy {
+            from tarTree(resources.gzip("${buildDir}/SDL2_mixer-${SDL2_mixer}.tar.gz"))
+            into 'src/main/cpp/SDL2_mixer/'
+        }
+        file("src/main/cpp/SDL2_mixer/SDL2_mixer-${SDL2_mixer}").renameTo(file('src/main/cpp/SDL2_mixer/SDL2_mixer'))
+        delete("src/main/cpp/SDL2_mixer/SDL2_mixer-${SDL2_mixer}")
+
+        download {
+            src "https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-${SDL2_ttf}.tar.gz"
+            dest buildDir
+        }
+        copy {
+            from tarTree(resources.gzip("${buildDir}/SDL2_ttf-${SDL2_ttf}.tar.gz"))
+            into 'src/main/cpp/SDL2_ttf/'
+        }
+        file("src/main/cpp/SDL2_ttf/SDL2_ttf-${SDL2_ttf}").renameTo(file('src/main/cpp/SDL2_ttf/SDL2_ttf'))
+        delete("src/main/cpp/SDL2_ttf/SDL2_ttf-${SDL2_ttf}")
+    }
+}
+
 task copyLangs(type: Copy) {
     description = 'Copies langs from Instead to assets'
     from 'src/main/cpp/Instead/Instead/lang/'
