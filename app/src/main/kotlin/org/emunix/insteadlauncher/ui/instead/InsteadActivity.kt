@@ -7,6 +7,7 @@ import android.view.WindowManager
 import android.view.Window
 import org.emunix.insteadlauncher.helpers.StorageHelper
 import org.emunix.insteadlauncher.helpers.showToast
+import java.util.*
 
 
 class InsteadActivity: SDLActivity() {
@@ -25,13 +26,14 @@ class InsteadActivity: SDLActivity() {
     }
 
     override fun getArguments(): Array<String> {
-        val args : Array<String> = Array(6){""}
+        val args : Array<String> = Array(7){""}
         args[0] = StorageHelper(this).getDataDirectory().absolutePath
         args[1] = StorageHelper(this).getAppFilesDirectory().absolutePath
         args[2] = StorageHelper(this).getGamesDirectory().absolutePath
         args[3] = StorageHelper(this).getThemesDirectory().absolutePath
         args[4] = getModesString()
-        args[5] = game
+        args[5] = Locale.getDefault().language
+        args[6] = game
         return args
     }
 

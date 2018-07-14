@@ -14,7 +14,8 @@ int SDL_main(int argc, char** argv) {
     const char* gamespath = argv[3];
     const char* themespath = argv[4];
     const char* modes = argv[5];
-    const char* game = argv[6];
+    const char* lang = argv[6];
+    const char* game = argv[7];
 
     __android_log_write(ANDROID_LOG_DEBUG, tag, argv[0]);
     __android_log_write(ANDROID_LOG_DEBUG, tag, path);
@@ -22,6 +23,7 @@ int SDL_main(int argc, char** argv) {
     __android_log_write(ANDROID_LOG_DEBUG, tag, gamespath);
     __android_log_write(ANDROID_LOG_DEBUG, tag, themespath);
     __android_log_write(ANDROID_LOG_DEBUG, tag, modes);
+    __android_log_write(ANDROID_LOG_DEBUG, tag, lang);
     __android_log_write(ANDROID_LOG_DEBUG, tag, game);
 
     int status;
@@ -36,6 +38,11 @@ int SDL_main(int argc, char** argv) {
     _argv[n++] = SDL_strdup("-modes");
     _argv[n++] = SDL_strdup(modes);
     _argv[n++] = SDL_strdup("-hires");
+
+    if (strlen(lang) > 0) {
+        _argv[n++] = SDL_strdup("-lang");
+        _argv[n++] = SDL_strdup(lang);
+    }
 
     _argv[n++] = SDL_strdup("-appdata");
     _argv[n++] = SDL_strdup(appdata);
