@@ -65,3 +65,4 @@ app/src/main/cpp/SDL2/SDL2
 app/src/main/cpp/SDL2_image/SDL2_image
 app/src/main/cpp/SDL2_mixer/SDL2_mixer
 app/src/main/cpp/SDL2_ttf/SDL2_ttf
+app/src/main/cpp/libiconv/libiconv

@@ -1,8 +1,8 @@
 
 set(INSTEAD_SRC_DIR Instead/src)
 
-include_directories( ${INSTEAD_SRC_DIR} ${INSTEAD_SRC_DIR}/instead ../Lua/Lua/src ../SDL2/SDL2/include
-                    ../SDL2_mixer/SDL2_mixer ../SDL2_image/SDL2_image ../SDL2_ttf/SDL2_ttf )
+include_directories( ${INSTEAD_SRC_DIR} ${INSTEAD_SRC_DIR}/instead ../Lua/Lua/src ${CMAKE_BINARY_DIR}/libiconv/libiconv/include
+        ../SDL2/SDL2/include ../SDL2_mixer/SDL2_mixer ../SDL2_image/SDL2_image ../SDL2_ttf/SDL2_ttf )
 
 set( SOURCES
         "instead_launcher.c"
@@ -37,7 +37,7 @@ set( SOURCES
         "${INSTEAD_SRC_DIR}/SDL_gfxBlitFunc.c"
         "${INSTEAD_SRC_DIR}/noise1234.c" )
 
-set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DANDROID -DNOMAIN -D_USE_SDL -D_LOCAL_APPDATA -D_SDL_MOD_BUG" )
+set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DANDROID -DNOMAIN -D_USE_SDL -D_LOCAL_APPDATA -D_SDL_MOD_BUG -D_HAVE_ICONV" )
 add_definitions( -DVERSION=\"3.2.1\" -DGAMES_PATH=\"./games/\" -DTHEME_PATH=\"./themes/\" -DLANG_PATH=\"./lang/\" -DSTEAD_PATH=\"./stead/\" )
 add_definitions( -DSDL_JAVA_PACKAGE_PATH=org_emunix_insteadlauncher )
 
@@ -47,6 +47,7 @@ find_library( log-lib log )
 
 target_link_libraries( instead
                        lua
+                       iconv
                        SDL2
                        SDL2_ttf
                        SDL2_mixer

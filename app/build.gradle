@@ -88,6 +88,7 @@ task deleteDependencies(type: Delete) {
     delete 'src/main/cpp/Instead/Instead', 'src/main/cpp/Lua/Lua'
     delete 'src/main/cpp/SDL2/SDL2', 'src/main/cpp/SDL2_image/SDL2_image'
     delete 'src/main/cpp/SDL2_mixer/SDL2_mixer', 'src/main/cpp/SDL2_ttf/SDL2_ttf'
+    delete 'src/main/cpp/libiconv/libiconv'
 }
 
 task downloadDependencies(dependsOn: deleteDependencies) {
@@ -97,6 +98,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
     def SDL2_image = '2.0.3'
     def SDL2_mixer = '2.0.2'
     def SDL2_ttf = '2.0.14'
+    def Iconv = '1.15'
 
     doLast {
         download {
@@ -165,6 +167,17 @@ task downloadDependencies(dependsOn: deleteDependencies) {
         }
         file("src/main/cpp/SDL2_ttf/SDL2_ttf-${SDL2_ttf}").renameTo(file('src/main/cpp/SDL2_ttf/SDL2_ttf'))
         delete("src/main/cpp/SDL2_ttf/SDL2_ttf-${SDL2_ttf}")
+
+        download {
+            src "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${Iconv}.tar.gz"
+            dest buildDir
+        }
+        copy {
+            from tarTree(resources.gzip("${buildDir}/libiconv-${Iconv}.tar.gz"))
+            into 'src/main/cpp/libiconv/'
+        }
+        file("src/main/cpp/libiconv/libiconv-${Iconv}").renameTo(file('src/main/cpp/libiconv/libiconv'))
+        delete("src/main/cpp/libiconv/libiconv-${Iconv}")
     }
 }
 

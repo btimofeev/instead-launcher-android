@@ -22,6 +22,8 @@ class InsteadActivity: SDLActivity() {
                 "SDL2_mixer",
                 "SDL2_ttf",
                 "lua",
+                "charset",
+                "iconv",
                 "instead")
     }
 
