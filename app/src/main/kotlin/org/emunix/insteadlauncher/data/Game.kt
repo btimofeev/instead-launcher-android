@@ -27,6 +27,7 @@ data class Game (
         INSTALLED,
         IS_INSTALL,
         IS_DELETE,
-        IS_UPDATE
+        IS_UPDATE,
+        IN_QUEUE_TO_INSTALL
     }
 }

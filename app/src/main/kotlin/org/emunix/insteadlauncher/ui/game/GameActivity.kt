@@ -3,11 +3,14 @@ package org.emunix.insteadlauncher.ui.game
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 
 import kotlinx.android.synthetic.main.activity_game.*
 import org.emunix.insteadlauncher.R
 
 class GameActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: GameViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,6 +19,8 @@ class GameActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         fragment.arguments = intent.extras
+
+        viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

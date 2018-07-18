@@ -14,6 +14,9 @@
     <string name="game_activity_label_author">Автор: %s</string>
     <string name="game_activity_label_version">Версия: %s</string>
     <string name="game_activity_label_size">Размер: %s</string>
+    <string name="game_activity_message_download_pending">Ожидается загрузка&#8230;</string>
+    <string name="game_activity_message_downloading">Загружаю: %1$s/%2$s</string>
+    <string name="game_activity_message_installing">Устанавливаю&#8230;</string>
 
     <string name="notification_download_and_install_game">Скачиваю игру, подождите&#8230;</string>
     <string name="notification_delete_game">Удаляю игру, подождите&#8230;</string>
@@ -25,6 +28,7 @@
     <string name="channel_update_repo">Обновление репозитория</string>
     <string name="channel_update_resources">Обновление ресурсов приложения</string>
 
-
     <string name="error">Ошибка</string>
+    <string name="error_failed_to_download_file">Не удалось скачать файл: %s</string>
+
 </resources>

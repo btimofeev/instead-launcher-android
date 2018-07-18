@@ -60,6 +60,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.51"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.23.4"
 
     // Architecture components
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0-beta01"

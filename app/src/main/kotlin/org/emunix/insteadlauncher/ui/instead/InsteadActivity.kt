@@ -6,7 +6,6 @@ import org.libsdl.app.SDLActivity
 import android.view.WindowManager
 import android.view.Window
 import org.emunix.insteadlauncher.helpers.StorageHelper
-import org.emunix.insteadlauncher.helpers.showToast
 import java.util.*
 
 
@@ -72,7 +71,6 @@ class InsteadActivity: SDLActivity() {
         super.onCreate(savedInstanceState)
 
         game = intent.extras.getString("game_name")
-        this.showToast(game)
 
         modes = getModes()
 

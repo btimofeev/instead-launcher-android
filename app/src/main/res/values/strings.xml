@@ -14,6 +14,9 @@
     <string name="game_activity_label_author">Author: %s</string>
     <string name="game_activity_label_version">Version: %s</string>
     <string name="game_activity_label_size">Size: %s</string>
+    <string name="game_activity_message_download_pending">Download pending&#8230;</string>
+    <string name="game_activity_message_downloading">Downloading: %1$s/%2$s</string>
+    <string name="game_activity_message_installing">Installing&#8230;</string>
 
     <string name="notification_download_and_install_game">Download the game, please wait&#8230;</string>
     <string name="notification_delete_game">Delete the game, please wait&#8230;</string>
@@ -26,4 +29,6 @@
     <string name="channel_update_resources">Update the application resources</string>
 
     <string name="error">Error</string>
+    <string name="error_failed_to_download_file">Failed to download file: %s</string>
+
 </resources>

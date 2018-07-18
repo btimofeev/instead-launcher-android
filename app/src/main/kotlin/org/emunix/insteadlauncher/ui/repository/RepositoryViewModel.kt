@@ -1,5 +1,6 @@
 package org.emunix.insteadlauncher.ui.repository
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
@@ -17,15 +18,16 @@ import org.emunix.insteadlauncher.services.UpdateRepository
 class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
     private var showProgress: MutableLiveData<Boolean> = MutableLiveData()
 
+    @SuppressLint("CheckResult")
     fun init() {
         RxBus.listen(UpdateRepoEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribe {
                     if (it.error) {
                         app.showToast(it.message)
                     }
                     showProgress.setValue(it.action)
-                })
+                }
     }
 
     fun getProgressState(): LiveData<Boolean> = showProgress
