@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -116,9 +117,19 @@ class GameFragment : Fragment() {
 
         deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
-                val deleteGame = Intent(activity, DeleteGame::class.java)
-                deleteGame.putExtra("game_name", game.name)
-                activity.startService(deleteGame)
+                val dialog = AlertDialog.Builder(activity, R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+                dialog.setTitle(R.string.dialog_delete_game_title)
+                dialog.setMessage(R.string.dialog_delete_game_text)
+                dialog.setPositiveButton(R.string.dialog_delete_game_positive_button) { _,_ ->
+                    val deleteGame = Intent(activity, DeleteGame::class.java)
+                    deleteGame.putExtra("game_name", game.name)
+                    activity.startService(deleteGame)
+                }
+                dialog.setNegativeButton(R.string.dialog_delete_game_negative_button) { dialog, _ ->
+                    dialog.cancel()
+                }
+                dialog.create()
+                dialog.show()
             }
         }
     }

@@ -18,6 +18,11 @@
     <string name="game_activity_message_downloading">Загружаю: %1$s/%2$s</string>
     <string name="game_activity_message_installing">Устанавливаю&#8230;</string>
 
+    <string name="dialog_delete_game_title">Удалить игру?</string>
+    <string name="dialog_delete_game_text">Сохраненые данные игры останутся на устройстве</string>
+    <string name="dialog_delete_game_positive_button">Удалить</string>
+    <string name="dialog_delete_game_negative_button">Отмена</string>
+
     <string name="notification_download_and_install_game">Скачиваю игру, подождите&#8230;</string>
     <string name="notification_delete_game">Удаляю игру, подождите&#8230;</string>
     <string name="notification_updating_repository">Обновляю репозиторий, подождите&#8230;</string>

@@ -18,6 +18,11 @@
     <string name="game_activity_message_downloading">Downloading: %1$s/%2$s</string>
     <string name="game_activity_message_installing">Installing&#8230;</string>
 
+    <string name="dialog_delete_game_title">Delete game?</string>
+    <string name="dialog_delete_game_text">Saved game data will remain on the device</string>
+    <string name="dialog_delete_game_positive_button">Delete</string>
+    <string name="dialog_delete_game_negative_button">Cancel</string>
+
     <string name="notification_download_and_install_game">Download the game, please wait&#8230;</string>
     <string name="notification_delete_game">Delete the game, please wait&#8230;</string>
     <string name="notification_updating_repository">Updating the repository, please wait&#8230;</string>
