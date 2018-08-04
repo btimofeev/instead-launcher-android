@@ -4,7 +4,6 @@ include_directories( Lua/src/ )
 add_library( lua SHARED
             Lua/src/lapi.c
             Lua/src/lcode.c
-            Lua/src/lctype.c
             Lua/src/ldebug.c
             Lua/src/ldo.c
             Lua/src/ldump.c
@@ -24,13 +23,11 @@ add_library( lua SHARED
             Lua/src/lzio.c
             Lua/src/lauxlib.c
             Lua/src/lbaselib.c
-            Lua/src/lcorolib.c
             Lua/src/ldblib.c
             Lua/src/liolib.c
             Lua/src/lmathlib.c
             Lua/src/loslib.c
             Lua/src/lstrlib.c
             Lua/src/ltablib.c
-            Lua/src/lutf8lib.c
             Lua/src/loadlib.c
             Lua/src/linit.c )
