@@ -2,10 +2,10 @@ package org.emunix.insteadlauncher.ui.instead
 
 import android.graphics.Point
 import android.os.Bundle
-import org.libsdl.app.SDLActivity
-import android.view.WindowManager
 import android.view.Window
+import android.view.WindowManager
 import org.emunix.insteadlauncher.helpers.StorageHelper
+import org.libsdl.app.SDLActivity
 import java.util.*
 
 
@@ -14,6 +14,8 @@ class InsteadActivity: SDLActivity() {
     private lateinit var game : String
 
     private lateinit var modes: List<Point>
+
+    private lateinit var inputLayout: InputLayout
 
     override fun getLibraries(): Array<String> {
         return arrayOf("SDL2",
@@ -73,6 +75,9 @@ class InsteadActivity: SDLActivity() {
         game = intent.extras.getString("game_name")
 
         modes = getModes()
+
+        inputLayout = InputLayout(this)
+        addContentView(inputLayout, InputLayout.params)
 
     }
 }
