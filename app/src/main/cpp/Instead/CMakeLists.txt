@@ -37,7 +37,7 @@ set( SOURCES
         "${INSTEAD_SRC_DIR}/SDL_gfxBlitFunc.c"
         "${INSTEAD_SRC_DIR}/noise1234.c" )
 
-set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DANDROID -DNOMAIN -D_USE_SDL -D_LOCAL_APPDATA -D_SDL_MOD_BUG -D_HAVE_ICONV" )
+add_definitions( -DANDROID -DNOMAIN -D_USE_SDL -D_LOCAL_APPDATA -D_SDL_MOD_BUG -D_HAVE_ICONV )
 add_definitions( -DVERSION=\"3.2.1\" -DGAMES_PATH=\"./games/\" -DTHEME_PATH=\"./themes/\" -DLANG_PATH=\"./lang/\" -DSTEAD_PATH=\"./stead/\" )
 add_definitions( -DSDL_JAVA_PACKAGE_PATH=org_emunix_insteadlauncher )
 

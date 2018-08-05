@@ -107,11 +107,9 @@ void unlock_rotation() {
     jobject activity = (jobject)SDL_AndroidGetActivity();
     jclass clazz = (*env)->GetObjectClass(env, activity);
 
-    jstring jstr = (*env)->NewStringUTF(env, "");
-    jmethodID method_id = (*env)->GetStaticMethodID(env, clazz, "setOrientation", "(IIZLjava/lang/String;)V");
-    (*env)->CallStaticVoidMethod(env, clazz, method_id, (jint)0, (jint)0, (jboolean)1, jstr);
+    jmethodID method_id = (*env)->GetStaticMethodID(env, clazz, "unlockRotation", "()V");
+    (*env)->CallStaticVoidMethod(env, clazz, method_id);
 
-    (*env)->DeleteLocalRef(env, jstr);
     (*env)->DeleteLocalRef(env, clazz);
     (*env)->DeleteLocalRef(env, activity);
 }

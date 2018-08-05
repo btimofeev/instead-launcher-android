@@ -1,5 +1,6 @@
 package org.emunix.insteadlauncher.ui.instead
 
+import android.content.pm.ActivityInfo
 import android.graphics.Point
 import android.os.Bundle
 import android.view.Window
@@ -80,4 +81,13 @@ class InsteadActivity: SDLActivity() {
         addContentView(inputLayout, InputLayout.params)
 
     }
+
+    companion object {
+        // This method is called by native instead_launcher.c using JNI.
+        @JvmStatic
+        fun unlockRotation() {
+            mSingleton.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
+
 }
