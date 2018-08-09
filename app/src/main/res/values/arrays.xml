@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="prefs_themes_values">
+        <item>no_themes_found</item>
+    </string-array>
+    <string-array name="prefs_keyboard_button_values">
+        <item>do_not_show_button</item>
+        <item>bottom_left</item>
+        <item>bottom_center</item>
+        <item>bottom_right</item>
+        <item>left</item>
+        <item>right</item>
+        <item>top_left</item>
+        <item>top_center</item>
+        <item>top_right</item>
+    </string-array>
+    <string-array name="prefs_back_button_values">
+        <item>exit_game</item>
+        <item>open_menu</item>
+    </string-array>
+</resources>

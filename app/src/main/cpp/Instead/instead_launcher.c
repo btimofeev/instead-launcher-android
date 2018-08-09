@@ -15,7 +15,12 @@ int SDL_main(int argc, char** argv) {
     const char* themespath = argv[4];
     const char* modes = argv[5];
     const char* lang = argv[6];
-    const char* game = argv[7];
+    const char* music = argv[7];
+    const char* cursor = argv[8];
+    const char* owntheme = argv[9];
+    const char* defaulttheme = argv[10];
+    const char* hires = argv[11];
+    const char* game = argv[12];
 
     __android_log_write(ANDROID_LOG_DEBUG, tag, argv[0]);
     __android_log_write(ANDROID_LOG_DEBUG, tag, path);
@@ -27,7 +32,7 @@ int SDL_main(int argc, char** argv) {
     __android_log_write(ANDROID_LOG_DEBUG, tag, game);
 
     int status;
-    char* _argv[13];
+    char* _argv[22];
     int n = 1;
     chdir(path);
 
@@ -37,7 +42,27 @@ int SDL_main(int argc, char** argv) {
     _argv[n++] = SDL_strdup("-fullscreen");
     _argv[n++] = SDL_strdup("-modes");
     _argv[n++] = SDL_strdup(modes);
-    _argv[n++] = SDL_strdup("-hires");
+
+    if (SDL_strcmp(music, "n") == 0) {
+        _argv[n++] = SDL_strdup("-nosound");
+    }
+
+    if (SDL_strcmp(hires, "y") == 0) {
+        _argv[n++] = SDL_strdup("-hires");
+    } else {
+        _argv[n++] = SDL_strdup("-nohires");
+    }
+
+    if (SDL_strcmp(cursor, "n") == 0) {
+        _argv[n++] = SDL_strdup("-nocursor");
+    }
+
+    if (SDL_strcmp(owntheme, "y") == 0) {
+        _argv[n++] = SDL_strdup("-owntheme");
+    }
+
+    _argv[n++] = SDL_strdup("-theme");
+    _argv[n++] = SDL_strdup(defaulttheme);
 
     if (strlen(lang) > 0) {
         _argv[n++] = SDL_strdup("-lang");
@@ -114,4 +139,16 @@ void unlock_rotation() {
     (*env)->DeleteLocalRef(env, activity);
 }
 
-/* vi: set ts=4 sw=4 expandtab: */
+void Java_org_emunix_insteadlauncher_ui_instead_InsteadActivity_toggleMenu(JNIEnv* env, jclass cls) {
+    SDL_Event event;
+
+    memset(&event, 0, sizeof(event));
+    event.key.type = SDL_KEYDOWN;
+    event.key.state = SDL_PRESSED;
+
+    event.key.keysym.scancode = SDL_SCANCODE_ESCAPE; // from SDL_Keysym
+    event.key.keysym.sym = SDLK_ESCAPE;
+    event.key.keysym.mod = 0; // from SDL_Keymod
+
+    SDL_PushEvent(&event); // Inject key press of the Escape Key
+}

@@ -18,6 +18,7 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
 import org.emunix.insteadlauncher.services.UpdateResources
+import org.emunix.insteadlauncher.ui.settings.SettingsActivity
 
 class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
 
@@ -60,6 +61,7 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
         val id = item.itemId
 
         if (id == R.id.action_settings) {
+            startActivity(Intent(this, SettingsActivity::class.java))
             return true
         }
 

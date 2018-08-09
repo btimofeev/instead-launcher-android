@@ -8,6 +8,6 @@
         android:id="@+id/kbdButton"
         android:layout_centerHorizontal="true"
         android:alpha="1"
-        android:background="@drawable/ic_keyboard_outline_24dp" />
+        android:background="@drawable/ic_keyboard_outline_bluegrey_24dp" />
 
 </RelativeLayout>

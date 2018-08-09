@@ -25,11 +25,22 @@ class InputLayout(context: Context) : RelativeLayout(context) {
         view.isFocusable = true
         view.isFocusableInTouchMode = true
         layoutParams = params
-        gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
         addView(view)
         kbdButton = findViewById(R.id.kbdButton)
-        //kbdButton.setBackgroundResource(R.drawable.ic_keyboard_outline_24dp)
         kbdButton.setOnClickListener { open() }
+    }
+
+    fun setGravity(s: String) {
+        when (s) {
+            "bottom_left"   -> gravity = Gravity.BOTTOM or Gravity.LEFT
+            "bottom_center" -> gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
+            "bottom_right"  -> gravity = Gravity.BOTTOM or Gravity.RIGHT
+            "left"          -> gravity = Gravity.CENTER_VERTICAL or Gravity.LEFT
+            "right"         -> gravity = Gravity.CENTER_VERTICAL or Gravity.RIGHT
+            "top_left"      -> gravity = Gravity.TOP or Gravity.LEFT
+            "top_center"    -> gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
+            "top_right"     -> gravity = Gravity.TOP or Gravity.RIGHT
+        }
     }
 
     fun open() {

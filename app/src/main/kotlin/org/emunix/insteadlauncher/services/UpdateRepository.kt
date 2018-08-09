@@ -4,10 +4,12 @@ import android.app.IntentService
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.preference.PreferenceManager
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UPDATE_REPOSITORY
+import org.emunix.insteadlauncher.InsteadLauncher.Companion.DEFAULT_REPOSITORY
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UPDATE_REPOSITORY_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
@@ -18,10 +20,6 @@ import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
 import java.io.IOException
 
 class UpdateRepository: IntentService("UpdateRepository") {
-
-    companion object {
-        val REPO_URL: String = "http://instead-games.ru/xml.php"
-    }
 
     override fun onHandleIntent(intent: Intent?) {
         val notificationIntent = Intent(this, RepositoryActivity::class.java)
@@ -62,17 +60,17 @@ class UpdateRepository: IntentService("UpdateRepository") {
     private fun fetchXML(): String {
         val client = OkHttpClient()
         val request = Request.Builder()
-                .url(REPO_URL)
+                .url(getRepo())
                 .build()
         val response = client.newCall(request).execute()
-        if (!response.isSuccessful) throw IOException("Unexpected code " + response)
-        val xml: String = response.body()!!.string()
-        return xml
+        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+        return response.body()!!.string()
     }
 
-    private fun parseXML(xml: String): List<Game> {
-        val xmlParser: InsteadGamesXMLParser = InsteadGamesXMLParser()
-        val games: List<Game> = xmlParser.parse(xml)
-        return games
+    private fun parseXML(xml: String): List<Game> = InsteadGamesXMLParser().parse(xml)
+
+    private fun getRepo(): String {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        return prefs.getString("pref_repository", DEFAULT_REPOSITORY)!!
     }
 }

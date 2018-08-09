@@ -36,4 +36,37 @@
     <string name="error">Ошибка</string>
     <string name="error_failed_to_download_file">Не удалось скачать файл: %s</string>
 
+    <string name="settings_activity_title">Настройки</string>
+    <string name="prefs_category_game_settings">Игровые настройки</string>
+    <string name="prefs_music_title">Включить музыку</string>
+    <string name="prefs_cursor_title">Отображать курсор</string>
+    <string name="prefs_enable_game_theme_title">Собственная тема игры</string>
+    <string name="prefs_enable_game_theme_summary">Использовать встроенную в игру тему, вместо темы по-умолчанию</string>
+    <string name="prefs_default_theme_title">Тема по-умолчанию</string>
+    <string-array name="prefs_themes_entries">
+        <item>Темы не найдены</item>
+    </string-array>
+    <string name="prefs_hires_title">Максимальное разрешение</string>
+    <string name="prefs_hires_summary">Использовать наилучшую ориентацию экрана</string>
+    <string name="prefs_keyboard_button_title">Кнопка открытия клавиатуры</string>
+    <string-array name="prefs_keyboard_button_entries">
+        <item>Не показывать</item>
+        <item>Внизу слева</item>
+        <item>Внизу по центру</item>
+        <item>Внизу справа</item>
+        <item>Слева</item>
+        <item>Справа</item>
+        <item>Вверху слева</item>
+        <item>Вверху по центру</item>
+        <item>Вверху справа</item>
+    </string-array>
+    <string name="prefs_back_button_title">Кнопка Назад в игре</string>
+    <string-array name="prefs_back_button_entries">
+        <item>Выйти из игры</item>
+        <item>Открыть меню Instead</item>
+    </string-array>
+    <string name="prefs_category_network">Сеть</string>
+    <string name="prefs_repository_title">Репозиторий</string>
+    <string name="prefs_repository_summary">Укажите адрес XML файла</string>
+
 </resources>

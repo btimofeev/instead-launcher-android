@@ -24,6 +24,8 @@ class InsteadLauncher: Application() {
         const val CHANNEL_INSTALL = "org.emunix.insteadlauncher.channel.install_game"
         const val CHANNEL_UNINSTALL = "org.emunix.insteadlauncher.channel.delete_game"
         const val CHANNEL_UPDATE_RESOURCES = "org.emunix.insteadlauncher.channel.update_resources"
+
+        const val DEFAULT_REPOSITORY = "http://instead-games.ru/xml.php"
     }
 
     override fun onCreate() {

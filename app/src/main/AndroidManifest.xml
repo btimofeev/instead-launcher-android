@@ -38,6 +38,11 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:label="@string/settings_activity_title"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <service android:name=".services.UpdateRepository"/>
         <service android:name=".services.InstallGame"/>

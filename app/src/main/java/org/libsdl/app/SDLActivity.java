@@ -115,6 +115,10 @@ public class SDLActivity extends Activity {
        }
     }
 
+    protected KeyEvent.DispatcherState getKeyDispatcherState() {
+        return mSurface.getKeyDispatcherState();
+    }
+
     /**
      * This method is called by SDL before starting the native application thread.
      * It can be overridden to provide the arguments after the application name.

@@ -3,8 +3,10 @@ package org.emunix.insteadlauncher.ui.instead
 import android.content.pm.ActivityInfo
 import android.graphics.Point
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.Window
 import android.view.WindowManager
+import androidx.preference.PreferenceManager
 import org.emunix.insteadlauncher.helpers.StorageHelper
 import org.libsdl.app.SDLActivity
 import java.util.*
@@ -18,6 +20,15 @@ class InsteadActivity: SDLActivity() {
 
     private lateinit var inputLayout: InputLayout
 
+    private var prefMusic: Boolean = true
+    private var prefCursor: Boolean = false
+    private var prefBuiltinTheme: Boolean = true
+    private lateinit var prefDefaultTheme: String
+    private var prefHires: Boolean = true
+    private lateinit var prefKeyboardButton: String
+    private lateinit var prefBackButton: String
+
+
     override fun getLibraries(): Array<String> {
         return arrayOf("SDL2",
                 "SDL2_image",
@@ -30,14 +41,19 @@ class InsteadActivity: SDLActivity() {
     }
 
     override fun getArguments(): Array<String> {
-        val args : Array<String> = Array(7){""}
+        val args : Array<String> = Array(12){""}
         args[0] = StorageHelper(this).getDataDirectory().absolutePath
         args[1] = StorageHelper(this).getAppFilesDirectory().absolutePath
         args[2] = StorageHelper(this).getGamesDirectory().absolutePath
         args[3] = StorageHelper(this).getThemesDirectory().absolutePath
         args[4] = getModesString()
         args[5] = Locale.getDefault().language
-        args[6] = game
+        args[6] = if (prefMusic) "y" else "n"
+        args[7] = if (prefCursor) "y" else "n"
+        args[8] = if (prefBuiltinTheme) "y" else "n"
+        args[9] = prefDefaultTheme
+        args[10] = if (prefHires) "y" else "n"
+        args[11] = game
         return args
     }
 
@@ -77,10 +93,49 @@ class InsteadActivity: SDLActivity() {
 
         modes = getModes()
 
-        inputLayout = InputLayout(this)
-        addContentView(inputLayout, InputLayout.params)
+        getPreferences()
 
+        if (prefKeyboardButton != "do_not_show_button") {
+            inputLayout = InputLayout(this)
+            inputLayout.setGravity(prefKeyboardButton)
+            addContentView(inputLayout, InputLayout.params)
+        }
     }
+
+    private fun getPreferences() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        prefMusic = prefs.getBoolean("pref_music", true)
+        prefCursor = prefs.getBoolean("pref_cursor", false)
+        prefBuiltinTheme = prefs.getBoolean("pref_enable_game_theme", true)
+        prefDefaultTheme = prefs.getString("pref_default_theme", "mobile")
+        prefHires = prefs.getBoolean("pref_hires", true)
+        prefKeyboardButton = prefs.getString("pref_keyboard_button", "do_not_show_button")
+        prefBackButton = prefs.getString("pref_back_button", "exit_game")
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.keyCode == KeyEvent.KEYCODE_BACK) {
+            if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
+                if (prefBackButton == "open_menu") {
+                    keyDispatcherState.startTracking(event, this)
+                    return true
+                }
+            } else if (event.action == KeyEvent.ACTION_UP) {
+                keyDispatcherState.handleUpEvent(event)
+                if (event.isTracking && !event.isCanceled) {
+                    if (prefBackButton == "open_menu") {
+                        toggleMenu()
+                        return true
+                    }
+                }
+            }
+            return super.dispatchKeyEvent(event)
+        } else {
+            return super.dispatchKeyEvent(event)
+        }
+    }
+
+    private external fun toggleMenu()
 
     companion object {
         // This method is called by native instead_launcher.c using JNI.

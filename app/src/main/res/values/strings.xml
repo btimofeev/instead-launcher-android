@@ -36,4 +36,38 @@
     <string name="error">Error</string>
     <string name="error_failed_to_download_file">Failed to download file: %s</string>
 
+    <string name="settings_activity_title">Settings</string>
+    <string name="prefs_category_game_settings">Game settings</string>
+    <string name="prefs_music_title">Play music</string>
+    <string name="prefs_cursor_title">Show cursor</string>
+    <string name="prefs_enable_game_theme_title">Built-in game theme</string>
+    <string name="prefs_enable_game_theme_summary">Use the built-in game theme instead of the default theme</string>
+    <string name="prefs_default_theme_title">Default theme</string>
+    <string-array name="prefs_themes_entries">
+        <item>No themes found</item>
+    </string-array>
+    <string name="prefs_hires_title">High resolution</string>
+    <string name="prefs_hires_summary">Use the best screen orientation</string>
+    <string name="prefs_keyboard_button_title">Open keyboard button</string>
+    <string-array name="prefs_keyboard_button_entries">
+        <item>Do not show button</item>
+        <item>Bottom left</item>
+        <item>Bottom center</item>
+        <item>Bottom right</item>
+        <item>Left</item>
+        <item>Right</item>
+        <item>Top left</item>
+        <item>Top center</item>
+        <item>Top right</item>
+    </string-array>
+    <string name="prefs_back_button_title">Back button in game</string>
+    <string-array name="prefs_back_button_entries">
+        <item>Exit the game</item>
+        <item>Open menu</item>
+    </string-array>
+    <string name="prefs_category_network">Network</string>
+    <string name="prefs_repository_title">Repository</string>
+    <string name="prefs_repository_summary">Specify the address of the XML file</string>
+
+
 </resources>

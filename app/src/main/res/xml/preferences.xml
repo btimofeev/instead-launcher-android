@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+                  xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/prefs_category_game_settings">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_headphones_grey_24dp"
+            android:key="pref_music"
+            android:title="@string/prefs_music_title"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_cursor_grey_24dp"
+            android:key="pref_cursor"
+            android:title="@string/prefs_cursor_title"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:disableDependentsState="true"
+            android:icon="@drawable/ic_image_grey_24dp"
+            android:key="pref_enable_game_theme"
+            android:summary="@string/prefs_enable_game_theme_summary"
+            android:title="@string/prefs_enable_game_theme_title"/>
+        <org.emunix.insteadlauncher.ui.settings.ThemeListPreference
+            android:dependency="pref_enable_game_theme"
+            android:icon="@drawable/ic_image_album_grey_24dp"
+            android:key="pref_default_theme"
+            android:title="@string/prefs_default_theme_title"
+            android:summary="%s"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_resize_grey_24dp"
+            android:key="pref_hires"
+            android:summary="@string/prefs_hires_summary"
+            android:title="@string/prefs_hires_title"/>
+        <ListPreference
+            android:defaultValue="do_not_show_button"
+            android:entries="@array/prefs_keyboard_button_entries"
+            android:entryValues="@array/prefs_keyboard_button_values"
+            android:icon="@drawable/ic_keyboard_outline_grey_24dp"
+            android:key="pref_keyboard_button"
+            android:title="@string/prefs_keyboard_button_title"
+            android:summary="%s"/>
+        <ListPreference
+            android:defaultValue="exit_game"
+            android:entries="@array/prefs_back_button_entries"
+            android:entryValues="@array/prefs_back_button_values"
+            android:icon="@drawable/ic_keyboard_backspace_grey_24dp"
+            android:key="pref_back_button"
+            android:title="@string/prefs_back_button_title"
+            android:summary="%s"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/prefs_category_network">
+
+        <EditTextPreference
+            android:defaultValue="http://instead-games.ru/xml.php"
+            android:icon="@drawable/ic_web_grey_24dp"
+            android:key="pref_repository"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/prefs_repository_summary"
+            android:title="@string/prefs_repository_title"/>
+    </PreferenceCategory>
+</PreferenceScreen>
