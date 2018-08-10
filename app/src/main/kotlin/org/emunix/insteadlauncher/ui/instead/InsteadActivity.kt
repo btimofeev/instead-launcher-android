@@ -79,7 +79,7 @@ class InsteadActivity: SDLActivity() {
         setOrientation(1, 0, false, "LandscapeRight")
         display.getSize(landscapeSize)
         result.add(landscapeSize)
-        setOrientation(0, 0, true, "")
+        unlockRotation()
         return result
     }
 
