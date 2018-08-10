@@ -137,6 +137,13 @@ class InsteadActivity: SDLActivity() {
 
     private external fun toggleMenu()
 
+    override fun onPause() {
+        if (prefKeyboardButton != "do_not_show_button") {
+            inputLayout.close()
+        }
+        super.onPause()
+    }
+
     companion object {
         // This method is called by native instead_launcher.c using JNI.
         @JvmStatic
