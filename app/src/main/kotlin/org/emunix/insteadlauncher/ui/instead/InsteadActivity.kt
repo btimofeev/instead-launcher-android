@@ -150,6 +150,19 @@ class InsteadActivity: SDLActivity() {
         fun unlockRotation() {
             mSingleton.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
+
+        @JvmStatic
+        private fun getScreenSize(orientation: Int): String {
+            mSingleton.requestedOrientation = when (orientation) {
+                1 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                2 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            }
+            val display = mSingleton.windowManager.defaultDisplay
+            val size = Point()
+            display.getSize(size)
+            return "${size.x}x${size.y}"
+        }
     }
 
 }

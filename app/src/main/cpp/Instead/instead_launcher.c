@@ -139,6 +139,23 @@ void unlock_rotation() {
     (*env)->DeleteLocalRef(env, activity);
 }
 
+char* get_screen_size(int orientation) {
+    char *str;
+    JNIEnv *env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+    jobject activity = (jobject)SDL_AndroidGetActivity();
+    jclass clazz = (*env)->GetObjectClass(env, activity);
+
+    jmethodID method_id = (*env)->GetStaticMethodID(env, clazz, "getScreenSize", "(I)Ljava/lang/String;");
+    jstring s= (*env)->CallStaticObjectMethod (env, clazz, method_id, (jint)orientation);
+
+    str = (*env)->GetStringUTFChars(env, s, 0);
+    (*env)->ReleaseStringUTFChars(env, s, str);
+
+    (*env)->DeleteLocalRef(env, clazz);
+    (*env)->DeleteLocalRef(env, activity);
+    return str;
+}
+
 void Java_org_emunix_insteadlauncher_ui_instead_InsteadActivity_toggleMenu(JNIEnv* env, jclass cls) {
     SDL_Event event;
 
