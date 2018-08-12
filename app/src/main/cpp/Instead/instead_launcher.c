@@ -19,7 +19,8 @@ int SDL_main(int argc, char** argv) {
     const char* owntheme = argv[8];
     const char* defaulttheme = argv[9];
     const char* hires = argv[10];
-    const char* game = argv[11];
+    const char* textsize = argv[11];
+    const char* game = argv[12];
 
     __android_log_write(ANDROID_LOG_DEBUG, tag, argv[0]);
     __android_log_write(ANDROID_LOG_DEBUG, tag, path);
@@ -30,7 +31,7 @@ int SDL_main(int argc, char** argv) {
     __android_log_write(ANDROID_LOG_DEBUG, tag, game);
 
     int status;
-    char* _argv[20];
+    char* _argv[22];
     int n = 1;
     chdir(path);
 
@@ -48,6 +49,9 @@ int SDL_main(int argc, char** argv) {
     } else {
         _argv[n++] = SDL_strdup("-nohires");
     }
+
+    _argv[n++] = SDL_strdup("-fontscale");
+    _argv[n++] = SDL_strdup(textsize);
 
     if (SDL_strcmp(cursor, "n") == 0) {
         _argv[n++] = SDL_strdup("-nocursor");

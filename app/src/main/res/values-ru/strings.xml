@@ -48,6 +48,8 @@
     </string-array>
     <string name="prefs_hires_title">Максимальное разрешение</string>
     <string name="prefs_hires_summary">Использовать наилучшую ориентацию экрана</string>
+    <string name="prefs_text_size_title">Размер текста</string>
+    <string name="prefs_text_size_summary">В процентах от базового размера</string>
     <string name="prefs_keyboard_button_title">Кнопка открытия клавиатуры</string>
     <string-array name="prefs_keyboard_button_entries">
         <item>Не показывать</item>

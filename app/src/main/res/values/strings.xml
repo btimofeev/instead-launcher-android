@@ -48,6 +48,8 @@
     </string-array>
     <string name="prefs_hires_title">High resolution</string>
     <string name="prefs_hires_summary">Use the best screen orientation</string>
+    <string name="prefs_text_size_title">Text size</string>
+    <string name="prefs_text_size_summary">Percentage of default font size</string>
     <string name="prefs_keyboard_button_title">Open keyboard button</string>
     <string-array name="prefs_keyboard_button_entries">
         <item>Do not show button</item>

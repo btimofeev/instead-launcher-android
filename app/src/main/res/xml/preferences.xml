@@ -34,6 +34,15 @@
             android:key="pref_hires"
             android:summary="@string/prefs_hires_summary"
             android:title="@string/prefs_hires_title"/>
+        <EditTextPreference
+            android:defaultValue="150"
+            android:icon="@drawable/ic_format_size_grey_24dp"
+            android:inputType="number"
+            android:key="pref_text_size"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/prefs_text_size_summary"
+            android:title="@string/prefs_text_size_title"/>
         <ListPreference
             android:defaultValue="do_not_show_button"
             android:entries="@array/prefs_keyboard_button_entries"

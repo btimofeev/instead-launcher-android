@@ -23,6 +23,7 @@ class InsteadActivity: SDLActivity() {
     private var prefBuiltinTheme: Boolean = true
     private lateinit var prefDefaultTheme: String
     private var prefHires: Boolean = true
+    private lateinit var prefTextSize: String
     private lateinit var prefKeyboardButton: String
     private lateinit var prefBackButton: String
 
@@ -39,7 +40,7 @@ class InsteadActivity: SDLActivity() {
     }
 
     override fun getArguments(): Array<String> {
-        val args : Array<String> = Array(11){""}
+        val args : Array<String> = Array(12){""}
         args[0] = StorageHelper(this).getDataDirectory().absolutePath
         args[1] = StorageHelper(this).getAppFilesDirectory().absolutePath
         args[2] = StorageHelper(this).getGamesDirectory().absolutePath
@@ -50,7 +51,8 @@ class InsteadActivity: SDLActivity() {
         args[7] = if (prefBuiltinTheme) "y" else "n"
         args[8] = prefDefaultTheme
         args[9] = if (prefHires) "y" else "n"
-        args[10] = game
+        args[10] = prefTextSize
+        args[11] = game
         return args
     }
 
@@ -84,6 +86,7 @@ class InsteadActivity: SDLActivity() {
         prefBuiltinTheme = prefs.getBoolean("pref_enable_game_theme", true)
         prefDefaultTheme = prefs.getString("pref_default_theme", "mobile")
         prefHires = prefs.getBoolean("pref_hires", true)
+        prefTextSize = prefs.getString("pref_text_size", "150")
         prefKeyboardButton = prefs.getString("pref_keyboard_button", "do_not_show_button")
         prefBackButton = prefs.getString("pref_back_button", "exit_game")
     }
