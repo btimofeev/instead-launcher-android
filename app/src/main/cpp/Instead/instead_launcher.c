@@ -55,6 +55,8 @@ int SDL_main(int argc, char** argv) {
 
     if (SDL_strcmp(owntheme, "y") == 0) {
         _argv[n++] = SDL_strdup("-owntheme");
+    } else {
+        _argv[n++] = SDL_strdup("-notheme");
     }
 
     _argv[n++] = SDL_strdup("-theme");
