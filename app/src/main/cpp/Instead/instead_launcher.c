@@ -13,26 +13,24 @@ int SDL_main(int argc, char** argv) {
     const char* appdata = argv[2];
     const char* gamespath = argv[3];
     const char* themespath = argv[4];
-    const char* modes = argv[5];
-    const char* lang = argv[6];
-    const char* music = argv[7];
-    const char* cursor = argv[8];
-    const char* owntheme = argv[9];
-    const char* defaulttheme = argv[10];
-    const char* hires = argv[11];
-    const char* game = argv[12];
+    const char* lang = argv[5];
+    const char* music = argv[6];
+    const char* cursor = argv[7];
+    const char* owntheme = argv[8];
+    const char* defaulttheme = argv[9];
+    const char* hires = argv[10];
+    const char* game = argv[11];
 
     __android_log_write(ANDROID_LOG_DEBUG, tag, argv[0]);
     __android_log_write(ANDROID_LOG_DEBUG, tag, path);
     __android_log_write(ANDROID_LOG_DEBUG, tag, appdata);
     __android_log_write(ANDROID_LOG_DEBUG, tag, gamespath);
     __android_log_write(ANDROID_LOG_DEBUG, tag, themespath);
-    __android_log_write(ANDROID_LOG_DEBUG, tag, modes);
     __android_log_write(ANDROID_LOG_DEBUG, tag, lang);
     __android_log_write(ANDROID_LOG_DEBUG, tag, game);
 
     int status;
-    char* _argv[22];
+    char* _argv[20];
     int n = 1;
     chdir(path);
 
@@ -40,8 +38,6 @@ int SDL_main(int argc, char** argv) {
 
     _argv[n++] = SDL_strdup("-nostdgames");
     _argv[n++] = SDL_strdup("-fullscreen");
-    _argv[n++] = SDL_strdup("-modes");
-    _argv[n++] = SDL_strdup(modes);
 
     if (SDL_strcmp(music, "n") == 0) {
         _argv[n++] = SDL_strdup("-nosound");

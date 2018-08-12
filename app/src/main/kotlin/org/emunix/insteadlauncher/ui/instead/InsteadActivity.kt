@@ -16,8 +16,6 @@ class InsteadActivity: SDLActivity() {
 
     private lateinit var game : String
 
-    private lateinit var modes: List<Point>
-
     private lateinit var inputLayout: InputLayout
 
     private var prefMusic: Boolean = true
@@ -41,46 +39,25 @@ class InsteadActivity: SDLActivity() {
     }
 
     override fun getArguments(): Array<String> {
-        val args : Array<String> = Array(12){""}
+        val args : Array<String> = Array(11){""}
         args[0] = StorageHelper(this).getDataDirectory().absolutePath
         args[1] = StorageHelper(this).getAppFilesDirectory().absolutePath
         args[2] = StorageHelper(this).getGamesDirectory().absolutePath
         args[3] = StorageHelper(this).getThemesDirectory().absolutePath
-        args[4] = getModesString()
-        args[5] = Locale.getDefault().language
-        args[6] = if (prefMusic) "y" else "n"
-        args[7] = if (prefCursor) "y" else "n"
-        args[8] = if (prefBuiltinTheme) "y" else "n"
-        args[9] = prefDefaultTheme
-        args[10] = if (prefHires) "y" else "n"
-        args[11] = game
+        args[4] = Locale.getDefault().language
+        args[5] = if (prefMusic) "y" else "n"
+        args[6] = if (prefCursor) "y" else "n"
+        args[7] = if (prefBuiltinTheme) "y" else "n"
+        args[8] = prefDefaultTheme
+        args[9] = if (prefHires) "y" else "n"
+        args[10] = game
         return args
-    }
-
-    private fun getModesString(): String {
-        val strModesList = modes.map { it -> "${it.x}x${it.y}" }
-        return strModesList.joinToString(separator = ",")
     }
 
     private fun enableHWA() {
         window.setFlags(
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED)
-    }
-
-    private fun getModes(): List<Point> {
-        val result = ArrayList<Point>()
-        val portraitSize = Point()
-        val landscapeSize = Point()
-        val display = windowManager.defaultDisplay
-        setOrientation(0, 1, false, "Portrait")
-        display.getSize(portraitSize)
-        result.add(portraitSize)
-        setOrientation(1, 0, false, "LandscapeRight")
-        display.getSize(landscapeSize)
-        result.add(landscapeSize)
-        unlockRotation()
-        return result
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,8 +67,6 @@ class InsteadActivity: SDLActivity() {
         super.onCreate(savedInstanceState)
 
         game = intent.extras.getString("game_name")
-
-        modes = getModes()
 
         getPreferences()
 
