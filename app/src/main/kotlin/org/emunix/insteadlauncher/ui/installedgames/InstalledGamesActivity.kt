@@ -31,7 +31,7 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
         val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
         list.addItemDecoration(dividerItemDecoration)
 
-        InsteadLauncher.gamesDB.gameDao().getInstalledGames()
+        InsteadLauncher.db.games().observeInstalledGames()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

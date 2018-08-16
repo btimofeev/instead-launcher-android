@@ -13,7 +13,7 @@ import org.emunix.insteadlauncher.helpers.StorageHelper
 class InsteadLauncher: Application() {
 
     companion object {
-        lateinit var gamesDB: GameDatabase
+        lateinit var db: GameDatabase
 
         const val UPDATE_REPOSITORY_NOTIFICATION_ID: Int = 1000
         const val INSTALL_NOTIFICATION_ID: Int = 1001
@@ -31,7 +31,7 @@ class InsteadLauncher: Application() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannels()
-        gamesDB =  Room.databaseBuilder(this, GameDatabase::class.java, "games.db").build()
+        db =  Room.databaseBuilder(this, GameDatabase::class.java, "games.db").build()
         StorageHelper(this).makeDirs()
     }
 

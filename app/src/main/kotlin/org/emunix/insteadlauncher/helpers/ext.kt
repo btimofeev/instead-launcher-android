@@ -65,10 +65,10 @@ fun String.unescapeHtmlCodes(): String {
 
 fun Game.saveStateToDB(state: Game.State) {
     this.state = state
-    InsteadLauncher.gamesDB.gameDao().update(this)
+    InsteadLauncher.db.games().update(this)
 }
 
 fun Game.saveInstalledVersionToDB(version: String) {
     this.installedVersion = version
-    InsteadLauncher.gamesDB.gameDao().update(this)
+    InsteadLauncher.db.games().update(this)
 }

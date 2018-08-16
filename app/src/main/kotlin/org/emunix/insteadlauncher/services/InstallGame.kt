@@ -37,7 +37,7 @@ class InstallGame : IntentService("InstallGame") {
     override fun onHandleIntent(intent: Intent?) {
         val url = intent?.getStringExtra("game_url")
         gameName = intent?.getStringExtra("game_name") ?: return
-        val game = InsteadLauncher.gamesDB.gameDao().getGameByName(gameName)
+        val game = InsteadLauncher.db.games().getByName(gameName)
 
         val notificationIntent = Intent(this, GameActivity::class.java)
         notificationIntent.putExtra("game_name", gameName)

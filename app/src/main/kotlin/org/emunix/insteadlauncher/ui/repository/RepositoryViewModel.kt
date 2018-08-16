@@ -37,5 +37,5 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
         app.startService(updateRepoIntent)
     }
 
-    fun getGames(): LiveData<List<Game>> = InsteadLauncher.gamesDB.gameDao().getAll()
+    fun getGames(): LiveData<List<Game>> = InsteadLauncher.db.games().observeAll()
 }

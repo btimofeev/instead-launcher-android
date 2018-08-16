@@ -21,7 +21,7 @@ class GameViewModel(var app: Application) : AndroidViewModel(app) {
 
     @SuppressLint("CheckResult")
     fun init(gameName: String) {
-        game = InsteadLauncher.gamesDB.gameDao().getByName(gameName)
+        game = InsteadLauncher.db.games().observeByName(gameName)
 
         RxBus.listen(DownloadProgressEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())

@@ -48,8 +48,8 @@ class UpdateRepository: IntentService("UpdateRepository") {
 
         val games: List<Game> = parseXML(xml)
 
-        InsteadLauncher.gamesDB.gameDao().deleteAll()
-        InsteadLauncher.gamesDB.gameDao().insertAll(games)
+        InsteadLauncher.db.games().deleteAll()
+        InsteadLauncher.db.games().insertAll(games)
 
         RxBus.publish(UpdateRepoEvent(false))
 
