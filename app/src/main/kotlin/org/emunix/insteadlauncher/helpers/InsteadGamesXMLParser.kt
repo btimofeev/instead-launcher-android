@@ -45,6 +45,7 @@ class InsteadGamesXMLParser {
         var gTitle: String = ""
         var gAuthor: String = ""
         var gImage: String = ""
+        var gDate: String = ""
         var gVersion: String = ""
         var gUrl: String = ""
         var gSize: Long = 0
@@ -63,6 +64,7 @@ class InsteadGamesXMLParser {
                 "title" -> gTitle = readTag(name, parser)
                 "author" -> gAuthor = readTag(name, parser)
                 "image" -> gImage = readTag(name, parser)
+                "date" -> gDate = readTag(name, parser)
                 "version" -> gVersion = readTag(name, parser)
                 "url" -> gUrl = readTag(name, parser)
                 "size" -> gSize = readTag(name, parser).toLong()
@@ -74,7 +76,7 @@ class InsteadGamesXMLParser {
         }
         gTitle = gTitle.unescapeHtmlCodes()
         gDescription = gDescription.unescapeHtmlCodes()
-        return Game(gName, gTitle, gAuthor, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl,"", Game.State.NO_INSTALLED)
+        return Game(gName, gTitle, gAuthor, gDate, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl,"", Game.State.NO_INSTALLED)
     }
 
     private fun readTag(tag: String, parser: XmlPullParser): String {

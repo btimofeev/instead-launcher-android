@@ -11,6 +11,7 @@ data class Game (
         val name: String,
         val title: String,
         val author: String,
+        val date: String,
         val version: String,
         val size: Long,
         val url: String,
