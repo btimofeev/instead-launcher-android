@@ -23,7 +23,7 @@ class RepositoryAdapter(val items: List<Game>, val listener: (Game) -> Unit): Re
         fun bind(item: Game, listener: (Game) -> Unit) = with(itemView) {
             name.text = item.title
             image.loadUrl(item.image)
-            description.text = item.description
+            description.text = item.brief
             setOnClickListener { listener(item) }
         }
     }

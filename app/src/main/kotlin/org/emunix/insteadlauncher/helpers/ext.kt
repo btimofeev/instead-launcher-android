@@ -63,6 +63,14 @@ fun String.unescapeHtmlCodes(): String {
     return s
 }
 
+fun String.getBrief(): String {
+    var s = this.take(300)
+    s = s.replace("\n", " ").replace("\r", " ") // remove newlines
+    s = s.replace("\\s+".toRegex(), " ") // remove double spaces
+    s = s.trim()
+    return s
+}
+
 fun Game.saveStateToDB(state: Game.State) {
     this.state = state
     InsteadLauncher.db.games().update(this)

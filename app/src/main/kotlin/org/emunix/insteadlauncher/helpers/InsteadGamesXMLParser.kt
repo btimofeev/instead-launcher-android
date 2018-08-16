@@ -52,6 +52,7 @@ class InsteadGamesXMLParser {
         var gLang: String = ""
         var gDescription: String = ""
         var gDescurl: String = ""
+        var gBrief: String = ""
 
         parser.require(XmlPullParser.START_TAG, null, "game")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -76,7 +77,8 @@ class InsteadGamesXMLParser {
         }
         gTitle = gTitle.unescapeHtmlCodes()
         gDescription = gDescription.unescapeHtmlCodes()
-        return Game(gName, gTitle, gAuthor, gDate, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl,"", Game.State.NO_INSTALLED)
+        gBrief = gDescription.getBrief()
+        return Game(gName, gTitle, gAuthor, gDate, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl, gBrief, "", Game.State.NO_INSTALLED)
     }
 
     private fun readTag(tag: String, parser: XmlPullParser): String {
