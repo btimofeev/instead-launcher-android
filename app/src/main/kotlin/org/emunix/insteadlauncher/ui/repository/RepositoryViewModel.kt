@@ -16,6 +16,7 @@ import org.emunix.insteadlauncher.services.UpdateRepository
 
 
 class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
+    private val games = InsteadLauncher.db.games().observeAll()
     private var showProgress: MutableLiveData<Boolean> = MutableLiveData()
 
     @SuppressLint("CheckResult")
@@ -37,5 +38,5 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
         app.startService(updateRepoIntent)
     }
 
-    fun getGames(): LiveData<List<Game>> = InsteadLauncher.db.games().observeAll()
+    fun getGames(): LiveData<List<Game>> = games
 }
