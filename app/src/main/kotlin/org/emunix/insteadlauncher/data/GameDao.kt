@@ -2,7 +2,6 @@ package org.emunix.insteadlauncher.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import io.reactivex.Flowable
 
 @Dao
 interface GameDao {
@@ -16,7 +15,7 @@ interface GameDao {
     fun getByName(name: String): Game
 
     @Query("SELECT * FROM games WHERE state = 1")
-    fun observeInstalledGames(): Flowable<List<Game>>
+    fun observeInstalledGames(): LiveData<List<Game>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(game: Game)

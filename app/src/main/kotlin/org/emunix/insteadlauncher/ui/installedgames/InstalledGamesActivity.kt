@@ -7,12 +7,11 @@ import android.view.MenuItem
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_installed_games.*
-import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.ui.instead.InsteadActivity
@@ -21,6 +20,8 @@ import org.emunix.insteadlauncher.services.UpdateResources
 import org.emunix.insteadlauncher.ui.settings.SettingsActivity
 
 class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
+
+    private lateinit var viewModel: InstalledGamesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,21 +32,11 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
         val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
         list.addItemDecoration(dividerItemDecoration)
 
-        InsteadLauncher.db.games().observeInstalledGames()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    val games: List<Game> = it
-                    if (games.isEmpty()) {
-                        //todo show empty view
-                    } else
-                        list.adapter = InstalledGamesAdapter(games){
-                            val intent = Intent(this, InsteadActivity::class.java)
-                            val gameName = it.name
-                            intent.putExtra("game_name", gameName)
-                            startActivity(intent)
-                        }
-                }
+        viewModel = ViewModelProviders.of(this).get(InstalledGamesViewModel::class.java)
+
+        viewModel.getInstalledGames().observe(this, Observer { games ->
+            updateList(games)
+        })
 
         fab.setOnClickListener { view -> startActivity(Intent(view.context, RepositoryActivity::class.java)) }
 
@@ -66,5 +57,14 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun updateList(games: List<Game>) {
+            list.adapter = InstalledGamesAdapter(games){
+                val intent = Intent(this, InsteadActivity::class.java)
+                val gameName = it.name
+                intent.putExtra("game_name", gameName)
+                startActivity(intent)
+            }
     }
 }
