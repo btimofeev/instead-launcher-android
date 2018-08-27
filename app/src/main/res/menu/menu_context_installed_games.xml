@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/installed_games_activity_context_menu_play"
+        android:title="@string/installed_games_activity_context_menu_play"/>
+
+    <item
+        android:id="@+id/installed_games_activity_context_menu_play_from_beginning"
+        android:title="@string/installed_games_activity_context_menu_play_from_beginning"/>
+
+    <item
+        android:id="@+id/installed_games_activity_context_menu_delete"
+        android:title="@string/installed_games_activity_context_menu_delete"/>
+
+    <item
+        android:id="@+id/installed_games_activity_context_menu_about"
+        android:title="@string/installed_games_activity_context_menu_about"/>
+
+</menu>

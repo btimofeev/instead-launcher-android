@@ -20,7 +20,8 @@ int SDL_main(int argc, char** argv) {
     const char* defaulttheme = argv[9];
     const char* hires = argv[10];
     const char* textsize = argv[11];
-    const char* game = argv[12];
+    const char* noautosave = argv[12];
+    const char* game = argv[13];
 
     __android_log_write(ANDROID_LOG_DEBUG, tag, argv[0]);
     __android_log_write(ANDROID_LOG_DEBUG, tag, path);
@@ -31,7 +32,7 @@ int SDL_main(int argc, char** argv) {
     __android_log_write(ANDROID_LOG_DEBUG, tag, game);
 
     int status;
-    char* _argv[22];
+    char* _argv[23];
     int n = 1;
     chdir(path);
 
@@ -79,6 +80,10 @@ int SDL_main(int argc, char** argv) {
 
     _argv[n++] = SDL_strdup("-themespath");
     _argv[n++] = SDL_strdup(themespath);
+
+    if (SDL_strcmp(noautosave, "y") == 0) {
+        _argv[n++] = SDL_strdup("-noautosave");
+    }
 
     _argv[n++] = SDL_strdup("-game");
     _argv[n++] = SDL_strdup(game);

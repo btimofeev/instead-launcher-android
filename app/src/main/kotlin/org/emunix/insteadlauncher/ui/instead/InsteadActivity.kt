@@ -15,6 +15,7 @@ import java.util.*
 class InsteadActivity: SDLActivity() {
 
     private lateinit var game : String
+    private var playFromBeginning = false
 
     private lateinit var inputLayout: InputLayout
 
@@ -40,7 +41,7 @@ class InsteadActivity: SDLActivity() {
     }
 
     override fun getArguments(): Array<String> {
-        val args : Array<String> = Array(12){""}
+        val args : Array<String> = Array(13){""}
         args[0] = StorageHelper(this).getDataDirectory().absolutePath
         args[1] = StorageHelper(this).getAppFilesDirectory().absolutePath
         args[2] = StorageHelper(this).getGamesDirectory().absolutePath
@@ -52,7 +53,8 @@ class InsteadActivity: SDLActivity() {
         args[8] = prefDefaultTheme
         args[9] = if (prefHires) "y" else "n"
         args[10] = prefTextSize
-        args[11] = game
+        args[11] = if (playFromBeginning) "y" else "n"
+        args[12] = game
         return args
     }
 
@@ -69,6 +71,7 @@ class InsteadActivity: SDLActivity() {
         super.onCreate(savedInstanceState)
 
         game = intent.extras.getString("game_name")
+        playFromBeginning = intent.extras.getBoolean("play_from_beginning", false)
 
         getPreferences()
 
