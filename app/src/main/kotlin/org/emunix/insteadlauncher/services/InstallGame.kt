@@ -64,13 +64,13 @@ class InstallGame : IntentService("InstallGame") {
                 game.saveInstalledVersionToDB(game.version)
             } catch (e: IndexOutOfBoundsException) {
                 // invalid url (exception from String.substring)
-                sendNotification(getString(R.string.error), "Bad url: $url")
+                sendNotification(getString(R.string.error), "Bad url: $url", pendingIntent)
                 game.saveStateToDB(NO_INSTALLED)
             } catch (e: IOException) {
-                sendNotification(getString(R.string.error), e.localizedMessage)
+                sendNotification(getString(R.string.error), e.localizedMessage, pendingIntent)
                 game.saveStateToDB(NO_INSTALLED)
             } catch (e: ZipException) {
-                sendNotification(getString(R.string.error), e.localizedMessage)
+                sendNotification(getString(R.string.error), e.localizedMessage, pendingIntent)
                 game.saveStateToDB(NO_INSTALLED)
             }
         }
@@ -115,13 +115,14 @@ class InstallGame : IntentService("InstallGame") {
         return url.substring(url.lastIndexOf('/') + 1)
     }
 
-    private fun sendNotification(title: String, body: String) {
+    private fun sendNotification(title: String, body: String, intent: PendingIntent) {
         val notification = NotificationCompat.Builder(this, InsteadLauncher.CHANNEL_INSTALL)
                 .setSmallIcon(R.drawable.ic_alert_white_24dp)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(body))
+                .setContentIntent(intent)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(2, notification.build())
