@@ -47,7 +47,7 @@ class InstallGame : IntentService("InstallGame") {
         val notification = NotificationCompat.Builder(this, CHANNEL_INSTALL)
                 .setContentTitle(gameName)
                 .setContentText(getText(R.string.notification_download_and_install_game))
-                .setSmallIcon(R.drawable.ic_refresh_white_24dp)
+                .setSmallIcon(R.drawable.ic_download_white_24dp)
                 .setContentIntent(pendingIntent)
                 .build()
 

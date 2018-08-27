@@ -32,7 +32,7 @@ class DeleteGame: IntentService("DeleteGame") {
         val notification = NotificationCompat.Builder(this, CHANNEL_UNINSTALL)
                 .setContentTitle(gameName)
                 .setContentText(getText(R.string.notification_delete_game))
-                .setSmallIcon(R.drawable.ic_refresh_white_24dp)
+                .setSmallIcon(R.drawable.ic_delete_white_24dp)
                 .setContentIntent(pendingIntent)
                 .build()
 
