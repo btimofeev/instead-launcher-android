@@ -17,6 +17,9 @@ interface GameDao {
     @Query("SELECT * FROM games WHERE state = 1")
     fun observeInstalledGames(): LiveData<List<Game>>
 
+    @Query("SELECT * FROM games WHERE state = 1")
+    fun getInstalledGames(): List<Game>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(game: Game)
 
@@ -31,4 +34,19 @@ interface GameDao {
 
     @Query("DELETE FROM games")
     fun deleteAll()
+
+    @Transaction
+    fun updateRepository(games: List<Game>) {
+        getInstalledGames().forEach { installedGame ->
+            for ((i, game) in games.withIndex()) {
+                if (game.name == installedGame.name) {
+                    games[i].installedVersion = installedGame.installedVersion
+                    games[i].state = installedGame.state
+                }
+            }
+        }
+
+        deleteAll()
+        insertAll(games)
+    }
 }
