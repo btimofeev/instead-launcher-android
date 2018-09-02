@@ -43,6 +43,7 @@ class UpdateRepository: IntentService("UpdateRepository") {
         } catch (e: IOException) {
             // TODO show better error
             RxBus.publish(UpdateRepoEvent(false, true, e.localizedMessage))
+            stopForeground(true)
             return
         }
 

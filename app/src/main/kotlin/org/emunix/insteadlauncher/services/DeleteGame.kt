@@ -46,6 +46,7 @@ class DeleteGame: IntentService("DeleteGame") {
         } catch (e: IOException) {
             sendNotification(getString(R.string.error), e.localizedMessage)
             game.saveStateToDB(NO_INSTALLED)
+            stopForeground(true)
             return
         }
 
