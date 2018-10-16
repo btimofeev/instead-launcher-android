@@ -73,7 +73,10 @@
         <item>Открыть меню Instead</item>
     </string-array>
     <string name="prefs_category_network">Сеть</string>
-    <string name="prefs_repository_title">Репозиторий</string>
+    <string name="prefs_category_repositories">Репозитории</string>
+    <string name="prefs_repository_title">Основной репозиторий</string>
     <string name="prefs_repository_summary">Укажите адрес XML файла</string>
+    <string name="prefs_sandbox">Песочница</string>
+    <string name="prefs_sandbox_summary">Бета-версии игр, незаконченные проекты и т.п.</string>
 
 </resources>

@@ -26,6 +26,7 @@ class InsteadLauncher: Application() {
         const val CHANNEL_UPDATE_RESOURCES = "org.emunix.insteadlauncher.channel.update_resources"
 
         const val DEFAULT_REPOSITORY = "http://instead-games.ru/xml.php"
+        const val SANDBOX = "http://instead-games.ru/xml2.php"
     }
 
     override fun onCreate() {

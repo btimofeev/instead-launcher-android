@@ -73,8 +73,12 @@
         <item>Open menu</item>
     </string-array>
     <string name="prefs_category_network">Network</string>
-    <string name="prefs_repository_title">Repository</string>
+    <string name="prefs_category_repositories">Repositories</string>
+    <string name="prefs_repository_title">Main repository</string>
     <string name="prefs_repository_summary">Specify the address of the XML file</string>
+    <string name="prefs_sandbox">Sandbox</string>
+    <string name="prefs_sandbox_summary">Beta versions of games, unfinished projects, etc.</string>
+
 
 
 </resources>

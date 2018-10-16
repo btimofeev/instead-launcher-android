@@ -9,7 +9,7 @@ import java.io.StringReader
 
 class InsteadGamesXMLParser {
 
-    fun parse(input: String): List<Game> {
+    fun parse(input: String): Map<String, Game> {
         try {
             val parser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
@@ -22,8 +22,8 @@ class InsteadGamesXMLParser {
     }
 
     @Throws (XmlPullParserException::class, IOException::class)
-    private fun readFeed(parser: XmlPullParser): List<Game> {
-        val games = ArrayList<Game>()
+    private fun readFeed(parser: XmlPullParser): Map<String, Game> {
+        val games = mutableMapOf<String, Game>()
 
         parser.require(XmlPullParser.START_TAG, null, "game_list")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -32,7 +32,8 @@ class InsteadGamesXMLParser {
             }
             val name = parser.name
             if (name == "game") {
-                games.add(readEntry(parser))
+                val entry = readEntry(parser)
+                games[entry.name] = entry
             } else {
                 skip(parser)
             }

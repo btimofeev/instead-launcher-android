@@ -61,7 +61,7 @@
             android:summary="%s"/>
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/prefs_category_network">
+        android:title="@string/prefs_category_repositories">
 
         <EditTextPreference
             android:defaultValue="http://instead-games.ru/xml.php"
@@ -71,5 +71,20 @@
             android:singleLine="true"
             android:summary="@string/prefs_repository_summary"
             android:title="@string/prefs_repository_title"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:disableDependentsState="false"
+            android:icon="@drawable/ic_sandbox_grey_24dp"
+            android:key="pref_sandbox_enabled"
+            android:title="@string/prefs_sandbox"
+            android:summary="@string/prefs_sandbox_summary"/>
+        <EditTextPreference
+            android:dependency="pref_sandbox_enabled"
+            android:defaultValue="http://instead-games.ru/xml2.php"
+            android:key="pref_sandbox"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/prefs_repository_summary"
+            android:title="@string/prefs_sandbox"/>
     </PreferenceCategory>
 </PreferenceScreen>
