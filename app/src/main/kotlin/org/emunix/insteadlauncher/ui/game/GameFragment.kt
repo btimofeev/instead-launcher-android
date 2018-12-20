@@ -11,8 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_game.*
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
@@ -105,7 +106,7 @@ class GameFragment : Fragment() {
                 installGame.putExtra("game_url", game.url)
                 installGame.putExtra("game_name", game.name)
                 activity.startService(installGame)
-                async (CommonPool) { game.saveStateToDB(IN_QUEUE_TO_INSTALL) }
+                GlobalScope.launch(Dispatchers.IO) { game.saveStateToDB(IN_QUEUE_TO_INSTALL) }
             }
 
             if (game.state == INSTALLED) {
