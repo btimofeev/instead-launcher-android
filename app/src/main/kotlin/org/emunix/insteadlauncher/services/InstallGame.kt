@@ -58,6 +58,8 @@ class InstallGame : IntentService("InstallGame") {
                 game.saveStateToDB(IS_INSTALL)
                 val zipfile = File(externalCacheDir, extractFilename(url))
                 download(url, zipfile)
+                val gameDir = File(StorageHelper(this).getGamesDirectory(), gameName)
+                gameDir.deleteRecursively()
                 zipfile.unzip(StorageHelper(this).getGamesDirectory())
                 zipfile.deleteRecursively()
                 game.saveStateToDB(INSTALLED)

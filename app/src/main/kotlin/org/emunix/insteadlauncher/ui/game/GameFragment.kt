@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -67,20 +68,35 @@ class GameFragment : Fragment() {
 
         name.text = game.title
         author.text = game.author
-        version.text = getString(R.string.game_activity_label_version, game.version)
+        if (game.installedVersion.isNotBlank() and (game.version != game.installedVersion)){
+            version.text = getString(R.string.game_activity_label_version, game.installedVersion + " (\u2191${game.version})")
+        } else {
+            version.text = getString(R.string.game_activity_label_version, game.version)
+        }
         size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
         image.loadUrl(game.image)
         description.text = game.description
 
         if (game.state == INSTALLED) {
-            installButton.text = getText(R.string.game_activity_button_run)
-            showProgress(false)
+            installMessage.visible(false)
+            progressBar.visible(false)
+            installButton.visible(false)
+            deleteButton.visible(true)
+            runButton.visible(true)
+
+            if (game.version != game.installedVersion){
+                installButton.text = getText(R.string.game_activity_button_update)
+                installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
+                installButton.visible(true)
+            }
         }
 
         if (game.state == NO_INSTALLED) {
             installButton.text = getText(R.string.game_activity_button_install)
+            installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorPrimary)
             installButton.visible(true)
             deleteButton.visible(false)
+            runButton.visible(false)
             progressBar.visible(false)
             installMessage.visible(false)
         }
@@ -101,19 +117,11 @@ class GameFragment : Fragment() {
         }
 
         installButton.setOnClickListener {
-            if (game.state == NO_INSTALLED) {
-                val installGame = Intent(activity, InstallGame::class.java)
-                installGame.putExtra("game_url", game.url)
-                installGame.putExtra("game_name", game.name)
-                activity.startService(installGame)
-                GlobalScope.launch(Dispatchers.IO) { game.saveStateToDB(IN_QUEUE_TO_INSTALL) }
-            }
-
-            if (game.state == INSTALLED) {
-                val runGame = Intent(activity, InsteadActivity::class.java)
-                runGame.putExtra("game_name", game.name)
-                startActivity(runGame)
-            }
+            val installGame = Intent(activity, InstallGame::class.java)
+            installGame.putExtra("game_url", game.url)
+            installGame.putExtra("game_name", game.name)
+            activity.startService(installGame)
+            GlobalScope.launch(Dispatchers.IO) { game.saveStateToDB(IN_QUEUE_TO_INSTALL) }
         }
 
         deleteButton.setOnClickListener {
@@ -133,6 +141,14 @@ class GameFragment : Fragment() {
                 dialog.show()
             }
         }
+
+        runButton.setOnClickListener {
+            if (game.state == INSTALLED) {
+                val runGame = Intent(activity, InsteadActivity::class.java)
+                runGame.putExtra("game_name", game.name)
+                startActivity(runGame)
+            }
+        }
     }
 
     private fun showProgress(flag: Boolean) {
@@ -140,6 +156,7 @@ class GameFragment : Fragment() {
         progressBar.visible(flag)
         installButton.visible(!flag)
         deleteButton.visible(!flag)
+        runButton.visible(!flag)
     }
 
     private fun setIndeterminateProgress(indeterminate: Boolean, value: Int = 0){

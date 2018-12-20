@@ -9,6 +9,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.inflate
 import org.emunix.insteadlauncher.helpers.loadUrl
+import org.emunix.insteadlauncher.helpers.visible
 
 class RepositoryAdapter(val items: List<Game>, val listener: (Game) -> Unit): RecyclerView.Adapter<RepositoryAdapter.ViewHolder>() {
 
@@ -25,6 +26,10 @@ class RepositoryAdapter(val items: List<Game>, val listener: (Game) -> Unit): Re
             image.loadUrl(item.image)
             description.text = item.brief
             setOnClickListener { listener(item) }
+
+            if (item.installedVersion.isNotBlank() and (item.version != item.installedVersion)) {
+                badge.visible(true)
+            }
         }
     }
 }

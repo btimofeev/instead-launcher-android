@@ -13,6 +13,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game.State.IS_DELETE
 import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.helpers.StorageHelper
+import org.emunix.insteadlauncher.helpers.saveInstalledVersionToDB
 import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import java.io.File
@@ -43,6 +44,7 @@ class DeleteGame: IntentService("DeleteGame") {
             val gameDir = File(StorageHelper(this).getGamesDirectory(), gameName)
             gameDir.deleteRecursively()
             game.saveStateToDB(NO_INSTALLED)
+            game.saveInstalledVersionToDB("")
         } catch (e: IOException) {
             sendNotification(getString(R.string.error), e.localizedMessage)
             game.saveStateToDB(NO_INSTALLED)
