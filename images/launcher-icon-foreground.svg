@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="108"
+   height="108"
+   viewBox="0 0 28.575001 28.575001"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 2405546, 2018-03-11"
+   sodipodi:docname="launcher-icon-foreground.svg">
+  <defs
+     id="defs2">
+    <marker
+       inkscape:stockid="DotS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="DotS"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4646"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(0.2,0,0,0.2,1.48,0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8"
+     inkscape:cx="19.775926"
+     inkscape:cy="26.744056"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1918"
+     inkscape:window-height="1062"
+     inkscape:window-x="0"
+     inkscape:window-y="16"
+     inkscape:window-maximized="0"
+     units="px"
+     width="512px"
+     inkscape:pagecheckerboard="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-intersection-paths="true">
+    <sodipodi:guide
+       position="20.156073,18.765802"
+       orientation="0.70710678,0.70710678"
+       id="guide5608"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="14.261175,12.686927"
+       orientation="0.70710678,0.70710678"
+       id="guide5610"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="9.5088166,8.111329"
+       orientation="0.70710678,0.70710678"
+       id="guide5616"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="14.852941,13.231275"
+       orientation="0.70710678,0.70710678"
+       id="guide5620"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="14.949992,18.786451"
+       orientation="-0.70710678,0.70710678"
+       id="guide5626"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Boris Timofeev &lt;btimofeev@emunix.org&gt;</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-268.425)">
+    <path
+       style="fill:#211d1d;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.10505838"
+       d="m 14.261174,284.31307 -4.7523579,4.5756 13.2084179,13.20842 4.945099,-4.38286 z"
+       id="path5630"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#211d1d;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.10505836"
+       d="m 20.156072,278.2342 -5.206081,-0.0206 -0.09705,5.55518 13.890078,13.89007 5.18732,-5.65034 z"
+       id="path5628"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:0;stroke:#ffffff;stroke-width:1.20772457;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="path5024"
+       sodipodi:type="arc"
+       sodipodi:cx="-17.54122"
+       sodipodi:cy="281.03793"
+       sodipodi:rx="3.190114"
+       sodipodi:ry="3.2660925"
+       sodipodi:start="0"
+       sodipodi:end="6.2831329"
+       sodipodi:open="true"
+       d="m -14.351106,281.03793 a 3.190114,3.2660925 0 0 1 -3.190072,3.2661 3.190114,3.2660925 0 0 1 -3.190156,-3.26601 3.190114,3.2660925 0 0 1 3.189989,-3.26618 3.190114,3.2660925 0 0 1 3.190239,3.26592"
+       transform="scale(-1,1)" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1.01556504;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="rect5028"
+       width="5.578155"
+       height="1.5998251"
+       x="191.81339"
+       y="205.35466"
+       ry="0.075140312"
+       transform="matrix(-0.68930454,0.72447171,0.70809684,0.70611533,0,0)" />
+  </g>
+</svg>
