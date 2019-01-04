@@ -29,7 +29,7 @@
       android:fillAlpha="1"
       android:strokeLineCap="square"/>
   <path
-      android:pathData="m18.0328,13.2253c0,0 0.1226,0.5571 0.6242,0.8741"
+      android:pathData="m17.5036,12.6961c0,0 0.1226,0.5571 0.6242,0.8741"
       android:strokeAlpha="1"
       android:strokeLineJoin="miter"
       android:strokeWidth="0.74599999"
@@ -38,7 +38,7 @@
       android:fillType="evenOdd"
       android:strokeLineCap="round"/>
   <path
-      android:pathData="m16.9584,10.9096c0,0 0.42,0.4817 0.5904,1.1559"
+      android:pathData="m16.4293,10.3804c0,0 0.42,0.4817 0.5904,1.1559"
       android:strokeAlpha="1"
       android:strokeLineJoin="miter"
       android:strokeWidth="0.74599999"
@@ -47,7 +47,7 @@
       android:fillType="evenOdd"
       android:strokeLineCap="round"/>
   <path
-      android:pathData="m19.7477,18.2086c-0.2706,0.2121 -0.5275,0.5015 -0.5102,0.9033"
+      android:pathData="m19.2186,17.6795c-0.2706,0.2121 -0.5275,0.5015 -0.5102,0.9033"
       android:strokeAlpha="1"
       android:strokeLineJoin="miter"
       android:strokeWidth="0.43743291"
@@ -56,7 +56,7 @@
       android:fillType="evenOdd"
       android:strokeLineCap="round"/>
   <path
-      android:pathData="m20.2046,16.4318c0.2107,0.3783 0.2691,0.7257 0.0836,1.034"
+      android:pathData="m19.6755,15.9026c0.2107,0.3783 0.2691,0.7257 0.0836,1.034"
       android:strokeAlpha="1"
       android:strokeLineJoin="miter"
       android:strokeWidth="0.43743291"
@@ -65,7 +65,7 @@
       android:fillType="evenOdd"
       android:strokeLineCap="round"/>
   <path
-      android:pathData="m19.1454,20.1564c0.0901,0.3897 0.0978,0.5337 0.4305,0.8426"
+      android:pathData="m18.6162,19.6272c0.0901,0.3897 0.0978,0.5337 0.4305,0.8426"
       android:strokeAlpha="1"
       android:strokeLineJoin="miter"
       android:strokeWidth="0.43743291"

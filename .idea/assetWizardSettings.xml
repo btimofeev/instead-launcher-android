@@ -19,10 +19,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundColor" value="b9ffc3" />
-                                      <entry key="backgroundImage" value="$USER_HOME$/downloads/instead-background.svg" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/downloads/instead-foreground.svg" />
+                                      <entry key="backgroundImage" value="$PROJECT_DIR$/images/launcher-icon-background.svg" />
+                                      <entry key="foregroundImage" value="$PROJECT_DIR$/images/launcher-icon-foreground.svg" />
                                       <entry key="showSafeZone" value="false" />
-                                      <entry key="webIconShape" value="CIRCLE" />
                                     </map>
                                   </option>
                                 </PersistentState>
