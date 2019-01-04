@@ -61,11 +61,16 @@ class InsteadLauncher: Application() {
         }
     }
 
-    fun getVersionCode(): Long {
+    fun getVersionCode(context: Context): Long {
         var version: Long = 0
         try {
-            val info = this.packageManager.getPackageInfo(this.packageName, 0)
-            version = info.versionCode.toLong()
+            val manager = context.packageManager
+            val info = manager.getPackageInfo(context.packageName, 0)
+            version = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                info.versionCode.toLong()
+            } else {
+                info.longVersionCode
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

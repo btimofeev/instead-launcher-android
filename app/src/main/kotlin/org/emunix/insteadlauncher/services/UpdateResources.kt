@@ -35,7 +35,7 @@ class UpdateResources : IntentService("UpdateResources") {
             StorageHelper(this).getLangDirectory().deleteRecursively()
             StorageHelper(this).copyAsset("lang", StorageHelper(this).getDataDirectory())
 
-            saveCurrentAppVersion(InsteadLauncher().getVersionCode())
+            saveCurrentAppVersion(InsteadLauncher().getVersionCode(this))
 
             stopForeground(true)
         }
@@ -57,7 +57,7 @@ class UpdateResources : IntentService("UpdateResources") {
     private fun isNewAppVersion() : Boolean {
         val prefs = this.getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE)
         val lastUpdate = prefs.getLong(PREF_RESOURCES_LAST_UPDATE, -1)
-        if (lastUpdate != InsteadLauncher().getVersionCode()) {
+        if (lastUpdate != InsteadLauncher().getVersionCode(this)) {
             return true
         }
         return false
