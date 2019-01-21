@@ -93,7 +93,7 @@ class GameFragment : Fragment() {
 
         if (game.state == NO_INSTALLED) {
             installButton.text = getText(R.string.game_activity_button_install)
-            installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorPrimary)
+            installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorInstallButton)
             installButton.visible(true)
             deleteButton.visible(false)
             runButton.visible(false)
