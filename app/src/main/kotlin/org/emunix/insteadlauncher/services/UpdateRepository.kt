@@ -32,7 +32,7 @@ class UpdateRepository: IntentService("UpdateRepository") {
         val notification = NotificationCompat.Builder(this, CHANNEL_UPDATE_REPOSITORY)
                 .setContentTitle(getText(R.string.app_name))
                 .setContentText(getText(R.string.notification_updating_repository))
-                .setSmallIcon(R.drawable.ic_refresh_white_24dp)
+                .setSmallIcon(R.drawable.ic_refresh_black_24dp)
                 .setContentIntent(pendingIntent)
                 .build()
 

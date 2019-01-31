@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#43a047</color>
-    <color name="colorPrimaryDark">#00701a</color>
+    <color name="colorPrimaryDark">#4B4B4B</color>
     <color name="colorAccent">#ff5252</color>
-    <color name="white">#ffffffff</color>
-    <color name="background">#ffffffff</color>
     <color name="colorInstallButton">#43a047</color>
     <color name="colorDeleteButton">#ff5252</color>
     <color name="colorUpdateButton">#ffb300</color>

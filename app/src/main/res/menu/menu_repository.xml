@@ -7,6 +7,6 @@
     android:id="@+id/action_update_repo"
     android:orderInCategory="100"
     android:title="@string/action_update_repo"
-    android:icon="@drawable/ic_refresh_white_24dp"
+    android:icon="@drawable/ic_refresh_black_24dp"
     app:showAsAction="always"/>
 </menu>

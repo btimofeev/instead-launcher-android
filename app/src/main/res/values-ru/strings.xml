@@ -18,6 +18,7 @@
     <string name="game_activity_message_downloading">Загружаю: %1$s/%2$s</string>
     <string name="game_activity_message_installing">Устанавливаю&#8230;</string>
 
+    <string name="installed_games_activity_title">INSTEAD</string>
     <string name="installed_games_activity_context_menu_play">Играть</string>
     <string name="installed_games_activity_context_menu_play_from_beginning">Начать новую игру</string>
     <string name="installed_games_activity_context_menu_delete">Удалить</string>
