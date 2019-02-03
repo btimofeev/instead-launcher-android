@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -64,7 +65,8 @@ class GameFragment : Fragment() {
 
     private fun setViews(game: Game) {
         val activity = activity as AppCompatActivity
-        activity.supportActionBar?.title = game.title
+        activity.supportActionBar?.title = ""
+        activity.collapsing_toolbar.isTitleEnabled = false
 
         name.text = game.title
         author.text = game.author
@@ -74,7 +76,7 @@ class GameFragment : Fragment() {
             version.text = getString(R.string.game_activity_label_version, game.version)
         }
         size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
-        image.loadUrl(game.image)
+        activity.toolbar_image.loadUrl(game.image)
         description.text = game.description
 
         if (game.state == INSTALLED) {

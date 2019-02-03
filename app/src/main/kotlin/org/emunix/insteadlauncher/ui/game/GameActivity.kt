@@ -16,6 +16,7 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         setSupportActionBar(toolbar)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         fragment.arguments = intent.extras
