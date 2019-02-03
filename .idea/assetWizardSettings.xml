@@ -78,7 +78,7 @@
                                       <entry key="backgroundColor" value="ffffff" />
                                       <entry key="backgroundImage" value="$PROJECT_DIR$/images/launcher-icon-background.svg" />
                                       <entry key="foregroundImage" value="$PROJECT_DIR$/images/launcher-icon-foreground.svg" />
-                                      <entry key="previewDensity" value="XXHIGH" />
+                                      <entry key="previewDensity" value="XXXHIGH" />
                                     </map>
                                   </option>
                                 </PersistentState>
