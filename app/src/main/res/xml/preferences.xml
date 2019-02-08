@@ -44,7 +44,7 @@
             android:summary="@string/prefs_text_size_summary"
             android:title="@string/prefs_text_size_title"/>
         <ListPreference
-            android:defaultValue="do_not_show_button"
+            android:defaultValue="bottom_left"
             android:entries="@array/prefs_keyboard_button_entries"
             android:entryValues="@array/prefs_keyboard_button_values"
             android:icon="@drawable/ic_keyboard_outline_grey_24dp"
