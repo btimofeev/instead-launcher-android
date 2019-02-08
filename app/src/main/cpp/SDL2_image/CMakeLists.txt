@@ -92,10 +92,10 @@ set( SOURCES
 
 add_library( png STATIC ${SOURCES} )
 
-find_library( zlib z)
+#find_library( zlib z)
 
 target_link_libraries( png
-                        ${zlib} )
+                        z )
 
 #----------------
 # Build SDL_image

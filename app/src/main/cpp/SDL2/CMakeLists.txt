@@ -38,15 +38,15 @@ file( GLOB SOURCES
 
 add_library( SDL2 SHARED ${SOURCES} )
 
-find_library( dl-lib dl )
-find_library( GLESv1_CM-lib GLESv1_CM )
-find_library( GLESv2-lib GLESv2 )
-find_library( log-lib log )
-find_library( android-lib android )
+#find_library( dl-lib dl )
+#find_library( GLESv1_CM-lib GLESv1_CM )
+#find_library( GLESv2-lib GLESv2 )
+#find_library( log-lib log )
+#find_library( android-lib android )
 
 target_link_libraries( SDL2
-                        ${dl-lib}
-                        ${GLESv1_CM-lib}
-                        ${GLESv2-lib}
-                        ${log-lib}
-                        ${android-lib} )
+                        dl
+                        GLESv1_CM
+                        GLESv2
+                        log
+                        android )
