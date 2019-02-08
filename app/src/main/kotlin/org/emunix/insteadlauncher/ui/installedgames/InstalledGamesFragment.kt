@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_installed_games.*
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.services.DeleteGame
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import org.emunix.insteadlauncher.ui.instead.InsteadActivity
@@ -40,8 +41,8 @@ class InstalledGamesFragment : Fragment() {
         viewModel.getInstalledGames().observe(this, Observer { games ->
             listAdapter.loadItems(games)
             listAdapter.notifyDataSetChanged()
+            empty_view.visible(games.isEmpty())
         })
-
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
