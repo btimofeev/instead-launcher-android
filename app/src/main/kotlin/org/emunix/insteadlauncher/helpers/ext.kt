@@ -42,10 +42,12 @@ fun File.unzip(dir: File) {
                 val entries = zip.entries()
                 while (entries.hasMoreElements()) {
                     val entry = entries.nextElement()
+                    val entryFile = File(dir, entry.name)
                     if (entry.isDirectory) {
-                        File(dir, entry.name).mkdirs()
+                        entryFile.mkdirs()
                     } else {
-                        FileOutputStream(File(dir, entry.name)).use {
+                        entryFile.parentFile.mkdirs()
+                        FileOutputStream(entryFile).use {
                             IOUtils.copy(zip.getInputStream(entry), it)
                         }
                     }
