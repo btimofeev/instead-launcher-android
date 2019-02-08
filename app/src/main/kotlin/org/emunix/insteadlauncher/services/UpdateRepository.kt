@@ -49,14 +49,14 @@ class UpdateRepository: IntentService("UpdateRepository") {
             gamesMap.forEach { (_, value) -> games.add(value) }
         } catch (e: IOException) {
             // TODO show better error
-            RxBus.publish(UpdateRepoEvent(false, true, e.localizedMessage))
+            RxBus.publish(UpdateRepoEvent(false, false, true, e.localizedMessage))
             stopForeground(true)
             return
         }
 
         InsteadLauncher.db.games().updateRepository(games)
 
-        RxBus.publish(UpdateRepoEvent(false))
+        RxBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = true))
 
         stopForeground(true)
     }

@@ -32,17 +32,19 @@ class RepositoryFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(activity!!).get(RepositoryViewModel::class.java)
 
+        try_again_button.setOnClickListener { viewModel.updateRepository() }
+
         viewModel.getGames().observe(this, Observer { games ->
-            showEmptyView(true)
             if (games != null) {
                 if (!games.isEmpty()) {
-                    showEmptyView(false)
                     list.adapter = RepositoryAdapter(games) {
                         val intent = Intent(activity, GameActivity::class.java)
                         val gameName = it.name
                         intent.putExtra("game_name", gameName)
                         startActivity(intent)
                     }
+                } else {
+                    viewModel.updateRepository()
                 }
             }
         })
@@ -50,13 +52,17 @@ class RepositoryFragment : Fragment() {
         viewModel.getProgressState().observe(this, Observer { state ->
             if (state != null) {
                 progress.visible(state)
-
             }
         })
-    }
 
-    private fun showEmptyView(isActive: Boolean) {
-        empty.visible(isActive)
-        list.visible(!isActive)
+        viewModel.getErrorViewState().observe(this, Observer { state ->
+            if (state != null)
+                error_view.visible(state)
+        })
+
+        viewModel.getGameListState().observe(this, Observer { state ->
+            if (state != null)
+                list.visible(state)
+        })
     }
 }
