@@ -45,6 +45,11 @@
             android:label="@string/settings_activity_title"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".ui.about.AboutActivity"
+            android:label="@string/about_activity_title"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <service android:name=".services.UpdateRepository"/>
         <service android:name=".services.InstallGame"/>

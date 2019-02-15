@@ -9,6 +9,8 @@ import android.content.Context
 import android.os.Build
 import org.emunix.insteadlauncher.data.GameDatabase
 import org.emunix.insteadlauncher.helpers.StorageHelper
+import android.util.Log
+
 
 class InsteadLauncher: Application() {
 
@@ -75,5 +77,17 @@ class InsteadLauncher: Application() {
             e.printStackTrace()
         }
         return version
+    }
+
+    fun getAppVersion(context: Context): String {
+        var versionName = "N/A"
+        try {
+            val pinfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            versionName = pinfo.versionName
+        } catch (e: Exception) {
+            Log.e("INSTEAD Launcher", "App version is not available")
+        }
+
+        return versionName
     }
 }

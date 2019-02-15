@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import kotlinx.android.synthetic.main.activity_installed_games.*
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.services.UpdateResources
+import org.emunix.insteadlauncher.ui.about.AboutActivity
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
 import org.emunix.insteadlauncher.ui.settings.SettingsActivity
 
@@ -33,9 +34,15 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
 
-        if (id == R.id.action_settings) {
-            startActivity(Intent(this, SettingsActivity::class.java))
-            return true
+        when (id) {
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                return true
+            }
+            R.id.action_about -> {
+                startActivity(Intent(this, AboutActivity::class.java))
+                return true
+            }
         }
 
         return super.onOptionsItemSelected(item)

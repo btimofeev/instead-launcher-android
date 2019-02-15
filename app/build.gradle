@@ -30,6 +30,10 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "INSTEAD_VERSION", "\"3.2.2\"")
+        }
+        debug {
+            buildConfigField("String", "INSTEAD_VERSION", "\"3.2.2\"")
         }
     }
     sourceSets {
