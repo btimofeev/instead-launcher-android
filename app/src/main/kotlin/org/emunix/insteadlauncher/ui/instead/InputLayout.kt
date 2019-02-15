@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2015-2018 Anton Kolosov https://github.com/instead-hub/instead-android-ng
+ * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
+ */
+
 package org.emunix.insteadlauncher.ui.instead
 
 import android.app.Activity
@@ -11,8 +17,6 @@ import android.widget.ImageButton
 import android.widget.RelativeLayout
 import org.emunix.insteadlauncher.R
 import org.libsdl.app.SDLActivity
-
-
 
 
 class InputLayout(context: Context) : RelativeLayout(context) {

@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2016-2018 Anton Kolosov https://github.com/instead-hub/instead-android-ng
+ * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
+ */
+
 #include <SDL.h>
 #include <jni.h>
 #include <unistd.h>
