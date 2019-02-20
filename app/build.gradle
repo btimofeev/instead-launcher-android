@@ -14,8 +14,8 @@ android {
         applicationId "org.emunix.insteadlauncher"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 400
-        versionName "0.4"
+        versionCode 500
+        versionName "0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         ndk {
