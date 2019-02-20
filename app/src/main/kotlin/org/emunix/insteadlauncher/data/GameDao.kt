@@ -25,6 +25,9 @@ interface GameDao {
     @Query("SELECT * FROM games WHERE state = 1")
     fun getInstalledGames(): List<Game>
 
+    @Query("SELECT * FROM games WHERE (name || title || author || description) LIKE :query")
+    fun search(query: String): LiveData<List<Game>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(game: Game)
 

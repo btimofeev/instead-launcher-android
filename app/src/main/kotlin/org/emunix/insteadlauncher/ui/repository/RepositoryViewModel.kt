@@ -48,4 +48,6 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
     }
 
     fun getGames(): LiveData<List<Game>> = games
+
+    fun searchGames(query: String): LiveData<List<Game>> = InsteadLauncher.db.games().search(query)
 }

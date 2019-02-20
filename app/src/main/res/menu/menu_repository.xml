@@ -3,10 +3,18 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".ui.repository.RepositoryActivity">
-<item
-    android:id="@+id/action_update_repo"
-    android:orderInCategory="100"
-    android:title="@string/action_update_repo"
-    android:icon="@drawable/ic_refresh_black_24dp"
-    app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/action_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_update_repo"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        android:orderInCategory="100"
+        android:title="@string/action_update_repo"
+        app:showAsAction="never"/>
 </menu>
