@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_repository.*
 import org.emunix.insteadlauncher.R
+import kotlinx.android.synthetic.main.fragment_repository.*
+
 
 class RepositoryActivity : AppCompatActivity() {
     private lateinit var viewModel: RepositoryViewModel
@@ -26,6 +28,10 @@ class RepositoryActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
         viewModel.init()
+
+        swipe_to_refresh.setOnRefreshListener {
+            viewModel.updateRepository()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -56,7 +56,7 @@ class RepositoryFragment : Fragment() {
 
         viewModel.getProgressState().observe(this, Observer { state ->
             if (state != null) {
-                progress.visible(state)
+                swipe_to_refresh.isRefreshing = state
             }
         })
 
