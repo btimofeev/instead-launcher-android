@@ -88,6 +88,6 @@
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Пётр Косых https://instead-hub.github.io/</string>
     <string name="about_activity_about_instead_launcher"><b>INSTEAD Launcher для Android</b> v%1$s &#169; Борис Тимофеев https://github.com/btimofeev/instead-launcher-android/</string>
     <string name="about_activity_thanks">Выражаю благодарность:\n- Андрею Лобанову за репозиторий с играми http://instead-games.ru\n- Антону Колосову за исходный код INSTEAD-NG, частично используемый в этой программе.\n- Художнику НЕУД за прекрасный рисунок https://vk.com/neudd</string>
-    <string name="about_activity_to_game_authors">Если вы хотите создать свою игру и разместить её в репозитории, то вам необходимо начать с чтения документации http://bit.ly/instead_doc_ru</string>
+    <string name="about_activity_to_game_authors">Если вы хотите создать свою игру и разместить её в репозитории, начните с чтения документации http://bit.ly/instead_doc_ru</string>
     <string name="about_activity_discuss">Обсудить INSTEAD и игры можно на следующих ресурсах:\n- Форум http://instead-games.ru/forum/\n- Telegram https://t.me/insteadtalk\n- Gitter https://gitter.im/instead-hub/instead\n- Jabber instead@conference.jabber.ru</string>
 </resources>
