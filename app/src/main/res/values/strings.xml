@@ -22,7 +22,7 @@
     <string name="game_activity_message_installing">Installing&#8230;</string>
 
     <string name="installed_games_activity_title">INSTEAD</string>
-    <string name="installed_games_empty_text">Are you ready for adventure?\nTap the red button to install games.</string>
+    <string name="installed_games_empty_text">Are you ready for an adventure?\nTap the red button to install games.</string>
     <string name="installed_games_activity_context_menu_play">Play</string>
     <string name="installed_games_activity_context_menu_play_from_beginning">Restart game</string>
     <string name="installed_games_activity_context_menu_delete">Delete</string>
@@ -33,8 +33,8 @@
     <string name="dialog_delete_game_positive_button">Delete</string>
     <string name="dialog_delete_game_negative_button">Cancel</string>
 
-    <string name="notification_download_and_install_game">Download the game, please wait&#8230;</string>
-    <string name="notification_delete_game">Delete the game, please wait&#8230;</string>
+    <string name="notification_download_and_install_game">Downloading the game, please wait&#8230;</string>
+    <string name="notification_delete_game">Deleting the game, please wait&#8230;</string>
     <string name="notification_updating_repository">Updating the repository, please wait&#8230;</string>
     <string name="notification_updating_resources">Updating the application resources, please wait&#8230;</string>
 
@@ -87,8 +87,8 @@
     <string name="about_activity_title">About</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Peter Kosyh https://instead-hub.github.io/</string>
     <string name="about_activity_about_instead_launcher"><b>INSTEAD Launcher for Android</b> v%1$s &#169; Boris Timofeev https://github.com/btimofeev/instead-launcher-android/</string>
-    <string name="about_activity_thanks">Thanks to:\n- Andrew Lobanov for a repository with games http://instead-games.ru\n- Anton Kolosov for the source code INSTEAD-NG, partially used in this program.\n - the artist NEUD for a beautiful drawing https://vk.com/neudd</string>
-    <string name="about_activity_to_game_authors">If you want to create your game and place it in the repository, then you need to start by reading the documentation http://bit.ly/instead_doc_en</string>
-    <string name="about_activity_discuss">You can discuss INSTEAD and games on the following resources:\n- Forum http://instead-games.ru/forum/\n- Telegram https://t.me/insteadtalk\n- Gitter https://gitter.im/instead-hub/instead\n- Jabber instead@conference.jabber.ru</string>
+    <string name="about_activity_thanks">Thanks to:\n- Andrew Lobanov for the game repository http://instead-games.ru\n- Anton Kolosov for the source code of INSTEAD-NG, partially used in this program.\n - the artist NEUD for the beautiful drawing https://vk.com/neudd</string>
+    <string name="about_activity_to_game_authors">If you want to create your own game and publish it in the repository, start by reading the documentation http://bit.ly/instead_doc_en</string>
+    <string name="about_activity_discuss">You can discuss INSTEAD and games on:\n- Forum http://instead-games.ru/forum/\n- Telegram https://t.me/insteadtalk\n- Gitter https://gitter.im/instead-hub/instead\n- Jabber instead@conference.jabber.ru</string>
 
 </resources>
