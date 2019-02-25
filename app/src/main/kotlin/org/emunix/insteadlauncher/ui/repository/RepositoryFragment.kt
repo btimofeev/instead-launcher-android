@@ -99,7 +99,8 @@ class RepositoryFragment : Fragment() {
     }
 
     private fun showGames(games: List<Game>) {
-        list.adapter = RepositoryAdapter(games) {
+        val sortedGames = games.sortedByDescending { it.date }
+        list.adapter = RepositoryAdapter(sortedGames) {
             val intent = Intent(activity, GameActivity::class.java)
             val gameName = it.name
             intent.putExtra("game_name", gameName)
