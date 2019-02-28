@@ -34,6 +34,8 @@ class RepositoryAdapter(val items: List<Game>, val listener: (Game) -> Unit): Re
 
             if (item.installedVersion.isNotBlank() and (item.version != item.installedVersion)) {
                 badge.visible(true)
+            } else {
+                badge.visible(false)
             }
         }
     }
