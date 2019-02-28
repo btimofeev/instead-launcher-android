@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -30,6 +30,7 @@ import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.services.DeleteGame
 import org.emunix.insteadlauncher.services.InstallGame
+import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 
 class GameFragment : Fragment() {
@@ -133,19 +134,8 @@ class GameFragment : Fragment() {
 
         deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
-                val dialog = AlertDialog.Builder(activity, R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
-                dialog.setTitle(R.string.dialog_delete_game_title)
-                dialog.setMessage(R.string.dialog_delete_game_text)
-                dialog.setPositiveButton(R.string.dialog_delete_game_positive_button) { _,_ ->
-                    val deleteGame = Intent(activity, DeleteGame::class.java)
-                    deleteGame.putExtra("game_name", game.name)
-                    activity.startService(deleteGame)
-                }
-                dialog.setNegativeButton(R.string.dialog_delete_game_negative_button) { dialog, _ ->
-                    dialog.cancel()
-                }
-                dialog.create()
-                dialog.show()
+                val deleteDialog = DeleteGameDialog.newInstance(game.name)
+                deleteDialog.show(fragmentManager, "delete_dialog")
             }
         }
 

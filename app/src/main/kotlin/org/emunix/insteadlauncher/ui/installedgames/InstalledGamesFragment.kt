@@ -20,6 +20,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.services.DeleteGame
+import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 
@@ -64,19 +65,8 @@ class InstalledGamesFragment : Fragment() {
                 playGame(listAdapter.getLongClickedGame(), true)
             }
             R.id.installed_games_activity_context_menu_delete -> {
-                val dialog = AlertDialog.Builder(activity!!, R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
-                dialog.setTitle(R.string.dialog_delete_game_title)
-                dialog.setMessage(R.string.dialog_delete_game_text)
-                dialog.setPositiveButton(R.string.dialog_delete_game_positive_button) { _, _ ->
-                    val deleteGame = Intent(activity, DeleteGame::class.java)
-                    deleteGame.putExtra("game_name", listAdapter.getLongClickedGame().name)
-                    activity?.startService(deleteGame)
-                }
-                dialog.setNegativeButton(R.string.dialog_delete_game_negative_button) { dialog, _ ->
-                    dialog.cancel()
-                }
-                dialog.create()
-                dialog.show()
+                val deleteDialog = DeleteGameDialog.newInstance(listAdapter.getLongClickedGame().name)
+                deleteDialog.show(fragmentManager, "delete_dialog")
             }
             R.id.installed_games_activity_context_menu_about -> {
                 val intent = Intent(context, GameActivity::class.java)
