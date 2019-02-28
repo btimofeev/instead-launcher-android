@@ -21,10 +21,18 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences,
                                            key: String) {
-        if (key == "pref_repository") {
-            val repo = findPreference("pref_repository") as EditTextPreference
-            if (repo.text.isBlank()) {
-                repo.text = InsteadLauncher.DEFAULT_REPOSITORY
+        when (key) {
+            "pref_repository" -> {
+                val repo = findPreference("pref_repository") as EditTextPreference
+                if (repo.text.isBlank()) {
+                    repo.text = InsteadLauncher.DEFAULT_REPOSITORY
+                }
+            }
+            "pref_sandbox" -> {
+                val sandbox = findPreference("pref_sandbox") as EditTextPreference
+                if (sandbox.text.isBlank()) {
+                    sandbox.text = InsteadLauncher.SANDBOX
+                }
             }
         }
     }
