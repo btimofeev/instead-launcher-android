@@ -96,7 +96,7 @@ class InsteadActivity: SDLActivity() {
         prefDefaultTheme = prefs.getString("pref_default_theme", "mobile")
         prefHires = prefs.getBoolean("pref_hires", true)
         prefTextSize = prefs.getString("pref_text_size", "150")
-        prefKeyboardButton = prefs.getString("pref_keyboard_button", "do_not_show_button")
+        prefKeyboardButton = prefs.getString("pref_keyboard_button", "bottom_left")
         prefBackButton = prefs.getString("pref_back_button", "exit_game")
     }
 
