@@ -29,6 +29,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 
+import org.emunix.insteadlauncher.ui.instead.GenerateScancode;
+
 /**
     SDL Activity
 */
@@ -1571,6 +1573,7 @@ class SDLInputConnection extends BaseInputConnection {
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             nativeGenerateScancodeForUnichar(c);
+            GenerateScancode.forUnichar(c);
         }
 
         SDLInputConnection.nativeCommitText(text.toString(), newCursorPosition);
