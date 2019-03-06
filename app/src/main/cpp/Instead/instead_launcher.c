@@ -107,7 +107,7 @@ int SDL_main(int argc, char** argv) {
     }
 
     // Kill it with fire, or else we'll get the error when restarting the activity
-    _exit(status);
+    exit(status);
 
     return status;
 }

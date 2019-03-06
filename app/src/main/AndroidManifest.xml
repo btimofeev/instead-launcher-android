@@ -38,7 +38,9 @@
         <activity
             android:name=".ui.instead.InsteadActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:process=":instead"
+            android:excludeFromRecents="true">
         </activity>
         <activity
             android:name=".ui.settings.SettingsActivity"
