@@ -83,6 +83,7 @@ class InsteadGamesXMLParser {
         }
         gTitle = gTitle.unescapeHtmlCodes()
         gDescription = gDescription.unescapeHtmlCodes()
+        gAuthor = gAuthor.unescapeHtmlCodes()
         gBrief = gDescription.getBrief()
         return Game(gName, gTitle, gAuthor, gDate, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl, gBrief, "", Game.State.NO_INSTALLED)
     }
