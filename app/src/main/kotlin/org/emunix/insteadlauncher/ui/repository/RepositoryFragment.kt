@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_repository.*
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
@@ -37,7 +38,7 @@ class RepositoryFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        list.layoutManager = LinearLayoutManager(activity, LinearLayout.VERTICAL, false)
+        list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
         list.addItemDecoration(dividerItemDecoration)
 
