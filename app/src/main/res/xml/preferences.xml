@@ -35,7 +35,7 @@
             android:summary="@string/prefs_hires_summary"
             android:title="@string/prefs_hires_title"/>
         <EditTextPreference
-            android:defaultValue="150"
+            android:defaultValue="130"
             android:icon="@drawable/ic_format_size_grey_24dp"
             android:inputType="number"
             android:key="pref_text_size"
