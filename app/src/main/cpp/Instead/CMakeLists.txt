@@ -38,7 +38,7 @@ set( SOURCES
         "${INSTEAD_SRC_DIR}/noise1234.c" )
 
 add_definitions( -DANDROID -DNOMAIN -D_USE_SDL -D_LOCAL_APPDATA -D_SDL_MOD_BUG -D_HAVE_ICONV )
-add_definitions( -DVERSION=\"3.2.2\" -DGAMES_PATH=\"./games/\" -DTHEME_PATH=\"./themes/\" -DLANG_PATH=\"./lang/\" -DSTEAD_PATH=\"./stead/\" )
+add_definitions( -DVERSION=\"3.3.0\" -DGAMES_PATH=\"./games/\" -DTHEME_PATH=\"./themes/\" -DLANG_PATH=\"./lang/\" -DSTEAD_PATH=\"./stead/\" )
 add_definitions( -DSDL_JAVA_PACKAGE_PATH=org_emunix_insteadlauncher )
 
 add_library( instead SHARED ${SOURCES} )
