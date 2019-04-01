@@ -3,10 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
@@ -31,12 +27,7 @@ android {
         }
     }
     signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
+        release
     }
     buildTypes {
         release {
@@ -63,6 +54,30 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+}
+
+def Properties props = new Properties()
+def propFile = rootProject.file("keystore.properties")
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+
+    if (props != null && props.containsKey('storeFile') && props.containsKey('storePassword') &&
+            props.containsKey('keyAlias') && props.containsKey('keyPassword')) {
+
+        println 'Release build signing'
+
+        android.signingConfigs.release.storeFile = file(props['storeFile'])
+        android.signingConfigs.release.storePassword = props['storePassword']
+        android.signingConfigs.release.keyAlias = props['keyAlias']
+        android.signingConfigs.release.keyPassword = props['keyPassword']
+    } else {
+        println 'Release build not found signing properties'
+
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    println 'Release build not found signing file'
+    android.buildTypes.release.signingConfig = null
 }
 
 dependencies {
