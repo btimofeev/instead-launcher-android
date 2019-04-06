@@ -38,6 +38,7 @@ android {
         }
         debug {
             applicationIdSuffix ".debug"
+            versionNameSuffix '-DEBUG'
             buildConfigField("String", "INSTEAD_VERSION", "\"3.3.0\"")
         }
     }
