@@ -36,12 +36,7 @@ class GameViewModel(var app: Application) : AndroidViewModel(app) {
                             app.showToast(it.errorMessage)
                         }
 
-                        if (it.contentLength == InstallGame.CONTENT_LENGTH_UNAVAILABLE) {
-                            progress.value = -1
-                        } else {
-                            progress.value = (100 * it.bytesRead / it.contentLength).toInt()
-                        }
-
+                        progress.value = it.progressValue
                         progressMessage.value = it.progressMessage
 
                         if (it.done) {

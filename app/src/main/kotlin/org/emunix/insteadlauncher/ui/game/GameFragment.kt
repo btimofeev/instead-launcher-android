@@ -123,7 +123,7 @@ class GameFragment : Fragment() {
         }
 
         installButton.setOnClickListener {
-            InstallGame.start(activity, game.name, game.url)
+            InstallGame.start(activity, game.name, game.url, game.title)
             GlobalScope.launch(Dispatchers.IO) { game.saveStateToDB(IN_QUEUE_TO_INSTALL) }
         }
 

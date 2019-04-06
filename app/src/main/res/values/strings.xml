@@ -33,7 +33,7 @@
     <string name="dialog_delete_game_positive_button">Delete</string>
     <string name="dialog_delete_game_negative_button">Cancel</string>
 
-    <string name="notification_download_and_install_game">Downloading the game, please wait&#8230;</string>
+    <string name="notification_download_and_install_game">Downloading</string>
     <string name="notification_delete_game">Deleting the game, please wait&#8230;</string>
     <string name="notification_updating_repository">Updating the repository, please wait&#8230;</string>
     <string name="notification_updating_resources">Updating the application resources, please wait&#8230;</string>

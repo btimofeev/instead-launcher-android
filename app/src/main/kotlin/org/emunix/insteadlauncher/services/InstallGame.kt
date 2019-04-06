@@ -39,10 +39,11 @@ class InstallGame : IntentService("InstallGame") {
         const val CONTENT_LENGTH_UNAVAILABLE = -1L
 
         @JvmStatic
-        fun start(context: Context, gameName: String, gameUrl: String) {
+        fun start(context: Context, gameName: String, gameUrl: String, gameTitle: String) {
             val intent = Intent(context, InstallGame::class.java).apply {
                 putExtra("game_name", gameName)
                 putExtra("game_url", gameUrl)
+                putExtra("game_title", gameTitle)
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(intent)
@@ -53,13 +54,18 @@ class InstallGame : IntentService("InstallGame") {
     }
 
     private lateinit var gameName: String
+    private lateinit var gameTitle: String
     private lateinit var pendingIntent: PendingIntent
+    private lateinit var notificationManager: NotificationManager
+    private lateinit var notificationBuilder: NotificationCompat.Builder
 
     override fun onHandleIntent(intent: Intent?) {
         gameName = intent?.getStringExtra("game_name") ?: return
+        gameTitle = intent.getStringExtra("game_title")
 
-        val notification = createNotification()
-        startForeground(INSTALL_NOTIFICATION_ID, notification)
+        notificationBuilder = createNotification()
+        startForeground(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
+        notificationManager= getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val url = intent.getStringExtra("game_url")
         val game = InsteadLauncher.db.games().getByName(gameName)
@@ -90,18 +96,18 @@ class InstallGame : IntentService("InstallGame") {
         stopForeground(true)
     }
 
-    private fun createNotification(): Notification {
+    private fun createNotification(): NotificationCompat.Builder {
         val notificationIntent = Intent(this, GameActivity::class.java)
         notificationIntent.putExtra("game_name", gameName)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return NotificationCompat.Builder(this, CHANNEL_INSTALL)
-                .setContentTitle(gameName)
+                .setContentTitle(gameTitle)
                 .setContentText(getText(R.string.notification_download_and_install_game))
+                .setProgress(100, 0, false)
                 .setSmallIcon(R.drawable.ic_download_white_24dp)
                 .setContentIntent(pendingIntent)
-                .build()
     }
 
     @Throws(IOException::class)
@@ -113,7 +119,15 @@ class InstallGame : IntentService("InstallGame") {
                         FileUtils.byteCountToDisplaySize(bytesRead),
                         if (contentLength == CONTENT_LENGTH_UNAVAILABLE) "??" else FileUtils.byteCountToDisplaySize(contentLength))
 
-                RxBus.publish(DownloadProgressEvent(gameName, bytesRead, contentLength, msg, done))
+                var progress = -1
+                if (contentLength == CONTENT_LENGTH_UNAVAILABLE) {
+                    notificationBuilder.setProgress(100, 0, true)
+                } else {
+                    progress = (100 * bytesRead / contentLength).toInt()
+                    notificationBuilder.setProgress(100, progress, false)
+                }
+                notificationManager.notify(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
+                RxBus.publish(DownloadProgressEvent(gameName, progress, msg, done))
             }
         }
 
@@ -129,7 +143,7 @@ class InstallGame : IntentService("InstallGame") {
         val response = client.newCall(request).execute()
         if (!response.isSuccessful) {
             val msg = application.getString(R.string.error_failed_to_download_file, url)
-            RxBus.publish(DownloadProgressEvent(gameName, 0, 0, "", true, true, msg))
+            RxBus.publish(DownloadProgressEvent(gameName, 0, "", true, true, msg))
             throw IOException(msg)
         }
         FileOutputStream(file).use { toFile ->
@@ -150,7 +164,6 @@ class InstallGame : IntentService("InstallGame") {
                         .bigText(body))
                 .setContentIntent(intent)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(2, notification.build())
     }
 }
