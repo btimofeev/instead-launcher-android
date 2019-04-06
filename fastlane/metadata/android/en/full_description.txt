@@ -1,0 +1,10 @@
+Collection of text quests on the engine INSTEAD.
+
+Most of the games are in Russian, but there are games in English and Spanish:
+		
+* in English: The Returning of the Quantum Cat, Mainland, Return of Red Hood, Crash Dive
+* in Spanish: Mansion
+
+You can find these games with the search button inside the app.
+	
+If you want to create your own game and publish it in the repository, start by reading the documentation https://github.com/instead-hub/instead/blob/master/doc/stead3-en.md
