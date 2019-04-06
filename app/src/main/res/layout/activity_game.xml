@@ -19,7 +19,7 @@
             android:background="@android:color/white"
             app:contentScrim="@android:color/white"
             app:statusBarScrim="@android:color/transparent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <ImageView
                 android:id="@+id/toolbar_image"
