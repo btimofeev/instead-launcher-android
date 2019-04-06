@@ -1,13 +1,16 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.services
 
 import android.app.IntentService
+import android.app.Notification
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import okhttp3.OkHttpClient
@@ -28,20 +31,10 @@ import java.io.IOException
 class UpdateRepository: IntentService("UpdateRepository") {
 
     override fun onHandleIntent(intent: Intent?) {
-        val notificationIntent = Intent(this, RepositoryActivity::class.java)
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val notification = createNotification()
+        startForeground(UPDATE_REPOSITORY_NOTIFICATION_ID, notification)
 
         RxBus.publish(UpdateRepoEvent(true))
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_UPDATE_REPOSITORY)
-                .setContentTitle(getText(R.string.app_name))
-                .setContentText(getText(R.string.notification_updating_repository))
-                .setSmallIcon(R.drawable.ic_refresh_black_24dp)
-                .setContentIntent(pendingIntent)
-                .build()
-
-        startForeground(UPDATE_REPOSITORY_NOTIFICATION_ID, notification)
 
         val games: ArrayList<Game> = arrayListOf()
 
@@ -64,6 +57,18 @@ class UpdateRepository: IntentService("UpdateRepository") {
         RxBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = true))
 
         stopForeground(true)
+    }
+
+    private fun createNotification(): Notification {
+        val notificationIntent = Intent(this, RepositoryActivity::class.java)
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return NotificationCompat.Builder(this, CHANNEL_UPDATE_REPOSITORY)
+                .setContentTitle(getText(R.string.app_name))
+                .setContentText(getText(R.string.notification_updating_repository))
+                .setSmallIcon(R.drawable.ic_refresh_black_24dp)
+                .setContentIntent(pendingIntent)
+                .build()
     }
 
     @Throws (IOException::class)
@@ -92,5 +97,18 @@ class UpdateRepository: IntentService("UpdateRepository") {
     private fun isSandboxEnabled(): Boolean {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         return prefs.getBoolean("pref_sandbox_enabled", false)
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun start(context: Context) {
+            val intent = Intent(context, UpdateRepository::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
+        }
     }
 }

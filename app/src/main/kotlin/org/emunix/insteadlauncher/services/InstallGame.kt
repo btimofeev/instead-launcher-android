@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.services
 
 import android.app.IntentService
+import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -21,6 +22,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.zip.ZipException
 import android.app.PendingIntent
+import android.os.Build
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_INSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.data.Game.State.*
@@ -35,29 +37,32 @@ class InstallGame : IntentService("InstallGame") {
 
     companion object {
         const val CONTENT_LENGTH_UNAVAILABLE = -1L
+
+        @JvmStatic
+        fun start(context: Context, gameName: String, gameUrl: String) {
+            val intent = Intent(context, InstallGame::class.java).apply {
+                putExtra("game_name", gameName)
+                putExtra("game_url", gameUrl)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
+        }
     }
 
     private lateinit var gameName: String
+    private lateinit var pendingIntent: PendingIntent
 
     override fun onHandleIntent(intent: Intent?) {
-        val url = intent?.getStringExtra("game_url")
         gameName = intent?.getStringExtra("game_name") ?: return
-        val game = InsteadLauncher.db.games().getByName(gameName)
 
-        val notificationIntent = Intent(this, GameActivity::class.java)
-        notificationIntent.putExtra("game_name", gameName)
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_INSTALL)
-                .setContentTitle(gameName)
-                .setContentText(getText(R.string.notification_download_and_install_game))
-                .setSmallIcon(R.drawable.ic_download_white_24dp)
-                .setContentIntent(pendingIntent)
-                .build()
-
+        val notification = createNotification()
         startForeground(INSTALL_NOTIFICATION_ID, notification)
 
+        val url = intent.getStringExtra("game_url")
+        val game = InsteadLauncher.db.games().getByName(gameName)
         if (url != null) {
             try {
                 game.saveStateToDB(IS_INSTALL)
@@ -85,6 +90,20 @@ class InstallGame : IntentService("InstallGame") {
         stopForeground(true)
     }
 
+    private fun createNotification(): Notification {
+        val notificationIntent = Intent(this, GameActivity::class.java)
+        notificationIntent.putExtra("game_name", gameName)
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        return NotificationCompat.Builder(this, CHANNEL_INSTALL)
+                .setContentTitle(gameName)
+                .setContentText(getText(R.string.notification_download_and_install_game))
+                .setSmallIcon(R.drawable.ic_download_white_24dp)
+                .setContentIntent(pendingIntent)
+                .build()
+    }
+
     @Throws(IOException::class)
     private fun download(url: String, file: File) {
 
@@ -110,7 +129,7 @@ class InstallGame : IntentService("InstallGame") {
         val response = client.newCall(request).execute()
         if (!response.isSuccessful) {
             val msg = application.getString(R.string.error_failed_to_download_file, url)
-            RxBus.publish(DownloadProgressEvent(gameName,0, 0, "", true, true, msg))
+            RxBus.publish(DownloadProgressEvent(gameName, 0, 0, "", true, true, msg))
             throw IOException(msg)
         }
         FileOutputStream(file).use { toFile ->

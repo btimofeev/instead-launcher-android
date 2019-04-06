@@ -28,7 +28,7 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
 
         fab.setOnClickListener { view -> startActivity(Intent(view.context, RepositoryActivity::class.java)) }
 
-        UpdateResources.startActionUpdate(this, false)
+        UpdateResources.start(this, false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -26,14 +26,12 @@ class DeleteGameDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val game = arguments?.getString("game")
+        val game = arguments!!.getString("game")
         return AlertDialog.Builder(activity!!, R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
                 .setTitle(R.string.dialog_delete_game_title)
                 .setMessage(R.string.dialog_delete_game_text)
                 .setPositiveButton(R.string.dialog_delete_game_positive_button) { _, _ ->
-                    val deleteGame = Intent(activity, DeleteGame::class.java)
-                    deleteGame.putExtra("game_name", game)
-                    activity?.startService(deleteGame)
+                    DeleteGame.start(activity!!.applicationContext, game)
                 }
                 .setNegativeButton(R.string.dialog_delete_game_negative_button) { dialog, _ ->
                     dialog.cancel()

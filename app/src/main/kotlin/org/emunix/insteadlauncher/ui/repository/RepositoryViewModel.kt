@@ -7,7 +7,6 @@ package org.emunix.insteadlauncher.ui.repository
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -43,8 +42,7 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
     fun getGameListState(): LiveData<Boolean> = showGameList
 
     fun updateRepository() {
-        val updateRepoIntent = Intent(app, UpdateRepository::class.java)
-        app.startService(updateRepoIntent)
+        UpdateRepository.start(app)
     }
 
     fun getGames(): LiveData<List<Game>> = games

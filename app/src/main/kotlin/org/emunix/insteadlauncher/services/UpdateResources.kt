@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -10,6 +10,7 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.Context
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
@@ -24,11 +25,11 @@ private const val PREF_RESOURCES_LAST_UPDATE = "resources_last_update"
 class UpdateResources : IntentService("UpdateResources") {
 
     override fun onHandleIntent(intent: Intent?) {
+        val notification = createNotification()
+        startForeground(InsteadLauncher.UPDATE_RESOURCES_NOTIFICATION_ID, notification)
+
         val removeBeforeUpdate = intent?.getBooleanExtra(REMOVE_THEMES_BEFORE_UPDATE, false) ?: false
         if (isNewAppVersion()) {
-            val notification = createNotification()
-            startForeground(InsteadLauncher.UPDATE_RESOURCES_NOTIFICATION_ID, notification)
-
             if (removeBeforeUpdate) {
                 StorageHelper(this).getThemesDirectory().deleteRecursively()
             }
@@ -41,9 +42,9 @@ class UpdateResources : IntentService("UpdateResources") {
             StorageHelper(this).copyAsset("lang", StorageHelper(this).getDataDirectory())
 
             saveCurrentAppVersion(InsteadLauncher().getVersionCode(this))
-
-            stopForeground(true)
         }
+
+        stopForeground(true)
     }
 
     private fun createNotification(): Notification? {
@@ -78,11 +79,15 @@ class UpdateResources : IntentService("UpdateResources") {
     companion object {
 
         @JvmStatic
-        fun startActionUpdate(context: Context, removeThemesBeforeUpdate: Boolean = false) {
+        fun start(context: Context, removeThemesBeforeUpdate: Boolean = false) {
             val intent = Intent(context, UpdateResources::class.java).apply {
                 putExtra(REMOVE_THEMES_BEFORE_UPDATE, removeThemesBeforeUpdate)
             }
-            context.startService(intent)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
         }
     }
 }

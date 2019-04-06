@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -28,7 +27,6 @@ import org.emunix.insteadlauncher.data.Game.State.*
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.helpers.visible
-import org.emunix.insteadlauncher.services.DeleteGame
 import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.ui.instead.InsteadActivity
@@ -125,10 +123,7 @@ class GameFragment : Fragment() {
         }
 
         installButton.setOnClickListener {
-            val installGame = Intent(activity, InstallGame::class.java)
-            installGame.putExtra("game_url", game.url)
-            installGame.putExtra("game_name", game.name)
-            activity.startService(installGame)
+            InstallGame.start(activity, game.name, game.url)
             GlobalScope.launch(Dispatchers.IO) { game.saveStateToDB(IN_QUEUE_TO_INSTALL) }
         }
 
