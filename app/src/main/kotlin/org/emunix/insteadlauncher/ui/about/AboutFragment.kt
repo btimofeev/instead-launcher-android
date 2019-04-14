@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import org.emunix.insteadlauncher.R
 import kotlinx.android.synthetic.main.fragment_about.*
 import org.emunix.insteadlauncher.BuildConfig
-import org.emunix.insteadlauncher.InsteadLauncher
+import org.emunix.insteadlauncher.helpers.AppVersion
 
 
 class AboutFragment : Fragment() {
@@ -27,7 +27,7 @@ class AboutFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         about_instead.text = getString(R.string.about_activity_about_instead, BuildConfig.INSTEAD_VERSION)
-        about_instead_launcher.text = getString(R.string.about_activity_about_instead_launcher, InsteadLauncher().getAppVersion(activity!!))
+        about_instead_launcher.text = getString(R.string.about_activity_about_instead_launcher, AppVersion(activity!!).getString())
 
     }
 }

@@ -14,13 +14,11 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.helpers.AppVersion
 import org.emunix.insteadlauncher.helpers.StorageHelper
 import org.emunix.insteadlauncher.ui.installedgames.InstalledGamesActivity
 
 private const val REMOVE_THEMES_BEFORE_UPDATE = "org.emunix.insteadlauncher.extra.REMOVE_THEMES_BEFORE_UPDATE "
-
-private const val PREFS_FILENAME = "version_prefs"
-private const val PREF_RESOURCES_LAST_UPDATE = "resources_last_update"
 
 class UpdateResources : IntentService("UpdateResources") {
 
@@ -29,7 +27,7 @@ class UpdateResources : IntentService("UpdateResources") {
         startForeground(InsteadLauncher.UPDATE_RESOURCES_NOTIFICATION_ID, notification)
 
         val removeBeforeUpdate = intent?.getBooleanExtra(REMOVE_THEMES_BEFORE_UPDATE, false) ?: false
-        if (isNewAppVersion()) {
+        if (AppVersion(this).isNewVersion()) {
             if (removeBeforeUpdate) {
                 StorageHelper(this).getThemesDirectory().deleteRecursively()
             }
@@ -41,7 +39,7 @@ class UpdateResources : IntentService("UpdateResources") {
             StorageHelper(this).getLangDirectory().deleteRecursively()
             StorageHelper(this).copyAsset("lang", StorageHelper(this).getDataDirectory())
 
-            saveCurrentAppVersion(InsteadLauncher().getVersionCode(this))
+            AppVersion(this).saveCurrentVersion(AppVersion(this).getCode())
         }
 
         stopForeground(true)
@@ -58,22 +56,6 @@ class UpdateResources : IntentService("UpdateResources") {
                 .setSmallIcon(R.drawable.ic_refresh_black_24dp)
                 .setContentIntent(pendingIntent)
                 .build()
-    }
-
-    private fun isNewAppVersion() : Boolean {
-        val prefs = this.getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE)
-        val lastUpdate = prefs.getLong(PREF_RESOURCES_LAST_UPDATE, -1)
-        if (lastUpdate != InsteadLauncher().getVersionCode(this)) {
-            return true
-        }
-        return false
-    }
-
-    private fun saveCurrentAppVersion(value: Long) {
-        val prefs = this.getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putLong(PREF_RESOURCES_LAST_UPDATE, value)
-        editor.apply()
     }
 
     companion object {
