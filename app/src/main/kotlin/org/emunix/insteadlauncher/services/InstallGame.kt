@@ -6,7 +6,6 @@
 package org.emunix.insteadlauncher.services
 
 import android.app.IntentService
-import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -74,6 +73,11 @@ class InstallGame : IntentService("InstallGame") {
                 game.saveStateToDB(IS_INSTALL)
                 val zipfile = File(externalCacheDir, extractFilename(url))
                 download(url, zipfile)
+
+                notificationBuilder.setProgress(100, 0, true)
+                        .setContentText(getText(R.string.notification_install_game))
+                notificationManager.notify(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
+
                 val gameDir = File(StorageHelper(this).getGamesDirectory(), gameName)
                 gameDir.deleteRecursively()
                 zipfile.unzip(StorageHelper(this).getGamesDirectory())
@@ -104,7 +108,7 @@ class InstallGame : IntentService("InstallGame") {
 
         return NotificationCompat.Builder(this, CHANNEL_INSTALL)
                 .setContentTitle(gameTitle)
-                .setContentText(getText(R.string.notification_download_and_install_game))
+                .setContentText("0%")
                 .setProgress(100, 0, false)
                 .setSmallIcon(R.drawable.ic_download_white_24dp)
                 .setContentIntent(pendingIntent)
@@ -122,9 +126,11 @@ class InstallGame : IntentService("InstallGame") {
                 var progress = -1
                 if (contentLength == CONTENT_LENGTH_UNAVAILABLE) {
                     notificationBuilder.setProgress(100, 0, true)
+                            .setContentText(getText(R.string.notification_download_game))
                 } else {
                     progress = (100 * bytesRead / contentLength).toInt()
                     notificationBuilder.setProgress(100, progress, false)
+                            .setContentText("$progress%")
                 }
                 notificationManager.notify(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
                 RxBus.publish(DownloadProgressEvent(gameName, progress, msg, done))

@@ -33,7 +33,8 @@
     <string name="dialog_delete_game_positive_button">Удалить</string>
     <string name="dialog_delete_game_negative_button">Отмена</string>
 
-    <string name="notification_download_and_install_game">Загружаю</string>
+    <string name="notification_download_game">Загружаю</string>
+    <string name="notification_install_game">Устанавливаю</string>
     <string name="notification_delete_game">Удаляю игру, подождите&#8230;</string>
     <string name="notification_updating_repository">Обновляю репозиторий, подождите&#8230;</string>
     <string name="notification_updating_resources">Обновляю ресурсы приложения, подождите&#8230;</string>
