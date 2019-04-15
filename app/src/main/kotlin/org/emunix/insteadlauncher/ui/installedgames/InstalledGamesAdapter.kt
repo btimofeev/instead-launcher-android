@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.loadUrl
+import org.emunix.insteadlauncher.helpers.visible
 
 class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : RecyclerView.Adapter<InstalledGamesAdapter.ViewHolder>() {
     private var items: List<Game> = emptyList()
@@ -37,7 +38,12 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : RecyclerView.
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.name.text = items[position].title
-        holder.image.loadUrl(items[position].image)
+        if (items[position].image.isEmpty()) {
+            holder.image.visibility = View.INVISIBLE
+        } else {
+            holder.image.visible(true)
+            holder.image.loadUrl(items[position].image)
+        }
         holder.itemView.setOnClickListener { onClickListener(items[position]) }
         holder.itemView.setOnLongClickListener {
             longClickedGame = items[position]
