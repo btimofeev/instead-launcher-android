@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.android.synthetic.main.activity_installed_games.*
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.services.ScanGames
 import org.emunix.insteadlauncher.services.UpdateResources
 import org.emunix.insteadlauncher.ui.about.AboutActivity
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
@@ -29,6 +30,7 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
         fab.setOnClickListener { view -> startActivity(Intent(view.context, RepositoryActivity::class.java)) }
 
         UpdateResources.start(this, false)
+        ScanGames.start(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

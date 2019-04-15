@@ -26,6 +26,8 @@ fun ViewGroup.inflate(layoutRes: Int): View {
 }
 
 fun ImageView.loadUrl(url: String) {
+    if (url.isEmpty())
+        return
     Picasso.get().load(url).into(this)
 }
 

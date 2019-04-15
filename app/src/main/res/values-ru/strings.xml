@@ -38,11 +38,13 @@
     <string name="notification_delete_game">Удаляю игру, подождите&#8230;</string>
     <string name="notification_updating_repository">Обновляю репозиторий, подождите&#8230;</string>
     <string name="notification_updating_resources">Обновляю ресурсы приложения, подождите&#8230;</string>
+    <string name="notification_scan_games">Поиск локальных изменений в директории с играми</string>
 
     <string name="channel_install_game">Установка игр</string>
     <string name="channel_delete_game">Удаление игр</string>
     <string name="channel_update_repo">Обновление репозитория</string>
     <string name="channel_update_resources">Обновление ресурсов приложения</string>
+    <string name="channel_scan_games">Поиск локальных изменений в директории с играми</string>
 
     <string name="error">Ошибка</string>
     <string name="error_failed_to_download_file">Не удалось скачать файл: %s</string>
