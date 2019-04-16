@@ -37,6 +37,13 @@ class RepositoryActivity : AppCompatActivity() {
         swipe_to_refresh.setOnRefreshListener {
             viewModel.updateRepository()
         }
+
+        val intent = intent
+        if (intent.type == "application/zip") {
+            val uri = intent.data
+            if (uri != null)
+                viewModel.installGame(uri)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

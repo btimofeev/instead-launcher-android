@@ -32,6 +32,15 @@
         <activity
             android:name=".ui.repository.RepositoryActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="application/zip" />
+                <data android:host="*" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.game.GameActivity"
