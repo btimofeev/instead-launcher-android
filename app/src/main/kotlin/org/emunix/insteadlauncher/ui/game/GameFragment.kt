@@ -26,6 +26,7 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.Game.State.*
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.saveStateToDB
+import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
@@ -51,7 +52,7 @@ class GameFragment : Fragment() {
                 if (game != null) {
                     setViews(game)
                 } else {
-                    //todo показать ошибку, что такой игры не найдено в базе
+                    activity?.finish()
                 }
             })
             viewModel.getProgress().observe(this, Observer { value ->

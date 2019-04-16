@@ -41,8 +41,14 @@ class DeleteGame : IntentService("DeleteGame") {
             game.saveStateToDB(IS_DELETE)
             val gameDir = File(StorageHelper(this).getGamesDirectory(), gameName)
             gameDir.deleteRecursively()
-            game.saveStateToDB(NO_INSTALLED)
-            game.saveInstalledVersionToDB("")
+
+            if (game.url.isNotEmpty()) {
+                game.saveStateToDB(NO_INSTALLED)
+                game.saveInstalledVersionToDB("")
+            } else { // delete local game
+                InsteadLauncher.db.games().delete(game)
+            }
+
         } catch (e: IOException) {
             sendNotification(getString(R.string.error), e.localizedMessage)
             game.saveStateToDB(NO_INSTALLED)

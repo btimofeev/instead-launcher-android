@@ -91,8 +91,12 @@ class ScanGames : IntentService("ScanGames") {
 
         deletedNames.forEach {
             val game = InsteadLauncher.db.games().getByName(it)
-            game.saveStateToDB(NO_INSTALLED)
-            game.saveInstalledVersionToDB("")
+            if (game.url.isNotEmpty()) {
+                game.saveStateToDB(NO_INSTALLED)
+                game.saveInstalledVersionToDB("")
+            } else { // delete local game
+                InsteadLauncher.db.games().delete(game)
+            }
         }
     }
 
