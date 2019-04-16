@@ -69,29 +69,18 @@ object GenerateScancode {
 
     private fun down(keyCode: Int, shift: Boolean) {
         keyPress(keyCode, shift)
-        waitFun()
         keyRelease(keyCode, shift)
-    }
-
-    private fun waitFun() {
-        try {
-            Thread.sleep(50)
-        } catch (e: InterruptedException) {
-            // no op
-        }
     }
 
     private fun keyPress(keyCode: Int, shift: Boolean) {
         if (shift) {
             SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT)
         }
-        waitFun()
         SDLActivity.onNativeKeyDown(keyCode)
     }
 
     private fun keyRelease(keyCode: Int, shift: Boolean) {
         SDLActivity.onNativeKeyUp(keyCode)
-        waitFun()
         if (shift) {
             SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT)
         }
