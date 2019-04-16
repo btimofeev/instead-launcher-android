@@ -6,6 +6,9 @@
 package org.emunix.insteadlauncher.helpers
 
 import java.io.File
+import java.io.InputStream
+import java.util.zip.ZipException
+import java.util.zip.ZipInputStream
 
 const val DEFAULT_LANG = "default_lang"
 
@@ -15,6 +18,23 @@ class GameHelper {
         val main3 = File(dir, "main3.lua")
         val main = File(dir, "main.lua")
         return main3.exists() or main.exists()
+    }
+
+    @Throws(ZipException::class)
+    fun isInsteadGameZip(inputStream: InputStream): Boolean {
+        var r = false
+        ZipInputStream(inputStream).use { zis ->
+            while (true) {
+                val entry = zis.nextEntry ?: break
+                val name = entry.name
+                zis.closeEntry()
+                if (name.contains("main3.lua") or name.contains("main.lua")) {
+                    r = true
+                    break
+                }
+            }
+        }
+        return r
     }
 
     fun getMainGameFile(dir: File): File {
@@ -70,3 +90,5 @@ class GameHelper {
             entries[DEFAULT_LANG]
     }
 }
+
+class NotInsteadGameZipException(message:String): Exception(message)

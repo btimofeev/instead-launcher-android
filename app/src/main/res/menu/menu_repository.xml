@@ -17,4 +17,10 @@
         android:orderInCategory="100"
         android:title="@string/action_update_repo"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_install_local_game"
+        android:orderInCategory="200"
+        android:title="@string/action_install_local_game"
+        app:showAsAction="never"/>
 </menu>

@@ -5,15 +5,20 @@
 
 package org.emunix.insteadlauncher.ui.repository
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_repository.*
 import org.emunix.insteadlauncher.R
 import kotlinx.android.synthetic.main.fragment_repository.*
+import android.app.Activity
 
+
+private const val READ_REQUEST_CODE = 546
 
 class RepositoryActivity : AppCompatActivity() {
     private lateinit var viewModel: RepositoryViewModel
@@ -49,7 +54,24 @@ class RepositoryActivity : AppCompatActivity() {
                 viewModel.updateRepository()
                 return true
             }
+            R.id.action_install_local_game -> {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "application/zip"
+                ActivityCompat.startActivityForResult(this, intent, READ_REQUEST_CODE, null)
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (resultData != null) {
+                val uri = resultData.data
+                if (uri != null)
+                    viewModel.installGame(uri)
+            }
+        }
     }
 }

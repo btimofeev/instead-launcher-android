@@ -4,6 +4,7 @@
     <string name="action_about">About</string>
     <string name="action_update_repo">Update repository</string>
     <string name="action_search">Search</string>
+    <string name="action_install_local_game">Install game from Zip</string>
 
     <string name="repository_activity_title">Add game</string>
     <string name="repository_unable_to_load">Unable to load the game list.\nPlease check your internet connection and try again or retry later.</string>
@@ -48,6 +49,7 @@
 
     <string name="error">Error</string>
     <string name="error_failed_to_download_file">Failed to download file: %s</string>
+    <string name="error_not_instead_game_zip">Zip archive does not contain a game</string>
 
     <string name="settings_activity_title">Settings</string>
     <string name="prefs_category_game_settings">Game settings</string>

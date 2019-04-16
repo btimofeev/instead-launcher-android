@@ -4,6 +4,7 @@
     <string name="action_about">О программе</string>
     <string name="action_update_repo">Обновить репозиторий</string>
     <string name="action_search">Поиск</string>
+    <string name="action_install_local_game">Установить игру из zip-архива</string>
 
     <string name="repository_activity_title">Добавить игру</string>
     <string name="repository_unable_to_load">Не удалось загрузить список игр.\nПожалуйста, проверьте соединение с интернетом и попробуйте ещё раз.</string>
@@ -48,6 +49,7 @@
 
     <string name="error">Ошибка</string>
     <string name="error_failed_to_download_file">Не удалось скачать файл: %s</string>
+    <string name="error_not_instead_game_zip">Zip-архив не содержит игры</string>
 
     <string name="settings_activity_title">Настройки</string>
     <string name="prefs_category_game_settings">Игровые настройки</string>

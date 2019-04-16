@@ -5,6 +5,7 @@
 
 package org.emunix.insteadlauncher.ui.repository
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_repository.*
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
@@ -25,6 +27,7 @@ import org.emunix.insteadlauncher.ui.game.GameActivity
 
 class RepositoryFragment : Fragment() {
     private lateinit var viewModel: RepositoryViewModel
+    private lateinit var installDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -70,6 +73,26 @@ class RepositoryFragment : Fragment() {
         viewModel.getGameListState().observe(this, Observer { state ->
             if (state != null)
                 list.visible(state)
+        })
+
+        installDialog = ProgressDialog(activity)
+        installDialog.setMessage(activity?.getString(R.string.notification_install_game))
+        installDialog.setCancelable(false)
+        installDialog.setCanceledOnTouchOutside(false)
+
+        viewModel.getInstallGameDialogState().observe(this, Observer { state ->
+            if (state != null) {
+                if (state == true)
+                    installDialog.show()
+                else
+                    installDialog.cancel()
+            }
+        })
+
+        viewModel.getSnackbarMessage().observe(this, Observer {
+            it.getContentIfNotHandled()?.let { message ->
+                Snackbar.make(list, message, Snackbar.LENGTH_LONG).show()
+            }
         })
     }
 

@@ -15,10 +15,13 @@ import com.squareup.picasso.Picasso
 import org.apache.commons.io.IOUtils
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.data.Game
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.util.zip.ZipFile
 import java.io.FileOutputStream
+import java.io.InputStream
 import java.util.zip.ZipException
+import java.util.zip.ZipInputStream
 
 
 fun ViewGroup.inflate(layoutRes: Int): View {
@@ -60,6 +63,33 @@ fun File.unzip(dir: File) {
                     }
                 }
             }
+}
+
+private const val BUFFER_SIZE = 102400
+
+@Throws(ZipException::class)
+fun InputStream.unzip(dir: File) {
+    ZipInputStream(this).use { zis ->
+        while (true) {
+            val entry = zis.nextEntry ?: break
+            val entryFile = File(dir, entry.name)
+            if (entry.isDirectory) {
+                entryFile.mkdirs()
+            } else {
+                entryFile.parentFile.mkdirs()
+                FileOutputStream(entryFile).use { output ->
+                    val buf = ByteArray(BUFFER_SIZE)
+                    while (true) {
+                        val count = zis.read(buf, 0, BUFFER_SIZE)
+                        if (count == -1) break
+                        val buffer = ByteArrayInputStream(buf, 0, count)
+                        IOUtils.copy(buffer, output)
+                    }
+                }
+            }
+            zis.closeEntry()
+        }
+    }
 }
 
 //todo переписать когда-нибудь
