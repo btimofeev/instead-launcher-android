@@ -25,6 +25,8 @@ import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.ui.installedgames.InstalledGamesActivity
 import java.io.File
 import java.util.*
+import java.text.SimpleDateFormat
+
 
 class ScanGames : IntentService("ScanGames") {
 
@@ -62,8 +64,9 @@ class ScanGames : IntentService("ScanGames") {
                     val author = GameHelper().getAuthor(file, lang)
                     val description = GameHelper().getInfo(file, lang)
                     val size = FileUtils.sizeOfDirectory(gameDir)
+                    val date = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
-                    val newGame = Game(it, title, author, "", version, size, "", "", "", description, "", "", version, INSTALLED)
+                    val newGame = Game(it, title, author, date, version, size, "", "", "", description, "", "", version, INSTALLED)
                     InsteadLauncher.db.games().insert(newGame)
 
                 } catch (e: IllegalStateException) {
