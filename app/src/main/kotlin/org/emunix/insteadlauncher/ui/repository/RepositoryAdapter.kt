@@ -28,7 +28,12 @@ class RepositoryAdapter(val items: List<Game>, val listener: (Game) -> Unit): Re
         @SuppressLint("SetTextI18n")
         fun bind(item: Game, listener: (Game) -> Unit) = with(itemView) {
             name.text = item.title
-            image.loadUrl(item.image)
+            if (item.image.isEmpty()) {
+                image.visibility = View.INVISIBLE
+            } else {
+                image.visible(true)
+                image.loadUrl(item.image)
+            }
             description.text = item.brief
             setOnClickListener { listener(item) }
 
