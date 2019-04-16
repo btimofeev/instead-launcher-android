@@ -56,6 +56,8 @@ class UpdateRepository: IntentService("UpdateRepository") {
 
         RxBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = true))
 
+        ScanGames.start(this)
+
         stopForeground(true)
     }
 
