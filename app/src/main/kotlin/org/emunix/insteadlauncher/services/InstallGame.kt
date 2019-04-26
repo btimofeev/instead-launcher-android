@@ -86,13 +86,14 @@ class InstallGame : IntentService("InstallGame") {
                 game.saveInstalledVersionToDB(game.version)
             } catch (e: IndexOutOfBoundsException) {
                 // invalid url (exception from String.substring)
-                sendNotification(getString(R.string.error), "Bad url: $url", pendingIntent)
+                NotificationHelper(this).showError(getString(R.string.error), "Bad url: $url", pendingIntent)
                 game.saveStateToDB(NO_INSTALLED)
             } catch (e: IOException) {
-                sendNotification(getString(R.string.error), e.localizedMessage, pendingIntent)
+                NotificationHelper(this).showError(getString(R.string.error), e.localizedMessage
+                        ?: getString(R.string.error_failed_to_download_file, url), pendingIntent)
                 game.saveStateToDB(NO_INSTALLED)
             } catch (e: ZipException) {
-                sendNotification(getString(R.string.error), e.localizedMessage, pendingIntent)
+                NotificationHelper(this).showError(getString(R.string.error), getString(R.string.error_failed_to_unpack_zip), pendingIntent)
                 game.saveStateToDB(NO_INSTALLED)
             }
         }
@@ -159,17 +160,5 @@ class InstallGame : IntentService("InstallGame") {
 
     private fun extractFilename(url: String): String {
         return url.substring(url.lastIndexOf('/') + 1)
-    }
-
-    private fun sendNotification(title: String, body: String, intent: PendingIntent) {
-        val notification = NotificationCompat.Builder(this, InsteadLauncher.CHANNEL_INSTALL)
-                .setSmallIcon(R.drawable.ic_alert_white_24dp)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText(body))
-                .setContentIntent(intent)
-
-        notificationManager.notify(2, notification.build())
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -7,9 +7,9 @@ package org.emunix.insteadlauncher.helpers
 
 import android.content.Context
 import android.os.Environment
-import android.util.Log
 import androidx.core.os.EnvironmentCompat
 import org.apache.commons.io.FileUtils
+import org.emunix.insteadlauncher.R
 import java.io.File
 import java.io.IOException
 
@@ -67,7 +67,7 @@ class StorageHelper(val context: Context) {
                 }
             }
         } catch (e: IOException) {
-            Log.e("copyAsset", e.localizedMessage)
+            NotificationHelper(context).showError(context.getString(R.string.error), context.getString(R.string.error_failed_to_copy_assets))
         }
     }
 }

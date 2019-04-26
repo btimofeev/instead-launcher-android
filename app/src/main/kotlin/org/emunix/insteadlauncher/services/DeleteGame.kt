@@ -7,7 +7,6 @@ package org.emunix.insteadlauncher.services
 
 import android.app.IntentService
 import android.app.Notification
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -22,6 +21,7 @@ import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.helpers.StorageHelper
 import org.emunix.insteadlauncher.helpers.saveInstalledVersionToDB
 import org.emunix.insteadlauncher.helpers.saveStateToDB
+import org.emunix.insteadlauncher.helpers.NotificationHelper
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import java.io.File
 import java.io.IOException
@@ -50,7 +50,7 @@ class DeleteGame : IntentService("DeleteGame") {
             }
 
         } catch (e: IOException) {
-            sendNotification(getString(R.string.error), e.localizedMessage)
+            NotificationHelper(this).showError(getString(R.string.error), getString(R.string.error_failed_to_delete_file))
             game.saveStateToDB(NO_INSTALLED)
             stopForeground(true)
             return
@@ -72,19 +72,6 @@ class DeleteGame : IntentService("DeleteGame") {
                 .setContentIntent(pendingIntent)
                 .build()
     }
-
-    private fun sendNotification(title: String, body: String) {
-        val notification = NotificationCompat.Builder(this, InsteadLauncher.CHANNEL_UNINSTALL)
-                .setSmallIcon(R.drawable.ic_alert_white_24dp)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText(body))
-
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(2, notification.build())
-    }
-
 
     companion object {
 

@@ -46,8 +46,8 @@ class UpdateRepository: IntentService("UpdateRepository") {
             gamesMap.putAll(parseXML(fetchXML(getRepo())))
             gamesMap.forEach { (_, value) -> games.add(value) }
         } catch (e: IOException) {
-            // TODO show better error
-            RxBus.publish(UpdateRepoEvent(false, false, true, e.localizedMessage))
+            RxBus.publish(UpdateRepoEvent(false, false, true,
+                    getString(R.string.error_server_return_unexpected_code, e.message)))
             stopForeground(true)
             return
         }
@@ -80,7 +80,7 @@ class UpdateRepository: IntentService("UpdateRepository") {
                 .url(url)
                 .build()
         val response = client.newCall(request).execute()
-        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+        if (!response.isSuccessful) throw IOException("${response.code()}")
         return response.body()!!.string()
     }
 

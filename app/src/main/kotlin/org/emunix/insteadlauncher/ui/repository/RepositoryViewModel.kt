@@ -72,9 +72,9 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
         } catch (e: NotInsteadGameZipException) {
             showSnackbar.value = Event(getApplication<InsteadLauncher>().getString(R.string.error_not_instead_game_zip))
         } catch (e: ZipException) {
-            getApplication<InsteadLauncher>().showToast("Error: ${e.message}")
+            getApplication<InsteadLauncher>().showToast(getApplication<InsteadLauncher>().getString(R.string.error_failed_to_unpack_zip))
         } catch (e: IOException) {
-            getApplication<InsteadLauncher>().showToast("Error: ${e.message}")
+            getApplication<InsteadLauncher>().showToast(getApplication<InsteadLauncher>().getString(R.string.error_failed_to_unpack_zip))
         }
         showInstallGameDialog.value = false
         ScanGames.start(getApplication())
