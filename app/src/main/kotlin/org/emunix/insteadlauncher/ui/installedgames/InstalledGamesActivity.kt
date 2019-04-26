@@ -29,7 +29,7 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
 
         fab.setOnClickListener { view -> startActivity(Intent(view.context, RepositoryActivity::class.java)) }
 
-        UpdateResources.start(this, false)
+        UpdateResources.start(this)
         ScanGames.start(this)
     }
 

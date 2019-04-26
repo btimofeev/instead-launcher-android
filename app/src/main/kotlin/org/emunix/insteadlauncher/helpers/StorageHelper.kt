@@ -35,14 +35,16 @@ class StorageHelper(val context: Context) {
 
     fun getSteadDirectory(): File = File(getDataDirectory(), "stead")
 
+    fun getThemesDirectory(): File = File(getDataDirectory(), "themes")
+
     fun getGamesDirectory(): File = File(getAppFilesDirectory(), "games")
 
     fun getSavesDirectory(): File = File(getAppFilesDirectory(), "saves")
 
-    fun getThemesDirectory(): File = File(getAppFilesDirectory(), "themes")
+    fun getUserThemesDirectory(): File = File(getAppFilesDirectory(), "themes")
 
     fun makeDirs() {
-        val dirs = arrayOf(getGamesDirectory(), getSavesDirectory(), getThemesDirectory())
+        val dirs = arrayOf(getGamesDirectory(), getSavesDirectory(), getUserThemesDirectory())
         for (dir in dirs) {
             try {
                 FileUtils.forceMkdir(dir)

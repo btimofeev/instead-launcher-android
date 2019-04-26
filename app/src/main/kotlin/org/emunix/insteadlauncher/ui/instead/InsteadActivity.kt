@@ -53,7 +53,7 @@ class InsteadActivity: SDLActivity() {
         args[0] = StorageHelper(this).getDataDirectory().absolutePath
         args[1] = StorageHelper(this).getAppFilesDirectory().absolutePath
         args[2] = StorageHelper(this).getGamesDirectory().absolutePath
-        args[3] = StorageHelper(this).getThemesDirectory().absolutePath
+        args[3] = StorageHelper(this).getUserThemesDirectory().absolutePath
         args[4] = Locale.getDefault().language
         args[5] = if (prefMusic) "y" else "n"
         args[6] = if (prefCursor) "y" else "n"

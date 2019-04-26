@@ -18,20 +18,15 @@ import org.emunix.insteadlauncher.helpers.AppVersion
 import org.emunix.insteadlauncher.helpers.StorageHelper
 import org.emunix.insteadlauncher.ui.installedgames.InstalledGamesActivity
 
-private const val REMOVE_THEMES_BEFORE_UPDATE = "org.emunix.insteadlauncher.extra.REMOVE_THEMES_BEFORE_UPDATE "
-
 class UpdateResources : IntentService("UpdateResources") {
 
     override fun onHandleIntent(intent: Intent?) {
         val notification = createNotification()
         startForeground(InsteadLauncher.UPDATE_RESOURCES_NOTIFICATION_ID, notification)
 
-        val removeBeforeUpdate = intent?.getBooleanExtra(REMOVE_THEMES_BEFORE_UPDATE, false) ?: false
         if (AppVersion(this).isNewVersion()) {
-            if (removeBeforeUpdate) {
-                StorageHelper(this).getThemesDirectory().deleteRecursively()
-            }
-            StorageHelper(this).copyAsset("themes", StorageHelper(this).getAppFilesDirectory())
+            StorageHelper(this).getThemesDirectory().deleteRecursively()
+            StorageHelper(this).copyAsset("themes", StorageHelper(this).getDataDirectory())
 
             StorageHelper(this).getSteadDirectory().deleteRecursively()
             StorageHelper(this).copyAsset("stead",  StorageHelper(this).getDataDirectory())
@@ -61,10 +56,8 @@ class UpdateResources : IntentService("UpdateResources") {
     companion object {
 
         @JvmStatic
-        fun start(context: Context, removeThemesBeforeUpdate: Boolean = false) {
-            val intent = Intent(context, UpdateResources::class.java).apply {
-                putExtra(REMOVE_THEMES_BEFORE_UPDATE, removeThemesBeforeUpdate)
-            }
+        fun start(context: Context) {
+            val intent = Intent(context, UpdateResources::class.java)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(intent)
             } else {
