@@ -1,0 +1,3 @@
+- added the ability to install games from zip-archives
+- improved notifications
+- fixed bugs
