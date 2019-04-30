@@ -5,43 +5,75 @@
 
 package org.emunix.insteadlauncher.ui.repository
 
-import android.annotation.SuppressLint
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_repository_list_item.view.*
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.helpers.inflate
+import org.emunix.insteadlauncher.data.GameDiffCallback
+import org.emunix.insteadlauncher.data.GameDiffCallback.Diff
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.visible
 
-class RepositoryAdapter(val items: List<Game>, val listener: (Game) -> Unit): RecyclerView.Adapter<RepositoryAdapter.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(parent.inflate(R.layout.activity_repository_list_item))
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position], listener)
-
-    override fun getItemCount(): Int = items.size
+class RepositoryAdapter(val listener: (Game) -> Unit): ListAdapter<Game, RepositoryAdapter.ViewHolder>(GameDiffCallback()) {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @SuppressLint("SetTextI18n")
-        fun bind(item: Game, listener: (Game) -> Unit) = with(itemView) {
-            name.text = item.title
-            if (item.image.isEmpty()) {
-                image.visibility = View.INVISIBLE
-            } else {
-                image.visible(true)
-                image.loadUrl(item.image)
-            }
-            description.text = item.brief
-            setOnClickListener { listener(item) }
+        val name = itemView.findViewById<TextView>(R.id.name)!!
+        val image = itemView.findViewById<ImageView>(R.id.image)!!
+        val description = itemView.findViewById<TextView>(R.id.description)!!
+        val badge = itemView.findViewById<ImageView>(R.id.badge)!!
+    }
 
-            if (item.installedVersion.isNotBlank() and (item.version != item.installedVersion)) {
-                badge.visible(true)
-            } else {
-                badge.visible(false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.activity_repository_list_item, parent, false))
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.name.text = getItem(position).title
+        updateImage(holder, position)
+        holder.description.text = getItem(position).brief
+        holder.itemView.setOnClickListener { listener(getItem(position)) }
+        updateBadge(holder, position)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+        } else {
+            val diff = payloads[0] as List<Diff>
+            for (key: Diff in diff) {
+                when (key) {
+                    Diff.IMAGE -> updateImage(holder, position)
+                    Diff.TITLE -> holder.name.text = getItem(position).title
+                    Diff.BRIEF -> holder.description.text = getItem(position).brief
+                    Diff.VERSION -> updateBadge(holder, position)
+                }
             }
+        }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).name.hashCode().toLong()
+    }
+
+    private fun updateImage(holder: ViewHolder, position: Int) {
+        if (getItem(position).image.isEmpty()) {
+            holder.image.visibility = View.INVISIBLE
+        } else {
+            holder.image.visible(true)
+            holder.image.loadUrl(getItem(position).image)
+        }
+    }
+
+    private fun updateBadge(holder: ViewHolder, position: Int) {
+        if (getItem(position).installedVersion.isNotBlank() and (getItem(position).version != getItem(position).installedVersion)) {
+            holder.badge.visible(true)
+        } else {
+            holder.badge.visible(false)
         }
     }
 }

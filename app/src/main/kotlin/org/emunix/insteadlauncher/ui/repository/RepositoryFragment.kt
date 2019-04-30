@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_repository.*
+import kotlinx.android.synthetic.main.fragment_repository.list
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.visible
@@ -28,6 +29,13 @@ import org.emunix.insteadlauncher.ui.game.GameActivity
 class RepositoryFragment : Fragment() {
     private lateinit var viewModel: RepositoryViewModel
     private lateinit var installDialog: ProgressDialog
+
+    private val listAdapter = RepositoryAdapter {
+        val intent = Intent(activity, GameActivity::class.java)
+        val gameName = it.name
+        intent.putExtra("game_name", gameName)
+        startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -44,6 +52,9 @@ class RepositoryFragment : Fragment() {
         list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
         list.addItemDecoration(dividerItemDecoration)
+        listAdapter.setHasStableIds(true)
+        list.adapter = listAdapter
+        list.setHasFixedSize(true)
 
         viewModel = ViewModelProviders.of(activity!!).get(RepositoryViewModel::class.java)
 
@@ -124,11 +135,6 @@ class RepositoryFragment : Fragment() {
 
     private fun showGames(games: List<Game>) {
         val sortedGames = games.sortedByDescending { it.date }
-        list.adapter = RepositoryAdapter(sortedGames) {
-            val intent = Intent(activity, GameActivity::class.java)
-            val gameName = it.name
-            intent.putExtra("game_name", gameName)
-            startActivity(intent)
-        }
+        listAdapter.submitList(sortedGames)
     }
 }

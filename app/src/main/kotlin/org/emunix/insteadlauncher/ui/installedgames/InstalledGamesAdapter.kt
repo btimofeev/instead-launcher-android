@@ -15,17 +15,15 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.visible
+import androidx.recyclerview.widget.ListAdapter
+import org.emunix.insteadlauncher.data.GameDiffCallback
+import org.emunix.insteadlauncher.data.GameDiffCallback.Diff
 
-class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : RecyclerView.Adapter<InstalledGamesAdapter.ViewHolder>() {
-    private var items: List<Game> = emptyList()
+class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<Game, InstalledGamesAdapter.ViewHolder>(GameDiffCallback()) {
 
     private lateinit var longClickedGame: Game
 
     fun getLongClickedGame(): Game = longClickedGame
-
-    fun loadItems(newItems: List<Game>) {
-        items = newItems
-    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.name)!!
@@ -37,17 +35,26 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.name.text = items[position].title
-        if (items[position].image.isEmpty()) {
-            holder.image.visibility = View.INVISIBLE
-        } else {
-            holder.image.visible(true)
-            holder.image.loadUrl(items[position].image)
-        }
-        holder.itemView.setOnClickListener { onClickListener(items[position]) }
+        holder.name.text = getItem(position).title
+        updateImage(holder, position)
+        holder.itemView.setOnClickListener { onClickListener(getItem(position)) }
         holder.itemView.setOnLongClickListener {
-            longClickedGame = items[position]
+            longClickedGame = getItem(position)
             false
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+        } else {
+            val diff = payloads[0] as List<Diff>
+            for (key in diff) {
+                when (key) {
+                    Diff.IMAGE -> updateImage(holder, position)
+                    Diff.BRIEF -> getItem(position).title
+                }
+            }
         }
     }
 
@@ -56,6 +63,16 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : RecyclerView.
         super.onViewRecycled(holder)
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemId(position: Int): Long {
+        return getItem(position).name.hashCode().toLong()
+    }
 
+    private fun updateImage(holder: ViewHolder, position: Int) {
+        if (getItem(position).image.isEmpty()) {
+            holder.image.visibility = View.INVISIBLE
+        } else {
+            holder.image.visible(true)
+            holder.image.loadUrl(getItem(position).image)
+        }
+    }
 }

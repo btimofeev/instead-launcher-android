@@ -37,6 +37,7 @@ class InstalledGamesFragment : Fragment() {
         list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
         list.addItemDecoration(dividerItemDecoration)
+        listAdapter.setHasStableIds(true)
         list.adapter = listAdapter
         list.setHasFixedSize(true)
         registerForContextMenu(list)
@@ -44,8 +45,7 @@ class InstalledGamesFragment : Fragment() {
         val viewModel = ViewModelProviders.of(this).get(InstalledGamesViewModel::class.java)
 
         viewModel.getInstalledGames().observe(this, Observer { games ->
-            listAdapter.loadItems(games)
-            listAdapter.notifyDataSetChanged()
+            listAdapter.submitList(games)
             empty_view.visible(games.isEmpty())
         })
     }
