@@ -1,0 +1,2 @@
+- fix crash on Android below 8
+- added animation of game list items
