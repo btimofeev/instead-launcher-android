@@ -59,7 +59,9 @@ freeline/
 freeline_project_description.json
 
 # langs and themes from instead sources
-app/src/main/assets/instead/
+app/src/main/assets/themes
+app/src/main/assets/stead
+app/src/main/assets/lang
 
 # dependencies
 app/src/main/cpp/Instead/Instead
