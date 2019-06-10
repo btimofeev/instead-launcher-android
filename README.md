@@ -3,8 +3,15 @@ This application allows you to download and run games for the popular text quest
 
 ### Install
 
-[<img src="/images/badges/google-play.png" alt="Get it on Google Play" width="220">](https://play.google.com/store/apps/details?id=org.emunix.insteadlauncher)
-[<img src="/images/badges/github.png" alt="Get it on GitHub" width="220">](https://github.com/btimofeev/instead-launcher-android/releases)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.emunix.insteadlauncher/)
+[<img src="/images/badges/google-play.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=org.emunix.insteadlauncher)
+[<img src="/images/badges/github.png"
+     alt="Get it on Github"
+     height="80">](https://github.com/btimofeev/instead-launcher-android/releases)
 
 ### Screenshots
 
