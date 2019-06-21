@@ -16,17 +16,31 @@ import java.io.IOException
 class StorageHelper(val context: Context) {
 
     fun getAppFilesDirectory() : File {
-        val storage : Array<File> = context.getExternalFilesDirs(null)
+        val storage : Array<File?> = context.getExternalFilesDirs(null)
         for (file in storage) {
             if (file != null) {
                 val state = EnvironmentCompat.getStorageState(file)
-                if (Environment.MEDIA_MOUNTED == state) {
+                if (state == Environment.MEDIA_MOUNTED) {
                     return file
                 }
             }
         }
-        // if external not presented use internal memory // todo check this
+        // if external not presented use internal memory
         return getDataDirectory()
+    }
+
+    fun getCacheDirectory() : File {
+        val storage : Array<File?> = context.externalCacheDirs
+        for (file in storage) {
+            if (file != null) {
+                val state = EnvironmentCompat.getStorageState(file)
+                if (state == Environment.MEDIA_MOUNTED) {
+                    return file
+                }
+            }
+        }
+        // if external not presented use internal memory
+        return context.cacheDir
     }
 
     fun getDataDirectory(): File = context.filesDir

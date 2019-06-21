@@ -71,7 +71,7 @@ class InstallGame : IntentService("InstallGame") {
         if (url != null) {
             try {
                 game.saveStateToDB(IS_INSTALL)
-                val zipfile = File(externalCacheDir, extractFilename(url))
+                val zipfile = File(StorageHelper(this).getCacheDirectory(), extractFilename(url))
                 download(url, zipfile)
 
                 notificationBuilder.setProgress(100, 0, true)
