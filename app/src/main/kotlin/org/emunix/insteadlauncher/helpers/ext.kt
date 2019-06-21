@@ -14,6 +14,7 @@ import android.widget.Toast
 import com.squareup.picasso.Picasso
 import org.apache.commons.io.IOUtils
 import org.emunix.insteadlauncher.InsteadLauncher
+import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -31,7 +32,11 @@ fun ViewGroup.inflate(layoutRes: Int): View {
 fun ImageView.loadUrl(url: String) {
     if (url.isEmpty())
         return
-    Picasso.get().load(url).into(this)
+    Picasso.get()
+            .load(url)
+            .placeholder(R.drawable.walking_cat)
+            .error(R.drawable.sleeping_cat)
+            .into(this)
 }
 
 fun View.visible(visible: Boolean) {
