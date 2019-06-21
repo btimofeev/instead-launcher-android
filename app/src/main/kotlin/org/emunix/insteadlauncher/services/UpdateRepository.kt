@@ -26,6 +26,7 @@ import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.InsteadGamesXMLParser
 import org.emunix.insteadlauncher.helpers.RxBus
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
+import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
 class UpdateRepository: IntentService("UpdateRepository") {
@@ -45,6 +46,11 @@ class UpdateRepository: IntentService("UpdateRepository") {
             }
             gamesMap.putAll(parseXML(fetchXML(getRepo())))
             gamesMap.forEach { (_, value) -> games.add(value) }
+        } catch (e: XmlPullParserException) {
+            RxBus.publish(UpdateRepoEvent(false, false, true,
+                    getString(R.string.error_xml_parse, e.message)))
+            stopForeground(true)
+            return
         } catch (e: IOException) {
             RxBus.publish(UpdateRepoEvent(false, false, true,
                     getString(R.string.error_server_return_unexpected_code, e.message)))

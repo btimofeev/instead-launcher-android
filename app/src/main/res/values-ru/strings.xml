@@ -53,6 +53,7 @@
     <string name="error_not_instead_game_zip">Zip-архив не содержит игры</string>
     <string name="error_failed_to_delete_file">Не удалось удалить файл</string>
     <string name="error_server_return_unexpected_code">Сервер вернул неожиданный код %s</string>
+    <string name="error_xml_parse">Не удалось загрузить список игр: %s</string>
     <string name="error_failed_to_copy_assets">Не удалось распаковать ресурсы Instead. Приложение может работать неправильно.</string>
 
     <string name="settings_activity_title">Настройки</string>

@@ -53,6 +53,7 @@
     <string name="error_not_instead_game_zip">Zip archive does not contain a game</string>
     <string name="error_failed_to_delete_file">Could not delete file from disk</string>
     <string name="error_server_return_unexpected_code">Server returned unexpected code %s</string>
+    <string name="error_xml_parse">Error loading game list: %s</string>
     <string name="error_failed_to_copy_assets">Unable to unpack resources. The application may not work correctly.</string>
 
     <string name="settings_activity_title">Settings</string>
