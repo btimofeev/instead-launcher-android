@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2018 Anton Kolosov https://github.com/instead-hub/instead-android-ng
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -66,16 +66,9 @@ class InsteadActivity: SDLActivity() {
         return args
     }
 
-    private fun enableHWA() {
-        window.setFlags(
-                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         // The following line is to workaround AndroidRuntimeException: requestFeature() must be called before adding content
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        enableHWA()
         super.onCreate(savedInstanceState)
 
         game = intent.extras.getString("game_name")
