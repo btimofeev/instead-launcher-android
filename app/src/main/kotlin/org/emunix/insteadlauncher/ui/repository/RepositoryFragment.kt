@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_repository.*
 import kotlinx.android.synthetic.main.fragment_repository.list
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.game.GameActivity
 
@@ -51,6 +52,8 @@ class RepositoryFragment : Fragment() {
 
         list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
+        val insetDivider = dividerItemDecoration.insetDivider(list.context, R.dimen.inset_divider_margin_start)
+        dividerItemDecoration.setDrawable(insetDivider)
         list.addItemDecoration(dividerItemDecoration)
         listAdapter.setHasStableIds(true)
         list.adapter = listAdapter
