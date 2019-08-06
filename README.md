@@ -28,7 +28,3 @@ To compile the application, you need to execute two commands in the project root
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
-
-#### Donate
-
-Buy Me a Beer: [PayPal](https://www.paypal.me/btimofeev), Bitcoin: 16coztryz7xbNNDNhhf98wuHmi3hEintsW
