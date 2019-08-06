@@ -65,7 +65,7 @@ add_library( jpeg STATIC ${SOURCES} )
 # Build libpng
 #----------------
 
-set( PNG_DIR "SDL2_image/external/libpng-1.6.32" )
+set( PNG_DIR "SDL2_image/external/libpng-1.6.37" )
 
 set( CMAKE_C_FLAGS ${COMMON_C_FLAGS} )
 
@@ -105,7 +105,7 @@ set( SDL_IMAGE_DIR "SDL2_image" )
 
 set( CMAKE_C_FLAGS "${COMMON_C_FLAGS} -DLOAD_BMP -DLOAD_GIF -DLOAD_LBM -DLOAD_PCX -DLOAD_PNM -DLOAD_SVG -DLOAD_TGA -DLOAD_XCF -DLOAD_XPM -DLOAD_XV -DLOAD_JPG -DLOAD_PNG")
 
-include_directories( SDL2_image/ ../SDL2/SDL2/include/ SDL2_image/external/jpeg-9b/ SDL2_image/external/libpng-1.6.32/)
+include_directories( SDL2_image/ ../SDL2/SDL2/include/ SDL2_image/external/jpeg-9b/ SDL2_image/external/libpng-1.6.37/)
 
 set( SOURCES
     "${SDL_IMAGE_DIR}/IMG.c"

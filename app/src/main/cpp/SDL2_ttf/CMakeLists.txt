@@ -3,7 +3,7 @@
 # Build FreeType
 #----------------
 
-set( FREETYPE_DIR "SDL2_ttf/external/freetype-2.4.12" )
+set( FREETYPE_DIR "SDL2_ttf/external/freetype-2.9.1" )
 
 set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DFT2_BUILD_LIBRARY -Os" )
 
@@ -32,7 +32,6 @@ set( SOURCES
         "${FREETYPE_DIR}/src/base/ftsystem.c"
         "${FREETYPE_DIR}/src/base/fttype1.c"
         "${FREETYPE_DIR}/src/base/ftwinfnt.c"
-        "${FREETYPE_DIR}/src/base/ftxf86.c"
         "${FREETYPE_DIR}/src/bdf/bdf.c"
         "${FREETYPE_DIR}/src/bzip2/ftbzip2.c"
         "${FREETYPE_DIR}/src/cache/ftcache.c"

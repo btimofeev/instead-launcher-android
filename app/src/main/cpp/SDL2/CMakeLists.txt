@@ -1,5 +1,26 @@
 
+#----------------
+# Build hidapi
+#----------------
+
+set( CMAKE_CXX_FLAGS "-std=c++11" )
+
+set( SOURCES
+		"SDL2/src/hidapi/android/hid.cpp" )
+
+add_library( hidapi SHARED ${SOURCES} )
+
+target_link_libraries(hidapi
+						log )
+
+#----------------
+# Build SDL2
+#----------------
+
 include_directories( SDL2/include/ )
+
+include(AndroidNdkModules)
+android_ndk_import_module_cpufeatures()
 
 set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGL_GLEXT_PROTOTYPES" )
 
@@ -8,6 +29,7 @@ file( GLOB SOURCES
         	"SDL2/src/audio/*.c"
         	"SDL2/src/audio/android/*.c"
         	"SDL2/src/audio/dummy/*.c"
+			"SDL2/src/audio/openslES/*.c"
         	"SDL2/src/atomic/SDL_atomic.c"
         	"SDL2/src/atomic/SDL_spinlock.c"
         	"SDL2/src/core/android/*.c"
@@ -19,11 +41,13 @@ file( GLOB SOURCES
         	"SDL2/src/haptic/android/*.c"
         	"SDL2/src/joystick/*.c"
         	"SDL2/src/joystick/android/*.c"
-        	"SDL2/src/joystick/steam/SDL_steamcontroller.c"
+        	"SDL2/src/joystick/hidapi/*.c"
         	"SDL2/src/loadso/dlopen/*.c"
         	"SDL2/src/power/*.c"
         	"SDL2/src/power/android/*.c"
         	"SDL2/src/filesystem/android/*.c"
+			"SDL2/src/sensor/*.c"
+			"SDL2/src/sensor/android/*.c"
         	"SDL2/src/render/*.c"
         	"SDL2/src/render/*/*.c"
         	"SDL2/src/stdlib/*.c"
@@ -45,8 +69,11 @@ add_library( SDL2 SHARED ${SOURCES} )
 #find_library( android-lib android )
 
 target_link_libraries( SDL2
+						hidapi
                         dl
                         GLESv1_CM
                         GLESv2
+						OpenSLES
                         log
-                        android )
+                        android
+						cpufeatures )
