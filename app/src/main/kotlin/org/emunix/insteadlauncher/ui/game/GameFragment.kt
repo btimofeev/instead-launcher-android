@@ -46,25 +46,27 @@ class GameFragment : Fragment() {
         val bundle = this.arguments
         if (bundle != null) {
             val gameName = bundle.getString("game_name")
-            viewModel = ViewModelProviders.of(activity!!).get(GameViewModel::class.java)
-            viewModel.init(gameName)
-            viewModel.getGame().observe(this, Observer { game ->
-                if (game != null) {
-                    setViews(game)
-                } else {
-                    activity?.finish()
-                }
-            })
-            viewModel.getProgress().observe(this, Observer { value ->
-                if (value == -1) {
-                    setIndeterminateProgress(true)
-                } else {
-                    setIndeterminateProgress(false, value)
-                }
-            })
-            viewModel.getProgressMessage().observe(this, Observer { msg ->
-                setInstallMessage(msg)
-            })
+            if (gameName != null) {
+                viewModel = ViewModelProviders.of(activity!!).get(GameViewModel::class.java)
+                viewModel.init(gameName)
+                viewModel.getGame().observe(this, Observer { game ->
+                    if (game != null) {
+                        setViews(game)
+                    } else {
+                        activity?.finish()
+                    }
+                })
+                viewModel.getProgress().observe(this, Observer { value ->
+                    if (value == -1) {
+                        setIndeterminateProgress(true)
+                    } else {
+                        setIndeterminateProgress(false, value)
+                    }
+                })
+                viewModel.getProgressMessage().observe(this, Observer { msg ->
+                    setInstallMessage(msg)
+                })
+            }
         }
     }
 

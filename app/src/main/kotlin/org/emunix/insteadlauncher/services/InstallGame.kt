@@ -143,7 +143,7 @@ class InstallGame : IntentService("InstallGame") {
                 .addNetworkInterceptor { chain ->
                     val originalResponse = chain.proceed(chain.request())
                     originalResponse.newBuilder()
-                            .body(ProgressResponseBody(originalResponse.body()!!, progressListener))
+                            .body(ProgressResponseBody(originalResponse.body!!, progressListener))
                             .build()
                 }
                 .build()
@@ -154,7 +154,7 @@ class InstallGame : IntentService("InstallGame") {
             throw IOException(msg)
         }
         FileOutputStream(file).use { toFile ->
-            IOUtils.copy(response.body()?.byteStream(), toFile)
+            IOUtils.copy(response.body?.byteStream(), toFile)
         }
     }
 

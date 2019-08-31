@@ -14,7 +14,6 @@ import android.content.Context
 import android.os.Build
 import org.emunix.insteadlauncher.data.GameDatabase
 import org.emunix.insteadlauncher.helpers.StorageHelper
-import com.squareup.leakcanary.LeakCanary
 
 
 class InsteadLauncher: Application() {
@@ -40,10 +39,6 @@ class InsteadLauncher: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return
-        }
-        LeakCanary.install(this)
 
         createNotificationChannels()
         db =  Room.databaseBuilder(this, GameDatabase::class.java, "games.db").build()

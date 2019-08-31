@@ -71,15 +71,15 @@ class StorageHelper(val context: Context) {
     fun copyAsset(name: String, toPath: File) {
         val assetManager = context.assets
         try {
-            val assets = assetManager.list(name)
+            val assets = assetManager.list(name) ?: throw IOException()
 
             val dir = File(toPath, name)
             if (assets.isEmpty()) {
                 FileUtils.copyInputStreamToFile(assetManager.open(name), dir)
             } else {
                 FileUtils.forceMkdir(dir)
-                for (i in 0 until assets.size) {
-                    copyAsset(name + "/" + assets[i], toPath)
+                for (element in assets) {
+                    copyAsset("$name/$element", toPath)
                 }
             }
         } catch (e: IOException) {

@@ -86,8 +86,8 @@ class UpdateRepository: IntentService("UpdateRepository") {
                 .url(url)
                 .build()
         val response = client.newCall(request).execute()
-        if (!response.isSuccessful) throw IOException("${response.code()}")
-        return response.body()!!.string()
+        if (!response.isSuccessful) throw IOException("${response.code}")
+        return response.body!!.string()
     }
 
     private fun parseXML(xml: String): Map<String, Game> = InsteadGamesXMLParser().parse(xml)

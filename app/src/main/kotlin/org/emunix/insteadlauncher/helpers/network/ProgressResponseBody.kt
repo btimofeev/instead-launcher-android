@@ -9,11 +9,7 @@ import java.io.IOException
 
 import okhttp3.MediaType
 import okhttp3.ResponseBody
-import okio.Buffer
-import okio.BufferedSource
-import okio.ForwardingSource
-import okio.Okio
-import okio.Source
+import okio.*
 
 class ProgressResponseBody internal constructor(private val responseBody: ResponseBody, private val progressListener: ProgressListener) : ResponseBody() {
     private var bufferedSource: BufferedSource? = null
@@ -28,7 +24,7 @@ class ProgressResponseBody internal constructor(private val responseBody: Respon
 
     override fun source(): BufferedSource {
         if (bufferedSource == null) {
-            bufferedSource = Okio.buffer(source(responseBody.source()))
+            bufferedSource = source(responseBody.source()).buffer()
         }
         return bufferedSource!!
     }

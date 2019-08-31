@@ -31,7 +31,7 @@ class DeleteGameDialog : DialogFragment() {
                 .setTitle(R.string.dialog_delete_game_title)
                 .setMessage(R.string.dialog_delete_game_text)
                 .setPositiveButton(R.string.dialog_delete_game_positive_button) { _, _ ->
-                    DeleteGame.start(activity!!.applicationContext, game)
+                    DeleteGame.start(activity!!.applicationContext, game!!)
                 }
                 .setNegativeButton(R.string.dialog_delete_game_negative_button) { dialog, _ ->
                     dialog.cancel()

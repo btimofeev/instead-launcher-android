@@ -19,10 +19,9 @@ import org.emunix.insteadlauncher.helpers.visible
 import org.libsdl.app.SDLActivity
 import java.util.*
 
-
 class InsteadActivity: SDLActivity() {
 
-    private lateinit var game : String
+    private var game : String? = ""
     private var playFromBeginning = false
 
     private lateinit var keyboardButton : ImageButton
@@ -30,11 +29,11 @@ class InsteadActivity: SDLActivity() {
     private var prefMusic: Boolean = true
     private var prefCursor: Boolean = false
     private var prefBuiltinTheme: Boolean = true
-    private lateinit var prefDefaultTheme: String
+    private var prefDefaultTheme: String? = ""
     private var prefHires: Boolean = true
-    private lateinit var prefTextSize: String
+    private var prefTextSize: String? = ""
     private lateinit var prefKeyboardButton: String
-    private lateinit var prefBackButton: String
+    private var prefBackButton: String? = ""
 
 
     override fun getLibraries(): Array<String> {
@@ -58,11 +57,11 @@ class InsteadActivity: SDLActivity() {
         args[5] = if (prefMusic) "y" else "n"
         args[6] = if (prefCursor) "y" else "n"
         args[7] = if (prefBuiltinTheme) "y" else "n"
-        args[8] = prefDefaultTheme
+        args[8] = prefDefaultTheme ?: DEFAULT_THEME
         args[9] = if (prefHires) "y" else "n"
-        args[10] = prefTextSize
+        args[10] = prefTextSize ?: DEFAULT_TEXT_SIZE
         args[11] = if (playFromBeginning) "y" else "n"
-        args[12] = game
+        args[12] = game ?: ""
         return args
     }
 
@@ -71,8 +70,8 @@ class InsteadActivity: SDLActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
 
-        game = intent.extras.getString("game_name")
-        playFromBeginning = intent.extras.getBoolean("play_from_beginning", false)
+        game = intent.extras?.getString("game_name")
+        playFromBeginning = intent.extras?.getBoolean("play_from_beginning", false) ?: false
 
         getPreferences()
         initKeyboard()
@@ -83,10 +82,10 @@ class InsteadActivity: SDLActivity() {
         prefMusic = prefs.getBoolean("pref_music", true)
         prefCursor = prefs.getBoolean("pref_cursor", false)
         prefBuiltinTheme = prefs.getBoolean("pref_enable_game_theme", true)
-        prefDefaultTheme = prefs.getString("pref_default_theme", "mobile")
+        prefDefaultTheme = prefs.getString("pref_default_theme", DEFAULT_THEME)
         prefHires = prefs.getBoolean("pref_hires", true)
-        prefTextSize = prefs.getString("pref_text_size", "130")
-        prefKeyboardButton = prefs.getString("pref_keyboard_button", "bottom_left")
+        prefTextSize = prefs.getString("pref_text_size", DEFAULT_TEXT_SIZE)
+        prefKeyboardButton = prefs?.getString("pref_keyboard_button", "bottom_left") ?: "bottom_left"
         prefBackButton = prefs.getString("pref_back_button", "exit_game")
     }
 
@@ -170,6 +169,9 @@ class InsteadActivity: SDLActivity() {
             display.getSize(size)
             return "${size.x}x${size.y}"
         }
+
+        const val DEFAULT_THEME = "mobile"
+        const val DEFAULT_TEXT_SIZE = "130"
     }
 
 }
