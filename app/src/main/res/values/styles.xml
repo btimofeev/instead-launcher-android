@@ -13,6 +13,8 @@
         <item name="snackbarButtonStyle">?attr/borderlessButtonStyle</item>
 
         <item name="searchViewStyle">@style/AppSearchViewStyle</item>
+
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme" parent="BaseAppTheme" />

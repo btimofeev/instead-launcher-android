@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
@@ -19,7 +20,7 @@ import org.emunix.insteadlauncher.data.GameDiffCallback.Diff
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.visible
 
-class RepositoryAdapter(val listener: (Game) -> Unit): ListAdapter<Game, RepositoryAdapter.ViewHolder>(GameDiffCallback()) {
+class RepositoryAdapter(val listener: (Game, ImageView) -> Unit): ListAdapter<Game, RepositoryAdapter.ViewHolder>(GameDiffCallback()) {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.name)!!
@@ -36,11 +37,12 @@ class RepositoryAdapter(val listener: (Game) -> Unit): ListAdapter<Game, Reposit
         holder.name.text = getItem(position).title
         updateImage(holder, position)
         holder.description.text = getItem(position).brief
-        holder.itemView.setOnClickListener { listener(getItem(position)) }
+        holder.itemView.setOnClickListener { listener(getItem(position), holder.image) }
         updateBadge(holder, position)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        ViewCompat.setTransitionName(holder.image, getItem(position).name)
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position)
         } else {
@@ -61,12 +63,7 @@ class RepositoryAdapter(val listener: (Game) -> Unit): ListAdapter<Game, Reposit
     }
 
     private fun updateImage(holder: ViewHolder, position: Int) {
-        if (getItem(position).image.isEmpty()) {
-            holder.image.visibility = View.INVISIBLE
-        } else {
-            holder.image.visible(true)
             holder.image.loadUrl(getItem(position).image)
-        }
     }
 
     private fun updateBadge(holder: ViewHolder, position: Int) {

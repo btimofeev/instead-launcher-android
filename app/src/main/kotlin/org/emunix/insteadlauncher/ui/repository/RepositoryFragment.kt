@@ -5,6 +5,7 @@
 
 package org.emunix.insteadlauncher.ui.repository
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -25,17 +26,18 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.game.GameActivity
+import androidx.core.app.ActivityOptionsCompat
 
 
 class RepositoryFragment : Fragment() {
     private lateinit var viewModel: RepositoryViewModel
     private lateinit var installDialog: ProgressDialog
 
-    private val listAdapter = RepositoryAdapter {
+    private val listAdapter = RepositoryAdapter { game, image ->
         val intent = Intent(activity, GameActivity::class.java)
-        val gameName = it.name
-        intent.putExtra("game_name", gameName)
-        startActivity(intent)
+        intent.putExtra("game_name", game.name)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity, image as View, game.name)
+        startActivity(intent, options.toBundle())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

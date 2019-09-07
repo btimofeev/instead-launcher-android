@@ -58,15 +58,14 @@ class InsteadGamesXMLParser {
         var gLang: String = ""
         var gDescription: String = ""
         var gDescurl: String = ""
-        var gBrief: String = ""
+        val gBrief: String
 
         parser.require(XmlPullParser.START_TAG, null, "game")
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
-            val name = parser.name
-            when(name) {
+            when(val name = parser.name) {
                 "name"  -> gName = readTag(name, parser)
                 "title" -> gTitle = readTag(name, parser)
                 "author" -> gAuthor = readTag(name, parser)
@@ -85,6 +84,9 @@ class InsteadGamesXMLParser {
         gDescription = gDescription.unescapeHtmlCodes()
         gAuthor = gAuthor.unescapeHtmlCodes()
         gBrief = gDescription.getBrief()
+        if (!gImage.contains(".png", true) && !gImage.contains(".jpg", true)) {
+            gImage = ""
+        }
         return Game(gName, gTitle, gAuthor, gDate, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl, gBrief, "", Game.State.NO_INSTALLED)
     }
 

@@ -36,13 +36,17 @@ fun ViewGroup.inflate(layoutRes: Int): View {
 }
 
 fun ImageView.loadUrl(url: String) {
-    if (url.isEmpty())
-        return
-    Picasso.get()
-            .load(url)
-            .placeholder(R.drawable.walking_cat)
-            .error(R.drawable.sleeping_cat)
-            .into(this)
+    if (url.isEmpty()) {
+        Picasso.get()
+                .load(R.drawable.sleeping_cat)
+                .into(this)
+    } else {
+        Picasso.get()
+                .load(url)
+                .placeholder(R.drawable.walking_cat)
+                .error(R.drawable.sleeping_cat)
+                .into(this)
+    }
 }
 
 fun View.visible(visible: Boolean) {

@@ -27,6 +27,8 @@ class GameActivity : AppCompatActivity() {
         fragment.arguments = intent.extras
 
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+
+        toolbar_image.transitionName = intent.extras?.getString("game_name")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
