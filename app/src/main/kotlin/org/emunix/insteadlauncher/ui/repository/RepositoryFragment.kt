@@ -129,8 +129,10 @@ class RepositoryFragment : Fragment() {
             fun search(text: String) {
                 val query = "%$text%"
                 viewModel.searchGames(query).observe(this@RepositoryFragment, Observer { games ->
-                    if (games != null)
+                    if (games != null) {
                         showGames(games)
+                        nothing_found_text.visible(games.isEmpty())
+                    }
                 })
             }
         })

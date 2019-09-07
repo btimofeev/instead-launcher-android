@@ -9,6 +9,7 @@
     <string name="repository_activity_title">Add game</string>
     <string name="repository_unable_to_load">Unable to load the game list.\nPlease check your internet connection and try again or retry later.</string>
     <string name="repository_try_again">Try again</string>
+    <string name="repository_nothing_found">Nothing found</string>
 
     <string name="game_activity_title">Game</string>
     <string name="game_activity_button_install">Install</string>
