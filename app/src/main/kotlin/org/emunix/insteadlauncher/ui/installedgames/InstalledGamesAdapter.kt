@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.loadUrl
-import org.emunix.insteadlauncher.helpers.visible
 import androidx.recyclerview.widget.ListAdapter
 import org.emunix.insteadlauncher.data.GameDiffCallback
 import org.emunix.insteadlauncher.data.GameDiffCallback.Diff
@@ -36,7 +35,7 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<G
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.name.text = getItem(position).title
-        updateImage(holder, position)
+        holder.image.loadUrl(getItem(position).image)
         holder.itemView.setOnClickListener { onClickListener(getItem(position)) }
         holder.itemView.setOnLongClickListener {
             longClickedGame = getItem(position)
@@ -51,7 +50,7 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<G
             val diff = payloads[0] as List<Diff>
             for (key in diff) {
                 when (key) {
-                    Diff.IMAGE -> updateImage(holder, position)
+                    Diff.IMAGE -> holder.image.loadUrl(getItem(position).image)
                     Diff.BRIEF -> getItem(position).title
                 }
             }
@@ -65,14 +64,5 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<G
 
     override fun getItemId(position: Int): Long {
         return getItem(position).name.hashCode().toLong()
-    }
-
-    private fun updateImage(holder: ViewHolder, position: Int) {
-        if (getItem(position).image.isEmpty()) {
-            holder.image.visibility = View.INVISIBLE
-        } else {
-            holder.image.visible(true)
-            holder.image.loadUrl(getItem(position).image)
-        }
     }
 }
