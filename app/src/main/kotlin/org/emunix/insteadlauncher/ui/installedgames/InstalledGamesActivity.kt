@@ -5,6 +5,7 @@
 
 package org.emunix.insteadlauncher.ui.installedgames
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -27,7 +28,8 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
         setContentView(R.layout.activity_installed_games)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view -> startActivity(Intent(view.context, RepositoryActivity::class.java)) }
+        fab.setOnClickListener { view -> startActivity(Intent(view.context, RepositoryActivity::class.java),
+                ActivityOptions.makeSceneTransitionAnimation(this).toBundle()) }
 
         UpdateResources.start(this)
         ScanGames.start(this)

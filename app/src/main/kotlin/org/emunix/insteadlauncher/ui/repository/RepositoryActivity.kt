@@ -16,6 +16,9 @@ import kotlinx.android.synthetic.main.activity_repository.*
 import org.emunix.insteadlauncher.R
 import kotlinx.android.synthetic.main.fragment_repository.*
 import android.app.Activity
+import android.transition.Slide
+import android.view.Gravity
+import android.view.Window
 
 
 private const val READ_REQUEST_CODE = 546
@@ -24,6 +27,11 @@ class RepositoryActivity : AppCompatActivity() {
     private lateinit var viewModel: RepositoryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        with(window) {
+            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+            enterTransition = Slide(Gravity.END)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repository)
 

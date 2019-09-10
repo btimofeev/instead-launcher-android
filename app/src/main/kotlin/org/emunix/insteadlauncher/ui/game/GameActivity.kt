@@ -6,7 +6,10 @@
 package org.emunix.insteadlauncher.ui.game
 
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
 import android.view.MenuItem
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 
@@ -18,6 +21,11 @@ class GameActivity : AppCompatActivity() {
     private lateinit var viewModel: GameViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        with(window) {
+            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+            enterTransition = Slide(Gravity.END)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         setSupportActionBar(toolbar)
