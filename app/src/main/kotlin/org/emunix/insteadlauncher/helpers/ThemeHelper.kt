@@ -5,8 +5,8 @@
 
 package org.emunix.insteadlauncher.helpers
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.BuildCompat
 
 object ThemeHelper {
 
@@ -23,7 +23,7 @@ object ThemeHelper {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
             else -> {
-                if (BuildCompat.isAtLeastQ()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
