@@ -37,7 +37,8 @@ class InsteadActivity: SDLActivity() {
 
 
     override fun getLibraries(): Array<String> {
-        return arrayOf("SDL2",
+        return arrayOf("hidapi",
+                "SDL2",
                 "SDL2_image",
                 "SDL2_mixer",
                 "SDL2_ttf",
