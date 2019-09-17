@@ -12,8 +12,10 @@ import android.app.NotificationManager
 import androidx.room.Room
 import android.content.Context
 import android.os.Build
+import androidx.preference.PreferenceManager
 import org.emunix.insteadlauncher.data.GameDatabase
 import org.emunix.insteadlauncher.helpers.StorageHelper
+import org.emunix.insteadlauncher.helpers.ThemeHelper
 
 
 class InsteadLauncher: Application() {
@@ -43,6 +45,10 @@ class InsteadLauncher: Application() {
         createNotificationChannels()
         db =  Room.databaseBuilder(this, GameDatabase::class.java, "games.db").build()
         StorageHelper(this).makeDirs()
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val themePref = sharedPreferences.getString("app_theme", ThemeHelper.DEFAULT_MODE)
+        ThemeHelper.applyTheme(themePref!!)
     }
 
     @TargetApi(26)

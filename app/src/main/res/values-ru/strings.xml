@@ -95,6 +95,14 @@
     <string name="prefs_sandbox">Песочница</string>
     <string name="prefs_sandbox_summary">Бета-версии игр, незаконченные проекты и т.п.</string>
 
+    <string name="prefs_category_interface">Внешний вид</string>
+    <string name="prefs_theme">Тема приложения</string>
+    <string name="prefs_theme_dialog_title">Выберите тему</string>
+    <string name="prefs_theme_name_light">Светлая</string>
+    <string name="prefs_theme_name_dark">Тёмная</string>
+    <string name="prefs_theme_name_auto_battery">В зависимости от заряда батареи</string>
+    <string name="prefs_theme_name_follow_system">В зависимости от системной темы</string>
+
     <string name="about_activity_title">О программе</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Пётр Косых https://instead-hub.github.io/</string>
     <string name="about_activity_about_instead_launcher"><b>INSTEAD Launcher для Android</b> v%1$s &#169; Борис Тимофеев https://github.com/btimofeev/instead-launcher-android/</string>

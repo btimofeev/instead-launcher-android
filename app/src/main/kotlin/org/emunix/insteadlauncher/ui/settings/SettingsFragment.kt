@@ -8,9 +8,11 @@ package org.emunix.insteadlauncher.ui.settings
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.EditTextPreference
+import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.helpers.ThemeHelper
 
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -33,6 +35,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 if (sandbox.text.isBlank()) {
                     sandbox.text = InsteadLauncher.SANDBOX
                 }
+            }
+            "app_theme" -> {
+                val theme = findPreference("app_theme") as ListPreference
+                ThemeHelper.applyTheme(theme.value)
             }
         }
     }

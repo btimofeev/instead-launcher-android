@@ -107,7 +107,7 @@ class ScanGames : IntentService("ScanGames") {
         return NotificationCompat.Builder(this, InsteadLauncher.CHANNEL_SCAN_GAMES)
                 .setContentTitle(getText(R.string.app_name))
                 .setContentText(getText(R.string.notification_scan_games))
-                .setSmallIcon(R.drawable.ic_search_black_24dp)
+                .setSmallIcon(R.drawable.ic_search_24dp)
                 .setContentIntent(pendingIntent)
                 .build()
     }

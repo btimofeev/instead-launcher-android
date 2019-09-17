@@ -6,10 +6,9 @@
 package org.emunix.insteadlauncher.ui.dialogs
 
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.services.DeleteGame
 
@@ -27,7 +26,7 @@ class DeleteGameDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val game = arguments!!.getString("game")
-        return AlertDialog.Builder(activity!!, R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+        return MaterialAlertDialogBuilder(activity!!, R.style.AppTheme_AlertDialogOverlay)
                 .setTitle(R.string.dialog_delete_game_title)
                 .setMessage(R.string.dialog_delete_game_text)
                 .setPositiveButton(R.string.dialog_delete_game_positive_button) { _, _ ->

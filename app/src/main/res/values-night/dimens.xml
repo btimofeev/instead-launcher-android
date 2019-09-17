@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="toolbar_elevation">1dp</dimen>
+</resources>

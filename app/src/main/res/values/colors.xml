@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#43a047</color>
+    <color name="colorPrimary">@android:color/white</color>
     <color name="colorPrimaryDark">#4B4B4B</color>
-    <color name="colorAccent">#ff5252</color>
+    <color name="colorSecondary">#ff5252</color>
+    <color name="colorOnPrimary">@android:color/black</color>
+    <color name="colorOnSecondary">@android:color/white</color>
+    <color name="colorSurface">@android:color/white</color>
+    <color name="colorOnSurface">@android:color/black</color>
+
+    <color name="backgroundColor">@android:color/white</color>
+
+    <color name="toolbarColor">@android:color/white</color>
+    <color name="toolbarTextColor">@android:color/black</color>
+    <color name="toolbarBackArrowColor">@android:color/black</color>
+    <color name="toolbarSearchTextColor">@android:color/black</color>
+    <color name="toolbarSearchHintColor">#808080</color>
+
     <color name="colorInstallButton">#43a047</color>
     <color name="colorDeleteButton">#ff5252</color>
     <color name="colorUpdateButton">#ffb300</color>
-    <color name="colorSearchHint">#808080</color>
 </resources>

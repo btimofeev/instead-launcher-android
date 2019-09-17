@@ -133,7 +133,7 @@ class GameFragment : Fragment() {
         deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
                 val deleteDialog = DeleteGameDialog.newInstance(game.name)
-                deleteDialog.show(fragmentManager, "delete_dialog")
+                fragmentManager?.let { deleteDialog.show(it, "delete_dialog") }
             }
         }
 

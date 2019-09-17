@@ -35,7 +35,7 @@
             android:layout_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name"
-            app:srcCompat="@drawable/ic_account_circle_red_24dp"
+            app:srcCompat="@drawable/ic_account_circle_24dp"
             />
 
         <TextView
@@ -58,7 +58,7 @@
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/authorImage"
-            app:srcCompat="@drawable/ic_file_compare_blue_24dp"/>
+            app:srcCompat="@drawable/ic_file_compare_24dp"/>
 
         <TextView
             android:id="@+id/version"
@@ -79,7 +79,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/versionImage"
             app:layout_constraintStart_toEndOf="@+id/version"
             app:layout_constraintTop_toTopOf="@+id/versionImage"
-            app:srcCompat="@drawable/ic_math_compass_purple_24dp"/>
+            app:srcCompat="@drawable/ic_math_compass_24dp"/>
 
         <TextView
             android:id="@+id/size"
@@ -94,47 +94,51 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/deleteButton"
+            style="@style/Widget.MaterialComponents.Button"
+            android:theme="@style/AppTheme.MaterialButtonOverlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/game_activity_button_uninstall"
-            style="@style/Widget.MaterialComponents.Button"
-            app:backgroundTint="@color/colorDeleteButton"
             android:visibility="gone"
+            app:backgroundTint="@color/colorDeleteButton"
             app:layout_constraintBottom_toTopOf="@+id/description"
             app:layout_constraintEnd_toStartOf="@+id/installButton"
-            app:layout_constraintTop_toBottomOf="@+id/versionImage"/>
+            app:layout_constraintTop_toBottomOf="@+id/versionImage" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/installButton"
+            style="@style/Widget.MaterialComponents.Button"
+            android:theme="@style/AppTheme.MaterialButtonOverlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/game_activity_button_install"
-            style="@style/Widget.MaterialComponents.Button"
+            android:visibility="gone"
             app:backgroundTint="@color/colorInstallButton"
             app:layout_constraintBottom_toTopOf="@+id/description"
             app:layout_constraintEnd_toStartOf="@+id/runButton"
-            app:layout_constraintTop_toBottomOf="@+id/versionImage"/>
+            app:layout_constraintTop_toBottomOf="@+id/versionImage" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/runButton"
+            style="@style/Widget.MaterialComponents.Button"
+            android:theme="@style/AppTheme.MaterialButtonOverlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/game_activity_button_run"
-            style="@style/Widget.MaterialComponents.Button"
             android:visibility="gone"
             app:backgroundTint="@color/colorInstallButton"
             app:layout_constraintBottom_toTopOf="@+id/description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/versionImage"/>
+            app:layout_constraintTop_toBottomOf="@+id/versionImage" />
 
         <TextView
             android:id="@+id/description"
@@ -155,16 +159,16 @@
             android:id="@+id/installMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/notification_download_game"
             android:textSize="12sp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/progressBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/size"/>
+            app:layout_constraintTop_toBottomOf="@+id/size" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -175,7 +179,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:indeterminate="true"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

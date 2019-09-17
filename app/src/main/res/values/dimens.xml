@@ -3,5 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="toolbar_elevation">4dp</dimen>
+
     <dimen name="inset_divider_margin_start">116dp</dimen>
 </resources>

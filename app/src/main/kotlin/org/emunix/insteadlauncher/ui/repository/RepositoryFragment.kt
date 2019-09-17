@@ -112,7 +112,7 @@ class RepositoryFragment : Fragment() {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
         val searchView = menu!!.findItem(R.id.action_search)!!.actionView as SearchView

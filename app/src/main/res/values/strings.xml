@@ -95,6 +95,14 @@
     <string name="prefs_sandbox">Sandbox</string>
     <string name="prefs_sandbox_summary">Beta versions of games, unfinished projects, etc.</string>
 
+    <string name="prefs_category_interface">User interface</string>
+    <string name="prefs_theme">Launcher theme</string>
+    <string name="prefs_theme_dialog_title">Select theme</string>
+    <string name="prefs_theme_name_light">Light</string>
+    <string name="prefs_theme_name_dark">Dark</string>
+    <string name="prefs_theme_name_auto_battery">Set by Battery Saver</string>
+    <string name="prefs_theme_name_follow_system">Use system default</string>
+
     <string name="about_activity_title">About</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Peter Kosyh https://instead-hub.github.io/</string>
     <string name="about_activity_about_instead_launcher"><b>INSTEAD Launcher for Android</b> v%1$s &#169; Boris Timofeev https://github.com/btimofeev/instead-launcher-android/</string>

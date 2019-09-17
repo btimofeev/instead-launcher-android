@@ -1,16 +1,14 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="BaseAppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="BaseAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <!-- New MaterialComponents attributes. -->
-        <item name="colorSecondary">?attr/colorPrimary</item>
-        <item name="scrimBackground">@color/mtrl_scrim_color</item>
-        <item name="snackbarButtonStyle">?attr/borderlessButtonStyle</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="android:colorBackground">@color/backgroundColor</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
 
         <item name="searchViewStyle">@style/AppSearchViewStyle</item>
 
@@ -26,37 +24,45 @@
 
     <style name="AppSearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="queryBackground">@android:color/transparent</item>
-        <item name="searchIcon">@drawable/ic_search_black_24dp</item>
-        <item name="searchHintIcon">@drawable/ic_search_black_24dp</item>
-        <item name="closeIcon">@drawable/ic_close_black_24dp</item>
+        <item name="searchIcon">@drawable/ic_search_24dp</item>
+        <item name="searchHintIcon">@drawable/ic_search_24dp</item>
+        <item name="closeIcon">@drawable/ic_close_24dp</item>
         <item name="android:queryHint">@string/action_search</item>
         <item name="android:imeActionId">3</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
 
+    <style name="AppTheme.AlertDialogOverlay" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@color/colorSecondary</item>
+    </style>
+
+    <style name="AppTheme.MaterialButtonOverlay" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorOnPrimary">@color/colorOnSecondary</item>
+    </style>
+
     <style name="ToolbarTextAppearance">
         <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">@color/toolbarTextColor</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <style name="MyToolbar">
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="popupTheme">@style/AppTheme.PopupOverlay</item>
         <item name="android:theme">@style/MyToolbarTheme</item>
-        <item name="android:background">@android:color/white</item>
-        <item name="titleTextColor">@android:color/black</item>
-        <item name="android:elevation">4dp</item>
+        <item name="android:background">@color/toolbarColor</item>
+        <item name="titleTextColor">@color/toolbarTextColor</item>
+        <item name="android:elevation">@dimen/toolbar_elevation</item>
     </style>
 
     <style name="MyToolbarTheme">
         <!-- Used to tint the back arrow, menu and spinner arrow -->
-        <item name="colorControlNormal">@android:color/black</item>
+        <item name="colorControlNormal">@color/toolbarBackArrowColor</item>
         <!-- Text color inside SearchView -->
-        <item name="android:editTextColor">@android:color/black</item>
-        <item name="android:textColorHint">@color/colorSearchHint</item>
+        <item name="android:editTextColor">@color/toolbarSearchTextColor</item>
+        <item name="android:textColorHint">@color/toolbarSearchHintColor</item>
     </style>
 
 </resources>

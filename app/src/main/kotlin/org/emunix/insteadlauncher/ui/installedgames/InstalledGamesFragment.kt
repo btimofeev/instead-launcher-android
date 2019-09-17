@@ -69,7 +69,7 @@ class InstalledGamesFragment : Fragment() {
             }
             R.id.installed_games_activity_context_menu_delete -> {
                 val deleteDialog = DeleteGameDialog.newInstance(listAdapter.getLongClickedGame().name)
-                deleteDialog.show(fragmentManager, "delete_dialog")
+                fragmentManager?.let { deleteDialog.show(it, "delete_dialog") }
             }
             R.id.installed_games_activity_context_menu_about -> {
                 val intent = Intent(context, GameActivity::class.java)

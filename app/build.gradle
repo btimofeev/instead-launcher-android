@@ -91,7 +91,7 @@ dependencies {
 
     // Support libraries
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'androidx.preference:preference:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
@@ -119,7 +119,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.5' // 2.6 crashes the application on Android below 8, because java.nio.file is not available in these versions
 
     // LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 }
 
 repositories {

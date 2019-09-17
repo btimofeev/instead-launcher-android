@@ -21,7 +21,7 @@
             android:autoLink="web"
             android:linksClickable="true"
             android:text="@string/about_activity_about_instead_launcher"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -36,7 +36,7 @@
             android:autoLink="web"
             android:linksClickable="true"
             android:text="@string/about_activity_about_instead"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/about_instead_launcher"/>
@@ -50,7 +50,7 @@
             android:layout_marginEnd="16dp"
             android:autoLink="web"
             android:text="@string/about_activity_thanks"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/about_instead"/>
@@ -65,7 +65,7 @@
             android:autoLink="web"
             android:linksClickable="true"
             android:text="@string/about_activity_to_game_authors"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/about_thanks"/>
@@ -80,7 +80,7 @@
             android:autoLink="web"
             android:linksClickable="true"
             android:text="@string/about_activity_discuss"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/about_to_game_authors"/>
