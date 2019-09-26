@@ -50,7 +50,8 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/try_again_button"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:theme="@style/AppTheme.MaterialButtonOverlay"
+            app:backgroundTint="@color/colorSecondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/repository_try_again"/>
