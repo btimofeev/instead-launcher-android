@@ -7,7 +7,7 @@
     <string name="action_install_local_game">Install game from Zip</string>
 
     <string name="repository_activity_title">Add game</string>
-    <string name="repository_unable_to_load">Unable to load the game list.\nPlease check your internet connection and try again or retry later.</string>
+    <string name="repository_unable_to_load">Unable to load the game list.\nServer is unavailable or there is no internet connection.</string>
     <string name="repository_try_again">Try again</string>
     <string name="repository_nothing_found">Nothing found</string>
 
