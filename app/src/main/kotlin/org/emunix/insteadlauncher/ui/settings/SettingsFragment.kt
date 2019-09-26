@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -25,20 +25,22 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                                            key: String) {
         when (key) {
             "pref_repository" -> {
-                val repo = findPreference("pref_repository") as EditTextPreference
-                if (repo.text.isBlank()) {
+                val repo : EditTextPreference? = findPreference("pref_repository")
+                if (repo != null && repo.text.isBlank()) {
                     repo.text = InsteadLauncher.DEFAULT_REPOSITORY
                 }
             }
             "pref_sandbox" -> {
-                val sandbox = findPreference("pref_sandbox") as EditTextPreference
-                if (sandbox.text.isBlank()) {
+                val sandbox : EditTextPreference? = findPreference("pref_sandbox")
+                if (sandbox != null && sandbox.text.isBlank()) {
                     sandbox.text = InsteadLauncher.SANDBOX
                 }
             }
             "app_theme" -> {
-                val theme = findPreference("app_theme") as ListPreference
-                ThemeHelper.applyTheme(theme.value)
+                val theme : ListPreference? = findPreference("app_theme")
+                if (theme != null) {
+                    ThemeHelper.applyTheme(theme.value)
+                }
             }
         }
     }
