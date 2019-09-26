@@ -1,11 +1,13 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.helpers
 
+import android.app.ActivityManager
 import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.text.TextUtils
@@ -148,3 +150,10 @@ fun Game.saveInstalledVersionToDB(version: String) {
     this.installedVersion = version
     InsteadLauncher.db.games().update(this)
 }
+
+// https://gist.github.com/kevinmcmahon/2988931
+@Suppress("DEPRECATION") // Deprecated for third party Services.
+fun <T> Context.isServiceRunning(service: Class<T>) =
+        (getSystemService(ACTIVITY_SERVICE) as ActivityManager)
+                .getRunningServices(Integer.MAX_VALUE)
+                .any { it.service.className == service.name }

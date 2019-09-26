@@ -9,11 +9,10 @@
         android:icon="@drawable/ic_search_24dp"
         android:title="@string/action_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView"/>
+        app:showAsAction="ifRoom|collapseActionView"/>
 
     <item
         android:id="@+id/action_update_repo"
-        android:icon="@drawable/ic_refresh_black_24dp"
         android:orderInCategory="100"
         android:title="@string/action_update_repo"
         app:showAsAction="never"/>

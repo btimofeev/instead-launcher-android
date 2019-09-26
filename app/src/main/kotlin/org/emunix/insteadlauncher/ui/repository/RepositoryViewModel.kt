@@ -11,6 +11,7 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.preference.PreferenceManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.*
 import org.emunix.insteadlauncher.InsteadLauncher
@@ -45,6 +46,18 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
                     showProgress.value = it.isLoading
                     showGameList.value = it.isGamesLoaded
                 }
+
+        if (app.isServiceRunning(UpdateRepository::class.java)) {
+            showErrorView.value = false
+            showProgress.value = true
+            showGameList.value = false
+        } else {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(app)
+            val prefUpdateRepo = prefs.getBoolean("pref_update_repo_startup", false)
+            if (prefUpdateRepo) {
+                updateRepository()
+            }
+        }
     }
 
     fun getProgressState(): LiveData<Boolean> = showProgress

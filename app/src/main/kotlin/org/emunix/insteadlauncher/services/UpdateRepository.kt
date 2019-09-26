@@ -74,7 +74,7 @@ class UpdateRepository: IntentService("UpdateRepository") {
         return NotificationCompat.Builder(this, CHANNEL_UPDATE_REPOSITORY)
                 .setContentTitle(getText(R.string.app_name))
                 .setContentText(getText(R.string.notification_updating_repository))
-                .setSmallIcon(R.drawable.ic_refresh_black_24dp)
+                .setSmallIcon(R.drawable.ic_sync_24dp)
                 .setContentIntent(pendingIntent)
                 .build()
     }

@@ -94,6 +94,7 @@
     <string name="prefs_repository_summary">Specify the address of the XML file</string>
     <string name="prefs_sandbox">Sandbox</string>
     <string name="prefs_sandbox_summary">Beta versions of games, unfinished projects, etc.</string>
+    <string name="pref_update_repo_when_open">Update repository on startup</string>
 
     <string name="prefs_category_interface">User interface</string>
     <string name="prefs_theme">Launcher theme</string>
