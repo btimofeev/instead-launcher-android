@@ -47,6 +47,7 @@ class InstalledGamesFragment : Fragment() {
         registerForContextMenu(list)
 
         val viewModel = ViewModelProviders.of(this).get(InstalledGamesViewModel::class.java)
+        viewModel.init()
 
         viewModel.getInstalledGames().observe(this, Observer { games ->
             listAdapter.submitList(games)

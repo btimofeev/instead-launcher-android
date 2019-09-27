@@ -10,9 +10,11 @@ import android.os.Bundle
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.helpers.ThemeHelper
+import org.emunix.insteadlauncher.services.UpdateRepositoryWork
 
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -40,6 +42,14 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 val theme : ListPreference? = findPreference("app_theme")
                 if (theme != null) {
                     ThemeHelper.applyTheme(theme.value)
+                }
+            }
+            "pref_update_repo_background" -> {
+                val pref : SwitchPreference? = findPreference("pref_update_repo_background")
+                if (pref != null && pref.isChecked) {
+                    UpdateRepositoryWork.start(activity!!.applicationContext)
+                } else {
+                    UpdateRepositoryWork.stop(activity!!.applicationContext)
                 }
             }
         }

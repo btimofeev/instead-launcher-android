@@ -12,22 +12,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.preference.PreferenceManager
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UPDATE_REPOSITORY
-import org.emunix.insteadlauncher.InsteadLauncher.Companion.DEFAULT_REPOSITORY
-import org.emunix.insteadlauncher.InsteadLauncher.Companion.SANDBOX
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UPDATE_REPOSITORY_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.event.UpdateRepoEvent
-import org.emunix.insteadlauncher.helpers.InsteadGamesXMLParser
-import org.emunix.insteadlauncher.helpers.RxBus
+import org.emunix.insteadlauncher.helpers.network.RepoUpdater
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
-import org.xmlpull.v1.XmlPullParserException
-import java.io.IOException
 
 class UpdateRepository: IntentService("UpdateRepository") {
 
@@ -35,34 +24,7 @@ class UpdateRepository: IntentService("UpdateRepository") {
         val notification = createNotification()
         startForeground(UPDATE_REPOSITORY_NOTIFICATION_ID, notification)
 
-        RxBus.publish(UpdateRepoEvent(true))
-
-        val games: ArrayList<Game> = arrayListOf()
-
-        try {
-            val gamesMap: MutableMap<String, Game> = mutableMapOf()
-            if (isSandboxEnabled()){
-                gamesMap.putAll(parseXML(fetchXML(getSandbox())))
-            }
-            gamesMap.putAll(parseXML(fetchXML(getRepo())))
-            gamesMap.forEach { (_, value) -> games.add(value) }
-        } catch (e: XmlPullParserException) {
-            RxBus.publish(UpdateRepoEvent(false, false, true,
-                    getString(R.string.error_xml_parse, e.message)))
-            stopForeground(true)
-            return
-        } catch (e: IOException) {
-            RxBus.publish(UpdateRepoEvent(false, false, true,
-                    getString(R.string.error_server_return_unexpected_code, e.message)))
-            stopForeground(true)
-            return
-        }
-
-        InsteadLauncher.db.games().updateRepository(games)
-
-        RxBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = true))
-
-        ScanGames.start(this)
+        RepoUpdater(this).update()
 
         stopForeground(true)
     }
@@ -77,34 +39,6 @@ class UpdateRepository: IntentService("UpdateRepository") {
                 .setSmallIcon(R.drawable.ic_sync_24dp)
                 .setContentIntent(pendingIntent)
                 .build()
-    }
-
-    @Throws (IOException::class)
-    private fun fetchXML(url: String): String {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-                .url(url)
-                .build()
-        val response = client.newCall(request).execute()
-        if (!response.isSuccessful) throw IOException("${response.code}")
-        return response.body!!.string()
-    }
-
-    private fun parseXML(xml: String): Map<String, Game> = InsteadGamesXMLParser().parse(xml)
-
-    private fun getRepo(): String {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        return prefs.getString("pref_repository", DEFAULT_REPOSITORY)!!
-    }
-
-    private fun getSandbox(): String {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        return prefs.getString("pref_sandbox", SANDBOX)!!
-    }
-
-    private fun isSandboxEnabled(): Boolean {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        return prefs.getBoolean("pref_sandbox_enabled", false)
     }
 
     companion object {

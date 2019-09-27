@@ -88,8 +88,13 @@
             android:summary="@string/prefs_repository_summary"
             android:title="@string/prefs_sandbox"/>
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:icon="@drawable/ic_sync_24dp"
+            android:key="pref_update_repo_background"
+            android:title="@string/pref_update_repo_background"
+            android:summary="@string/pref_update_repo_background_summary"/>
+        <SwitchPreference
+            android:defaultValue="false"
             android:key="pref_update_repo_startup"
             android:title="@string/pref_update_repo_when_open"/>
     </PreferenceCategory>

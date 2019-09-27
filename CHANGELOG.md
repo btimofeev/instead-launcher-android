@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Added
+- update repository in background once a day (default on)
+- update repository on opening (default off)
 - support Android 10
 - dark theme
 - animations when changing activities
@@ -11,7 +13,7 @@
 - update SDL 2.0.10, SDL2_image 2.0.5, SDL2_mixer 2.0.4, SDL2_ttf 2.0.15
 
 ### Fixed
-- fixed crash when processing xml
+- fixed crash when updating the repository
 
 ## [0.7.1] - 2019-06-10
 ### Added
