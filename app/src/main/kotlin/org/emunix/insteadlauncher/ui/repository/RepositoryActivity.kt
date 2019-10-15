@@ -17,8 +17,8 @@ import org.emunix.insteadlauncher.R
 import kotlinx.android.synthetic.main.fragment_repository.*
 import android.app.Activity
 import android.transition.Slide
-import android.view.Gravity
 import android.view.Window
+import androidx.core.view.GravityCompat
 
 
 private const val READ_REQUEST_CODE = 546
@@ -29,7 +29,7 @@ class RepositoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         with(window) {
             requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-            enterTransition = Slide(Gravity.END)
+            enterTransition = Slide(GravityCompat.getAbsoluteGravity(GravityCompat.END, resources.configuration.layoutDirection)) // fix crash on API 21
         }
 
         super.onCreate(savedInstanceState)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -7,10 +7,10 @@ package org.emunix.insteadlauncher.ui.game
 
 import android.os.Bundle
 import android.transition.Slide
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProviders
 
 import kotlinx.android.synthetic.main.activity_game.*
@@ -23,7 +23,7 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         with(window) {
             requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-            enterTransition = Slide(Gravity.END)
+            enterTransition = Slide(GravityCompat.getAbsoluteGravity(GravityCompat.END, resources.configuration.layoutDirection)) // fix crash on API 21
         }
 
         super.onCreate(savedInstanceState)
