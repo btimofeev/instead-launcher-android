@@ -17,6 +17,7 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/backgroundColor"
             app:contentScrim="@color/backgroundColor"
             app:statusBarScrim="@android:color/transparent"
             app:layout_scrollFlags="scroll|enterAlways">
