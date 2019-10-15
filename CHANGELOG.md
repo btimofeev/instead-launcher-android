@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 ### Added
+### Changed
+### Fixed
+
+## [0.8] - 2019-10-15
+### Added
 - update repository in background once a day (default on)
 - update repository on opening (default off)
 - support Android 10
@@ -10,7 +15,8 @@
 - placeholder images (thanks to [NEUD](https://vk.com/neudd))
 
 ### Changed
-- update SDL 2.0.10, SDL2_image 2.0.5, SDL2_mixer 2.0.4, SDL2_ttf 2.0.15
+- update INSTEAD 3.3.1
+- update SDL 2.0.10 (and patch https://hg.libsdl.org/SDL/rev/131ea7dcc225), SDL2_image 2.0.5, SDL2_mixer 2.0.4, SDL2_ttf 2.0.15
 
 ### Fixed
 - fixed crash when updating the repository

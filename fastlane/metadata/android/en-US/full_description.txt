@@ -2,8 +2,21 @@ Collection of text quests on the engine INSTEAD.
 
 Most of the games are in Russian, but there are games in English and Spanish:
 		
-* in English: The Returning of the Quantum Cat, I.A.G. Alpha, Constellation, Mainland, Return of Red Hood, Crash Dive
-* in Spanish: Mansion
+* in English:
+ - The Returning of the Quantum Cat
+ - I.A.G. Alpha
+ - Constellation
+ - Mainland
+ - Return of Red Hood
+ - Crash Dive!
+ - Semyon The Hamster 1
+ - Am I a monster?
+ - Kingdom of Grain
+ - Mirror
+ - Kayleth
+
+* in Spanish:
+ - Mansion
 
 You can find these games with the search button inside the app.
 	
