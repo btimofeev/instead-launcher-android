@@ -5,6 +5,14 @@
 ### Changed
 ### Fixed
 
+## [0.8.1] - 2019-11-20
+### Fixed
+This version includes patches from the INSTEAD master branch 
+(and these changes are not available in F-Droid version):
+
+- fixed a bug where the image was redrawn incorrectly when the screen is rotated (https://github.com/instead-hub/instead/commit/2178375716e628126b18dd6c88b6c5c087863385)
+- games start again in full screen mode (https://github.com/instead-hub/instead/commit/03c4fcb9454d6d9a7185488ffb74a93605ceb678)
+
 ## [0.8] - 2019-10-15
 ### Added
 - update repository in background once a day (default on)
