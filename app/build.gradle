@@ -137,7 +137,7 @@ task deleteDependencies(type: Delete) {
 }
 
 task downloadDependencies(dependsOn: deleteDependencies) {
-    def Instead = '3.3.1'
+    def Instead = '03c4fcb9454d6d9a7185488ffb74a93605ceb678'
     def Lua = '5.1.5'
     def SDL2 = '2.0.10'
     def SDL2_image = '2.0.5'

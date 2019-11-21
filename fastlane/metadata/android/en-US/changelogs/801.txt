@@ -1,0 +1,2 @@
+- Fixed a bug where the image was redrawn incorrectly when the screen is rotated
+- Games start again in full screen mode
