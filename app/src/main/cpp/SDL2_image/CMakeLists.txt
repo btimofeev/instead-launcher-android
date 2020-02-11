@@ -69,10 +69,6 @@ set( PNG_DIR "SDL2_image/external/libpng-1.6.37" )
 
 set( CMAKE_C_FLAGS ${COMMON_C_FLAGS} )
 
-if( ${ANDROID_ABI} STREQUAL "arm64-v8a" )
-    add_definitions(-DPNG_ARM_NEON_OPT=0)
-endif()
-
 set( SOURCES
         "${PNG_DIR}/png.c"
         "${PNG_DIR}/pngerror.c"
@@ -89,6 +85,14 @@ set( SOURCES
         "${PNG_DIR}/pngwrite.c"
         "${PNG_DIR}/pngwtran.c"
         "${PNG_DIR}/pngwutil.c" )
+
+if( ${ANDROID_ABI} STREQUAL "armeabi-v7a" OR ${ANDROID_ABI} STREQUAL "arm64-v8a" )
+    list( APPEND SOURCES
+            "${PNG_DIR}/arm/arm_init.c"
+            "${PNG_DIR}/arm/filter_neon.S"
+            "${PNG_DIR}/arm/filter_neon_intrinsics.c"
+            "${PNG_DIR}/arm/palette_neon_intrinsics.c" )
+endif()
 
 add_library( png STATIC ${SOURCES} )
 
