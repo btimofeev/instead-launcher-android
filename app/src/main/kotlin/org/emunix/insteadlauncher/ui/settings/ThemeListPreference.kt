@@ -34,9 +34,22 @@ class ThemeListPreference
 
     private fun getThemes(): List<String> {
         val themes = mutableListOf<String>()
-        val themesDir = StorageHelper(context).getThemesDirectory()
-        if (themesDir.exists()) {
-            val dirs = themesDir.listFiles().filter { it.isDirectory }
+        val internalThemesDir = StorageHelper(context).getThemesDirectory()
+        val externalThemesDir = StorageHelper(context).getUserThemesDirectory()
+        themes.addAll(getThemesFrom(internalThemesDir))
+        if (internalThemesDir.canonicalFile != externalThemesDir.canonicalFile) {
+            for (theme in getThemesFrom(externalThemesDir)) {
+                if (!themes.contains(theme))
+                    themes.add(theme)
+            }
+        }
+        return themes
+    }
+
+    private fun getThemesFrom(path: File): List<String> {
+        val themes = mutableListOf<String>()
+        if (path.exists()) {
+            val dirs = path.listFiles().filter { it.isDirectory }
             dirs.forEach { dir ->
                 if (File(dir, "theme.ini").exists()) {
                     themes.add(dir.name)
