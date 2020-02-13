@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,7 +11,7 @@ import android.view.*
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,10 +46,10 @@ class InstalledGamesFragment : Fragment() {
         list.setHasFixedSize(true)
         registerForContextMenu(list)
 
-        val viewModel = ViewModelProviders.of(this).get(InstalledGamesViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(InstalledGamesViewModel::class.java)
         viewModel.init()
 
-        viewModel.getInstalledGames().observe(this, Observer { games ->
+        viewModel.getInstalledGames().observe(viewLifecycleOwner, Observer { games ->
             listAdapter.submitList(games)
             empty_view.visible(games.isEmpty())
         })
@@ -70,7 +70,8 @@ class InstalledGamesFragment : Fragment() {
             }
             R.id.installed_games_activity_context_menu_delete -> {
                 val deleteDialog = DeleteGameDialog.newInstance(listAdapter.getLongClickedGame().name)
-                fragmentManager?.let { deleteDialog.show(it, "delete_dialog") }
+                if (isAdded)
+                    parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
             }
             R.id.installed_games_activity_context_menu_about -> {
                 val intent = Intent(context, GameActivity::class.java)

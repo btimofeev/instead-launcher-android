@@ -17,7 +17,6 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.event.DownloadProgressEvent
 import org.emunix.insteadlauncher.helpers.RxBus
 import org.emunix.insteadlauncher.helpers.showToast
-import org.emunix.insteadlauncher.services.InstallGame
 
 class GameViewModel(var app: Application) : AndroidViewModel(app) {
     private lateinit var game: LiveData<Game>

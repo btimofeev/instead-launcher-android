@@ -11,7 +11,7 @@ import android.view.MenuItem
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 
 import kotlinx.android.synthetic.main.activity_game.*
 import org.emunix.insteadlauncher.R
@@ -34,7 +34,7 @@ class GameActivity : AppCompatActivity() {
 
         fragment.arguments = intent.extras
 
-        viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
 
         toolbar_image.transitionName = intent.extras?.getString("game_name")
     }

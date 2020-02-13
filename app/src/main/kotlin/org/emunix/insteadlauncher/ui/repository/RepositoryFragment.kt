@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -14,7 +14,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +26,7 @@ import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.lifecycle.ViewModelProvider
 
 
 class RepositoryFragment : Fragment() {
@@ -61,11 +61,11 @@ class RepositoryFragment : Fragment() {
         list.adapter = listAdapter
         list.setHasFixedSize(true)
 
-        viewModel = ViewModelProviders.of(activity!!).get(RepositoryViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!).get(RepositoryViewModel::class.java)
 
         try_again_button.setOnClickListener { viewModel.updateRepository() }
 
-        viewModel.getGames().observe(this, Observer { games ->
+        viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
             if (games != null) {
                 if (!games.isEmpty()) {
                     showGames(games)
@@ -75,18 +75,18 @@ class RepositoryFragment : Fragment() {
             }
         })
 
-        viewModel.getProgressState().observe(this, Observer { state ->
+        viewModel.getProgressState().observe(viewLifecycleOwner, Observer { state ->
             if (state != null) {
                 swipe_to_refresh.isRefreshing = state
             }
         })
 
-        viewModel.getErrorViewState().observe(this, Observer { state ->
+        viewModel.getErrorViewState().observe(viewLifecycleOwner, Observer { state ->
             if (state != null)
                 error_view.visible(state)
         })
 
-        viewModel.getGameListState().observe(this, Observer { state ->
+        viewModel.getGameListState().observe(viewLifecycleOwner, Observer { state ->
             if (state != null)
                 list.visible(state)
         })
@@ -96,7 +96,7 @@ class RepositoryFragment : Fragment() {
         installDialog.setCancelable(false)
         installDialog.setCanceledOnTouchOutside(false)
 
-        viewModel.getInstallGameDialogState().observe(this, Observer { state ->
+        viewModel.getInstallGameDialogState().observe(viewLifecycleOwner, Observer { state ->
             if (state != null) {
                 if (state == true)
                     installDialog.show()
@@ -105,7 +105,7 @@ class RepositoryFragment : Fragment() {
             }
         })
 
-        viewModel.getSnackbarMessage().observe(this, Observer {
+        viewModel.getSnackbarMessage().observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { message ->
                 Snackbar.make(list, message, Snackbar.LENGTH_LONG).show()
             }
@@ -115,7 +115,7 @@ class RepositoryFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        val searchView = menu!!.findItem(R.id.action_search)!!.actionView as SearchView
+        val searchView = menu.findItem(R.id.action_search)!!.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {

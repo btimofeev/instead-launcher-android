@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,7 +11,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_repository.*
 import org.emunix.insteadlauncher.R
 import kotlinx.android.synthetic.main.fragment_repository.*
@@ -19,6 +18,7 @@ import android.app.Activity
 import android.transition.Slide
 import android.view.Window
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.ViewModelProvider
 
 
 private const val READ_REQUEST_CODE = 546
@@ -39,7 +39,7 @@ class RepositoryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = getString(R.string.repository_activity_title)
 
-        viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RepositoryViewModel::class.java)
         viewModel.init()
 
         swipe_to_refresh.setOnRefreshListener {

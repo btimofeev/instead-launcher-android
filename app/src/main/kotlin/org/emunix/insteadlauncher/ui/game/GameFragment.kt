@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,6 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.Game.State.*
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.saveStateToDB
-import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
@@ -47,23 +46,23 @@ class GameFragment : Fragment() {
         if (bundle != null) {
             val gameName = bundle.getString("game_name")
             if (gameName != null) {
-                viewModel = ViewModelProviders.of(activity!!).get(GameViewModel::class.java)
+                viewModel = ViewModelProvider(activity!!).get(GameViewModel::class.java)
                 viewModel.init(gameName)
-                viewModel.getGame().observe(this, Observer { game ->
+                viewModel.getGame().observe(viewLifecycleOwner, Observer { game ->
                     if (game != null) {
                         setViews(game)
                     } else {
                         activity?.finish()
                     }
                 })
-                viewModel.getProgress().observe(this, Observer { value ->
+                viewModel.getProgress().observe(viewLifecycleOwner, Observer { value ->
                     if (value == -1) {
                         setIndeterminateProgress(true)
                     } else {
                         setIndeterminateProgress(false, value)
                     }
                 })
-                viewModel.getProgressMessage().observe(this, Observer { msg ->
+                viewModel.getProgressMessage().observe(viewLifecycleOwner, Observer { msg ->
                     setInstallMessage(msg)
                 })
             }
@@ -133,7 +132,8 @@ class GameFragment : Fragment() {
         deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
                 val deleteDialog = DeleteGameDialog.newInstance(game.name)
-                fragmentManager?.let { deleteDialog.show(it, "delete_dialog") }
+                if (isAdded)
+                    parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
             }
         }
 
