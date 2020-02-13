@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -7,6 +7,7 @@ package org.emunix.insteadlauncher.helpers
 
 import java.io.File
 import java.io.InputStream
+import java.util.regex.Pattern
 import java.util.zip.ZipException
 import java.util.zip.ZipInputStream
 
@@ -71,8 +72,11 @@ class GameHelper {
 
     private fun parseFrom(file: File, regex: Regex, locale: String): String? {
         val entries = hashMapOf<String, String?>(DEFAULT_LANG to null)
+        val commentPattern = Pattern.compile("\\s*--.*")
 
         file.forEachLine { line ->
+            if (!commentPattern.matcher(line).matches())
+                return@forEachLine
             val matchResult = regex.find(line)
             if (matchResult != null) {
                 val (lang, text) = matchResult.destructured
