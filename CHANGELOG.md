@@ -3,7 +3,10 @@
 ## [Unreleased]
 ### Added
 ### Changed
+- faster detection of locally installed games
+- turned on ARM NEON optimizations for libpng
 ### Fixed
+- choose custom game themes in the settings
 
 ## [0.8.1] - 2019-11-20
 ### Fixed
