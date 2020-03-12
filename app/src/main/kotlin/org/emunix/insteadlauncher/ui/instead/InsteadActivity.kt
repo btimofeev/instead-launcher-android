@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2018 Anton Kolosov https://github.com/instead-hub/instead-android-ng
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -9,7 +9,10 @@ package org.emunix.insteadlauncher.ui.instead
 import android.content.pm.ActivityInfo
 import android.graphics.Point
 import android.os.Bundle
-import android.view.*
+import android.util.Log
+import android.view.Gravity
+import android.view.KeyEvent
+import android.view.Window
 import android.widget.ImageButton
 import android.widget.RelativeLayout
 import androidx.preference.PreferenceManager
@@ -18,6 +21,7 @@ import org.emunix.insteadlauncher.helpers.StorageHelper
 import org.emunix.insteadlauncher.helpers.visible
 import org.libsdl.app.SDLActivity
 import java.util.*
+
 
 class InsteadActivity: SDLActivity() {
 
@@ -151,6 +155,32 @@ class InsteadActivity: SDLActivity() {
             return super.dispatchKeyEvent(event)
         } else {
             return super.dispatchKeyEvent(event)
+        }
+    }
+
+    override fun setOrientationBis(w: Int, h: Int, resizable: Boolean, hint: String) {
+        val orientation = when {
+            hint.contains("LandscapeRight") && hint.contains("LandscapeLeft") -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            hint.contains("LandscapeRight") -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            hint.contains("LandscapeLeft") -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+            hint.contains("Portrait") && hint.contains("PortraitUpsideDown") -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            hint.contains("Portrait") -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            hint.contains("PortraitUpsideDown") -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+            else -> {
+                if (!resizable)
+                    if (w > h) {
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                    } else {
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+                    }
+                else
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            }
+        }
+
+        Log.v("SDL", "setOrientation() orientation=$orientation width=$w height=$h resizable=$resizable hint=$hint")
+        if (orientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
+            mSingleton.requestedOrientation = orientation
         }
     }
 
