@@ -5,6 +5,7 @@
 ### Changed
 - faster detection of locally installed games
 - turned on ARM NEON optimizations for libpng
+- update SDL 2.0.12
 ### Fixed
 - choose custom game themes in the settings
 
