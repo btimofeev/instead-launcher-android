@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 ### Changed
+- update INSTEAD 3.3.2
 - faster detection of locally installed games
 - turned on ARM NEON optimizations for libpng
 - update SDL 2.0.12

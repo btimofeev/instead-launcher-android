@@ -35,12 +35,12 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "INSTEAD_VERSION", "\"3.3.1\"")
+            buildConfigField("String", "INSTEAD_VERSION", "\"3.3.2\"")
         }
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix '-DEBUG'
-            buildConfigField("String", "INSTEAD_VERSION", "\"3.3.1\"")
+            buildConfigField("String", "INSTEAD_VERSION", "\"3.3.2\"")
         }
     }
     sourceSets {
@@ -141,7 +141,7 @@ task deleteDependencies(type: Delete) {
 }
 
 task downloadDependencies(dependsOn: deleteDependencies) {
-    def Instead = 'a0d2482b3e166f1d9e7b98cfbb7153335fe0f637'
+    def Instead = '3.3.2'
     def Lua = '5.1.5'
     def SDL2 = '2.0.12'
     def SDL2_image = '2.0.5'
