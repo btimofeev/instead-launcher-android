@@ -1,0 +1,5 @@
+- update INSTEAD 3.3.2
+- update SDL 2.0.12
+- faster detection of locally installed games
+- enabled ARM NEON optimizations for libpng
+- fixed custom game theme selection in settings

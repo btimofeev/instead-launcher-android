@@ -3,12 +3,16 @@
 ## [Unreleased]
 ### Added
 ### Changed
-- update INSTEAD 3.3.2
-- faster detection of locally installed games
-- turned on ARM NEON optimizations for libpng
-- update SDL 2.0.12
 ### Fixed
-- choose custom game themes in the settings
+
+## [0.8.2] - 2020-04-21
+### Changed
+- update INSTEAD 3.3.2
+- update SDL 2.0.12
+- faster detection of locally installed games
+- enabled ARM NEON optimizations for libpng
+### Fixed
+- fixed custom game theme selection in settings
 
 ## [0.8.1] - 2019-11-20
 ### Fixed

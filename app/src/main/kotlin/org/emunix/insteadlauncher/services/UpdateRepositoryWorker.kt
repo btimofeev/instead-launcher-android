@@ -32,7 +32,7 @@ object UpdateRepositoryWork {
                     .build()
 
             val updateRequest =
-                    PeriodicWorkRequest.Builder(UpdateRepositoryWorker::class.java, 1, TimeUnit.DAYS)
+                    PeriodicWorkRequest.Builder(UpdateRepositoryWorker::class.java, 1L, TimeUnit.DAYS)
                             .setConstraints(constraints)
                             .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, PeriodicWorkRequest.DEFAULT_BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                             .build()
