@@ -27,6 +27,7 @@ import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.ViewModelProvider
+import org.emunix.insteadlauncher.helpers.showToast
 
 
 class RepositoryFragment : Fragment() {
@@ -107,9 +108,15 @@ class RepositoryFragment : Fragment() {
             }
         })
 
-        viewModel.getSnackbarMessage().observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let { message ->
-                Snackbar.make(list, message, Snackbar.LENGTH_LONG).show()
+        viewModel.getSnackbarMessage().observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()?.let { resId ->
+                Snackbar.make(list, getString(resId), Snackbar.LENGTH_LONG).show()
+            }
+        })
+
+        viewModel.getToastMessage().observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()?.let { resId ->
+                context?.showToast(getString(resId))
             }
         })
     }

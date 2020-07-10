@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -20,19 +20,20 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.event.Event
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.*
-import org.emunix.insteadlauncher.services.UpdateRepository
 import org.emunix.insteadlauncher.services.ScanGames
+import org.emunix.insteadlauncher.services.UpdateRepository
 import java.io.IOException
 import java.util.zip.ZipException
 
 
 class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
     private val games = InsteadLauncher.db.games().observeAll()
-    private var showProgress: MutableLiveData<Boolean> = MutableLiveData()
-    private var showErrorView: MutableLiveData<Boolean> = MutableLiveData()
-    private var showGameList: MutableLiveData<Boolean> = MutableLiveData()
-    private var showInstallGameDialog: MutableLiveData<Boolean> = MutableLiveData()
-    private var showSnackbar = MutableLiveData<Event<String>>()
+    private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
+    private val showErrorView: MutableLiveData<Boolean> = MutableLiveData()
+    private val showGameList: MutableLiveData<Boolean> = MutableLiveData()
+    private val showInstallGameDialog: MutableLiveData<Boolean> = MutableLiveData()
+    private val showSnackbar = MutableLiveData<Event<Int>>()
+    private val showToast = MutableLiveData<Event<Int>>()
 
     private val viewModelJob = Job()
     private val scope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -68,7 +69,9 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
 
     fun getInstallGameDialogState(): LiveData<Boolean> = showInstallGameDialog
 
-    fun getSnackbarMessage(): LiveData<Event<String>> = showSnackbar
+    fun getSnackbarMessage(): LiveData<Event<Int>> = showSnackbar
+
+    fun getToastMessage(): LiveData<Event<Int>> = showToast
 
     fun updateRepository() {
         UpdateRepository.start(app)
@@ -83,33 +86,39 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
         try {
             unzipGame(uri)
         } catch (e: NotInsteadGameZipException) {
-            showSnackbar.value = Event(getApplication<InsteadLauncher>().getString(R.string.error_not_instead_game_zip))
+            showSnackbar.value = Event(R.string.error_not_instead_game_zip)
         } catch (e: ZipException) {
-            getApplication<InsteadLauncher>().showToast(getApplication<InsteadLauncher>().getString(R.string.error_failed_to_unpack_zip))
+            showToast.value = Event(R.string.error_failed_to_unpack_zip)
         } catch (e: IOException) {
-            getApplication<InsteadLauncher>().showToast(getApplication<InsteadLauncher>().getString(R.string.error_failed_to_unpack_zip))
+            showToast.value = Event(R.string.error_failed_to_unpack_zip)
         }
         showInstallGameDialog.value = false
         ScanGames.start(getApplication())
     }
 
     private suspend fun unzipGame(uri: Uri) {
-        withContext(Dispatchers.IO) {
-            var inputStream = getApplication<InsteadLauncher>().applicationContext.contentResolver.openInputStream(uri)
-            if (inputStream != null) {
-                if (!GameHelper().isInsteadGameZip(inputStream)) {
-                    inputStream.close()
-                    throw NotInsteadGameZipException("main.lua not found")
-                }
-                inputStream.close()
-            }
 
-            inputStream = getApplication<InsteadLauncher>().applicationContext.contentResolver.openInputStream(uri)
-            if (inputStream != null) {
-                val gamesDir = StorageHelper(getApplication()).getGamesDirectory()
-                inputStream.unzip(gamesDir)
-                inputStream.close()
-            }
+        fun isGameZip(uri: Uri): Boolean {
+            val inputStream = app.contentResolver.openInputStream(uri)
+                    ?: throw IOException("inputStream is null")
+            val isInsteadGameZip = GameHelper().isInsteadGameZip(inputStream)
+            inputStream.close()
+            return isInsteadGameZip
+        }
+
+        fun unzip(uri: Uri) {
+            val inputStream = app.contentResolver.openInputStream(uri)
+                    ?: throw IOException("inputStream is null")
+            val gamesDir = StorageHelper(getApplication()).getGamesDirectory()
+            inputStream.unzip(gamesDir)
+            inputStream.close()
+        }
+
+        withContext(Dispatchers.IO) {
+            if (isGameZip(uri)) {
+                unzip(uri)
+            } else
+                throw NotInsteadGameZipException("main.lua not found")
         }
     }
 
