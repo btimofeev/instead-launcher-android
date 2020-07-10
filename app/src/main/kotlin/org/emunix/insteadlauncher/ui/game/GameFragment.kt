@@ -42,31 +42,25 @@ class GameFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val bundle = this.arguments
-        if (bundle != null) {
-            val gameName = bundle.getString("game_name")
-            if (gameName != null) {
-                viewModel = ViewModelProvider(requireActivity()).get(GameViewModel::class.java)
-                viewModel.init(gameName)
-                viewModel.getGame().observe(viewLifecycleOwner, Observer { game ->
-                    if (game != null) {
-                        setViews(game)
-                    } else {
-                        activity?.finish()
-                    }
-                })
-                viewModel.getProgress().observe(viewLifecycleOwner, Observer { value ->
-                    if (value == -1) {
-                        setIndeterminateProgress(true)
-                    } else {
-                        setIndeterminateProgress(false, value)
-                    }
-                })
-                viewModel.getProgressMessage().observe(viewLifecycleOwner, Observer { msg ->
-                    setInstallMessage(msg)
-                })
+        viewModel = ViewModelProvider(requireActivity()).get(GameViewModel::class.java)
+
+        viewModel.getGame().observe(viewLifecycleOwner, Observer { game ->
+            if (game != null) {
+                setViews(game)
+            } else {
+                activity?.finish()
             }
-        }
+        })
+        viewModel.getProgress().observe(viewLifecycleOwner, Observer { value ->
+            if (value == -1) {
+                setIndeterminateProgress(true)
+            } else {
+                setIndeterminateProgress(false, value)
+            }
+        })
+        viewModel.getProgressMessage().observe(viewLifecycleOwner, Observer { msg ->
+            setInstallMessage(msg)
+        })
     }
 
     private fun setViews(game: Game) {
@@ -76,7 +70,7 @@ class GameFragment : Fragment() {
 
         name.text = game.title
         author.text = game.author
-        if (game.installedVersion.isNotBlank() and (game.version != game.installedVersion)){
+        if (game.installedVersion.isNotBlank() and (game.version != game.installedVersion)) {
             version.text = getString(R.string.game_activity_label_version, game.installedVersion + " (\u2191${game.version})")
         } else {
             version.text = getString(R.string.game_activity_label_version, game.version)
@@ -92,7 +86,7 @@ class GameFragment : Fragment() {
             deleteButton.visible(true)
             runButton.visible(true)
 
-            if (game.version != game.installedVersion){
+            if (game.version != game.installedVersion) {
                 installButton.text = getText(R.string.game_activity_button_update)
                 installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
                 installButton.visible(true)
@@ -154,7 +148,7 @@ class GameFragment : Fragment() {
         runButton.visible(!flag)
     }
 
-    private fun setIndeterminateProgress(indeterminate: Boolean, value: Int = 0){
+    private fun setIndeterminateProgress(indeterminate: Boolean, value: Int = 0) {
         if (progressBar.isIndeterminate != indeterminate) {
             progressBar.isIndeterminate = indeterminate
         }

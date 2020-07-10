@@ -65,6 +65,8 @@ class RepositoryFragment : Fragment() {
 
         try_again_button.setOnClickListener { viewModel.updateRepository() }
 
+        swipe_to_refresh.setOnRefreshListener { viewModel.updateRepository() }
+
         viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
             if (games != null) {
                 if (!games.isEmpty()) {

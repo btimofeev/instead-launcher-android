@@ -18,11 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             app:titleTextAppearance="@style/ToolbarTextAppearance"
-            style="@style/MyToolbar"/>
+            style="@style/MyToolbar"
+            tools:menu="@menu/menu_repository"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment"
         android:name="org.emunix.insteadlauncher.ui.repository.RepositoryFragment"
         android:layout_width="match_parent"

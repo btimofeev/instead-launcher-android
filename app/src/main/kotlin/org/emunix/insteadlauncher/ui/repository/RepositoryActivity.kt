@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_repository.*
 import org.emunix.insteadlauncher.R
-import kotlinx.android.synthetic.main.fragment_repository.*
 import android.app.Activity
 import android.transition.Slide
 import android.view.Window
@@ -41,10 +40,6 @@ class RepositoryActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(RepositoryViewModel::class.java)
         viewModel.init()
-
-        swipe_to_refresh.setOnRefreshListener {
-            viewModel.updateRepository()
-        }
 
         val intent = intent
         if (intent.type == "application/zip") {

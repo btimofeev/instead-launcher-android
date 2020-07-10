@@ -15,7 +15,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic"/>
 
     <TextView
         android:id="@+id/name"
@@ -25,11 +26,11 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         android:singleLine="true"
-        android:text="name"
         android:textAppearance="@android:style/TextAppearance.Material.Subhead"
         app:layout_constraintStart_toEndOf="@+id/image"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="8dp"/>
+        android:layout_marginEnd="8dp"
+        tools:text="@tools:sample/lorem"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

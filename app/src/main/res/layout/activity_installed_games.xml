@@ -17,7 +17,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            style="@style/MyToolbar">
+            style="@style/MyToolbar"
+            tools:menu="@menu/menu_context_installed_games">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -29,7 +30,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment"
         android:name="org.emunix.insteadlauncher.ui.installedgames.InstalledGamesFragment"
         android:layout_width="match_parent"

@@ -10,6 +10,7 @@
     <string name="repository_unable_to_load">Не удалось загрузить список игр.\nСервер недоступен или отсутствует соединение с интернетом.</string>
     <string name="repository_try_again">Повторить попытку</string>
     <string name="repository_nothing_found">Игр не найдено</string>
+    <string name="repository_badge_content_description">Доступна новая версия игры</string>
 
     <string name="game_activity_title">Игра</string>
     <string name="game_activity_button_install">Установить</string>

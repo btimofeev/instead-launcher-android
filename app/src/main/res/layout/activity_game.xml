@@ -29,7 +29,9 @@
                 android:fitsSystemWindows="true"
                 android:adjustViewBounds="true"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.5"/>
+                app:layout_collapseParallaxMultiplier="0.5"
+                tools:src="@tools:sample/backgrounds/scenic"
+                tools:ignore="ContentDescription" />
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -41,7 +43,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment"
         android:name="org.emunix.insteadlauncher.ui.game.GameFragment"
         android:layout_width="match_parent"

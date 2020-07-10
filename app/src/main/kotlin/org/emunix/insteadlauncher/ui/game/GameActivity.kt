@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 
 import kotlinx.android.synthetic.main.activity_game.*
 import org.emunix.insteadlauncher.R
+import java.lang.IllegalArgumentException
 
 class GameActivity : AppCompatActivity() {
 
@@ -32,9 +33,11 @@ class GameActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_24dp)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        fragment.arguments = intent.extras
+        //fragment.arguments = intent.extras
 
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
+        val gameName = intent.extras?.getString("game_name") ?: throw IllegalArgumentException("GameActivity require game_name in intent.extras")
+        viewModel.init(gameName)
 
         toolbar_image.transitionName = intent.extras?.getString("game_name")
     }
