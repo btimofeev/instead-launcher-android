@@ -52,7 +52,7 @@ class RepositoryFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
         val insetDivider = dividerItemDecoration.insetDivider(list.context, R.dimen.inset_divider_margin_start)
         dividerItemDecoration.setDrawable(insetDivider)
@@ -61,7 +61,7 @@ class RepositoryFragment : Fragment() {
         list.adapter = listAdapter
         list.setHasFixedSize(true)
 
-        viewModel = ViewModelProvider(activity!!).get(RepositoryViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(RepositoryViewModel::class.java)
 
         try_again_button.setOnClickListener { viewModel.updateRepository() }
 

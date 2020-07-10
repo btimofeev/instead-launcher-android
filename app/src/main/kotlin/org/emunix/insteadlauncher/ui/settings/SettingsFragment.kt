@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -47,9 +47,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             "pref_update_repo_background" -> {
                 val pref : SwitchPreference? = findPreference("pref_update_repo_background")
                 if (pref != null && pref.isChecked) {
-                    UpdateRepositoryWork.start(activity!!.applicationContext)
+                    UpdateRepositoryWork.start(requireContext())
                 } else {
-                    UpdateRepositoryWork.stop(activity!!.applicationContext)
+                    UpdateRepositoryWork.stop(requireContext())
                 }
             }
         }

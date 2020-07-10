@@ -46,7 +46,7 @@ class GameFragment : Fragment() {
         if (bundle != null) {
             val gameName = bundle.getString("game_name")
             if (gameName != null) {
-                viewModel = ViewModelProvider(activity!!).get(GameViewModel::class.java)
+                viewModel = ViewModelProvider(requireActivity()).get(GameViewModel::class.java)
                 viewModel.init(gameName)
                 viewModel.getGame().observe(viewLifecycleOwner, Observer { game ->
                     if (game != null) {

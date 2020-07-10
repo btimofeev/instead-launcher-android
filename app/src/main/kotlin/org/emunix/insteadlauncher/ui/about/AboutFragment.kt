@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -27,7 +27,7 @@ class AboutFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         about_instead.text = getString(R.string.about_activity_about_instead, BuildConfig.INSTEAD_VERSION)
-        about_instead_launcher.text = getString(R.string.about_activity_about_instead_launcher, AppVersion(activity!!).getString())
+        about_instead_launcher.text = getString(R.string.about_activity_about_instead_launcher, AppVersion(requireContext()).getString())
 
     }
 }
