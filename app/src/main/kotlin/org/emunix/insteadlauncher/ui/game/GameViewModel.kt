@@ -15,14 +15,14 @@ import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.event.DownloadProgressEvent
-import org.emunix.insteadlauncher.event.Event
+import org.emunix.insteadlauncher.event.ConsumableEvent
 import org.emunix.insteadlauncher.helpers.RxBus
 
 class GameViewModel(var app: Application) : AndroidViewModel(app) {
     private lateinit var game: LiveData<Game>
     private val progress: MutableLiveData<Int> = MutableLiveData()
     private val progressMessage: MutableLiveData<String> = MutableLiveData()
-    private val errorMessage: MutableLiveData<Event<String>> = MutableLiveData()
+    private val errorMessage: MutableLiveData<ConsumableEvent<String>> = MutableLiveData()
 
     @SuppressLint("CheckResult")
     fun init(gameName: String) {
@@ -33,7 +33,7 @@ class GameViewModel(var app: Application) : AndroidViewModel(app) {
                 .subscribe {
                     if (it.gameName == gameName) {
                         if (it.error) {
-                            errorMessage.value = Event(it.errorMessage)
+                            errorMessage.value = ConsumableEvent(it.errorMessage)
                         }
 
                         progress.value = it.progressValue
@@ -53,5 +53,5 @@ class GameViewModel(var app: Application) : AndroidViewModel(app) {
 
     fun getProgressMessage(): LiveData<String> = progressMessage
 
-    fun getErrorMessage(): LiveData<Event<String>> = errorMessage
+    fun getErrorMessage(): LiveData<ConsumableEvent<String>> = errorMessage
 }

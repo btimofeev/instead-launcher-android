@@ -17,7 +17,7 @@ import kotlinx.coroutines.*
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.event.Event
+import org.emunix.insteadlauncher.event.ConsumableEvent
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.services.ScanGames
@@ -32,8 +32,8 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
     private val showErrorView: MutableLiveData<Boolean> = MutableLiveData()
     private val showGameList: MutableLiveData<Boolean> = MutableLiveData()
     private val showInstallGameDialog: MutableLiveData<Boolean> = MutableLiveData()
-    private val showSnackbar = MutableLiveData<Event<Int>>()
-    private val showToast = MutableLiveData<Event<Int>>()
+    private val showSnackbar = MutableLiveData<ConsumableEvent<Int>>()
+    private val showToast = MutableLiveData<ConsumableEvent<Int>>()
 
     private val viewModelJob = Job()
     private val scope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -69,9 +69,9 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
 
     fun getInstallGameDialogState(): LiveData<Boolean> = showInstallGameDialog
 
-    fun getSnackbarMessage(): LiveData<Event<Int>> = showSnackbar
+    fun getSnackbarMessage(): LiveData<ConsumableEvent<Int>> = showSnackbar
 
-    fun getToastMessage(): LiveData<Event<Int>> = showToast
+    fun getToastMessage(): LiveData<ConsumableEvent<Int>> = showToast
 
     fun updateRepository() {
         UpdateRepository.start(app)
@@ -86,11 +86,11 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
         try {
             unzipGame(uri)
         } catch (e: NotInsteadGameZipException) {
-            showSnackbar.value = Event(R.string.error_not_instead_game_zip)
+            showSnackbar.value = ConsumableEvent(R.string.error_not_instead_game_zip)
         } catch (e: ZipException) {
-            showToast.value = Event(R.string.error_failed_to_unpack_zip)
+            showToast.value = ConsumableEvent(R.string.error_failed_to_unpack_zip)
         } catch (e: IOException) {
-            showToast.value = Event(R.string.error_failed_to_unpack_zip)
+            showToast.value = ConsumableEvent(R.string.error_failed_to_unpack_zip)
         }
         showInstallGameDialog.value = false
         ScanGames.start(getApplication())
