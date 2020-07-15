@@ -2,8 +2,8 @@ package org.emunix.insteadlauncher.helpers
 
 // code from https://android.jlelse.eu/super-simple-event-bus-with-rxjava-and-kotlin-f1f969b21003
 
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 // Use object so we have a singleton instance
 object RxBus {
