@@ -26,6 +26,7 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.Game.State.*
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.saveStateToDB
+import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
@@ -60,6 +61,11 @@ class GameFragment : Fragment() {
         })
         viewModel.getProgressMessage().observe(viewLifecycleOwner, Observer { msg ->
             setInstallMessage(msg)
+        })
+        viewModel.getErrorMessage().observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()?.let {
+                requireContext().showToast(it)
+            }
         })
     }
 
