@@ -1,20 +1,22 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018, 2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers
+package org.emunix.insteadlauncher.repository.parser
 
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
 import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.helpers.getBrief
+import org.emunix.insteadlauncher.helpers.unescapeHtmlCodes
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.StringReader
 
-class InsteadGamesXMLParser {
+class InsteadGamesXmlParser: GameListParser {
 
-    fun parse(input: String): Map<String, Game> {
+    override fun parse(input: String): Map<String, Game> {
         try {
             val parser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)

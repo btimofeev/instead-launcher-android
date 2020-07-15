@@ -1,25 +1,25 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.helpers.network
 
 import android.content.Context
-import androidx.preference.PreferenceManager
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import android.content.SharedPreferences
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
-import org.emunix.insteadlauncher.helpers.InsteadGamesXMLParser
 import org.emunix.insteadlauncher.helpers.RxBus
+import org.emunix.insteadlauncher.repository.fetcher.GameListFetcher
+import org.emunix.insteadlauncher.repository.parser.GameListParser
 import org.emunix.insteadlauncher.services.ScanGames
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
-class RepoUpdater(val context: Context) {
+class RepoUpdater(private val context: Context, private val fetcher: GameListFetcher,
+                  private val parser: GameListParser, private val prefs: SharedPreferences) {
 
     fun update(): Boolean {
         RxBus.publish(UpdateRepoEvent(true))
@@ -51,31 +51,13 @@ class RepoUpdater(val context: Context) {
         return true
     }
 
-    @Throws (IOException::class)
-    private fun fetchXML(url: String): String {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-                .url(url)
-                .build()
-        val response = client.newCall(request).execute()
-        if (!response.isSuccessful) throw IOException("${response.code}")
-        return response.body!!.string()
-    }
+    private fun fetchXML(url: String): String = fetcher.fetch(url)
 
-    private fun parseXML(xml: String): Map<String, Game> = InsteadGamesXMLParser().parse(xml)
+    private fun parseXML(xml: String): Map<String, Game> = parser.parse(xml)
 
-    private fun getRepo(): String {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString("pref_repository", InsteadLauncher.DEFAULT_REPOSITORY)!!
-    }
+    private fun getRepo(): String = prefs.getString("pref_repository", InsteadLauncher.DEFAULT_REPOSITORY)!!
 
-    private fun getSandbox(): String {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString("pref_sandbox", InsteadLauncher.SANDBOX)!!
-    }
+    private fun getSandbox(): String = prefs.getString("pref_sandbox", InsteadLauncher.SANDBOX)!!
 
-    private fun isSandboxEnabled(): Boolean {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getBoolean("pref_sandbox_enabled", false)
-    }
+    private fun isSandboxEnabled(): Boolean =  prefs.getBoolean("pref_sandbox_enabled", false)
 }

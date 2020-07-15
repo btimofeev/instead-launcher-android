@@ -1,20 +1,27 @@
 /*
- * Copyright (c) 2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.services
 
 import android.content.Context
+import androidx.preference.PreferenceManager
 import androidx.work.*
 import org.emunix.insteadlauncher.helpers.network.RepoUpdater
+import org.emunix.insteadlauncher.repository.fetcher.InsteadGamesXmlFetcher
+import org.emunix.insteadlauncher.repository.parser.InsteadGamesXmlParser
 import java.util.concurrent.TimeUnit
 
 class UpdateRepositoryWorker(appContext: Context, workerParams: WorkerParameters)
     : Worker(appContext, workerParams) {
 
     override fun doWork(): Result {
-        return if (RepoUpdater(applicationContext).update()) {
+        return if (RepoUpdater(applicationContext,
+                        InsteadGamesXmlFetcher(),
+                        InsteadGamesXmlParser(),
+                        PreferenceManager.getDefaultSharedPreferences(applicationContext))
+                        .update()) {
             Result.success()
         } else {
             Result.retry()

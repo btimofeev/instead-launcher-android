@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -12,10 +12,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.preference.PreferenceManager
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UPDATE_REPOSITORY
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UPDATE_REPOSITORY_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.helpers.network.RepoUpdater
+import org.emunix.insteadlauncher.repository.fetcher.InsteadGamesXmlFetcher
+import org.emunix.insteadlauncher.repository.parser.InsteadGamesXmlParser
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
 
 class UpdateRepository: IntentService("UpdateRepository") {
@@ -24,7 +27,10 @@ class UpdateRepository: IntentService("UpdateRepository") {
         val notification = createNotification()
         startForeground(UPDATE_REPOSITORY_NOTIFICATION_ID, notification)
 
-        RepoUpdater(this).update()
+        RepoUpdater(this,
+                InsteadGamesXmlFetcher(),
+                InsteadGamesXmlParser(),
+                PreferenceManager.getDefaultSharedPreferences(applicationContext)).update()
 
         stopForeground(true)
     }
