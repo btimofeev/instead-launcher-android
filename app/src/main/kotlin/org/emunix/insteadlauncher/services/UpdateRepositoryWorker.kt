@@ -31,25 +31,27 @@ class UpdateRepositoryWorker(appContext: Context, workerParams: WorkerParameters
 
 object UpdateRepositoryWork {
 
-        @JvmStatic
-        fun start(context: Context) {
-            val constraints = Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .setRequiresBatteryNotLow(true)
-                    .build()
+    private const val UPDATE_REPO_WORK = "update_repo_work"
 
-            val updateRequest =
-                    PeriodicWorkRequest.Builder(UpdateRepositoryWorker::class.java, 1L, TimeUnit.DAYS)
-                            .setConstraints(constraints)
-                            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, PeriodicWorkRequest.DEFAULT_BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                            .build()
+    @JvmStatic
+    fun start(context: Context) {
+        val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
+                .build()
 
-            WorkManager.getInstance(context)
-                    .enqueueUniquePeriodicWork("update_repo_work", ExistingPeriodicWorkPolicy.KEEP ,updateRequest)
-        }
+        val updateRequest =
+                PeriodicWorkRequest.Builder(UpdateRepositoryWorker::class.java, 1L, TimeUnit.DAYS)
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, PeriodicWorkRequest.DEFAULT_BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                        .build()
 
-        @JvmStatic
-        fun stop(context: Context) {
-            WorkManager.getInstance(context).cancelUniqueWork("update_repo_work")
-        }
+        WorkManager.getInstance(context)
+                .enqueueUniquePeriodicWork(UPDATE_REPO_WORK, ExistingPeriodicWorkPolicy.KEEP, updateRequest)
+    }
+
+    @JvmStatic
+    fun stop(context: Context) {
+        WorkManager.getInstance(context).cancelUniqueWork(UPDATE_REPO_WORK)
+    }
 }
