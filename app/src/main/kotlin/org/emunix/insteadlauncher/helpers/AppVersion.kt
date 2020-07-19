@@ -6,13 +6,14 @@
 package org.emunix.insteadlauncher.helpers
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
+import javax.inject.Inject
 
-private const val PREFS_FILENAME = "version_prefs"
 private const val PREF_RESOURCES_LAST_UPDATE = "resources_last_update"
 
-class AppVersion(val context: Context) {
+class AppVersion @Inject constructor(private val context: Context, private val prefs: SharedPreferences) {
 
     @Suppress("DEPRECATION")
     fun getCode(): Long {
@@ -44,7 +45,6 @@ class AppVersion(val context: Context) {
     }
 
     fun isNewVersion() : Boolean {
-        val prefs = context.getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE)
         val lastUpdate = prefs.getLong(PREF_RESOURCES_LAST_UPDATE, -1)
         if (lastUpdate != getCode()) {
             return true
@@ -53,7 +53,6 @@ class AppVersion(val context: Context) {
     }
 
     fun saveCurrentVersion(value: Long) {
-        val prefs = context.getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE)
         val editor = prefs.edit()
         editor.putLong(PREF_RESOURCES_LAST_UPDATE, value)
         editor.apply()

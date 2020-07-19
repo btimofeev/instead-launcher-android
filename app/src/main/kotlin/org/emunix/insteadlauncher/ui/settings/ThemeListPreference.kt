@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018, 2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -8,12 +8,16 @@ package org.emunix.insteadlauncher.ui.settings
 import android.content.Context
 import android.util.AttributeSet
 import androidx.preference.ListPreference
+import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.helpers.StorageHelper
+import org.emunix.insteadlauncher.storage.Storage
 import java.io.File
 
 class ThemeListPreference
 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ListPreference(context, attrs) {
+
+    val storage: Storage = InsteadLauncher.appComponent.storage()
+
     init {
         val themes = getThemes().toTypedArray()
         if (themes.isNotEmpty()) {
@@ -34,8 +38,8 @@ class ThemeListPreference
 
     private fun getThemes(): List<String> {
         val themes = mutableListOf<String>()
-        val internalThemesDir = StorageHelper(context).getThemesDirectory()
-        val externalThemesDir = StorageHelper(context).getUserThemesDirectory()
+        val internalThemesDir = storage.getThemesDirectory()
+        val externalThemesDir = storage.getUserThemesDirectory()
         themes.addAll(getThemesFrom(internalThemesDir))
         if (internalThemesDir.canonicalFile != externalThemesDir.canonicalFile) {
             for (theme in getThemesFrom(externalThemesDir)) {

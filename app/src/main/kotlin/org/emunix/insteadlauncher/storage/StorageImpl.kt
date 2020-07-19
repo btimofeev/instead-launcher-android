@@ -1,21 +1,23 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers
+package org.emunix.insteadlauncher.storage
 
 import android.content.Context
 import android.os.Environment
 import androidx.core.os.EnvironmentCompat
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.helpers.NotificationHelper
+import org.emunix.insteadlauncher.helpers.showToast
 import java.io.File
 import java.io.IOException
 
-class StorageHelper(val context: Context) {
+class StorageImpl (private val context: Context) : Storage {
 
-    fun getAppFilesDirectory() : File {
+    override fun getAppFilesDirectory() : File {
         val storage : Array<File?> = context.getExternalFilesDirs(null)
         for (file in storage) {
             if (file != null) {
@@ -29,7 +31,7 @@ class StorageHelper(val context: Context) {
         return getDataDirectory()
     }
 
-    fun getCacheDirectory() : File {
+    override fun getCacheDirectory() : File {
         val storage : Array<File?> = context.externalCacheDirs
         for (file in storage) {
             if (file != null) {
@@ -43,21 +45,21 @@ class StorageHelper(val context: Context) {
         return context.cacheDir
     }
 
-    fun getDataDirectory(): File = context.filesDir
+    override fun getDataDirectory(): File = context.filesDir
 
-    fun getLangDirectory(): File = File(getDataDirectory(), "lang")
+    override fun getLangDirectory(): File = File(getDataDirectory(), "lang")
 
-    fun getSteadDirectory(): File = File(getDataDirectory(), "stead")
+    override fun getSteadDirectory(): File = File(getDataDirectory(), "stead")
 
-    fun getThemesDirectory(): File = File(getDataDirectory(), "themes")
+    override fun getThemesDirectory(): File = File(getDataDirectory(), "themes")
 
-    fun getGamesDirectory(): File = File(getAppFilesDirectory(), "games")
+    override fun getGamesDirectory(): File = File(getAppFilesDirectory(), "games")
 
-    fun getSavesDirectory(): File = File(getAppFilesDirectory(), "saves")
+    override fun getSavesDirectory(): File = File(getAppFilesDirectory(), "saves")
 
-    fun getUserThemesDirectory(): File = File(getAppFilesDirectory(), "themes")
+    override fun getUserThemesDirectory(): File = File(getAppFilesDirectory(), "themes")
 
-    fun makeDirs() {
+    override fun createStorageDirectories() {
         val dirs = arrayOf(getGamesDirectory(), getSavesDirectory(), getUserThemesDirectory())
         for (dir in dirs) {
             try {
@@ -68,7 +70,7 @@ class StorageHelper(val context: Context) {
         }
     }
 
-    fun copyAsset(name: String, toPath: File) {
+    override fun copyAsset(name: String, toPath: File) {
         val assetManager = context.assets
         try {
             val assets = assetManager.list(name) ?: throw IOException()

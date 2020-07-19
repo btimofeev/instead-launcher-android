@@ -109,7 +109,7 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
         fun unzip(uri: Uri) {
             val inputStream = app.contentResolver.openInputStream(uri)
                     ?: throw IOException("inputStream is null")
-            val gamesDir = StorageHelper(getApplication()).getGamesDirectory()
+            val gamesDir = InsteadLauncher.appComponent.storage().getGamesDirectory()
             inputStream.unzip(gamesDir)
             inputStream.close()
         }

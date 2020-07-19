@@ -6,25 +6,23 @@
 package org.emunix.insteadlauncher.services
 
 import android.content.Context
-import androidx.preference.PreferenceManager
 import androidx.work.*
+import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.helpers.network.RepoUpdater
-import org.emunix.insteadlauncher.repository.fetcher.InsteadGamesXmlFetcher
-import org.emunix.insteadlauncher.repository.parser.InsteadGamesXmlParser
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 class UpdateRepositoryWorker(appContext: Context, workerParams: WorkerParameters)
     : Worker(appContext, workerParams) {
 
+    @Inject lateinit var repoUpdater: RepoUpdater
+
     override fun doWork(): Result {
-        return if (RepoUpdater(applicationContext,
-                        InsteadGamesXmlFetcher(),
-                        InsteadGamesXmlParser(),
-                        PreferenceManager.getDefaultSharedPreferences(applicationContext))
-                        .update()) {
-            Result.success()
-        } else {
-            Result.retry()
+        InsteadLauncher.appComponent.inject(this)
+
+        return when (repoUpdater.update()) {
+            true  -> Result.success()
+            false -> Result.retry()
         }
     }
 }

@@ -17,8 +17,9 @@ import org.emunix.insteadlauncher.repository.parser.GameListParser
 import org.emunix.insteadlauncher.services.ScanGames
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
+import javax.inject.Inject
 
-class RepoUpdater(private val context: Context, private val fetcher: GameListFetcher,
+class RepoUpdater @Inject constructor(private val context: Context, private val fetcher: GameListFetcher,
                   private val parser: GameListParser, private val prefs: SharedPreferences) {
 
     fun update(): Boolean {

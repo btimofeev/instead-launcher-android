@@ -6,6 +6,7 @@
 
 package org.emunix.insteadlauncher.ui.instead
 
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Point
 import android.os.Bundle
@@ -15,15 +16,19 @@ import android.view.KeyEvent
 import android.view.Window
 import android.widget.ImageButton
 import android.widget.RelativeLayout
-import androidx.preference.PreferenceManager
+import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.helpers.StorageHelper
+import org.emunix.insteadlauncher.storage.Storage
 import org.emunix.insteadlauncher.helpers.visible
 import org.libsdl.app.SDLActivity
 import java.util.*
+import javax.inject.Inject
 
 
 class InsteadActivity: SDLActivity() {
+
+    @Inject lateinit var prefs: SharedPreferences
+    @Inject lateinit var storage: Storage
 
     private var game : String? = ""
     private var playFromBeginning = false
@@ -54,10 +59,10 @@ class InsteadActivity: SDLActivity() {
 
     override fun getArguments(): Array<String> {
         val args : Array<String> = Array(13){""}
-        args[0] = StorageHelper(this).getDataDirectory().absolutePath
-        args[1] = StorageHelper(this).getAppFilesDirectory().absolutePath
-        args[2] = StorageHelper(this).getGamesDirectory().absolutePath
-        args[3] = StorageHelper(this).getUserThemesDirectory().absolutePath
+        args[0] = storage.getDataDirectory().absolutePath
+        args[1] = storage.getAppFilesDirectory().absolutePath
+        args[2] = storage.getGamesDirectory().absolutePath
+        args[3] = storage.getUserThemesDirectory().absolutePath
         args[4] = Locale.getDefault().language
         args[5] = if (prefMusic) "y" else "n"
         args[6] = if (prefCursor) "y" else "n"
@@ -75,6 +80,8 @@ class InsteadActivity: SDLActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
 
+        InsteadLauncher.appComponent.inject(this)
+
         game = intent.extras?.getString("game_name")
         playFromBeginning = intent.extras?.getBoolean("play_from_beginning", false) ?: false
 
@@ -83,14 +90,13 @@ class InsteadActivity: SDLActivity() {
     }
 
     private fun getPreferences() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefMusic = prefs.getBoolean("pref_music", true)
         prefCursor = prefs.getBoolean("pref_cursor", false)
         prefBuiltinTheme = prefs.getBoolean("pref_enable_game_theme", true)
         prefDefaultTheme = prefs.getString("pref_default_theme", DEFAULT_THEME)
         prefHires = prefs.getBoolean("pref_hires", true)
         prefTextSize = prefs.getString("pref_text_size", DEFAULT_TEXT_SIZE)
-        prefKeyboardButton = prefs?.getString("pref_keyboard_button", "bottom_left") ?: "bottom_left"
+        prefKeyboardButton = prefs.getString("pref_keyboard_button", "bottom_left") ?: "bottom_left"
         prefBackButton = prefs.getString("pref_back_button", "exit_game")
     }
 

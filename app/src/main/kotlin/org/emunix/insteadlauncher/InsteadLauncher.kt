@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -9,18 +9,21 @@ import android.annotation.TargetApi
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import androidx.room.Room
 import android.content.Context
 import android.os.Build
-import androidx.preference.PreferenceManager
 import org.emunix.insteadlauncher.data.GameDatabase
-import org.emunix.insteadlauncher.helpers.StorageHelper
+import org.emunix.insteadlauncher.di.AppComponent
+import org.emunix.insteadlauncher.di.AppModule
+import org.emunix.insteadlauncher.di.DaggerAppComponent
 import org.emunix.insteadlauncher.helpers.ThemeHelper
 
 
 class InsteadLauncher: Application() {
 
     companion object {
+        lateinit var appComponent: AppComponent
+        private set
+
         lateinit var db: GameDatabase
 
         const val UPDATE_REPOSITORY_NOTIFICATION_ID: Int = 1000
@@ -41,12 +44,17 @@ class InsteadLauncher: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        appComponent = DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .build()
 
         createNotificationChannels()
-        db =  Room.databaseBuilder(this, GameDatabase::class.java, "games.db").build()
-        StorageHelper(this).makeDirs()
+        db =  appComponent.db()
 
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val storage = appComponent.storage()
+        storage.createStorageDirectories()
+
+        val sharedPreferences = appComponent.sharedPreferences()
         val themePref = sharedPreferences.getString("app_theme", ThemeHelper.DEFAULT_MODE)
         ThemeHelper.applyTheme(themePref!!)
     }

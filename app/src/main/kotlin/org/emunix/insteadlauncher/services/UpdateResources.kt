@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -15,26 +15,32 @@ import androidx.core.app.NotificationCompat
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.helpers.AppVersion
-import org.emunix.insteadlauncher.helpers.StorageHelper
+import org.emunix.insteadlauncher.storage.Storage
 import org.emunix.insteadlauncher.ui.installedgames.InstalledGamesActivity
+import javax.inject.Inject
 
 class UpdateResources : IntentService("UpdateResources") {
+
+    @Inject lateinit var appVersion: AppVersion
+    @Inject lateinit var storage: Storage
 
     override fun onHandleIntent(intent: Intent?) {
         val notification = createNotification()
         startForeground(InsteadLauncher.UPDATE_RESOURCES_NOTIFICATION_ID, notification)
 
-        if (AppVersion(this).isNewVersion()) {
-            StorageHelper(this).getThemesDirectory().deleteRecursively()
-            StorageHelper(this).copyAsset("themes", StorageHelper(this).getDataDirectory())
+        InsteadLauncher.appComponent.inject(this)
 
-            StorageHelper(this).getSteadDirectory().deleteRecursively()
-            StorageHelper(this).copyAsset("stead",  StorageHelper(this).getDataDirectory())
+        if (appVersion.isNewVersion()) {
+            storage.getThemesDirectory().deleteRecursively()
+            storage.copyAsset("themes", storage.getDataDirectory())
 
-            StorageHelper(this).getLangDirectory().deleteRecursively()
-            StorageHelper(this).copyAsset("lang", StorageHelper(this).getDataDirectory())
+            storage.getSteadDirectory().deleteRecursively()
+            storage.copyAsset("stead",  storage.getDataDirectory())
 
-            AppVersion(this).saveCurrentVersion(AppVersion(this).getCode())
+            storage.getLangDirectory().deleteRecursively()
+            storage.copyAsset("lang", storage.getDataDirectory())
+
+            appVersion.saveCurrentVersion(appVersion.getCode())
         }
 
         stopForeground(true)

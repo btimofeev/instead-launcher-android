@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -19,20 +19,25 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.Game.State.INSTALLED
 import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.helpers.GameHelper
-import org.emunix.insteadlauncher.helpers.StorageHelper
+import org.emunix.insteadlauncher.storage.Storage
 import org.emunix.insteadlauncher.helpers.saveInstalledVersionToDB
 import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.ui.installedgames.InstalledGamesActivity
 import java.io.File
 import java.util.*
 import java.text.SimpleDateFormat
+import javax.inject.Inject
 
 
 class ScanGames : IntentService("ScanGames") {
 
+    @Inject lateinit var storage: Storage
+
     override fun onHandleIntent(intent: Intent?) {
         val notification = createNotification()
         startForeground(InsteadLauncher.SCAN_GAMES_NOTIFICATION_ID, notification)
+
+        InsteadLauncher.appComponent.inject(this)
 
         checkDeletedGames()
         checkNewGames()
@@ -46,7 +51,7 @@ class ScanGames : IntentService("ScanGames") {
         installedGames.forEach {
             installedNames.add(it.name)
         }
-        val gamesDir = StorageHelper(this).getGamesDirectory()
+        val gamesDir = storage.getGamesDirectory()
         val localNames = gamesDir.list() ?: return
         if (localNames.isEmpty())
             return
@@ -85,7 +90,7 @@ class ScanGames : IntentService("ScanGames") {
         installedGames.forEach {
             installedNames.add(it.name)
         }
-        val localNames = StorageHelper(this).getGamesDirectory().list() ?: return
+        val localNames = storage.getGamesDirectory().list() ?: return
 
         val deletedNames = installedNames.filterNot { localNames.contains(it) }
 

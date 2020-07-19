@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -18,7 +18,6 @@ import org.emunix.insteadlauncher.InsteadLauncher.Companion.UNINSTALL_NOTIFICATI
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game.State.IS_DELETE
 import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
-import org.emunix.insteadlauncher.helpers.StorageHelper
 import org.emunix.insteadlauncher.helpers.saveInstalledVersionToDB
 import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.helpers.NotificationHelper
@@ -39,7 +38,7 @@ class DeleteGame : IntentService("DeleteGame") {
         val game = InsteadLauncher.db.games().getByName(gameName)
         try {
             game.saveStateToDB(IS_DELETE)
-            val gameDir = File(StorageHelper(this).getGamesDirectory(), gameName)
+            val gameDir = File(InsteadLauncher.appComponent.storage().getGamesDirectory(), gameName)
             gameDir.deleteRecursively()
 
             if (game.url.isNotEmpty()) {

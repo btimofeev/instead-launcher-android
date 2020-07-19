@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -30,6 +30,8 @@ import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.helpers.network.ProgressListener
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import org.emunix.insteadlauncher.helpers.network.ProgressResponseBody
+import org.emunix.insteadlauncher.storage.Storage
+import javax.inject.Inject
 
 
 class InstallGame : IntentService("InstallGame") {
@@ -58,6 +60,8 @@ class InstallGame : IntentService("InstallGame") {
     private lateinit var notificationManager: NotificationManager
     private lateinit var notificationBuilder: NotificationCompat.Builder
 
+    @Inject lateinit var storage: Storage
+
     override fun onHandleIntent(intent: Intent?) {
         gameName = intent?.getStringExtra("game_name") ?: return
         gameTitle = intent.getStringExtra("game_title")
@@ -66,21 +70,23 @@ class InstallGame : IntentService("InstallGame") {
         startForeground(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
         notificationManager= getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        InsteadLauncher.appComponent.inject(this)
+
         val url = intent.getStringExtra("game_url")
         val game = InsteadLauncher.db.games().getByName(gameName)
         if (url != null) {
             try {
                 game.saveStateToDB(IS_INSTALL)
-                val zipfile = File(StorageHelper(this).getCacheDirectory(), extractFilename(url))
+                val zipfile = File(storage.getCacheDirectory(), extractFilename(url))
                 download(url, zipfile)
 
                 notificationBuilder.setProgress(100, 0, true)
                         .setContentText(getText(R.string.notification_install_game))
                 notificationManager.notify(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
 
-                val gameDir = File(StorageHelper(this).getGamesDirectory(), gameName)
+                val gameDir = File(storage.getGamesDirectory(), gameName)
                 gameDir.deleteRecursively()
-                zipfile.unzip(StorageHelper(this).getGamesDirectory())
+                zipfile.unzip(storage.getGamesDirectory())
                 zipfile.deleteRecursively()
                 game.saveStateToDB(INSTALLED)
                 game.saveInstalledVersionToDB(game.version)

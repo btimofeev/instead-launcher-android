@@ -9,11 +9,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 
-class InsteadGamesXmlFetcher: GameListFetcher {
+class InsteadGamesXmlFetcher(private val client: OkHttpClient): GameListFetcher {
 
     @Throws(IOException::class)
     override fun fetch(url: String): String {
-        val client = OkHttpClient()
         val request = Request.Builder()
                 .url(url)
                 .build()
