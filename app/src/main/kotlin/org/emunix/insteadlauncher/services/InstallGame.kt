@@ -27,6 +27,7 @@ import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION
 import org.emunix.insteadlauncher.data.Game.State.*
 import org.emunix.insteadlauncher.event.DownloadProgressEvent
 import org.emunix.insteadlauncher.helpers.*
+import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.network.ProgressListener
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import org.emunix.insteadlauncher.helpers.network.ProgressResponseBody
@@ -61,6 +62,7 @@ class InstallGame : IntentService("InstallGame") {
     private lateinit var notificationBuilder: NotificationCompat.Builder
 
     @Inject lateinit var storage: Storage
+    @Inject lateinit var eventBus: EventBus
 
     override fun onHandleIntent(intent: Intent?) {
         gameName = intent?.getStringExtra("game_name") ?: return
@@ -140,7 +142,7 @@ class InstallGame : IntentService("InstallGame") {
                             .setContentText("$progress%")
                 }
                 notificationManager.notify(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
-                RxBus.publish(DownloadProgressEvent(gameName, progress, msg, done))
+                eventBus.publish(DownloadProgressEvent(gameName, progress, msg, done))
             }
         }
 
@@ -156,7 +158,7 @@ class InstallGame : IntentService("InstallGame") {
         val response = client.newCall(request).execute()
         if (!response.isSuccessful) {
             val msg = application.getString(R.string.error_failed_to_download_file, url)
-            RxBus.publish(DownloadProgressEvent(gameName, 0, "", true, true, msg))
+            eventBus.publish(DownloadProgressEvent(gameName, 0, "", true, true, msg))
             throw IOException(msg)
         }
         FileOutputStream(file).use { toFile ->

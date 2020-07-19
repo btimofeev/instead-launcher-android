@@ -35,12 +35,14 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
     private val showSnackbar = MutableLiveData<ConsumableEvent<Int>>()
     private val showToast = MutableLiveData<ConsumableEvent<Int>>()
 
+    private val eventBus = InsteadLauncher.appComponent.eventBus()
+
     private val viewModelJob = Job()
     private val scope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     @SuppressLint("CheckResult")
     fun init() {
-        RxBus.listen(UpdateRepoEvent::class.java)
+        eventBus.listen(UpdateRepoEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     showErrorView.value = it.isError

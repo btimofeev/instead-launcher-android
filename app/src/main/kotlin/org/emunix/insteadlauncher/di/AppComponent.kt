@@ -8,6 +8,7 @@ package org.emunix.insteadlauncher.di
 import android.content.SharedPreferences
 import dagger.Component
 import org.emunix.insteadlauncher.data.GameDatabase
+import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.services.*
 import org.emunix.insteadlauncher.storage.Storage
 import org.emunix.insteadlauncher.ui.about.AboutFragment
@@ -31,5 +32,5 @@ interface AppComponent {
     fun sharedPreferences(): SharedPreferences
     fun db(): GameDatabase
     fun storage(): Storage
-
+    fun eventBus(): EventBus
 }

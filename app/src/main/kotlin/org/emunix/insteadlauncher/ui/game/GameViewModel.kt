@@ -16,19 +16,19 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.event.DownloadProgressEvent
 import org.emunix.insteadlauncher.event.ConsumableEvent
-import org.emunix.insteadlauncher.helpers.RxBus
 
 class GameViewModel(var app: Application) : AndroidViewModel(app) {
     private lateinit var game: LiveData<Game>
     private val progress: MutableLiveData<Int> = MutableLiveData()
     private val progressMessage: MutableLiveData<String> = MutableLiveData()
     private val errorMessage: MutableLiveData<ConsumableEvent<String>> = MutableLiveData()
+    private val eventBus = InsteadLauncher.appComponent.eventBus()
 
     @SuppressLint("CheckResult")
     fun init(gameName: String) {
         game = InsteadLauncher.db.games().observeByName(gameName)
 
-        RxBus.listen(DownloadProgressEvent::class.java)
+        eventBus.listen(DownloadProgressEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.gameName == gameName) {

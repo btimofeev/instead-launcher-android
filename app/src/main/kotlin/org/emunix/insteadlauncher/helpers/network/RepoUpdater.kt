@@ -11,7 +11,7 @@ import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
-import org.emunix.insteadlauncher.helpers.RxBus
+import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.repository.fetcher.GameListFetcher
 import org.emunix.insteadlauncher.repository.parser.GameListParser
 import org.emunix.insteadlauncher.services.ScanGames
@@ -19,34 +19,37 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import javax.inject.Inject
 
-class RepoUpdater @Inject constructor(private val context: Context, private val fetcher: GameListFetcher,
-                  private val parser: GameListParser, private val prefs: SharedPreferences) {
+class RepoUpdater @Inject constructor(private val context: Context,
+                                      private val fetcher: GameListFetcher,
+                                      private val parser: GameListParser,
+                                      private val prefs: SharedPreferences,
+                                      private val eventBus: EventBus) {
 
     fun update(): Boolean {
-        RxBus.publish(UpdateRepoEvent(true))
+        eventBus.publish(UpdateRepoEvent(true))
 
         val games: ArrayList<Game> = arrayListOf()
 
         try {
             val gamesMap: MutableMap<String, Game> = mutableMapOf()
-            if (isSandboxEnabled()){
+            if (isSandboxEnabled()) {
                 gamesMap.putAll(parseXML(fetchXML(getSandbox())))
             }
             gamesMap.putAll(parseXML(fetchXML(getRepo())))
             gamesMap.forEach { (_, value) -> games.add(value) }
         } catch (e: XmlPullParserException) {
-            RxBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = false, isError = true,
+            eventBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = false, isError = true,
                     message = context.getString(R.string.error_xml_parse, e.message)))
             return false
         } catch (e: IOException) {
-            RxBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = false, isError = true,
+            eventBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = false, isError = true,
                     message = context.getString(R.string.error_server_return_unexpected_code, e.message)))
             return false
         }
 
         InsteadLauncher.db.games().updateRepository(games)
 
-        RxBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = true))
+        eventBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = true))
 
         ScanGames.start(context)
         return true
@@ -60,5 +63,5 @@ class RepoUpdater @Inject constructor(private val context: Context, private val 
 
     private fun getSandbox(): String = prefs.getString("pref_sandbox", InsteadLauncher.SANDBOX)!!
 
-    private fun isSandboxEnabled(): Boolean =  prefs.getBoolean("pref_sandbox_enabled", false)
+    private fun isSandboxEnabled(): Boolean = prefs.getBoolean("pref_sandbox_enabled", false)
 }
