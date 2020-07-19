@@ -101,7 +101,7 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
         fun isGameZip(uri: Uri): Boolean {
             val inputStream = app.contentResolver.openInputStream(uri)
                     ?: throw IOException("inputStream is null")
-            val isInsteadGameZip = GameHelper().isInsteadGameZip(inputStream)
+            val isInsteadGameZip = GameParser().isInsteadGameZip(inputStream)
             inputStream.close()
             return isInsteadGameZip
         }

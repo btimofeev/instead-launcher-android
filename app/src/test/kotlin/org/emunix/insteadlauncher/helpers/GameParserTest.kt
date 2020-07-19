@@ -10,29 +10,31 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.io.File
 
-class GameHelperTest {
+class GameParserTest {
+
+    private val gameParser = GameParser()
 
     @Test
     fun `is instead game`() {
         val gamePath = File(this.javaClass.getResource("/testgame")!!.path)
-        assertTrue(GameHelper().isInsteadGame(gamePath))
+        assertTrue(gameParser.isInsteadGame(gamePath))
     }
 
     @Test
     fun `is instead game in zip`() {
         val gamePath = File(this.javaClass.getResource("/testgame.zip")!!.path)
-        assertTrue(GameHelper().isInsteadGameZip(gamePath.inputStream()))
+        assertTrue(gameParser.isInsteadGameZip(gamePath.inputStream()))
     }
 
     @Test
     fun `parse game tags`() {
         val gamePath = File(this.javaClass.getResource("/testgame")!!.path)
-        val gameFile = GameHelper().getMainGameFile(gamePath)
+        val gameFile = gameParser.getMainGameFile(gamePath)
         assertEquals(gameFile.absolutePath, File(gamePath, "main3.lua").absolutePath)
 
-        assertEquals(GameHelper().getTitle(gameFile, "ru"), "Тестовая игра")
-        assertEquals(GameHelper().getAuthor(gameFile, "en"), "Test Author")
-        assertEquals(GameHelper().getVersion(gameFile, "en"), "1.0")
-        assertEquals(GameHelper().getInfo(gameFile, "en"), "Game for test")
+        assertEquals(gameParser.getTitle(gameFile, "ru"), "Тестовая игра")
+        assertEquals(gameParser.getAuthor(gameFile, "en"), "Test Author")
+        assertEquals(gameParser.getVersion(gameFile, "en"), "1.0")
+        assertEquals(gameParser.getInfo(gameFile, "en"), "Game for test")
     }
 }

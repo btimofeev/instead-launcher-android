@@ -10,10 +10,11 @@ import java.io.InputStream
 import java.util.regex.Pattern
 import java.util.zip.ZipException
 import java.util.zip.ZipInputStream
+import javax.inject.Inject
 
 const val DEFAULT_LANG = "default_lang"
 
-class GameHelper {
+class GameParser @Inject constructor() {
 
     fun isInsteadGame(dir: File): Boolean {
         val main3 = File(dir, "main3.lua")

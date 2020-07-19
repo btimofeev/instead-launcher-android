@@ -18,7 +18,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.Game.State.INSTALLED
 import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
-import org.emunix.insteadlauncher.helpers.GameHelper
+import org.emunix.insteadlauncher.helpers.GameParser
 import org.emunix.insteadlauncher.storage.Storage
 import org.emunix.insteadlauncher.helpers.saveInstalledVersionToDB
 import org.emunix.insteadlauncher.helpers.saveStateToDB
@@ -32,6 +32,7 @@ import javax.inject.Inject
 class ScanGames : IntentService("ScanGames") {
 
     @Inject lateinit var storage: Storage
+    @Inject lateinit var gameParser: GameParser
 
     override fun onHandleIntent(intent: Intent?) {
         val notification = createNotification()
@@ -60,14 +61,14 @@ class ScanGames : IntentService("ScanGames") {
         val newNames = localNames.filterNot { installedNames.contains(it) }
         newNames.forEach {
             val gameDir = File(gamesDir, it)
-            if (GameHelper().isInsteadGame(gameDir)) {
+            if (gameParser.isInsteadGame(gameDir)) {
                 try {
-                    val file = GameHelper().getMainGameFile(gameDir)
+                    val file = gameParser.getMainGameFile(gameDir)
 
-                    val version = GameHelper().getVersion(file, lang)
-                    val title = GameHelper().getTitle(file, lang)
-                    val author = GameHelper().getAuthor(file, lang)
-                    val description = GameHelper().getInfo(file, lang)
+                    val version = gameParser.getVersion(file, lang)
+                    val title = gameParser.getTitle(file, lang)
+                    val author = gameParser.getAuthor(file, lang)
+                    val description = gameParser.getInfo(file, lang)
                     val size = FileUtils.sizeOfDirectory(gameDir)
                     val date = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
