@@ -5,7 +5,6 @@
 
 package org.emunix.insteadlauncher.ui.game
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,20 +16,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.fragment_game.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.Game.State.*
 import org.emunix.insteadlauncher.helpers.loadUrl
-import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.helpers.visible
-import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
-import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 
 class GameFragment : Fragment() {
     private lateinit var viewModel: GameViewModel
@@ -125,8 +118,7 @@ class GameFragment : Fragment() {
         }
 
         installButton.setOnClickListener {
-            InstallGame.start(activity, game.name, game.url, game.title)
-            GlobalScope.launch(Dispatchers.IO) { game.saveStateToDB(IN_QUEUE_TO_INSTALL) }
+            viewModel.installGame()
         }
 
         deleteButton.setOnClickListener {
@@ -138,11 +130,7 @@ class GameFragment : Fragment() {
         }
 
         runButton.setOnClickListener {
-            if (game.state == INSTALLED) {
-                val runGame = Intent(activity, InsteadActivity::class.java)
-                runGame.putExtra("game_name", game.name)
-                startActivity(runGame)
-            }
+            viewModel.runGame(requireContext())
         }
     }
 
@@ -155,9 +143,7 @@ class GameFragment : Fragment() {
     }
 
     private fun setIndeterminateProgress(indeterminate: Boolean, value: Int = 0) {
-        if (progressBar.isIndeterminate != indeterminate) {
-            progressBar.isIndeterminate = indeterminate
-        }
+        progressBar.isIndeterminate = indeterminate
         progressBar.progress = value
     }
 
