@@ -97,11 +97,14 @@ class InstallGame : IntentService("InstallGame") {
                 NotificationHelper(this).showError(getString(R.string.error), "Bad url: $url", pendingIntent)
                 game.saveStateToDB(NO_INSTALLED)
             } catch (e: IOException) {
-                NotificationHelper(this).showError(getString(R.string.error), e.localizedMessage
-                        ?: getString(R.string.error_failed_to_download_file, url), pendingIntent)
+                val message = e.localizedMessage ?: getString(R.string.error_failed_to_download_file, url)
+                NotificationHelper(this).showError(getString(R.string.error), message, pendingIntent)
+                eventBus.publish(DownloadProgressEvent(gameName, 0, "", done = true, error = true, errorMessage = message))
                 game.saveStateToDB(NO_INSTALLED)
             } catch (e: ZipException) {
-                NotificationHelper(this).showError(getString(R.string.error), getString(R.string.error_failed_to_unpack_zip), pendingIntent)
+                val message = getString(R.string.error_failed_to_unpack_zip)
+                NotificationHelper(this).showError(getString(R.string.error), message, pendingIntent)
+                eventBus.publish(DownloadProgressEvent(gameName, 0, "", done = true, error = true, errorMessage = message))
                 game.saveStateToDB(NO_INSTALLED)
             }
         }
@@ -158,7 +161,6 @@ class InstallGame : IntentService("InstallGame") {
         val response = client.newCall(request).execute()
         if (!response.isSuccessful) {
             val msg = application.getString(R.string.error_failed_to_download_file, url)
-            eventBus.publish(DownloadProgressEvent(gameName, 0, "", true, true, msg))
             throw IOException(msg)
         }
         FileOutputStream(file).use { toFile ->
