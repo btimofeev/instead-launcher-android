@@ -21,6 +21,8 @@ android {
             cmake {
                 cppFlags ""
                 arguments "-DANDROID_PLATFORM=android-21", "-DCMAKE_BUILD_TYPE=Release",
+                        "-DANDROID=1",
+                        "TTF_WITH_HARFBUZZ=1",
                         "-DANDROID_ARM_MODE=arm"
                 version "3.10.2"
             }
