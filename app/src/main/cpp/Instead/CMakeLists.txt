@@ -2,7 +2,8 @@
 set(INSTEAD_SRC_DIR Instead/src)
 
 include_directories( ${INSTEAD_SRC_DIR} ${INSTEAD_SRC_DIR}/instead ../Lua/Lua/src ${CMAKE_BINARY_DIR}/libiconv/libiconv/include
-        ../SDL2/SDL2/include ../SDL2_mixer/SDL2_mixer ../SDL2_image/SDL2_image ../SDL2_ttf/SDL2_ttf )
+        ../SDL2/SDL2/include ../SDL2_mixer/SDL2_mixer ../SDL2_image/SDL2_image ../SDL2_ttf/SDL2_ttf 
+        ../SDL2_ttf/SDL2_ttf/external/harfbuzz-2.3.1 ../SDL2_ttf/SDL2_ttf/external/harfbuzz-2.3.1/src )
 
 set( SOURCES
         "instead_launcher.c"
@@ -35,9 +36,10 @@ set( SOURCES
         "${INSTEAD_SRC_DIR}/SDL2_rotozoom.c"
         "${INSTEAD_SRC_DIR}/SDL_anigif.c"
         "${INSTEAD_SRC_DIR}/SDL_gfxBlitFunc.c"
-        "${INSTEAD_SRC_DIR}/noise1234.c" )
+        "${INSTEAD_SRC_DIR}/noise1234.c"
+        "${INSTEAD_SRC_DIR}/guniprops.c" )
 
-add_definitions( -DANDROID -DNOMAIN -D_USE_SDL -D_LOCAL_APPDATA -D_SDL_MOD_BUG -D_HAVE_ICONV )
+add_definitions( -DANDROID -DNOMAIN -D_USE_SDL -D_LOCAL_APPDATA -D_SDL_MOD_BUG -D_HAVE_ICONV -D_USE_HARFBUZZ)
 add_definitions( -DVERSION=\"3.3.2\" -DGAMES_PATH=\"./games/\" -DTHEME_PATH=\"./themes/\" -DLANG_PATH=\"./lang/\" -DSTEAD_PATH=\"./stead/\" )
 add_definitions( -DSDL_JAVA_PACKAGE_PATH=org_emunix_insteadlauncher )
 
