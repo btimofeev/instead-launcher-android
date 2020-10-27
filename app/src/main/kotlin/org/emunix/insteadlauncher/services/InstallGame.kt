@@ -66,7 +66,7 @@ class InstallGame : IntentService("InstallGame") {
 
     override fun onHandleIntent(intent: Intent?) {
         gameName = intent?.getStringExtra("game_name") ?: return
-        gameTitle = intent.getStringExtra("game_title")
+        gameTitle = intent.getStringExtra("game_title") ?: ""
 
         notificationBuilder = createNotification()
         startForeground(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
