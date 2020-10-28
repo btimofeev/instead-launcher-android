@@ -30,201 +30,169 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin">
 
             <ImageView
                 android:id="@+id/game_image"
-                android:layout_width="300dp"
-                android:layout_height="225dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_width="350dp"
+                android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:src="@tools:sample/backgrounds/scenic"
-                tools:ignore="ContentDescription" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription"
+                tools:src="@tools:sample/backgrounds/scenic" />
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
+                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:gravity="center"
                 android:textAllCaps="false"
                 android:textAppearance="@android:style/TextAppearance.Material.Headline"
                 android:textIsSelectable="true"
+                app:layout_constraintBottom_toTopOf="@+id/author"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/game_image"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="@tools:sample/lorem"/>
-
-            <ImageView
-                android:id="@+id/authorImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_weight="1"
-                app:layout_constraintStart_toEndOf="@id/game_image"
-                app:layout_constraintTop_toBottomOf="@+id/name"
-                app:srcCompat="@drawable/ic_account_circle_24dp"
-                tools:ignore="ContentDescription" />
+                tools:text="@tools:sample/lorem" />
 
             <TextView
                 android:id="@+id/author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
+                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:drawablePadding="8dp"
                 android:text="@string/game_activity_label_author"
-                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:textIsSelectable="true"
-                app:layout_constraintBottom_toBottomOf="@+id/authorImage"
-                app:layout_constraintStart_toEndOf="@+id/authorImage"
-                app:layout_constraintTop_toTopOf="@+id/authorImage"/>
-
-            <ImageView
-                android:id="@+id/versionImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                app:drawableLeftCompat="@drawable/ic_account_circle_24dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/game_image"
-                app:layout_constraintTop_toBottomOf="@+id/authorImage"
-                app:srcCompat="@drawable/ic_file_compare_24dp"
-                tools:ignore="ContentDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/name" />
 
             <TextView
                 android:id="@+id/version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:layout_marginEnd="@dimen/horizontal_margin_small"
+                android:drawablePadding="8dp"
                 android:text="@string/game_activity_label_version"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 android:textIsSelectable="true"
-                app:layout_constraintBottom_toBottomOf="@+id/versionImage"
-                app:layout_constraintStart_toEndOf="@+id/versionImage"
-                app:layout_constraintTop_toTopOf="@+id/versionImage"/>
-
-            <ImageView
-                android:id="@+id/sizeImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/versionImage"
-                app:layout_constraintStart_toEndOf="@+id/version"
-                app:layout_constraintTop_toTopOf="@+id/versionImage"
-                app:srcCompat="@drawable/ic_math_compass_24dp"
-                tools:ignore="ContentDescription" />
+                app:drawableLeftCompat="@drawable/ic_file_compare_24dp"
+                app:layout_constraintEnd_toStartOf="@+id/size"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/game_image"
+                app:layout_constraintTop_toBottomOf="@+id/author" />
 
             <TextView
                 android:id="@+id/size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:drawablePadding="8dp"
                 android:text="@string/game_activity_label_size"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 android:textIsSelectable="true"
-                app:layout_constraintBottom_toBottomOf="@+id/sizeImage"
-                app:layout_constraintStart_toEndOf="@+id/sizeImage"
-                app:layout_constraintTop_toTopOf="@+id/sizeImage"/>
+                app:drawableLeftCompat="@drawable/ic_math_compass_24dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/version"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/version" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/flow"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:orientation="horizontal"
+                app:layout_constraintVertical_bias="1"
+                app:constraint_referenced_ids="deleteButton,installButton,runButton"
+                app:flow_horizontalBias="0.5"
+                app:flow_horizontalGap="8dp"
+                app:flow_horizontalStyle="packed"
+                app:flow_maxElementsWrap="4"
+                app:flow_wrapMode="chain"
+                app:layout_constraintTop_toBottomOf="@id/version"
                 app:layout_constraintBottom_toBottomOf="@+id/game_image"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/game_image">
+                app:layout_constraintStart_toEndOf="@+id/game_image" />
 
-                <androidx.constraintlayout.helper.widget.Flow
-                    android:id="@+id/flow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:constraint_referenced_ids="deleteButton,installButton,runButton"
-                    app:flow_horizontalBias="0"
-                    app:flow_horizontalGap="8dp"
-                    app:flow_horizontalStyle="packed"
-                    app:flow_maxElementsWrap="4"
-                    app:flow_wrapMode="chain"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteButton"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_activity_button_uninstall"
+                android:theme="@style/AppTheme.MaterialButtonOverlay"
+                android:visibility="gone"
+                app:backgroundTint="@color/colorDeleteButton"
+                tools:visibility="visible" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/deleteButton"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_activity_button_uninstall"
-                    android:theme="@style/AppTheme.MaterialButtonOverlay"
-                    android:visibility="gone"
-                    app:backgroundTint="@color/colorDeleteButton"
-                    tools:visibility="visible" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/installButton"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_activity_button_install"
+                android:theme="@style/AppTheme.MaterialButtonOverlay"
+                android:visibility="gone"
+                app:backgroundTint="@color/colorInstallButton"
+                tools:visibility="visible" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/installButton"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_activity_button_install"
-                    android:theme="@style/AppTheme.MaterialButtonOverlay"
-                    android:visibility="gone"
-                    app:backgroundTint="@color/colorInstallButton"
-                    tools:visibility="visible" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/runButton"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_activity_button_run"
+                android:theme="@style/AppTheme.MaterialButtonOverlay"
+                android:visibility="gone"
+                app:backgroundTint="@color/colorInstallButton"
+                tools:visibility="visible" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/runButton"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_activity_button_run"
-                    android:theme="@style/AppTheme.MaterialButtonOverlay"
-                    android:visibility="gone"
-                    app:backgroundTint="@color/colorInstallButton"
-                    tools:visibility="visible" />
+            <TextView
+                android:id="@+id/installMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:layout_marginBottom="8dp"
+                android:text="@string/notification_download_game"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/game_image"
+                tools:visibility="visible" />
 
-                <TextView
-                    android:id="@+id/installMessage"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/notification_download_game"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@+id/progressBar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:visibility="invisible" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:indeterminate="true"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    tools:visibility="invisible" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:layout_marginBottom="8dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/game_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/game_image"
+                tools:visibility="invisible" />
 
             <TextView
                 android:id="@+id/description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="@dimen/vertical_margin_normal"
                 android:autoLink="web|email"
                 android:linksClickable="true"
-                android:text="description"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:textIsSelectable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
