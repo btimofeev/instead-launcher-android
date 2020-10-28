@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
 
-import kotlinx.android.synthetic.main.activity_game.*
 import org.emunix.insteadlauncher.R
 import java.lang.IllegalArgumentException
 
@@ -29,17 +28,10 @@ class GameActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_24dp)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        //fragment.arguments = intent.extras
 
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
         val gameName = intent.extras?.getString("game_name") ?: throw IllegalArgumentException("GameActivity require game_name in intent.extras")
         viewModel.init(gameName)
-
-        toolbar_image.transitionName = intent.extras?.getString("game_name")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

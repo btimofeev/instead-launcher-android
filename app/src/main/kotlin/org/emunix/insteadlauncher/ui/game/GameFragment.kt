@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.fragment_game.*
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
@@ -35,6 +34,10 @@ class GameFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_24dp)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        game_image.transitionName = requireActivity().intent.extras?.getString("game_name")
 
         viewModel = ViewModelProvider(requireActivity()).get(GameViewModel::class.java)
 
@@ -65,7 +68,7 @@ class GameFragment : Fragment() {
     private fun setViews(game: Game) {
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = ""
-        activity.collapsing_toolbar.isTitleEnabled = false
+        activity.collapsing_toolbar?.isTitleEnabled = false
 
         name.text = game.title
         author.text = game.author
@@ -75,7 +78,7 @@ class GameFragment : Fragment() {
             version.text = getString(R.string.game_activity_label_version, game.version)
         }
         size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
-        activity.toolbar_image.loadUrl(game.image)
+        activity.game_image.loadUrl(game.image)
         description.text = game.description
 
         if (game.state == INSTALLED) {
