@@ -8,7 +8,7 @@ package org.emunix.insteadlauncher.ui.about
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.activity_about.*
 import org.emunix.insteadlauncher.R
 
 class AboutActivity : AppCompatActivity() {
