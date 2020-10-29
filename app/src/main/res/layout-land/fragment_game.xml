@@ -38,8 +38,8 @@
 
             <ImageView
                 android:id="@+id/game_image"
-                android:layout_width="350dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/game_fragment_land_game_image_width"
+                android:layout_height="@dimen/game_fragment_land_game_image_height"
                 android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -50,7 +50,7 @@
                 android:id="@+id/name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:layout_marginStart="@dimen/horizontal_margin_medium"
                 android:gravity="center"
                 android:textAllCaps="false"
                 android:textAppearance="@android:style/TextAppearance.Material.Headline"
@@ -65,7 +65,7 @@
                 android:id="@+id/author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:layout_marginStart="@dimen/horizontal_margin_medium"
                 android:layout_marginTop="@dimen/vertical_margin_small"
                 android:drawablePadding="8dp"
                 android:text="@string/game_activity_label_author"
@@ -76,22 +76,29 @@
                 app:layout_constraintStart_toEndOf="@id/game_image"
                 app:layout_constraintTop_toBottomOf="@+id/name" />
 
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/version_size_flow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_medium"
+                app:flow_horizontalGap="@dimen/horizontal_margin_small"
+                app:flow_horizontalStyle="packed"
+                app:flow_wrapMode="chain"
+                app:constraint_referenced_ids="version,size"
+                app:layout_constraintTop_toBottomOf="@id/author"
+                app:layout_constraintStart_toEndOf="@id/game_image"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
             <TextView
                 android:id="@+id/version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_margin_small"
-                android:layout_marginEnd="@dimen/horizontal_margin_small"
                 android:drawablePadding="8dp"
                 android:text="@string/game_activity_label_version"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 android:textIsSelectable="true"
-                app:drawableLeftCompat="@drawable/ic_file_compare_24dp"
-                app:layout_constraintEnd_toStartOf="@+id/size"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toEndOf="@+id/game_image"
-                app:layout_constraintTop_toBottomOf="@+id/author" />
+                app:drawableLeftCompat="@drawable/ic_file_compare_24dp" />
 
             <TextView
                 android:id="@+id/size"
@@ -101,28 +108,25 @@
                 android:text="@string/game_activity_label_size"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 android:textIsSelectable="true"
-                app:drawableLeftCompat="@drawable/ic_math_compass_24dp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/version"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/version" />
+                app:drawableLeftCompat="@drawable/ic_math_compass_24dp" />
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/flow"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:layout_marginStart="@dimen/horizontal_margin_medium"
                 android:orientation="horizontal"
-                app:layout_constraintVertical_bias="1"
                 app:constraint_referenced_ids="deleteButton,installButton,runButton"
                 app:flow_horizontalBias="0.5"
                 app:flow_horizontalGap="8dp"
                 app:flow_horizontalStyle="packed"
                 app:flow_maxElementsWrap="4"
                 app:flow_wrapMode="chain"
-                app:layout_constraintTop_toBottomOf="@id/version"
                 app:layout_constraintBottom_toBottomOf="@+id/game_image"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/game_image" />
+                app:layout_constraintStart_toEndOf="@+id/game_image"
+                app:layout_constraintTop_toBottomOf="@id/version_size_flow"
+                app:layout_constraintVertical_bias="1" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteButton"
@@ -161,7 +165,7 @@
                 android:id="@+id/installMessage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:layout_marginStart="@dimen/horizontal_margin_medium"
                 android:layout_marginBottom="8dp"
                 android:text="@string/notification_download_game"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
@@ -176,7 +180,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/horizontal_margin_normal"
+                android:layout_marginStart="@dimen/horizontal_margin_medium"
                 android:layout_marginBottom="8dp"
                 android:indeterminate="true"
                 android:visibility="gone"
@@ -189,7 +193,7 @@
                 android:id="@+id/description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_margin_normal"
+                android:layout_marginTop="@dimen/vertical_margin_medium"
                 android:autoLink="web|email"
                 android:linksClickable="true"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
