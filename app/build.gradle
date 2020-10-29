@@ -132,6 +132,11 @@ dependencies {
     // Files
     implementation 'commons-io:commons-io:2.5' // 2.6 crashes the application on Android below 8, because java.nio.file is not available in these versions
 
+    // Crash reports
+    def acraVersion = '5.7.0'
+    implementation "ch.acra:acra-mail:$acraVersion"
+    implementation "ch.acra:acra-notification:$acraVersion"
+
     // LeakCanary
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 }

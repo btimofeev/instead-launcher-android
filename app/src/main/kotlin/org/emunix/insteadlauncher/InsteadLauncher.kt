@@ -11,6 +11,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import org.acra.ACRA
+import org.acra.annotation.AcraCore
+import org.acra.annotation.AcraMailSender
+import org.acra.annotation.AcraNotification
+import org.acra.data.StringFormat
 import org.emunix.insteadlauncher.data.GameDatabase
 import org.emunix.insteadlauncher.di.AppComponent
 import org.emunix.insteadlauncher.di.AppModule
@@ -18,6 +23,15 @@ import org.emunix.insteadlauncher.di.DaggerAppComponent
 import org.emunix.insteadlauncher.helpers.ThemeHelper
 
 
+@AcraCore(stopServicesOnCrash = true,
+        reportFormat = StringFormat.KEY_VALUE_LIST)
+@AcraMailSender(mailTo = "btimofeev@emunix.org",
+        reportFileName = "instead_launcher_crash_report.txt")
+@AcraNotification(resText = R.string.error_crash_message,
+        resTitle = R.string.error_crash_title,
+        resSendButtonText = R.string.error_crash_send_button,
+        resDiscardButtonText = R.string.error_crash_discard_button,
+        resChannelName = R.string.channel_crash_report)
 class InsteadLauncher: Application() {
 
     companion object {
@@ -37,6 +51,7 @@ class InsteadLauncher: Application() {
         const val CHANNEL_UNINSTALL = "org.emunix.insteadlauncher.channel.delete_game"
         const val CHANNEL_UPDATE_RESOURCES = "org.emunix.insteadlauncher.channel.update_resources"
         const val CHANNEL_SCAN_GAMES = "org.emunix.insteadlauncher.channel.scan_games"
+        const val CHANNEL_CRASH_REPORT = "org.emunix.insteadlauncher.channel.crash_report"
 
         const val DEFAULT_REPOSITORY = "http://instead-games.ru/xml.php"
         const val SANDBOX = "http://instead-games.ru/xml2.php"
@@ -57,6 +72,11 @@ class InsteadLauncher: Application() {
         val sharedPreferences = appComponent.sharedPreferences()
         val themePref = sharedPreferences.getString("app_theme", ThemeHelper.DEFAULT_MODE)
         ThemeHelper.applyTheme(themePref!!)
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        ACRA.init(this)
     }
 
     @TargetApi(26)
@@ -84,6 +104,10 @@ class InsteadLauncher: Application() {
 
             name = getString(R.string.channel_scan_games)
             channel = NotificationChannel(CHANNEL_SCAN_GAMES, name, importance)
+            notificationManager.createNotificationChannel(channel)
+
+            name = getString(R.string.channel_crash_report)
+            channel = NotificationChannel(CHANNEL_CRASH_REPORT, name, importance)
             notificationManager.createNotificationChannel(channel)
         }
     }

@@ -48,6 +48,7 @@
     <string name="channel_update_repo">Обновление репозитория</string>
     <string name="channel_update_resources">Обновление ресурсов приложения</string>
     <string name="channel_scan_games">Поиск локальных изменений в директории с играми</string>
+    <string name="channel_crash_report">Отправить отчет об ошибке</string>
 
     <string name="error">Ошибка</string>
     <string name="error_failed_to_download_file">Не удалось скачать файл: %s</string>
@@ -113,4 +114,9 @@
     <string name="about_activity_thanks">Выражаю благодарность:\n- Андрею Лобанову за репозиторий с играми http://instead-games.ru\n- Антону Колосову за исходный код INSTEAD-NG, частично используемый в этой программе.\n- Художнику НЕУД за прекрасные рисунки https://vk.com/neudd</string>
     <string name="about_activity_to_game_authors">Если вы хотите создать свою игру и разместить её в репозитории, начните с чтения документации http://bit.ly/instead_doc_ru</string>
     <string name="about_activity_discuss">Обсудить INSTEAD и игры можно на следующих ресурсах:\n- Форум http://instead-games.ru/forum/\n- Telegram https://t.me/insteadtalk\n- Discord https://discord.gg/RHquRHm\n- Gitter https://gitter.im/instead-hub/instead\n- Jabber instead@conference.jabber.ru</string>
+
+    <string name="error_crash_title">Приложение остановлено</string>
+    <string name="error_crash_message">К сожалению, в приложении возникла критическая ошибка. Пожалуйста, отправьте отчет разработчику.</string>
+    <string name="error_crash_send_button">Отправить</string>
+    <string name="error_crash_discard_button">Отменить</string>
 </resources>
