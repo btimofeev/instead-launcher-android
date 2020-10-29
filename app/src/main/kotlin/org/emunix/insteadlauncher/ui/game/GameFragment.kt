@@ -5,6 +5,8 @@
 
 package org.emunix.insteadlauncher.ui.game
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -80,6 +82,17 @@ class GameFragment : Fragment() {
         size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
         activity.game_image.loadUrl(game.image)
         description.text = game.description
+
+        if (game.descurl.isNotBlank()) {
+            feedbackButton.visible(true)
+            feedbackButton.setOnClickListener {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(game.descurl))
+                browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                requireActivity().startActivity(browserIntent)
+            }
+        } else {
+            feedbackButton.visible(false)
+        }
 
         if (game.state == INSTALLED) {
             installMessage.visible(false)

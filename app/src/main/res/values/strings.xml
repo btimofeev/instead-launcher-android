@@ -17,6 +17,7 @@
     <string name="game_activity_button_uninstall">Uninstall</string>
     <string name="game_activity_button_update">Update</string>
     <string name="game_activity_button_run">Run</string>
+    <string name="game_activity_button_feedback">Write feedback</string>
     <string name="game_activity_label_author">Author: %s</string>
     <string name="game_activity_label_version">Version: %s</string>
     <string name="game_activity_label_size">Size: %s</string>

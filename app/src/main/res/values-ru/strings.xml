@@ -17,6 +17,7 @@
     <string name="game_activity_button_uninstall">Удалить</string>
     <string name="game_activity_button_update">Обновить</string>
     <string name="game_activity_button_run">Играть</string>
+    <string name="game_activity_button_feedback">Написать отзыв</string>
     <string name="game_activity_label_author">Автор: %s</string>
     <string name="game_activity_label_version">Версия: %s</string>
     <string name="game_activity_label_size">Размер: %s</string>
