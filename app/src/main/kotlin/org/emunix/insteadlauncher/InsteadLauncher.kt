@@ -51,7 +51,6 @@ class InsteadLauncher: Application() {
         const val CHANNEL_UNINSTALL = "org.emunix.insteadlauncher.channel.delete_game"
         const val CHANNEL_UPDATE_RESOURCES = "org.emunix.insteadlauncher.channel.update_resources"
         const val CHANNEL_SCAN_GAMES = "org.emunix.insteadlauncher.channel.scan_games"
-        const val CHANNEL_CRASH_REPORT = "org.emunix.insteadlauncher.channel.crash_report"
 
         const val DEFAULT_REPOSITORY = "http://instead-games.ru/xml.php"
         const val SANDBOX = "http://instead-games.ru/xml2.php"
@@ -104,10 +103,6 @@ class InsteadLauncher: Application() {
 
             name = getString(R.string.channel_scan_games)
             channel = NotificationChannel(CHANNEL_SCAN_GAMES, name, importance)
-            notificationManager.createNotificationChannel(channel)
-
-            name = getString(R.string.channel_crash_report)
-            channel = NotificationChannel(CHANNEL_CRASH_REPORT, name, importance)
             notificationManager.createNotificationChannel(channel)
         }
     }
