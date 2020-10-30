@@ -55,7 +55,7 @@ class RepositoryFragment : Fragment() {
 
         list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
-        val insetDivider = dividerItemDecoration.insetDivider(list.context, R.dimen.inset_divider_margin_start)
+        val insetDivider = dividerItemDecoration.insetDivider(list.context, R.dimen.installed_game_fragment_inset_divider_margin_start)
         dividerItemDecoration.setDrawable(insetDivider)
         list.addItemDecoration(dividerItemDecoration)
         listAdapter.setHasStableIds(true)

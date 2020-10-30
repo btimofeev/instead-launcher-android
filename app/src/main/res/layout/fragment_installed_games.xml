@@ -11,11 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
+        android:paddingStart="@dimen/installed_game_fragment_list_padding_start"
+        android:paddingEnd="@dimen/installed_game_fragment_list_padding_start"
+        android:scrollbarStyle="outsideOverlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/activity_installed_games_list_item"/>
+        tools:listitem="@layout/activity_installed_games_list_item"
+        tools:visibility="visible"/>
 
     <ScrollView
         android:id="@+id/empty_view"
@@ -24,18 +28,20 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:layout_gravity="center"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="@dimen/installed_game_fragment_boy_image_width"
+                android:layout_marginTop="@dimen/vertical_margin_medium"
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
                 android:src="@drawable/boy_and_cat"/>
@@ -43,10 +49,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="@dimen/horizontal_margin_medium"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:layout_marginEnd="@dimen/horizontal_margin_medium"
+                android:layout_marginBottom="@dimen/vertical_margin_small"
                 android:fontFamily="@font/neucha"
                 android:gravity="center"
                 android:text="@string/installed_games_empty_text"

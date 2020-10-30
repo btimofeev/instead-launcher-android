@@ -5,8 +5,6 @@
 
     <dimen name="toolbar_elevation">4dp</dimen>
 
-    <dimen name="inset_divider_margin_start">116dp</dimen>
-
     <dimen name="horizontal_margin_small">8dp</dimen>
     <dimen name="horizontal_margin_medium">16dp</dimen>
     <dimen name="horizontal_margin_large">24dp</dimen>
@@ -18,5 +16,18 @@
 
     <dimen name="game_fragment_land_game_image_width">350dp</dimen>
     <dimen name="game_fragment_land_game_image_height">200dp</dimen>
+
+    <dimen name="installed_game_fragment_boy_image_width">300dp</dimen>
+    <dimen name="installed_game_fragment_list_padding_start">0dp</dimen>
+    <dimen name="installed_game_fragment_list_padding_end">0dp</dimen>
+    <dimen name="installed_game_fragment_list_image_width">100dp</dimen>
+    <dimen name="installed_game_fragment_list_image_height">56dp</dimen>
+    <dimen name="installed_game_fragment_inset_divider_margin_start">116dp</dimen>  <!-- image_width + horizontal_margin_small -->
+
+    <dimen name="repository_fragment_list_padding_start">0dp</dimen>
+    <dimen name="repository_fragment_list_padding_end">0dp</dimen>
+    <dimen name="repository_fragment_list_image_width">100dp</dimen>
+    <dimen name="repository_fragment_list_image_height">56dp</dimen>
+    <dimen name="repository_fragment_inset_divider_margin_start">116dp</dimen>  <!-- image_width + horizontal_margin_small -->
 
 </resources>

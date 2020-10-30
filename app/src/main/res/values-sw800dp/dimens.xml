@@ -1,0 +1,33 @@
+<resources>
+    <dimen name="fab_margin">24dp</dimen>
+    <dimen name="activity_horizontal_margin">64dp</dimen>
+    <dimen name="activity_vertical_margin">48dp</dimen>
+
+    <dimen name="toolbar_elevation">4dp</dimen>
+
+    <dimen name="horizontal_margin_small">24dp</dimen>
+    <dimen name="horizontal_margin_medium">32dp</dimen>
+    <dimen name="horizontal_margin_large">48dp</dimen>
+    <dimen name="vertical_margin_small">24dp</dimen>
+    <dimen name="vertical_margin_medium">32dp</dimen>
+    <dimen name="vertical_margin_large">48dp</dimen>
+
+    <dimen name="game_description_vertical_margin">64dp</dimen>
+
+    <dimen name="game_fragment_land_game_image_width">480dp</dimen>
+    <dimen name="game_fragment_land_game_image_height">275dp</dimen>
+
+    <dimen name="installed_game_fragment_boy_image_width">400dp</dimen>
+    <dimen name="installed_game_fragment_list_padding_start">64dp</dimen>
+    <dimen name="installed_game_fragment_list_padding_end">64dp</dimen>
+    <dimen name="installed_game_fragment_list_image_width">160dp</dimen>
+    <dimen name="installed_game_fragment_list_image_height">95dp</dimen>
+    <dimen name="installed_game_fragment_inset_divider_margin_start">184dp</dimen>  <!-- image_width + horizontal_margin_small -->
+
+    <dimen name="repository_fragment_list_padding_start">64dp</dimen>
+    <dimen name="repository_fragment_list_padding_end">64dp</dimen>
+    <dimen name="repository_fragment_list_image_width">160dp</dimen>
+    <dimen name="repository_fragment_list_image_height">95dp</dimen>
+    <dimen name="repository_fragment_inset_divider_margin_start">184dp</dimen>  <!-- image_width + horizontal_margin_small -->
+
+</resources>
