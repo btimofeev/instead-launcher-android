@@ -75,13 +75,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/vertical_margin_medium"
             android:layout_marginEnd="@dimen/horizontal_margin_small"
+            android:layout_marginBottom="@dimen/vertical_margin_medium"
             android:autoLink="web"
             android:linksClickable="true"
             android:text="@string/about_activity_discuss"
             android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/vert_guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/about_to_game_authors" />
+            app:layout_constraintTop_toBottomOf="@+id/about_to_game_authors"
+            app:layout_constraintVertical_bias="0.0" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="0dp"
