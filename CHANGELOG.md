@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 ### Added
+- button for writing a review (opens the game page on the http://instead-games.ru website)
+- send crash reports via email
 ### Changed
+- improved layouts for tablets
 ### Fixed
 
 ## [0.8.2] - 2020-04-21
