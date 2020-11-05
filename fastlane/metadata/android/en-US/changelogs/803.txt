@@ -1,0 +1,3 @@
+- Added button for writing a review (opens the game page on the http://instead-games.ru website)
+- Improved user interface in landscape mode and for tablets
+- Added the ability to send a crash report via email
