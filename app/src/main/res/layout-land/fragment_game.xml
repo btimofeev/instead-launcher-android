@@ -168,7 +168,7 @@
                 android:layout_marginStart="@dimen/horizontal_margin_medium"
                 android:layout_marginBottom="8dp"
                 android:text="@string/notification_download_game"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 app:layout_constraintEnd_toEndOf="parent"

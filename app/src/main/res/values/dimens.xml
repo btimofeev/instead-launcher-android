@@ -12,8 +12,6 @@
     <dimen name="vertical_margin_medium">16dp</dimen>
     <dimen name="vertical_margin_large">24dp</dimen>
 
-    <dimen name="game_description_vertical_margin">64dp</dimen>
-
     <dimen name="game_fragment_land_game_image_width">350dp</dimen>
     <dimen name="game_fragment_land_game_image_height">200dp</dimen>
 
