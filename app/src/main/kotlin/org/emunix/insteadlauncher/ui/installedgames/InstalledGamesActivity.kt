@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -12,10 +12,10 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_installed_games.*
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.services.ScanGames
-import org.emunix.insteadlauncher.services.UpdateResources
 import org.emunix.insteadlauncher.ui.about.AboutActivity
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
 import org.emunix.insteadlauncher.ui.settings.SettingsActivity
@@ -31,7 +31,15 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
         fab.setOnClickListener { view -> startActivity(Intent(view.context, RepositoryActivity::class.java),
                 ActivityOptions.makeSceneTransitionAnimation(this).toBundle()) }
 
-        UpdateResources.start(this)
+        val unpackViewModel = ViewModelProvider(this).get(UnpackResourcesViewModel::class.java)
+        unpackViewModel.getUnpackSuccessStatus().observe(this, {isSuccess ->
+            if (isSuccess) {
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment, InstalledGamesFragment())
+                        .commit()
+            }
+        })
+
         ScanGames.start(this)
     }
 

@@ -12,6 +12,7 @@ import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.services.*
 import org.emunix.insteadlauncher.storage.Storage
 import org.emunix.insteadlauncher.ui.about.AboutFragment
+import org.emunix.insteadlauncher.ui.installedgames.UnpackResourcesViewModel
 import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 import org.emunix.insteadlauncher.ui.settings.ThemeListPreference
 import javax.inject.Singleton
@@ -21,13 +22,13 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun inject(service: UpdateRepository)
-    fun inject(service: UpdateResources)
     fun inject(service: InstallGame)
     fun inject(service: ScanGames)
     fun inject(activity: InsteadActivity)
     fun inject(fragment: AboutFragment)
     fun inject(preference: ThemeListPreference)
     fun inject(worker: UpdateRepositoryWorker)
+    fun inject(viewModel: UnpackResourcesViewModel)
 
     fun sharedPreferences(): SharedPreferences
     fun db(): GameDatabase

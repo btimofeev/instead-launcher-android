@@ -9,8 +9,6 @@ import android.content.Context
 import android.os.Environment
 import androidx.core.os.EnvironmentCompat
 import org.apache.commons.io.FileUtils
-import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.helpers.NotificationHelper
 import org.emunix.insteadlauncher.helpers.showToast
 import java.io.File
 import java.io.IOException
@@ -72,20 +70,16 @@ class StorageImpl (private val context: Context) : Storage {
 
     override fun copyAsset(name: String, toPath: File) {
         val assetManager = context.assets
-        try {
-            val assets = assetManager.list(name) ?: throw IOException()
+        val assets = assetManager.list(name) ?: throw IOException()
 
-            val dir = File(toPath, name)
-            if (assets.isEmpty()) {
-                FileUtils.copyInputStreamToFile(assetManager.open(name), dir)
-            } else {
-                FileUtils.forceMkdir(dir)
-                for (element in assets) {
-                    copyAsset("$name/$element", toPath)
-                }
+        val dir = File(toPath, name)
+        if (assets.isEmpty()) {
+            FileUtils.copyInputStreamToFile(assetManager.open(name), dir)
+        } else {
+            FileUtils.forceMkdir(dir)
+            for (element in assets) {
+                copyAsset("$name/$element", toPath)
             }
-        } catch (e: IOException) {
-            NotificationHelper(context).showError(context.getString(R.string.error), context.getString(R.string.error_failed_to_copy_assets))
         }
     }
 }
