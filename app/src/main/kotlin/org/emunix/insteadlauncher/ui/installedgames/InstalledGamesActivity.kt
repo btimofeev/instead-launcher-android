@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -13,8 +13,8 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_installed_games.*
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.databinding.ActivityInstalledGamesBinding
 import org.emunix.insteadlauncher.services.ScanGames
 import org.emunix.insteadlauncher.ui.about.AboutActivity
 import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
@@ -25,20 +25,25 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_installed_games)
-        setSupportActionBar(toolbar)
+        val binding = ActivityInstalledGamesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
-        fab.setOnClickListener { view -> startActivity(Intent(view.context, RepositoryActivity::class.java),
-                ActivityOptions.makeSceneTransitionAnimation(this).toBundle()) }
+        binding.fab.setOnClickListener { view ->
+            startActivity(
+                    Intent(view.context, RepositoryActivity::class.java),
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
+            )
+        }
 
         val unpackViewModel = ViewModelProvider(this).get(UnpackResourcesViewModel::class.java)
-        unpackViewModel.getUnpackSuccessStatus().observe(this, {isSuccess ->
+        unpackViewModel.getUnpackSuccessStatus().observe(this) { isSuccess ->
             if (isSuccess) {
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment, InstalledGamesFragment())
                         .commit()
             }
-        })
+        }
 
         ScanGames.start(this)
     }
@@ -49,9 +54,7 @@ class InstalledGamesActivity : AppCompatActivity(), LifecycleOwner {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        when (id) {
+        when (item.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 return true

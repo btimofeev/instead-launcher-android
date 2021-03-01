@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,19 +11,21 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import kotlinx.android.synthetic.main.activity_repository.*
 import org.emunix.insteadlauncher.R
 import android.app.Activity
 import android.transition.Slide
 import android.view.Window
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
+import org.emunix.insteadlauncher.databinding.ActivityRepositoryBinding
 
 
 private const val READ_REQUEST_CODE = 546
 
 class RepositoryActivity : AppCompatActivity() {
     private lateinit var viewModel: RepositoryViewModel
+
+    private lateinit var binding: ActivityRepositoryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         with(window) {
@@ -32,9 +34,10 @@ class RepositoryActivity : AppCompatActivity() {
         }
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_repository)
+        binding = ActivityRepositoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = getString(R.string.repository_activity_title)
 

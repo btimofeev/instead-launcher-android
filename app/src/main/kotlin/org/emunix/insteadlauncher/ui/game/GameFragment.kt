@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -14,13 +14,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_game.*
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.Game.State.*
+import org.emunix.insteadlauncher.databinding.FragmentGameBinding
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.helpers.visible
@@ -29,115 +28,124 @@ import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
 class GameFragment : Fragment() {
     private lateinit var viewModel: GameViewModel
 
+    private var _binding: FragmentGameBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_game, container, false)
+        _binding = FragmentGameBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
         (requireActivity() as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_24dp)
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        game_image.transitionName = requireActivity().intent.extras?.getString("game_name")
+        binding.gameImage.transitionName = requireActivity().intent.extras?.getString("game_name")
 
         viewModel = ViewModelProvider(requireActivity()).get(GameViewModel::class.java)
 
-        viewModel.getGame().observe(viewLifecycleOwner, Observer { game ->
+        viewModel.getGame().observe(viewLifecycleOwner) { game ->
             if (game != null) {
                 setViews(game)
             } else {
                 activity?.finish()
             }
-        })
-        viewModel.getProgress().observe(viewLifecycleOwner, Observer { value ->
+        }
+        viewModel.getProgress().observe(viewLifecycleOwner) { value ->
             if (value == -1) {
                 setIndeterminateProgress(true)
             } else {
                 setIndeterminateProgress(false, value)
             }
-        })
-        viewModel.getProgressMessage().observe(viewLifecycleOwner, Observer { msg ->
+        }
+        viewModel.getProgressMessage().observe(viewLifecycleOwner) { msg ->
             setInstallMessage(msg)
-        })
-        viewModel.getErrorMessage().observe(viewLifecycleOwner, Observer { event ->
+        }
+        viewModel.getErrorMessage().observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 requireContext().showToast(it)
             }
-        })
+        }
     }
 
     private fun setViews(game: Game) {
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = ""
-        activity.collapsing_toolbar?.isTitleEnabled = false
+        binding.collapsingToolbar?.isTitleEnabled = false
 
-        name.text = game.title
-        author.text = game.author
+        binding.name.text = game.title
+        binding.author.text = game.author
         if (game.installedVersion.isNotBlank() and (game.version != game.installedVersion)) {
-            version.text = getString(R.string.game_activity_label_version, game.installedVersion + " (\u2191${game.version})")
+            binding.version.text = getString(R.string.game_activity_label_version, game.installedVersion + " (\u2191${game.version})")
         } else {
-            version.text = getString(R.string.game_activity_label_version, game.version)
+            binding.version.text = getString(R.string.game_activity_label_version, game.version)
         }
-        size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
-        activity.game_image.loadUrl(game.image)
-        description.text = game.description
+        binding.size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
+        binding.gameImage.loadUrl(game.image)
+        binding.description.text = game.description
 
         if (game.descurl.isNotBlank()) {
-            feedbackButton.visible(true)
-            feedbackButton.setOnClickListener {
+            binding.feedbackButton.visible(true)
+            binding.feedbackButton.setOnClickListener {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(game.descurl))
                 browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 requireActivity().startActivity(browserIntent)
             }
         } else {
-            feedbackButton.visible(false)
+            binding.feedbackButton.visible(false)
         }
 
         if (game.state == INSTALLED) {
-            installMessage.visible(false)
-            progressBar.visible(false)
-            installButton.visible(false)
-            deleteButton.visible(true)
-            runButton.visible(true)
+            binding.installMessage.visible(false)
+            binding.progressBar.visible(false)
+            binding.installButton.visible(false)
+            binding.deleteButton.visible(true)
+            binding.runButton.visible(true)
 
             if (game.version != game.installedVersion) {
-                installButton.text = getText(R.string.game_activity_button_update)
-                installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
-                installButton.visible(true)
+                binding.installButton.text = getText(R.string.game_activity_button_update)
+                binding.installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
+                binding.installButton.visible(true)
             }
         }
 
         if (game.state == NO_INSTALLED) {
-            installButton.text = getText(R.string.game_activity_button_install)
-            installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorInstallButton)
-            installButton.visible(true)
-            deleteButton.visible(false)
-            runButton.visible(false)
-            progressBar.visible(false)
-            installMessage.visible(false)
+            binding.installButton.text = getText(R.string.game_activity_button_install)
+            binding.installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorInstallButton)
+            binding.installButton.visible(true)
+            binding.deleteButton.visible(false)
+            binding.runButton.visible(false)
+            binding.progressBar.visible(false)
+            binding.installMessage.visible(false)
         }
 
         if (game.state == IS_INSTALL) {
-            installMessage.text = getString(R.string.game_activity_message_installing)
+            binding.installMessage.text = getString(R.string.game_activity_message_installing)
             showProgress(true)
         }
 
         if (game.state == IS_DELETE) {
-            installMessage.text = getString(R.string.notification_delete_game)
+            binding.installMessage.text = getString(R.string.notification_delete_game)
             showProgress(true)
         }
 
         if (game.state == IN_QUEUE_TO_INSTALL) {
-            installMessage.text = getString(R.string.game_activity_message_download_pending)
+            binding.installMessage.text = getString(R.string.game_activity_message_download_pending)
             showProgress(true)
         }
 
-        installButton.setOnClickListener {
+        binding.installButton.setOnClickListener {
             viewModel.installGame()
         }
 
-        deleteButton.setOnClickListener {
+        binding.deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
                 val deleteDialog = DeleteGameDialog.newInstance(game.name)
                 if (isAdded)
@@ -145,26 +153,26 @@ class GameFragment : Fragment() {
             }
         }
 
-        runButton.setOnClickListener {
+        binding.runButton.setOnClickListener {
             viewModel.runGame(requireContext())
         }
     }
 
     private fun showProgress(flag: Boolean) {
-        installMessage.visible(flag)
-        progressBar.visible(flag)
-        installButton.visible(!flag)
-        deleteButton.visible(!flag)
-        runButton.visible(!flag)
+        binding.installMessage.visible(flag)
+        binding.progressBar.visible(flag)
+        binding.installButton.visible(!flag)
+        binding.deleteButton.visible(!flag)
+        binding.runButton.visible(!flag)
     }
 
     private fun setIndeterminateProgress(indeterminate: Boolean, value: Int = 0) {
-        progressBar.isIndeterminate = indeterminate
-        progressBar.progress = value
+        binding.progressBar.isIndeterminate = indeterminate
+        binding.progressBar.progress = value
     }
 
     private fun setInstallMessage(msg: String) {
-        installMessage.text = msg
+        binding.installMessage.text = msg
     }
 
 }

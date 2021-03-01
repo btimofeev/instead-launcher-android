@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019, 2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -8,14 +8,17 @@ package org.emunix.insteadlauncher.ui.about
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_about.*
-import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.databinding.ActivityAboutBinding
 
 class AboutActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityAboutBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
-        setSupportActionBar(toolbar)
+        binding = ActivityAboutBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //fragment.arguments = intent.extras

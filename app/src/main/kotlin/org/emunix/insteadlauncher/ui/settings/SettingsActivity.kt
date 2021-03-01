@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018, 2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -9,16 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import org.emunix.insteadlauncher.R
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
+import org.emunix.insteadlauncher.databinding.ActivitySettingsBinding
 
 
 class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        val binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         supportFragmentManager.beginTransaction()

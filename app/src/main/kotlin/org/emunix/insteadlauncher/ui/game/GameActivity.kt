@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
 
-import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.databinding.ActivityGameBinding
 import java.lang.IllegalArgumentException
 
 class GameActivity : AppCompatActivity() {
@@ -27,7 +27,8 @@ class GameActivity : AppCompatActivity() {
         }
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game)
+        val binding = ActivityGameBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
         val gameName = intent.extras?.getString("game_name") ?: throw IllegalArgumentException("GameActivity require game_name in intent.extras")

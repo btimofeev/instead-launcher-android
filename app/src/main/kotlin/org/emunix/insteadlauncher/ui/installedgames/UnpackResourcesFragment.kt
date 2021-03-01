@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,16 +11,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_unpack_resources.*
-import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.databinding.FragmentUnpackResourcesBinding
 import org.emunix.insteadlauncher.helpers.visible
 
 
 class UnpackResourcesFragment : Fragment() {
 
+    private var _binding: FragmentUnpackResourcesBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_unpack_resources, container, false)
+        _binding = FragmentUnpackResourcesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -28,12 +36,12 @@ class UnpackResourcesFragment : Fragment() {
 
         val viewModel = ViewModelProvider(this).get(UnpackResourcesViewModel::class.java)
 
-        viewModel.getErrorStatus().observe(viewLifecycleOwner, { showError ->
-            unpackResourcesProgressBar.visible(!showError)
-            errorTextView.visible(showError)
-            unpackResourcesTryAgainButton.visible(showError)
-        })
+        viewModel.getErrorStatus().observe(viewLifecycleOwner) { showError ->
+            binding.unpackResourcesProgressBar.visible(!showError)
+            binding.errorTextView.visible(showError)
+            binding.unpackResourcesTryAgainButton.visible(showError)
+        }
 
-        unpackResourcesTryAgainButton.setOnClickListener { viewModel.tryAgainIsClicked() }
+        binding.unpackResourcesTryAgainButton.setOnClickListener { viewModel.tryAgainIsClicked() }
     }
 }

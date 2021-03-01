@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -15,9 +15,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_installed_games.*
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.databinding.FragmentInstalledGamesBinding
 import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
@@ -27,31 +27,41 @@ import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 
 class InstalledGamesFragment : Fragment() {
 
+    private var _binding: FragmentInstalledGamesBinding? = null
+    private val binding get() = _binding!!
+
     private val listAdapter = InstalledGamesAdapter { playGame(it) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_installed_games, container, false)
+                              savedInstanceState: Bundle?): View? {
+        _binding = FragmentInstalledGamesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        val dividerItemDecoration = DividerItemDecoration(list.context, LinearLayout.VERTICAL)
-        val insetDivider = dividerItemDecoration.insetDivider(list.context, R.dimen.installed_game_fragment_inset_divider_margin_start)
+        binding.list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
+        val insetDivider = dividerItemDecoration.insetDivider(binding.list.context, R.dimen.installed_game_fragment_inset_divider_margin_start)
         dividerItemDecoration.setDrawable(insetDivider)
-        list.addItemDecoration(dividerItemDecoration)
+        binding.list.addItemDecoration(dividerItemDecoration)
         listAdapter.setHasStableIds(true)
-        list.adapter = listAdapter
-        list.setHasFixedSize(true)
-        registerForContextMenu(list)
+        binding.list.adapter = listAdapter
+        binding.list.setHasFixedSize(true)
+        registerForContextMenu(binding.list)
 
         val viewModel = ViewModelProvider(this).get(InstalledGamesViewModel::class.java)
         viewModel.init()
 
         viewModel.getInstalledGames().observe(viewLifecycleOwner, Observer { games ->
             listAdapter.submitList(games)
-            empty_view.visible(games.isEmpty())
+            binding.emptyView.visible(games.isEmpty())
         })
     }
 
