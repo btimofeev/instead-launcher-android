@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2020 Boris Timofeev <btimofeev@emunix.org>
- * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
- */
-
 package org.emunix.insteadlauncher.helpers.eventbus
 
 // code from https://android.jlelse.eu/super-simple-event-bus-with-rxjava-and-kotlin-f1f969b21003

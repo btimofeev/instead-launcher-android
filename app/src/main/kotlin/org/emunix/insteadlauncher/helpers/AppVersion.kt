@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
+import androidx.core.content.edit
 import javax.inject.Inject
 
 private const val PREF_RESOURCES_LAST_UPDATE = "resources_last_update"
@@ -53,8 +54,8 @@ class AppVersion @Inject constructor(private val context: Context, private val p
     }
 
     fun saveCurrentVersion(value: Long) {
-        val editor = prefs.edit()
-        editor.putLong(PREF_RESOURCES_LAST_UPDATE, value)
-        editor.apply()
+        prefs.edit {
+            putLong(PREF_RESOURCES_LAST_UPDATE, value)
+        }
     }
 }
