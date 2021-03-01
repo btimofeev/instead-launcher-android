@@ -1,5 +1,11 @@
 # Changelog
 
+## [Next] - 2021-?-?
+### Changed
+- update INSTEAD 3.3.3
+### Fixed
+- overlapping buttons
+
 ## [0.8.3] - 2020-11-05
 ### Added
 - button for writing a review (opens the game page on the http://instead-games.ru website)
