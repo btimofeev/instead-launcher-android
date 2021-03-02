@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -16,7 +16,6 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.loadUrl
 import androidx.recyclerview.widget.ListAdapter
 import org.emunix.insteadlauncher.data.GameDiffCallback
-import org.emunix.insteadlauncher.data.GameDiffCallback.Diff
 
 class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<Game, InstalledGamesAdapter.ViewHolder>(GameDiffCallback()) {
 
@@ -40,20 +39,6 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<G
         holder.itemView.setOnLongClickListener {
             longClickedGame = getItem(position)
             false
-        }
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
-        if (payloads.isEmpty()) {
-            onBindViewHolder(holder, position)
-        } else {
-            val diff = payloads[0] as List<Diff>
-            for (key in diff) {
-                when (key) {
-                    Diff.IMAGE -> holder.image.loadUrl(getItem(position).image)
-                    Diff.BRIEF -> getItem(position).title
-                }
-            }
         }
     }
 

@@ -1,10 +1,12 @@
 # Changelog
 
-## [Next] - 2021-?-?
+## [0.8.4] - 2021-?-?
 ### Changed
 - update INSTEAD 3.3.3
 ### Fixed
-- overlapping buttons
+- fixed a bug when the list of games scrolled to the beginning after installing the game
+- fixed overlapping buttons in the about game screen
+- fixed clipping of text with large font
 
 ## [0.8.3] - 2020-11-05
 ### Added

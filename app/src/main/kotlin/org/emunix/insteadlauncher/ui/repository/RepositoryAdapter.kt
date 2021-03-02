@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -10,13 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.GameDiffCallback
-import org.emunix.insteadlauncher.data.GameDiffCallback.Diff
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.visible
 
@@ -39,23 +37,6 @@ class RepositoryAdapter(val listener: (Game, ImageView) -> Unit): ListAdapter<Ga
         holder.description.text = getItem(position).brief
         holder.itemView.setOnClickListener { listener(getItem(position), holder.image) }
         updateBadge(holder, position)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
-        ViewCompat.setTransitionName(holder.image, getItem(position).name)
-        if (payloads.isEmpty()) {
-            onBindViewHolder(holder, position)
-        } else {
-            val diff = payloads[0] as List<Diff>
-            for (key: Diff in diff) {
-                when (key) {
-                    Diff.IMAGE -> updateImage(holder, position)
-                    Diff.TITLE -> holder.name.text = getItem(position).title
-                    Diff.BRIEF -> holder.description.text = getItem(position).brief
-                    Diff.VERSION -> updateBadge(holder, position)
-                }
-            }
-        }
     }
 
     override fun getItemId(position: Int): Long {
