@@ -45,6 +45,8 @@ class RepositoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProvider(requireActivity()).get(RepositoryViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -58,8 +60,8 @@ class RepositoryFragment : Fragment() {
         _binding = null
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
@@ -69,8 +71,6 @@ class RepositoryFragment : Fragment() {
         listAdapter.setHasStableIds(true)
         binding.list.adapter = listAdapter
         binding.list.setHasFixedSize(true)
-
-        viewModel = ViewModelProvider(requireActivity()).get(RepositoryViewModel::class.java)
 
         binding.tryAgainButton.setOnClickListener { viewModel.updateRepository() }
 

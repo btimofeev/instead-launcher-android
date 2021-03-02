@@ -31,8 +31,8 @@ class UnpackResourcesFragment : Fragment() {
         _binding = null
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val viewModel = ViewModelProvider(this).get(UnpackResourcesViewModel::class.java)
 

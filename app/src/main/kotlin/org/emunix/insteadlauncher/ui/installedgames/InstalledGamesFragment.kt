@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,8 +42,8 @@ class InstalledGamesFragment : Fragment() {
         _binding = null
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
@@ -59,10 +58,10 @@ class InstalledGamesFragment : Fragment() {
         val viewModel = ViewModelProvider(this).get(InstalledGamesViewModel::class.java)
         viewModel.init()
 
-        viewModel.getInstalledGames().observe(viewLifecycleOwner, Observer { games ->
+        viewModel.getInstalledGames().observe(viewLifecycleOwner) { games ->
             listAdapter.submitList(games)
             binding.emptyView.visible(games.isEmpty())
-        })
+        }
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
