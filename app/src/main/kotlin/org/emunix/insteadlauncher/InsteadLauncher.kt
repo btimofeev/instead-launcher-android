@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -75,7 +75,8 @@ class InsteadLauncher: Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-        ACRA.init(this)
+        if (!BuildConfig.DEBUG)
+            ACRA.init(this)
     }
 
     @TargetApi(26)
