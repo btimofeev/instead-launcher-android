@@ -35,6 +35,9 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField("String", "INSTEAD_VERSION", "\"3.3.3\"")
+            ndk {
+                debugSymbolLevel = 'FULL'
+            }
         }
         debug {
             applicationIdSuffix ".debug"
