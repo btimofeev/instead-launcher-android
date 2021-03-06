@@ -59,7 +59,7 @@ class InstalledGamesFragment : Fragment() {
         viewModel.init()
 
         viewModel.getInstalledGames().observe(viewLifecycleOwner) { games ->
-            listAdapter.submitList(games)
+            listAdapter.submitList(games.toList())
             binding.emptyView.visible(games.isEmpty())
         }
     }
@@ -72,19 +72,19 @@ class InstalledGamesFragment : Fragment() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.installed_games_activity_context_menu_play -> {
-                playGame(listAdapter.getLongClickedGame())
+                playGame(listAdapter.longClickedGame)
             }
             R.id.installed_games_activity_context_menu_play_from_beginning -> {
-                playGame(listAdapter.getLongClickedGame(), true)
+                playGame(listAdapter.longClickedGame, true)
             }
             R.id.installed_games_activity_context_menu_delete -> {
-                val deleteDialog = DeleteGameDialog.newInstance(listAdapter.getLongClickedGame().name)
+                val deleteDialog = DeleteGameDialog.newInstance(listAdapter.longClickedGame.name)
                 if (isAdded)
                     parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
             }
             R.id.installed_games_activity_context_menu_about -> {
                 val intent = Intent(context, GameActivity::class.java)
-                val gameName = listAdapter.getLongClickedGame().name
+                val gameName = listAdapter.longClickedGame.name
                 intent.putExtra("game_name", gameName)
                 startActivity(intent)
             }

@@ -21,6 +21,7 @@ import org.emunix.insteadlauncher.di.AppComponent
 import org.emunix.insteadlauncher.di.AppModule
 import org.emunix.insteadlauncher.di.DaggerAppComponent
 import org.emunix.insteadlauncher.helpers.ThemeHelper
+import timber.log.Timber
 
 
 @AcraCore(stopServicesOnCrash = true,
@@ -58,6 +59,9 @@ class InsteadLauncher: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        if(BuildConfig.DEBUG)
+            Timber.plant(Timber.DebugTree())
+
         appComponent = DaggerAppComponent.builder()
                 .appModule(AppModule(this))
                 .build()

@@ -16,12 +16,12 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.loadUrl
 import androidx.recyclerview.widget.ListAdapter
 import org.emunix.insteadlauncher.data.GameDiffCallback
+import timber.log.Timber
 
 class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<Game, InstalledGamesAdapter.ViewHolder>(GameDiffCallback()) {
 
-    private lateinit var longClickedGame: Game
-
-    fun getLongClickedGame(): Game = longClickedGame
+    lateinit var longClickedGame: Game
+    private set
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.name)!!
@@ -33,16 +33,19 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<G
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.name.text = getItem(position).title
-        holder.image.loadUrl(getItem(position).image)
-        holder.itemView.setOnClickListener { onClickListener(getItem(position)) }
+        val game = getItem(position)
+        holder.name.text = game.title
+        holder.image.loadUrl(game.image)
+        holder.itemView.setOnClickListener { onClickListener(game) }
         holder.itemView.setOnLongClickListener {
-            longClickedGame = getItem(position)
+            Timber.d("Long clicked game: ${game.name}")
+            longClickedGame = game
             false
         }
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
+        holder.itemView.setOnClickListener(null)
         holder.itemView.setOnLongClickListener(null)
         super.onViewRecycled(holder)
     }

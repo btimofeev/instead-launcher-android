@@ -12,5 +12,5 @@ class GameStateConverter {
     fun toState(ordinal: Int): Game.State = Game.State.values()[ordinal]
 
     @TypeConverter
-    fun toOrdinal(state: Game.State): Int? = state.ordinal
+    fun toOrdinal(state: Game.State): Int = state.ordinal
 }
