@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.8.4] - 2021-?-?
+## [0.8.4] - 2021-03-06
 ### Changed
-- update INSTEAD 3.3.3
+- INSTEAD updated to version 3.3.3
 ### Fixed
 - fixed a bug when the list of games scrolled to the beginning after installing the game
 - fixed overlapping buttons in the about game screen

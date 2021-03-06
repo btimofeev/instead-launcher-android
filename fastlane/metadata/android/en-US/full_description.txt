@@ -1,6 +1,6 @@
 Collection of text quests on the engine INSTEAD.
 
-Most of the games are in Russian, but there are games in English and Spanish:
+Most of the games are in Russian, but there are games in English, Spanish and French:
 		
 * in English:
  - The Returning of the Quantum Cat
@@ -18,6 +18,9 @@ Most of the games are in Russian, but there are games in English and Spanish:
 
 * in Spanish:
  - Mansion
+
+* in French:
+ - Dark Crystal
 
 You can find these games with the search button inside the app.
 	
