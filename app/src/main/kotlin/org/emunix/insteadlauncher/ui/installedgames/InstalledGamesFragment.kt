@@ -9,8 +9,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +31,14 @@ class InstalledGamesFragment : Fragment() {
     private var _binding: FragmentInstalledGamesBinding? = null
     private val binding get() = _binding!!
 
-    private val listAdapter = InstalledGamesAdapter { playGame(it) }
+    private val viewModel: InstalledGamesViewModel by viewModels()
+
+    private lateinit var listAdapter: InstalledGamesAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,23 +54,48 @@ class InstalledGamesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+
+        binding.fab.setOnClickListener {
+            findNavController().navigate(R.id.action_installedGamesFragment_to_repositoryFragment)
+        }
+
         binding.list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
         val insetDivider = dividerItemDecoration.insetDivider(binding.list.context, R.dimen.installed_game_fragment_inset_divider_margin_start)
         dividerItemDecoration.setDrawable(insetDivider)
         binding.list.addItemDecoration(dividerItemDecoration)
+        listAdapter = InstalledGamesAdapter { playGame(it) }
         listAdapter.setHasStableIds(true)
         binding.list.adapter = listAdapter
         binding.list.setHasFixedSize(true)
         registerForContextMenu(binding.list)
 
-        val viewModel = ViewModelProvider(this).get(InstalledGamesViewModel::class.java)
         viewModel.init()
-
         viewModel.getInstalledGames().observe(viewLifecycleOwner) { games ->
             listAdapter.submitList(games.toList())
             binding.emptyView.visible(games.isEmpty())
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_installed_games, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_settings -> {
+                findNavController().navigate(R.id.action_installedGamesFragment_to_settingsFragment)
+                return true
+            }
+            R.id.action_about -> {
+                findNavController().navigate(R.id.action_installedGamesFragment_to_aboutFragment)
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {

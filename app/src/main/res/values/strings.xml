@@ -31,6 +31,7 @@
     <string name="installed_games_activity_context_menu_play_from_beginning">Restart game</string>
     <string name="installed_games_activity_context_menu_delete">Delete</string>
     <string name="installed_games_activity_context_menu_about">About</string>
+    <string name="installed_games_fragment_fab_content_description">Install games</string>
 
     <string name="dialog_delete_game_title">Delete game?</string>
     <string name="dialog_delete_game_text">Saved game data will remain on the device</string>

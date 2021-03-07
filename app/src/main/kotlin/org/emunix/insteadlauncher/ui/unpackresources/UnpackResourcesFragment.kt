@@ -3,14 +3,16 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.ui.installedgames
+package org.emunix.insteadlauncher.ui.unpackresources
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentUnpackResourcesBinding
 import org.emunix.insteadlauncher.helpers.visible
 
@@ -19,6 +21,8 @@ class UnpackResourcesFragment : Fragment() {
 
     private var _binding: FragmentUnpackResourcesBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: UnpackResourcesViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,7 +38,11 @@ class UnpackResourcesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = ViewModelProvider(this).get(UnpackResourcesViewModel::class.java)
+        viewModel.getUnpackSuccessStatus().observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                findNavController().navigate(R.id.action_unpackResourcesFragment_to_installedGamesFragment)
+            }
+        }
 
         viewModel.getErrorStatus().observe(viewLifecycleOwner) { showError ->
             binding.unpackResourcesProgressBar.visible(!showError)

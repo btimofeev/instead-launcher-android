@@ -22,7 +22,7 @@ import org.emunix.insteadlauncher.helpers.GameParser
 import org.emunix.insteadlauncher.storage.Storage
 import org.emunix.insteadlauncher.helpers.saveInstalledVersionToDB
 import org.emunix.insteadlauncher.helpers.saveStateToDB
-import org.emunix.insteadlauncher.ui.installedgames.InstalledGamesActivity
+import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
 import java.io.File
 import java.util.*
 import java.text.SimpleDateFormat
@@ -107,7 +107,7 @@ class ScanGames : IntentService("ScanGames") {
     }
 
     private fun createNotification(): Notification {
-        val notificationIntent = Intent(this, InstalledGamesActivity::class.java)
+        val notificationIntent = Intent(this, LauncherActivity::class.java)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         return NotificationCompat.Builder(this, InsteadLauncher.CHANNEL_SCAN_GAMES)

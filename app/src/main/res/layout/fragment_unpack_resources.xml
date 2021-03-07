@@ -6,7 +6,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.installedgames.UnpackResourcesFragment">
+    tools:context=".ui.unpackresources.UnpackResourcesFragment">
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/unpackResourcesFlow"
