@@ -127,6 +127,11 @@ dependencies {
     implementation "androidx.room:room-runtime:2.2.6"
     kapt "androidx.room:room-compiler:2.2.6"
 
+    // Navigation
+    def nav_version = "2.3.3"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
     // WorkManager
     implementation "androidx.work:work-runtime:2.5.0"
 

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021 Boris Timofeev <btimofeev@emunix.org>
+  ~ Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/unpackResourcesFragment">
+    <fragment
+        android:id="@+id/unpackResourcesFragment"
+        android:name="org.emunix.insteadlauncher.ui.unpackresources.UnpackResourcesFragment"
+        android:label="fragment_unpack_resources"
+        tools:layout="@layout/fragment_unpack_resources" >
+        <action
+            android:id="@+id/action_unpackResourcesFragment_to_installedGamesFragment"
+            app:destination="@id/installedGamesFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/installedGamesFragment"
+        android:name="org.emunix.insteadlauncher.ui.installedgames.InstalledGamesFragment"
+        android:label="fragment_installed_games"
+        tools:layout="@layout/fragment_installed_games" >
+        <action
+            android:id="@+id/action_installedGamesFragment_to_repositoryFragment"
+            app:destination="@id/repositoryFragment" />
+        <action
+            android:id="@+id/action_installedGamesFragment_to_insteadActivity"
+            app:destination="@id/insteadActivity" />
+        <action
+            android:id="@+id/action_installedGamesFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+        <action
+            android:id="@+id/action_installedGamesFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_installedGamesFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/repositoryFragment"
+        android:name="org.emunix.insteadlauncher.ui.repository.RepositoryFragment"
+        android:label="fragment_repository"
+        tools:layout="@layout/fragment_repository" >
+        <action
+            android:id="@+id/action_repositoryFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/insteadActivity"
+        android:name="org.emunix.insteadlauncher.ui.instead.InsteadActivity"
+        android:label="InsteadActivity" />
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="org.emunix.insteadlauncher.ui.game.GameFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_gameFragment_to_insteadActivity"
+            app:destination="@id/insteadActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="org.emunix.insteadlauncher.ui.about.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="org.emunix.insteadlauncher.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
+</navigation>
