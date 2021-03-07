@@ -37,7 +37,7 @@
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/activity_installed_games_list_item"
+        tools:listitem="@layout/item_installed_games"
         tools:visibility="visible"/>
 
     <ScrollView

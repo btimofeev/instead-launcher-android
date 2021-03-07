@@ -29,7 +29,7 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<G
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.activity_installed_games_list_item, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_installed_games, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
