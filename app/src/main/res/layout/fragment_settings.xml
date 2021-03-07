@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
     android:fitsSystemWindows="true"
-    tools:context="org.emunix.insteadlauncher.ui.settings.SettingsActivity">
+    tools:context="org.emunix.insteadlauncher.ui.settings.SettingsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -19,15 +19,25 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             app:titleTextAppearance="@style/ToolbarTextAppearance"
-            style="@style/MyToolbar"/>
+            style="@style/MyToolbar">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/settings_activity_title"
+                android:gravity="center_vertical"
+                style="@style/ToolbarTextAppearance"
+                android:id="@+id/toolbar_title" />
+        </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/content"
+        android:id="@android:id/list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:targetApi="n">
+        <!-- targetApi just to appease the IDE; the id is defined by the support lib. -->
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

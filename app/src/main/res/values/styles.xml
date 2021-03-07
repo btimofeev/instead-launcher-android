@@ -13,6 +13,7 @@
         <item name="searchViewStyle">@style/AppSearchViewStyle</item>
 
         <item name="android:windowContentTransitions">true</item>
+        <item name="preferenceTheme">@style/AppTheme.PreferenceThemeOverlay</item>
     </style>
 
     <style name="AppTheme" parent="BaseAppTheme" />
@@ -63,6 +64,12 @@
         <!-- Text color inside SearchView -->
         <item name="android:editTextColor">@color/toolbarSearchTextColor</item>
         <item name="android:textColorHint">@color/toolbarSearchHintColor</item>
+    </style>
+
+    <style name="AppTheme.PreferenceThemeOverlay" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="android:layout">@layout/fragment_settings</item>
+        <item name="android:listPreferredItemPaddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:listPreferredItemPaddingRight">@dimen/activity_horizontal_margin</item>
     </style>
 
 </resources>

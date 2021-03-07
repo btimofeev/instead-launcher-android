@@ -54,11 +54,6 @@
             android:process=":instead"
             android:excludeFromRecents="true">
         </activity>
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:label="@string/settings_activity_title"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
         <service android:name=".services.UpdateRepository"/>
         <service android:name=".services.InstallGame"/>
         <service android:name=".services.DeleteGame"/>
