@@ -9,11 +9,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.BuildConfig
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.databinding.FragmentAboutBinding
+
 import org.emunix.insteadlauncher.helpers.AppVersion
 import javax.inject.Inject
 
@@ -39,6 +42,12 @@ class AboutFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+
+        binding.toolbar.setNavigationIcon(R.drawable.ic_back_24dp)
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         InsteadLauncher.appComponent.inject(this)
 
