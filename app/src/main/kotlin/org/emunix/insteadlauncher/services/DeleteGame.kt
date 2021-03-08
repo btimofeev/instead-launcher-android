@@ -7,11 +7,12 @@ package org.emunix.insteadlauncher.services
 
 import android.app.IntentService
 import android.app.Notification
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.os.bundleOf
+import androidx.navigation.NavDeepLinkBuilder
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UNINSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UNINSTALL_NOTIFICATION_ID
@@ -59,11 +60,14 @@ class DeleteGame : IntentService("DeleteGame") {
     }
 
     private fun createNotification(): Notification {
-        // todo go to game fragment
         val notificationIntent = Intent(this, LauncherActivity::class.java)
         notificationIntent.putExtra("game_name", gameName)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = NavDeepLinkBuilder(this)
+                .setGraph(R.navigation.nav_graph)
+                .setDestination(R.id.gameFragment)
+                .setArguments(bundleOf("game_name" to gameName))
+                .createPendingIntent()
 
         return NotificationCompat.Builder(this, CHANNEL_UNINSTALL)
                 .setContentTitle(gameName)

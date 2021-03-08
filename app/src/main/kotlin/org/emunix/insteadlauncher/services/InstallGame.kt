@@ -22,6 +22,8 @@ import java.io.IOException
 import java.util.zip.ZipException
 import android.app.PendingIntent
 import android.os.Build
+import androidx.core.os.bundleOf
+import androidx.navigation.NavDeepLinkBuilder
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_INSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.data.Game.State.*
@@ -113,11 +115,14 @@ class InstallGame : IntentService("InstallGame") {
     }
 
     private fun createNotification(): NotificationCompat.Builder {
-        // todo go to game fragment
         val notificationIntent = Intent(this, LauncherActivity::class.java)
         notificationIntent.putExtra("game_name", gameName)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        pendingIntent = NavDeepLinkBuilder(this)
+                .setGraph(R.navigation.nav_graph)
+                .setDestination(R.id.gameFragment)
+                .setArguments(bundleOf("game_name" to gameName))
+                .createPendingIntent()
 
         return NotificationCompat.Builder(this, CHANNEL_INSTALL)
                 .setContentTitle(gameTitle)
