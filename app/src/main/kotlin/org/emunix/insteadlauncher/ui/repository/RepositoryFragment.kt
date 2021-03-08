@@ -22,8 +22,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
-import org.emunix.insteadlauncher.ui.game.GameActivity
-import androidx.core.app.ActivityOptionsCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -41,12 +40,7 @@ class RepositoryFragment : Fragment() {
     private var _binding: FragmentRepositoryBinding? = null
     private val binding get() = _binding!!
 
-    private val listAdapter = RepositoryAdapter { game, image ->
-        val intent = Intent(activity, GameActivity::class.java)
-        intent.putExtra("game_name", game.name)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity, image as View, game.name)
-        startActivity(intent, options.toBundle())
-    }
+    private lateinit var listAdapter: RepositoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -80,6 +74,10 @@ class RepositoryFragment : Fragment() {
         val insetDivider = dividerItemDecoration.insetDivider(binding.list.context, R.dimen.installed_game_fragment_inset_divider_margin_start)
         dividerItemDecoration.setDrawable(insetDivider)
         binding.list.addItemDecoration(dividerItemDecoration)
+        listAdapter = RepositoryAdapter { game, image ->
+            val bundle = bundleOf("game_name" to game.name)
+            findNavController().navigate(R.id.action_repositoryFragment_to_gameFragment, bundle)
+        }
         listAdapter.setHasStableIds(true)
         binding.list.adapter = listAdapter
         binding.list.setHasFixedSize(true)

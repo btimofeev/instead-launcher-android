@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -23,7 +24,6 @@ import org.emunix.insteadlauncher.databinding.FragmentInstalledGamesBinding
 import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
-import org.emunix.insteadlauncher.ui.game.GameActivity
 import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
 
@@ -109,7 +109,7 @@ class InstalledGamesFragment : Fragment() {
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
         //super.onCreateContextMenu(menu, v, menuInfo)
-        activity?.menuInflater?.inflate(R.menu.menu_context_installed_games, menu)
+        requireActivity().menuInflater.inflate(R.menu.menu_context_installed_games, menu)
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
@@ -126,10 +126,8 @@ class InstalledGamesFragment : Fragment() {
                     parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
             }
             R.id.installed_games_activity_context_menu_about -> {
-                val intent = Intent(context, GameActivity::class.java)
-                val gameName = listAdapter.longClickedGame.name
-                intent.putExtra("game_name", gameName)
-                startActivity(intent)
+                val bundle = bundleOf("game_name" to listAdapter.longClickedGame.name)
+                findNavController().navigate(R.id.action_installedGamesFragment_to_gameFragment, bundle)
             }
         }
         return super.onContextItemSelected(item)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -21,7 +21,7 @@ import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.helpers.saveInstalledVersionToDB
 import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.helpers.NotificationHelper
-import org.emunix.insteadlauncher.ui.game.GameActivity
+import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
 import java.io.File
 import java.io.IOException
 
@@ -59,7 +59,8 @@ class DeleteGame : IntentService("DeleteGame") {
     }
 
     private fun createNotification(): Notification {
-        val notificationIntent = Intent(this, GameActivity::class.java)
+        // todo go to game fragment
+        val notificationIntent = Intent(this, LauncherActivity::class.java)
         notificationIntent.putExtra("game_name", gameName)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)

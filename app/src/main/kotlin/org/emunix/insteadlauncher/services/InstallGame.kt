@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -29,9 +29,9 @@ import org.emunix.insteadlauncher.event.DownloadProgressEvent
 import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.network.ProgressListener
-import org.emunix.insteadlauncher.ui.game.GameActivity
 import org.emunix.insteadlauncher.helpers.network.ProgressResponseBody
 import org.emunix.insteadlauncher.storage.Storage
+import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
 import javax.inject.Inject
 
 
@@ -113,7 +113,8 @@ class InstallGame : IntentService("InstallGame") {
     }
 
     private fun createNotification(): NotificationCompat.Builder {
-        val notificationIntent = Intent(this, GameActivity::class.java)
+        // todo go to game fragment
+        val notificationIntent = Intent(this, LauncherActivity::class.java)
         notificationIntent.putExtra("game_name", gameName)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)

@@ -14,7 +14,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
@@ -24,9 +25,10 @@ import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
+import java.lang.IllegalArgumentException
 
 class GameFragment : Fragment() {
-    private lateinit var viewModel: GameViewModel
+    private val viewModel: GameViewModel by viewModels()
 
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
@@ -46,11 +48,13 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        (requireActivity() as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_24dp)
-        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.gameImage.transitionName = requireActivity().intent.extras?.getString("game_name")
+        binding.toolbar.setNavigationIcon(R.drawable.ic_close_24dp)
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
-        viewModel = ViewModelProvider(requireActivity()).get(GameViewModel::class.java)
+        val gameName = arguments?.getString("game_name") ?: throw IllegalArgumentException("GameFragment require game_name passed as argument")
+        viewModel.init(gameName)
 
         viewModel.getGame().observe(viewLifecycleOwner) { game ->
             if (game != null) {

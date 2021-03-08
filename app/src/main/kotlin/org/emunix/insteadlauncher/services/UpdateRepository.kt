@@ -17,7 +17,7 @@ import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UPDATE_REPOS
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UPDATE_REPOSITORY_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.helpers.network.RepoUpdater
-import org.emunix.insteadlauncher.ui.repository.RepositoryActivity
+import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
 import javax.inject.Inject
 
 class UpdateRepository: IntentService("UpdateRepository") {
@@ -35,7 +35,7 @@ class UpdateRepository: IntentService("UpdateRepository") {
     }
 
     private fun createNotification(): Notification {
-        val notificationIntent = Intent(this, RepositoryActivity::class.java)
+        val notificationIntent = Intent(this, LauncherActivity::class.java)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         return NotificationCompat.Builder(this, CHANNEL_UPDATE_REPOSITORY)

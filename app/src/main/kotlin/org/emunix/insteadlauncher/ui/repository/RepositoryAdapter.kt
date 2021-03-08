@@ -32,10 +32,11 @@ class RepositoryAdapter(val listener: (Game, ImageView) -> Unit): ListAdapter<Ga
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.name.text = getItem(position).title
+        val game = getItem(position)
+        holder.name.text = game.title
         updateImage(holder, position)
-        holder.description.text = getItem(position).brief
-        holder.itemView.setOnClickListener { listener(getItem(position), holder.image) }
+        holder.description.text = game.brief
+        holder.itemView.setOnClickListener { listener(game, holder.image) }
         updateBadge(holder, position)
     }
 

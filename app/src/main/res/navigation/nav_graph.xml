@@ -36,7 +36,10 @@
             app:destination="@id/insteadActivity" />
         <action
             android:id="@+id/action_installedGamesFragment_to_gameFragment"
-            app:destination="@id/gameFragment" />
+            app:destination="@id/gameFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_installedGamesFragment_to_aboutFragment"
             app:destination="@id/aboutFragment"
@@ -57,7 +60,10 @@
         tools:layout="@layout/fragment_repository" >
         <action
             android:id="@+id/action_repositoryFragment_to_gameFragment"
-            app:destination="@id/gameFragment" />
+            app:destination="@id/gameFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <activity
         android:id="@+id/insteadActivity"
@@ -71,6 +77,9 @@
         <action
             android:id="@+id/action_gameFragment_to_insteadActivity"
             app:destination="@id/insteadActivity" />
+        <argument
+            android:name="gameName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
