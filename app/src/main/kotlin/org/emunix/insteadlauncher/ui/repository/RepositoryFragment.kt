@@ -11,6 +11,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -23,13 +24,18 @@ import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import androidx.core.app.ActivityOptionsCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
 import org.emunix.insteadlauncher.helpers.showToast
+import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
 
+private const val READ_REQUEST_CODE = 546
 
 class RepositoryFragment : Fragment() {
-    private lateinit var viewModel: RepositoryViewModel
+    private val viewModel: RepositoryViewModel by viewModels()
+    private val appArgumentViewModel: AppArgumentViewModel by activityViewModels()
     private lateinit var installDialog: ProgressDialog
 
     private var _binding: FragmentRepositoryBinding? = null
@@ -45,8 +51,6 @@ class RepositoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(requireActivity()).get(RepositoryViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +66,14 @@ class RepositoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.init()
+
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        binding.toolbar.setNavigationIcon(R.drawable.ic_back_24dp)
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         binding.list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
@@ -127,10 +139,18 @@ class RepositoryFragment : Fragment() {
                 context?.showToast(getString(resId))
             }
         }
+
+        appArgumentViewModel.zipUri.observe(viewLifecycleOwner) { zipUri ->
+            zipUri?.let { uri ->
+                viewModel.installGame(uri)
+                appArgumentViewModel.zipUri.value = null
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_repository, menu)
 
         val searchView = menu.findItem(R.id.action_search)!!.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -155,6 +175,35 @@ class RepositoryFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_update_repo -> {
+                viewModel.updateRepository()
+                return true
+            }
+            R.id.action_install_local_game -> {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "application/zip"
+                startActivityForResult(intent, READ_REQUEST_CODE, null)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (resultData != null) {
+                val uri = resultData.data
+                if (uri != null)
+                    viewModel.installGame(uri)
+            }
+        }
     }
 
     private fun showGames(games: List<Game>) {

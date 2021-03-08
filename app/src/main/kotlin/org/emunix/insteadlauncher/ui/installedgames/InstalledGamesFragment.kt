@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -24,6 +25,7 @@ import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.ui.game.GameActivity
 import org.emunix.insteadlauncher.ui.instead.InsteadActivity
+import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
 
 
 class InstalledGamesFragment : Fragment() {
@@ -32,6 +34,7 @@ class InstalledGamesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: InstalledGamesViewModel by viewModels()
+    private val appArgumentViewModel: AppArgumentViewModel by activityViewModels()
 
     private lateinit var listAdapter: InstalledGamesAdapter
 
@@ -75,6 +78,12 @@ class InstalledGamesFragment : Fragment() {
         viewModel.getInstalledGames().observe(viewLifecycleOwner) { games ->
             listAdapter.submitList(games.toList())
             binding.emptyView.visible(games.isEmpty())
+        }
+
+        appArgumentViewModel.zipUri.observe(viewLifecycleOwner) { zipUri ->
+            zipUri?.let {
+                findNavController().navigate(R.id.action_installedGamesFragment_to_repositoryFragment)
+            }
         }
     }
 

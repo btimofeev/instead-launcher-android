@@ -28,7 +28,7 @@ class RepositoryAdapter(val listener: (Game, ImageView) -> Unit): ListAdapter<Ga
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.activity_repository_list_item, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_repository, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
