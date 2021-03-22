@@ -45,12 +45,6 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<G
         holder.image.loadUrl(game.image)
     }
 
-    override fun onViewRecycled(holder: ViewHolder) {
-        holder.itemView.setOnClickListener(null)
-        holder.itemView.setOnLongClickListener(null)
-        super.onViewRecycled(holder)
-    }
-
     override fun getItemId(position: Int): Long {
         return getItem(position).name.hashCode().toLong()
     }
