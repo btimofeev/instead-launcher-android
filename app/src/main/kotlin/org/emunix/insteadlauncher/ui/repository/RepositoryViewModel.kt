@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,6 +11,7 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.*
@@ -36,9 +37,6 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
     private val showToast = MutableLiveData<ConsumableEvent<Int>>()
 
     private val eventBus = InsteadLauncher.appComponent.eventBus()
-
-    private val viewModelJob = Job()
-    private val scope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     @SuppressLint("CheckResult")
     fun init() {
@@ -83,7 +81,7 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
 
     fun searchGames(query: String): LiveData<List<Game>> = InsteadLauncher.db.games().search(query)
 
-    fun installGame(uri: Uri) = scope.launch {
+    fun installGame(uri: Uri) = viewModelScope.launch {
         showInstallGameDialog.value = true
         try {
             unzipGame(uri)
@@ -95,7 +93,7 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
             showToast.value = ConsumableEvent(R.string.error_failed_to_unpack_zip)
         }
         showInstallGameDialog.value = false
-        ScanGames.start(getApplication())
+        ScanGames.start(app)
     }
 
     private suspend fun unzipGame(uri: Uri) {
@@ -122,10 +120,5 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
             } else
                 throw NotInsteadGameZipException("main.lua not found")
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
     }
 }

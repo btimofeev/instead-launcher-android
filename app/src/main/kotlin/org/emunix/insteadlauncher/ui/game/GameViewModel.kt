@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018, 2020-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -12,9 +12,9 @@ import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
@@ -59,7 +59,7 @@ class GameViewModel(var app: Application) : AndroidViewModel(app) {
         val gameToInstall = game.value
         if (gameToInstall != null) {
             InstallGame.start(app.applicationContext, gameToInstall.name, gameToInstall.url, gameToInstall.title)
-            GlobalScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(Dispatchers.IO) {
                 gameToInstall.saveStateToDB(Game.State.IN_QUEUE_TO_INSTALL)
             }
         }
