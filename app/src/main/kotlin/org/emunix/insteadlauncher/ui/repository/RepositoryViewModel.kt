@@ -14,6 +14,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.*
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
@@ -37,10 +38,11 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
     private val showToast = MutableLiveData<ConsumableEvent<Int>>()
 
     private val eventBus = InsteadLauncher.appComponent.eventBus()
+    private var eventDisposable: Disposable? = null
 
     @SuppressLint("CheckResult")
     fun init() {
-        eventBus.listen(UpdateRepoEvent::class.java)
+        eventDisposable = eventBus.listen(UpdateRepoEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     showErrorView.value = it.isError
@@ -120,5 +122,10 @@ class RepositoryViewModel(var app: Application) : AndroidViewModel(app) {
             } else
                 throw NotInsteadGameZipException("main.lua not found")
         }
+    }
+
+    override fun onCleared() {
+        eventDisposable?.dispose()
+        super.onCleared()
     }
 }

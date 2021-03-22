@@ -14,6 +14,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.InsteadLauncher
@@ -31,12 +32,13 @@ class GameViewModel(var app: Application) : AndroidViewModel(app) {
     private val progressMessage: MutableLiveData<String> = MutableLiveData()
     private val errorMessage: MutableLiveData<ConsumableEvent<String>> = MutableLiveData()
     private val eventBus = InsteadLauncher.appComponent.eventBus()
+    private var eventDisposable: Disposable? = null
 
     @SuppressLint("CheckResult")
     fun init(gameName: String) {
         game = InsteadLauncher.db.games().observeByName(gameName)
 
-        eventBus.listen(DownloadProgressEvent::class.java)
+        eventDisposable = eventBus.listen(DownloadProgressEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.gameName == gameName) {
@@ -81,4 +83,9 @@ class GameViewModel(var app: Application) : AndroidViewModel(app) {
     fun getProgressMessage(): LiveData<String> = progressMessage
 
     fun getErrorMessage(): LiveData<ConsumableEvent<String>> = errorMessage
+
+    override fun onCleared() {
+        eventDisposable?.dispose()
+        super.onCleared()
+    }
 }
