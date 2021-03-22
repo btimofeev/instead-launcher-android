@@ -28,7 +28,9 @@ class RepositoryAdapter(val listener: (Game, ImageView) -> Unit): ListAdapter<Ga
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_repository, parent, false))
+        val holder = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_repository, parent, false))
+        holder.itemView.setOnClickListener { listener(getItem(holder.adapterPosition), holder.image) }
+        return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -36,7 +38,6 @@ class RepositoryAdapter(val listener: (Game, ImageView) -> Unit): ListAdapter<Ga
         holder.name.text = game.title
         updateImage(holder, position)
         holder.description.text = game.brief
-        holder.itemView.setOnClickListener { listener(game, holder.image) }
         updateBadge(holder, position)
     }
 

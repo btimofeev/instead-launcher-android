@@ -29,19 +29,20 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<G
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_installed_games, parent, false))
+        val holder = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_installed_games, parent, false))
+        holder.itemView.setOnClickListener { onClickListener(getItem(holder.adapterPosition)) }
+        holder.itemView.setOnLongClickListener {
+            Timber.d("Long clicked game: ${getItem(holder.adapterPosition).name}")
+            longClickedGame = getItem(holder.adapterPosition)
+            false
+        }
+        return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val game = getItem(position)
         holder.name.text = game.title
         holder.image.loadUrl(game.image)
-        holder.itemView.setOnClickListener { onClickListener(game) }
-        holder.itemView.setOnLongClickListener {
-            Timber.d("Long clicked game: ${game.name}")
-            longClickedGame = game
-            false
-        }
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
