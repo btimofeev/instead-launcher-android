@@ -17,6 +17,6 @@ interface Storage {
     fun getGamesDirectory(): File
     fun getSavesDirectory(): File
     fun getUserThemesDirectory(): File
-    fun createStorageDirectories()
+    suspend fun createStorageDirectories()
     fun copyAsset(name: String, toPath: File)
 }

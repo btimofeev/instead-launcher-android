@@ -11,6 +11,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.acra.ACRA
 import org.acra.annotation.AcraCore
 import org.acra.annotation.AcraMailSender
@@ -69,8 +72,10 @@ class InsteadLauncher: Application() {
         createNotificationChannels()
         db =  appComponent.db()
 
-        val storage = appComponent.storage()
-        storage.createStorageDirectories()
+        GlobalScope.launch(Dispatchers.IO) {
+            val storage = appComponent.storage()
+            storage.createStorageDirectories()
+        }
 
         val sharedPreferences = appComponent.sharedPreferences()
         val themePref = sharedPreferences.getString("app_theme", ThemeHelper.DEFAULT_MODE)

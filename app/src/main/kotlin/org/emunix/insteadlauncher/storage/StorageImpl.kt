@@ -8,6 +8,9 @@ package org.emunix.insteadlauncher.storage
 import android.content.Context
 import android.os.Environment
 import androidx.core.os.EnvironmentCompat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.helpers.showToast
 import java.io.File
@@ -57,13 +60,15 @@ class StorageImpl (private val context: Context) : Storage {
 
     override fun getUserThemesDirectory(): File = File(getAppFilesDirectory(), "themes")
 
-    override fun createStorageDirectories() {
+    override suspend fun createStorageDirectories() {
         val dirs = arrayOf(getGamesDirectory(), getSavesDirectory(), getUserThemesDirectory())
         for (dir in dirs) {
             try {
                 FileUtils.forceMkdir(dir)
             } catch (e: IOException) {
-                context.showToast("Cannot create directory ${dir.absolutePath}")
+                withContext(Dispatchers.Main) {
+                    context.showToast("Cannot create directory ${dir.absolutePath}")
+                }
             }
         }
     }
