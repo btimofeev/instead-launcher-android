@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.5] - 2021-03-24
+### Changed
+- INSTEAD updated to version 3.3.4
+- changes in the architecture of the launcher (single activity)
+
 ## [0.8.4] - 2021-03-06
 ### Changed
 - INSTEAD updated to version 3.3.3
