@@ -1,0 +1,2 @@
+- INSTEAD updated to version 3.3.4
+- changes in the architecture of the launcher (single activity)
