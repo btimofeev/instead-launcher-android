@@ -21,8 +21,9 @@ This application allows you to download and run games for the popular text quest
 To compile the application, you need to execute two commands in the project root directory:
 
 ```
-./gradlew downloadDependencies
-./gradlew build
+./gradlew :instead:downloadDependencies
+./gradlew assembleRelease
+./gradlew installRelease
 ```
 
 ### License

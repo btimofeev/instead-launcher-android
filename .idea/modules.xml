@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/InsteadLauncher.iml" filepath="$PROJECT_DIR$/InsteadLauncher.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/InsteadLauncher.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/InsteadLauncher.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core-storage/InsteadLauncher.core-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/core-storage/InsteadLauncher.core-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/instead/InsteadLauncher.instead.iml" filepath="$PROJECT_DIR$/.idea/modules/instead/InsteadLauncher.instead.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-injector/InsteadLauncher.module-injector.iml" filepath="$PROJECT_DIR$/.idea/modules/module-injector/InsteadLauncher.module-injector.iml" />
     </modules>
   </component>
 </project>

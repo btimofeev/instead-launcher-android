@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019, 2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -9,13 +9,22 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.preference.PreferenceManager
+import org.emunix.instead_api.InsteadApi
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.services.UpdateRepositoryWork
+import javax.inject.Inject
 
 class InstalledGamesViewModel(var app: Application): AndroidViewModel(app) {
 
+    @Inject
+    lateinit var instead: InsteadApi
+
     private val games = InsteadLauncher.db.games().observeInstalledGames()
+
+    init {
+        InsteadLauncher.appComponent.inject(this)
+    }
 
     fun init() {
         startUpdateRepoWorker()
@@ -33,4 +42,8 @@ class InstalledGamesViewModel(var app: Application): AndroidViewModel(app) {
     }
 
     fun getInstalledGames(): LiveData<List<Game>> = games
+
+    fun playGame(gameName: String, playFromBeginning: Boolean = false) {
+        instead.startGame(app.applicationContext, gameName, playFromBeginning)
+    }
 }

@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2020-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.helpers
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.emunix.insteadlauncher.storage.Storage
+import org.emunix.instead.core_storage_api.data.Storage
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -29,7 +29,7 @@ class ResourceUpdater @Inject constructor(private val storage: Storage, private 
                 appVersion.saveCurrentVersion(appVersion.getCode())
             }
         } catch (e: IOException) {
-            Log.d("ResourceUpdater", e.message, e)
+            Timber.d(e)
             return@withContext false
         }
         return@withContext true

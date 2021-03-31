@@ -57,17 +57,3 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
-
-# langs and themes from instead sources
-app/src/main/assets/themes
-app/src/main/assets/stead
-app/src/main/assets/lang
-
-# dependencies
-app/src/main/cpp/Instead/Instead
-app/src/main/cpp/Lua/Lua/
-app/src/main/cpp/SDL2/SDL2
-app/src/main/cpp/SDL2_image/SDL2_image
-app/src/main/cpp/SDL2_mixer/SDL2_mixer
-app/src/main/cpp/SDL2_ttf/SDL2_ttf
-app/src/main/cpp/libiconv/libiconv

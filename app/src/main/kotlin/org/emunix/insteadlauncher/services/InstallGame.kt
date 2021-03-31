@@ -24,6 +24,7 @@ import android.app.PendingIntent
 import android.os.Build
 import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
+import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_INSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.data.Game.State.*
@@ -32,7 +33,6 @@ import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.network.ProgressListener
 import org.emunix.insteadlauncher.helpers.network.ProgressResponseBody
-import org.emunix.insteadlauncher.storage.Storage
 import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
 import javax.inject.Inject
 

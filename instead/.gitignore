@@ -1,0 +1,16 @@
+/build
+.cxx
+
+# langs and themes from instead sources
+src/main/assets/themes
+src/main/assets/stead
+src/main/assets/lang
+
+# dependencies
+src/main/c/Instead/Instead
+src/main/c/Lua/Lua/
+src/main/c/SDL2/SDL2
+src/main/c/SDL2_image/SDL2_image
+src/main/c/SDL2_mixer/SDL2_mixer
+src/main/c/SDL2_ttf/SDL2_ttf
+src/main/c/libiconv/libiconv

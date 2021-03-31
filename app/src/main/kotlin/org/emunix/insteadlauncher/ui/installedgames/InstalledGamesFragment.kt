@@ -5,7 +5,6 @@
 
 package org.emunix.insteadlauncher.ui.installedgames
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
@@ -19,12 +18,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.databinding.FragmentInstalledGamesBinding
 import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
-import org.emunix.insteadlauncher.ui.instead.InsteadActivity
 import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
 
 
@@ -68,7 +65,7 @@ class InstalledGamesFragment : Fragment() {
         val insetDivider = dividerItemDecoration.insetDivider(binding.list.context, R.dimen.installed_game_fragment_inset_divider_margin_start)
         dividerItemDecoration.setDrawable(insetDivider)
         binding.list.addItemDecoration(dividerItemDecoration)
-        listAdapter = InstalledGamesAdapter { playGame(it) }
+        listAdapter = InstalledGamesAdapter { viewModel.playGame(it.name) }
         listAdapter.setHasStableIds(true)
         binding.list.adapter = listAdapter
         binding.list.setHasFixedSize(true)
@@ -113,30 +110,24 @@ class InstalledGamesFragment : Fragment() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
+        val gameName = listAdapter.longClickedGame.name
         when (item.itemId) {
             R.id.installed_games_activity_context_menu_play -> {
-                playGame(listAdapter.longClickedGame)
+                viewModel.playGame(gameName)
             }
             R.id.installed_games_activity_context_menu_play_from_beginning -> {
-                playGame(listAdapter.longClickedGame, true)
+                viewModel.playGame(gameName, true)
             }
             R.id.installed_games_activity_context_menu_delete -> {
-                val deleteDialog = DeleteGameDialog.newInstance(listAdapter.longClickedGame.name)
+                val deleteDialog = DeleteGameDialog.newInstance(gameName)
                 if (isAdded)
                     parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
             }
             R.id.installed_games_activity_context_menu_about -> {
-                val bundle = bundleOf("game_name" to listAdapter.longClickedGame.name)
+                val bundle = bundleOf("game_name" to gameName)
                 findNavController().navigate(R.id.action_installedGamesFragment_to_gameFragment, bundle)
             }
         }
         return super.onContextItemSelected(item)
-    }
-
-    private fun playGame(game: Game, playFromBeginning: Boolean = false) {
-        val intent = Intent(activity, InsteadActivity::class.java)
-        intent.putExtra("game_name", game.name)
-        intent.putExtra("play_from_beginning", playFromBeginning)
-        startActivity(intent)
     }
 }

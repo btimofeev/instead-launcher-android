@@ -1,1 +1,4 @@
+include ':core-storage'
+include ':module-injector'
+include ':instead'
 include ':app'

@@ -8,9 +8,9 @@ package org.emunix.insteadlauncher.ui.settings
 import android.content.Context
 import android.util.AttributeSet
 import androidx.preference.ListPreference
+import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.storage.Storage
 import java.io.File
 
 class ThemeListPreference

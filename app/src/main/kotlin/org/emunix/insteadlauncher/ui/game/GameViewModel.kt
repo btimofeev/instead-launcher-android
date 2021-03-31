@@ -8,7 +8,6 @@ package org.emunix.insteadlauncher.ui.game
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,6 +16,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.emunix.instead_api.InsteadApi
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
@@ -24,15 +24,23 @@ import org.emunix.insteadlauncher.event.DownloadProgressEvent
 import org.emunix.insteadlauncher.event.ConsumableEvent
 import org.emunix.insteadlauncher.helpers.saveStateToDB
 import org.emunix.insteadlauncher.services.InstallGame
-import org.emunix.insteadlauncher.ui.instead.InsteadActivity
+import javax.inject.Inject
 
 class GameViewModel(var app: Application) : AndroidViewModel(app) {
+
+    @Inject
+    lateinit var instead: InsteadApi
+
     private lateinit var game: LiveData<Game>
     private val progress: MutableLiveData<Int> = MutableLiveData()
     private val progressMessage: MutableLiveData<String> = MutableLiveData()
     private val errorMessage: MutableLiveData<ConsumableEvent<String>> = MutableLiveData()
     private val eventBus = InsteadLauncher.appComponent.eventBus()
     private var eventDisposable: Disposable? = null
+
+    init {
+        InsteadLauncher.appComponent.inject(this)
+    }
 
     @SuppressLint("CheckResult")
     fun init(gameName: String) {
@@ -70,9 +78,7 @@ class GameViewModel(var app: Application) : AndroidViewModel(app) {
     fun runGame(activityContext: Context) {
         val gameToRun = game.value
         if (gameToRun != null && gameToRun.state == Game.State.INSTALLED) {
-            val runGame = Intent(app.applicationContext, InsteadActivity::class.java)
-            runGame.putExtra("game_name", gameToRun.name)
-            activityContext.startActivity(runGame)
+            instead.startGame(app.applicationContext, gameToRun.name)
         }
     }
 

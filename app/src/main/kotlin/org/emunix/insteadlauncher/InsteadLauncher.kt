@@ -10,6 +10,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -19,6 +20,8 @@ import org.acra.annotation.AcraCore
 import org.acra.annotation.AcraMailSender
 import org.acra.annotation.AcraNotification
 import org.acra.data.StringFormat
+import org.emunix.instead.core_storage_api.data.Storage
+import org.emunix.instead_api.InsteadDependenciesHolder
 import org.emunix.insteadlauncher.data.GameDatabase
 import org.emunix.insteadlauncher.di.AppComponent
 import org.emunix.insteadlauncher.di.AppModule
@@ -36,7 +39,7 @@ import timber.log.Timber
         resSendButtonText = R.string.error_crash_send_button,
         resDiscardButtonText = R.string.error_crash_discard_button,
         resChannelName = R.string.channel_crash_report)
-class InsteadLauncher: Application() {
+class InsteadLauncher: Application(), InsteadDependenciesHolder {
 
     companion object {
         lateinit var appComponent: AppComponent
@@ -87,6 +90,10 @@ class InsteadLauncher: Application() {
         if (!BuildConfig.DEBUG)
             ACRA.init(this)
     }
+
+    override fun getStorage(): Storage = appComponent.storage()
+
+    override fun getPreferences(): SharedPreferences = appComponent.sharedPreferences()
 
     @TargetApi(26)
     fun createNotificationChannels() {

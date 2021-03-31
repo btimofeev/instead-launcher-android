@@ -38,14 +38,6 @@
                 <data android:host="*" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.instead.InsteadActivity"
-            android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:hardwareAccelerated="true"
-            android:process=":instead"
-            android:excludeFromRecents="true">
-        </activity>
         <service android:name=".services.UpdateRepository"/>
         <service android:name=".services.InstallGame"/>
         <service android:name=".services.DeleteGame"/>
