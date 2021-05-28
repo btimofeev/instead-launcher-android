@@ -116,7 +116,7 @@
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Peter Kosykh https://instead-hub.github.io/</string>
     <string name="about_activity_about_instead_launcher"><b>INSTEAD Launcher por Android</b> v%1$s &#169; Boris Timofeev https://github.com/btimofeev/instead-launcher-android/</string>
     <string name="about_activity_thanks">Mi esprimas dankemon:\n- Andrej Lobanov pro la deponejo kun ludoj http://instead-games.ru\n- Anton Kolosov pro la fontkodo INSTEAD-NG, parte uzata en ĉi tiu programo.\n- artisto NEUD (НЕУД) pro belaj desegnajojn https://vk.com/neudd</string>
-    <string name="about_activity_to_game_authors">Se vi volas krei vian propran ludon kaj loki ŝia en deponejo, komencu kun legante la dokumentaron http://bit.ly/instead_doc_ru</string>
+    <string name="about_activity_to_game_authors">Se vi volas krei vian propran ludon kaj loki ŝia en deponejo, komencu kun legante la dokumentaron http://bit.ly/instead_doc_en</string>
     <string name="about_activity_discuss">Povas diskuti INSTEAD kaj ludoj pro la jenaj rimedoj:\n- Forumo http://instead-games.ru/forum/\n- Telegram https://t.me/insteadtalk\n- Discord https://discord.gg/RHquRHm\n- Gitter https://gitter.im/instead-hub/instead\n- Jabber instead@conference.jabber.ru\n- IRC chat.freenode.net #instead</string>
 
     <string name="error_crash_title">Programo haltigita</string>
