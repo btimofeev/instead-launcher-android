@@ -1,0 +1,126 @@
+<resources>
+    <string name="app_name">INSTEAD</string>
+    <string name="action_settings">Agordoj</string>
+    <string name="action_about">Pri la programo</string>
+    <string name="action_update_repo">Ĝesdatigo deponejo</string>
+    <string name="action_search">Serĉo</string>
+    <string name="action_install_local_game">Instali la ludon de zip-arĥivo</string>
+
+    <string name="repository_activity_title">Aldoni ludo</string>
+    <string name="repository_unable_to_load">Fiaskis ŝarĝi la listo de la ludoj.\nServilo ne disponeblas aŭ ne ekzistas konekto kun Interreto.</string>
+    <string name="repository_try_again">Provi ripeti</string>
+    <string name="repository_nothing_found">Ludojn ne trovis</string>
+    <string name="repository_badge_content_description">Akireblas nova versio la ludon</string>
+
+    <string name="game_activity_title">Ludo</string>
+    <string name="game_activity_button_install">Instali</string>
+    <string name="game_activity_button_uninstall">Forigi ludon</string>
+    <string name="game_activity_button_update">Ĝisdatigi</string>
+    <string name="game_activity_button_run">Ludi</string>
+    <string name="game_activity_button_feedback">Skribos recenzo</string>
+    <string name="game_activity_label_author">Aŭtoro: %s</string>
+    <string name="game_activity_label_version">Versio: %s</string>
+    <string name="game_activity_label_size">Grando: %s</string>
+    <string name="game_activity_message_download_pending">Atendo alŝutas&#8230;</string>
+    <string name="game_activity_message_downloading">Alŝuti: %1$s/%2$s</string>
+    <string name="game_activity_message_installing">Instalas&#8230;</string>
+
+    <string name="installed_games_activity_title">INSTEAD</string>
+    <string name="installed_games_empty_text">Preta al aventuro?\nPremu sur ruĝa butono por elekto ludon.</string>
+    <string name="installed_games_activity_context_menu_play">Ludi</string>
+    <string name="installed_games_activity_context_menu_play_from_beginning">Komenci nova ludon</string>
+    <string name="installed_games_activity_context_menu_delete">Forigi</string>
+    <string name="installed_games_activity_context_menu_about">Pri ludo</string>
+    <string name="installed_games_fragment_fab_content_description">Instali ludoj</string>
+
+    <string name="dialog_delete_game_title">Forigi ludon?</string>
+    <string name="dialog_delete_game_text">Konserva ludoj restas sur aparato</string>
+    <string name="dialog_delete_game_positive_button">Forigi</string>
+    <string name="dialog_delete_game_negative_button">Agordo</string>
+
+    <string name="unpack_resources_fragment_try_again_button">Ripeti provo</string>
+    <string name="unpack_resources_fragment_error_message">Malsukcesis malpaki risurcojn. Kontrolu liberan spacon en la interna-stokado kaj provu denove.</string>
+
+    <string name="notification_download_game">Alŝutas</string>
+    <string name="notification_install_game">Instalas</string>
+    <string name="notification_delete_game">Forigas ludon, atendu&#8230;</string>
+    <string name="notification_updating_repository">Ĝisdatigas deponejo, atendu&#8230;</string>
+    <string name="notification_scan_games">Serĉado ena ŝanĝoj en dosierujo kun ludoj</string>
+
+    <string name="channel_install_game">Instalado ludoj</string>
+    <string name="channel_delete_game">Forigado ludoj</string>
+    <string name="channel_update_repo">Ĝisdatigante la deponejon</string>
+    <string name="channel_update_resources">Ĝisdatigande risurcojn la programon</string>
+    <string name="channel_scan_games">Serĉado ena ŝanĝoj en dosierujo kun ludoj</string>
+    <string name="channel_crash_report">Sendu raporto pri eraro</string>
+
+    <string name="error">Eraro</string>
+    <string name="error_failed_to_download_file">Malsukcesis alŝulti dosiero: %s</string>
+    <string name="error_failed_to_unpack_zip">Malsukcesos malpaki ludon. Certigu, ke vi havas sufiĉe da libera spaco en telefono kaj provu denove.</string>
+    <string name="error_not_instead_game_zip">Zip-arĥivo ne enhavas la ludon</string>
+    <string name="error_failed_to_delete_file">Malsukcesis forigis dosieron</string>
+    <string name="error_server_return_unexpected_code">Servilo redonis neatenditan kodon %s</string>
+    <string name="error_xml_parse">Malsukcesis alŝutis listo de la ludoj: %s</string>
+    <string name="error_failed_to_copy_assets">Malsukcesis alŝultis risurcoj Instead. Programo povas labori malĝuste.</string>
+
+    <string name="settings_activity_title">Agordoj</string>
+    <string name="prefs_category_game_settings">Luda agordoj</string>
+    <string name="prefs_music_title">Ŝaltu muziko</string>
+    <string name="prefs_cursor_title">Montri kursoro</string>
+    <string name="prefs_enable_game_theme_title">Propra temo de la ludon</string>
+    <string name="prefs_enable_game_theme_summary">Uzu enkonstruita en ludon temo, anstataŭ la defaŭlte temo</string>
+    <string name="prefs_default_theme_title">Defaŭlte temo</string>
+    <string-array name="prefs_themes_entries">
+        <item>Temoj ne trovis</item>
+    </string-array>
+    <string name="prefs_hires_title">Maksimuma distingivo</string>
+    <string name="prefs_hires_summary">Uzu la plej bonan ekranan orientiĝon</string>
+    <string name="prefs_text_size_title">Teksta grandeco</string>
+    <string name="prefs_text_size_summary">En procentoj de baza grandeco</string>
+    <string name="prefs_keyboard_button_title">Butono por malfermi klavaron</string>
+    <string-array name="prefs_keyboard_button_entries">
+        <item>Ne vidigu</item>
+        <item>Maldekstre malsupre</item>
+        <item>Malsupre centron</item>
+        <item>Dekstre malsupre</item>
+        <item>Maldekstre</item>
+        <item>Dekstre</item>
+        <item>Maldekstre supre</item>
+        <item>Supre centron</item>
+        <item>Dekstre supre</item>
+    </string-array>
+    <string name="prefs_back_button_title">Butono Reen en la ludo</string>
+    <string-array name="prefs_back_button_entries">
+        <item>Eliri ludon</item>
+        <item>Malfermi menuo Instead</item>
+    </string-array>
+    <string name="prefs_category_network">Reto</string>
+    <string name="prefs_category_repositories">Deponejoj</string>
+    <string name="prefs_repository_title">Ĉefa deponejo</string>
+    <string name="prefs_repository_summary">Indiku la adreson de la dosiero</string>
+    <string name="prefs_sandbox">Sablujo</string>
+    <string name="prefs_sandbox_summary">Beta-versioj ludoj, nefinitaj projektoj k.t.p.</string>
+    <string name="pref_update_repo_background">Ĝisdatigas deponejo en fono</string>
+    <string name="pref_update_repo_background_summary">Unufoje en tago</string>
+    <string name="pref_update_repo_when_open">Ĝisdatigi deponejojn ĉe malferme</string>
+
+    <string name="prefs_category_interface">Aspekto</string>
+    <string name="prefs_theme">Temo de la programon</string>
+    <string name="prefs_theme_dialog_title">Elektu temon</string>
+    <string name="prefs_theme_name_light">Luma</string>
+    <string name="prefs_theme_name_dark">Malluma</string>
+    <string name="prefs_theme_name_auto_battery">Depende de ŝarĝon baterion</string>
+    <string name="prefs_theme_name_follow_system">Depende de temo de la sistemon</string>
+
+    <string name="about_activity_title">Pri programo</string>
+    <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Peter Kosykh https://instead-hub.github.io/</string>
+    <string name="about_activity_about_instead_launcher"><b>INSTEAD Launcher por Android</b> v%1$s &#169; Boris Timofeev https://github.com/btimofeev/instead-launcher-android/</string>
+    <string name="about_activity_thanks">Mi esprimas dankemon:\n- Andrej Lobanov pro la deponejo kun ludoj http://instead-games.ru\n- Anton Kolosov pro la fontkodo INSTEAD-NG, parte uzata en ĉi tiu programo.\n- artisto NEUD (НЕУД) pro belaj desegnajojn https://vk.com/neudd</string>
+    <string name="about_activity_to_game_authors">Se vi volas krei vian propran ludon kaj loki ŝia en deponejo, komencu kun legante la dokumentaron http://bit.ly/instead_doc_en</string>
+    <string name="about_activity_discuss">Povas diskuti INSTEAD kaj ludoj pro la jenaj rimedoj:\n- Forumo http://instead-games.ru/forum/\n- Telegram https://t.me/insteadtalk\n- Discord https://discord.gg/RHquRHm\n- Gitter https://gitter.im/instead-hub/instead\n- Jabber instead@conference.jabber.ru\n- IRC chat.freenode.net #instead</string>
+
+    <string name="error_crash_title">Programo haltigita</string>
+    <string name="error_crash_message">Pardonu, la programo detektis kritikan eraron. Bonvolu sendi raporton al la programisto.</string>
+    <string name="error_crash_send_button">Sendi</string>
+    <string name="error_crash_discard_button">Nuligi</string>
+</resources>
