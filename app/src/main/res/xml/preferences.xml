@@ -59,6 +59,12 @@
             android:key="pref_back_button"
             android:title="@string/prefs_back_button_title"
             android:summary="%s"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_image_broken_24dp"
+            android:key="pref_gl_hack"
+            android:summary="@string/prefs_gl_hack_summary"
+            android:title="@string/prefs_gl_hack_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory

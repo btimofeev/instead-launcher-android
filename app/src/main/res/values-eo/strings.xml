@@ -94,6 +94,8 @@
         <item>Eliri ludon</item>
         <item>Malfermi menuo Instead</item>
     </string-array>
+    <string name="prefs_gl_hack_title">GL Hack</string>
+    <string name="prefs_gl_hack_summary">Fixes image rendering issues on some phones</string>
     <string name="prefs_category_network">Reto</string>
     <string name="prefs_category_repositories">Deponejoj</string>
     <string name="prefs_repository_title">Ĉefa deponejo</string>

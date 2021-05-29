@@ -42,6 +42,7 @@ internal class InsteadActivity: SDLActivity() {
     private var prefTextSize: String? = ""
     private lateinit var prefKeyboardButton: String
     private var prefBackButton: String? = ""
+    private var prefGlHack: Boolean = false
 
 
     override fun getLibraries(): Array<String> {
@@ -57,7 +58,7 @@ internal class InsteadActivity: SDLActivity() {
     }
 
     override fun getArguments(): Array<String> {
-        val args : Array<String> = Array(13){""}
+        val args : Array<String> = Array(14){""}
         args[0] = storage.getDataDirectory().absolutePath
         args[1] = storage.getAppFilesDirectory().absolutePath
         args[2] = storage.getGamesDirectory().absolutePath
@@ -70,7 +71,8 @@ internal class InsteadActivity: SDLActivity() {
         args[9] = if (prefHires) "y" else "n"
         args[10] = prefTextSize ?: DEFAULT_TEXT_SIZE
         args[11] = if (playFromBeginning) "y" else "n"
-        args[12] = game ?: ""
+        args[12] = if (prefGlHack) "y" else "n"
+        args[13] = game ?: ""
         return args
     }
 
@@ -98,8 +100,8 @@ internal class InsteadActivity: SDLActivity() {
         prefTextSize = prefs.getString("pref_text_size", DEFAULT_TEXT_SIZE)
         prefKeyboardButton = prefs.getString("pref_keyboard_button", "bottom_left") ?: "bottom_left"
         prefBackButton = prefs.getString("pref_back_button", "exit_game")
+        prefGlHack = prefs.getBoolean("pref_gl_hack", false)
     }
-
 
     private fun initKeyboard() {
         val keyboardLayout = RelativeLayout(this)

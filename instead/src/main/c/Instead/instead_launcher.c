@@ -27,7 +27,8 @@ int SDL_main(int argc, char** argv) {
     const char* hires = argv[10];
     const char* textsize = argv[11];
     const char* noautosave = argv[12];
-    const char* game = argv[13];
+    const char* glhack = argv[13];
+    const char* game = argv[14];
 
     __android_log_write(ANDROID_LOG_DEBUG, tag, argv[0]);
     __android_log_write(ANDROID_LOG_DEBUG, tag, path);
@@ -35,10 +36,11 @@ int SDL_main(int argc, char** argv) {
     __android_log_write(ANDROID_LOG_DEBUG, tag, gamespath);
     __android_log_write(ANDROID_LOG_DEBUG, tag, themespath);
     __android_log_write(ANDROID_LOG_DEBUG, tag, lang);
+    __android_log_write(ANDROID_LOG_DEBUG, tag, glhack);
     __android_log_write(ANDROID_LOG_DEBUG, tag, game);
 
     int status;
-    char* _argv[23];
+    char* _argv[25];
     int n = 1;
     chdir(path);
 
@@ -89,6 +91,11 @@ int SDL_main(int argc, char** argv) {
 
     if (SDL_strcmp(noautosave, "y") == 0) {
         _argv[n++] = SDL_strdup("-noautosave");
+    }
+
+    if (SDL_strcmp(glhack, "y") == 0) {
+        _argv[n++] = SDL_strdup("-glhack");
+        _argv[n++] = SDL_strdup("565"); // for some older samsung devices -glhack 565 fixes rendering issues
     }
 
     _argv[n++] = SDL_strdup("-game");

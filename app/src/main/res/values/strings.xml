@@ -94,6 +94,8 @@
         <item>Exit the game</item>
         <item>Open menu</item>
     </string-array>
+    <string name="prefs_gl_hack_title">GL Hack</string>
+    <string name="prefs_gl_hack_summary">Fixes image rendering issues on some phones</string>
     <string name="prefs_category_network">Network</string>
     <string name="prefs_category_repositories">Repositories</string>
     <string name="prefs_repository_title">Main repository</string>

@@ -94,6 +94,8 @@
         <item>Выйти из игры</item>
         <item>Открыть меню Instead</item>
     </string-array>
+    <string name="prefs_gl_hack_title">GL Hack</string>
+    <string name="prefs_gl_hack_summary">Исправляет проблемы рендеринга изображения на некоторых телефонах</string>
     <string name="prefs_category_network">Сеть</string>
     <string name="prefs_category_repositories">Репозитории</string>
     <string name="prefs_repository_title">Основной репозиторий</string>
