@@ -1,5 +1,10 @@
 # Changelog
 
+## [In development] - 2021-?-?
+### Added
+- GL Hack option (fixes rendering issues on some phones)
+- Esperanto translation (thanks to Artur Aiwasan)
+
 ## [0.8.5] - 2021-03-24
 ### Changed
 - INSTEAD updated to version 3.3.4
