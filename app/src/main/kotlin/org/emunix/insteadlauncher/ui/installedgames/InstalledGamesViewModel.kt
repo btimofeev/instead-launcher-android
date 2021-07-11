@@ -5,24 +5,22 @@
 
 package org.emunix.insteadlauncher.ui.installedgames
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.GameDao
 import org.emunix.insteadlauncher.interactor.GamesInteractor
-import org.emunix.insteadlauncher.services.UpdateRepositoryWork
+import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager
 import javax.inject.Inject
 
 @HiltViewModel
 class InstalledGamesViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val gamesInteractor: GamesInteractor,
     private val gamesDB: GameDao,
-    private val preferences: SharedPreferences
+    private val preferences: SharedPreferences,
+    private val updateRepositoryWorkManager: UpdateRepositoryWorkManager,
 ) : ViewModel() {
 
     private val games = gamesDB.observeInstalledGames()
@@ -35,9 +33,9 @@ class InstalledGamesViewModel @Inject constructor(
         val updatePref = preferences.getBoolean("pref_update_repo_background", true)
 
         if (updatePref) {
-            UpdateRepositoryWork.start(context)
+            updateRepositoryWorkManager.start()
         } else {
-            UpdateRepositoryWork.stop(context)
+            updateRepositoryWorkManager.stop()
         }
     }
 

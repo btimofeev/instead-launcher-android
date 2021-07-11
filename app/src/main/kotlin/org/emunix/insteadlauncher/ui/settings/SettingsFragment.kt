@@ -14,13 +14,17 @@ import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.helpers.ThemeHelper
-import org.emunix.insteadlauncher.services.UpdateRepositoryWork
+import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+
+    @Inject lateinit var updateRepositoryWorkManager: UpdateRepositoryWorkManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,9 +63,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             "pref_update_repo_background" -> {
                 val pref: SwitchPreference? = findPreference("pref_update_repo_background")
                 if (pref != null && pref.isChecked) {
-                    UpdateRepositoryWork.start(requireContext())
+                    updateRepositoryWorkManager.start()
                 } else {
-                    UpdateRepositoryWork.stop(requireContext())
+                    updateRepositoryWorkManager.stop()
                 }
             }
         }
