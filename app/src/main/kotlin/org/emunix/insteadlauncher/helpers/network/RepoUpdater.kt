@@ -5,7 +5,6 @@
 
 package org.emunix.insteadlauncher.helpers.network
 
-import android.content.Context
 import android.content.SharedPreferences
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
@@ -13,20 +12,22 @@ import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.GameDao
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
+import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
+import org.emunix.insteadlauncher.interactor.GamesInteractor
 import org.emunix.insteadlauncher.repository.fetcher.GameListFetcher
 import org.emunix.insteadlauncher.repository.parser.GameListParser
-import org.emunix.insteadlauncher.services.ScanGames
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import javax.inject.Inject
 
 class RepoUpdater @Inject constructor(
-    private val context: Context,
+    private val resourceProvider: ResourceProvider,
     private val fetcher: GameListFetcher,
     private val parser: GameListParser,
     private val prefs: SharedPreferences,
     private val eventBus: EventBus,
-    private val gamesDB: GameDao
+    private val gamesDB: GameDao,
+    private val gamesInteractor: GamesInteractor
 ) {
 
     fun update(): Boolean {
@@ -42,12 +43,23 @@ class RepoUpdater @Inject constructor(
             gamesMap.putAll(parseXML(fetchXML(getRepo())))
             gamesMap.forEach { (_, value) -> games.add(value) }
         } catch (e: XmlPullParserException) {
-            eventBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = false, isError = true,
-                    message = context.getString(R.string.error_xml_parse, e.message)))
+            eventBus.publish(
+                UpdateRepoEvent(
+                    isLoading = false, isGamesLoaded = false, isError = true,
+                    message = resourceProvider.getString(R.string.error_xml_parse, e.message.orEmpty())
+                )
+            )
             return false
         } catch (e: IOException) {
-            eventBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = false, isError = true,
-                    message = context.getString(R.string.error_server_return_unexpected_code, e.message)))
+            eventBus.publish(
+                UpdateRepoEvent(
+                    isLoading = false, isGamesLoaded = false, isError = true,
+                    message = resourceProvider.getString(
+                        R.string.error_server_return_unexpected_code,
+                        e.message.orEmpty()
+                    )
+                )
+            )
             return false
         }
 
@@ -55,7 +67,7 @@ class RepoUpdater @Inject constructor(
 
         eventBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = true))
 
-        ScanGames.start(context)
+        gamesInteractor.scanGames()
         return true
     }
 

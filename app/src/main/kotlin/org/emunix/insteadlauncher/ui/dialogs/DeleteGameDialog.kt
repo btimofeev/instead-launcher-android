@@ -10,13 +10,15 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.services.DeleteGame
+import org.emunix.insteadlauncher.interactor.GamesInteractor
 
-class DeleteGameDialog : DialogFragment() {
+class DeleteGameDialog(
+    private val gamesInteractor: GamesInteractor
+) : DialogFragment() {
 
     companion object {
-        fun newInstance(gameName: String): DeleteGameDialog {
-            val fragment = DeleteGameDialog()
+        fun newInstance(gameName: String, gamesInteractor: GamesInteractor): DeleteGameDialog {
+            val fragment = DeleteGameDialog(gamesInteractor)
             val args = Bundle()
             args.putString("game", gameName)
             fragment.arguments = args
@@ -31,7 +33,7 @@ class DeleteGameDialog : DialogFragment() {
                 .setTitle(R.string.dialog_delete_game_title)
                 .setMessage(R.string.dialog_delete_game_text)
                 .setPositiveButton(R.string.dialog_delete_game_positive_button) { _, _ ->
-                    DeleteGame.start(requireContext().applicationContext, game)
+                    gamesInteractor.deleteGame(game)
                 }
                 .setNegativeButton(R.string.dialog_delete_game_negative_button) { dialog, _ ->
                     dialog.cancel()

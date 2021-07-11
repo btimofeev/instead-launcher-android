@@ -9,15 +9,13 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.emunix.insteadlauncher.helpers.gameparser.GameParser
-import org.emunix.insteadlauncher.helpers.gameparser.GameParserImpl
-import javax.inject.Singleton
+import org.emunix.insteadlauncher.interactor.GamesInteractor
+import org.emunix.insteadlauncher.interactor.GamesInteractorImpl
 
 @InstallIn(SingletonComponent::class)
 @Module
-interface GameUtilsModule {
+interface InteractorModule {
 
-    @Singleton
     @Binds
-    fun bindGameParser(impl: GameParserImpl): GameParser
+    fun bindGameInteractor(impl: GamesInteractorImpl): GamesInteractor
 }

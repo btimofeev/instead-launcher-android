@@ -15,6 +15,8 @@ import org.emunix.instead.InsteadApiImpl
 import org.emunix.instead_api.InsteadApi
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.eventbus.RxBus
+import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
+import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProviderImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -31,4 +33,7 @@ class AppModule {
 
     @Provides
     fun provideFeatureInstead(): InsteadApi = InsteadApiImpl()
+
+    @Provides
+    fun provideResourceProvider(context: Context): ResourceProvider = ResourceProviderImpl(context)
 }

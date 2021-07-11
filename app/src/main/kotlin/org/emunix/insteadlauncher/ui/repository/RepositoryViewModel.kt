@@ -6,7 +6,6 @@
 package org.emunix.insteadlauncher.ui.repository
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -14,34 +13,27 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
-import kotlinx.coroutines.*
-import org.emunix.instead.core_storage_api.data.Storage
-import org.emunix.instead_api.InsteadApi
+import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.GameDao
 import org.emunix.insteadlauncher.event.ConsumableEvent
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
-import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
-import org.emunix.insteadlauncher.helpers.gameparser.GameParserImpl
 import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
-import org.emunix.insteadlauncher.services.ScanGames
-import org.emunix.insteadlauncher.services.UpdateRepository
+import org.emunix.insteadlauncher.interactor.GamesInteractor
 import java.io.IOException
 import java.util.zip.ZipException
 import javax.inject.Inject
 
 @HiltViewModel
 class RepositoryViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val eventBus: EventBus,
     private val gamesDB: GameDao,
     private val preferences: SharedPreferences,
-    private val storage: Storage
+    private val gamesInteractor: GamesInteractor
 ) : ViewModel() {
 
     private val games = gamesDB.observeAll()
@@ -57,14 +49,14 @@ class RepositoryViewModel @Inject constructor(
     @SuppressLint("CheckResult")
     fun init() {
         eventDisposable = eventBus.listen(UpdateRepoEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    showErrorView.value = it.isError
-                    showProgress.value = it.isLoading
-                    showGameList.value = it.isGamesLoaded
-                }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                showErrorView.value = it.isError
+                showProgress.value = it.isLoading
+                showGameList.value = it.isGamesLoaded
+            }
 
-        if (context.isServiceRunning(UpdateRepository::class.java)) {
+        if (gamesInteractor.isRepositoryUpdating()) {
             showErrorView.value = false
             showProgress.value = true
             showGameList.value = false
@@ -89,7 +81,7 @@ class RepositoryViewModel @Inject constructor(
     fun getToastMessage(): LiveData<ConsumableEvent<Int>> = showToast
 
     fun updateRepository() {
-        UpdateRepository.start(context)
+        gamesInteractor.updateRepository()
     }
 
     fun getGames(): LiveData<List<Game>> = games
@@ -99,7 +91,7 @@ class RepositoryViewModel @Inject constructor(
     fun installGame(uri: Uri) = viewModelScope.launch {
         showInstallGameDialog.value = true
         try {
-            unzipGame(uri)
+            gamesInteractor.installGameFromZip(uri)
         } catch (e: NotInsteadGameZipException) {
             showSnackbar.value = ConsumableEvent(R.string.error_not_instead_game_zip)
         } catch (e: ZipException) {
@@ -108,33 +100,7 @@ class RepositoryViewModel @Inject constructor(
             showToast.value = ConsumableEvent(R.string.error_failed_to_unpack_zip)
         }
         showInstallGameDialog.value = false
-        ScanGames.start(context)
-    }
-
-    private suspend fun unzipGame(uri: Uri) {
-
-        fun isGameZip(uri: Uri): Boolean {
-            val inputStream = context.contentResolver.openInputStream(uri)
-                    ?: throw IOException("inputStream is null")
-            val isInsteadGameZip = GameParserImpl().isInsteadGameZip(inputStream)
-            inputStream.close()
-            return isInsteadGameZip
-        }
-
-        fun unzip(uri: Uri) {
-            val inputStream = context.contentResolver.openInputStream(uri)
-                    ?: throw IOException("inputStream is null")
-            val gamesDir = storage.getGamesDirectory()
-            inputStream.unzip(gamesDir)
-            inputStream.close()
-        }
-
-        withContext(Dispatchers.IO) {
-            if (isGameZip(uri)) {
-                unzip(uri)
-            } else
-                throw NotInsteadGameZipException("main.lua not found")
-        }
+        gamesInteractor.scanGames()
     }
 
     override fun onCleared() {

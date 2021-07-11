@@ -22,12 +22,15 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentInstalledGamesBinding
 import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
+import org.emunix.insteadlauncher.interactor.GamesInteractor
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
-
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class InstalledGamesFragment : Fragment() {
+
+    @Inject lateinit var gamesInteractor: GamesInteractor
 
     private var _binding: FragmentInstalledGamesBinding? = null
     private val binding get() = _binding!!
@@ -121,7 +124,7 @@ class InstalledGamesFragment : Fragment() {
                 viewModel.playGame(gameName, true)
             }
             R.id.installed_games_activity_context_menu_delete -> {
-                val deleteDialog = DeleteGameDialog.newInstance(gameName)
+                val deleteDialog = DeleteGameDialog.newInstance(gameName, gamesInteractor)
                 if (isAdded)
                     parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
             }

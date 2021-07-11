@@ -20,24 +20,34 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.data.Game.State.*
+import org.emunix.insteadlauncher.data.Game.State.INSTALLED
+import org.emunix.insteadlauncher.data.Game.State.IN_QUEUE_TO_INSTALL
+import org.emunix.insteadlauncher.data.Game.State.IS_DELETE
+import org.emunix.insteadlauncher.data.Game.State.IS_INSTALL
+import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.databinding.FragmentGameBinding
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.helpers.visible
+import org.emunix.insteadlauncher.interactor.GamesInteractor
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
-import java.lang.IllegalArgumentException
-
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class GameFragment : Fragment() {
+
+    @Inject
+    lateinit var gamesInteractor: GamesInteractor
+
     private val viewModel: GameViewModel by viewModels()
 
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -56,7 +66,8 @@ class GameFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        val gameName = arguments?.getString("game_name") ?: throw IllegalArgumentException("GameFragment require game_name passed as argument")
+        val gameName = arguments?.getString("game_name")
+            ?: throw IllegalArgumentException("GameFragment require game_name passed as argument")
         viewModel.init(gameName)
 
         viewModel.getGame().observe(viewLifecycleOwner) { game ->
@@ -91,7 +102,8 @@ class GameFragment : Fragment() {
         binding.name.text = game.title
         binding.author.text = game.author
         if (game.installedVersion.isNotBlank() and (game.version != game.installedVersion)) {
-            binding.version.text = getString(R.string.game_activity_label_version, game.installedVersion + " (\u2191${game.version})")
+            binding.version.text =
+                getString(R.string.game_activity_label_version, game.installedVersion + " (\u2191${game.version})")
         } else {
             binding.version.text = getString(R.string.game_activity_label_version, game.version)
         }
@@ -119,14 +131,16 @@ class GameFragment : Fragment() {
 
             if (game.version != game.installedVersion) {
                 binding.installButton.text = getText(R.string.game_activity_button_update)
-                binding.installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
+                binding.installButton.backgroundTintList =
+                    ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
                 binding.installButton.visible(true)
             }
         }
 
         if (game.state == NO_INSTALLED) {
             binding.installButton.text = getText(R.string.game_activity_button_install)
-            binding.installButton.backgroundTintList = ContextCompat.getColorStateList(activity, R.color.colorInstallButton)
+            binding.installButton.backgroundTintList =
+                ContextCompat.getColorStateList(activity, R.color.colorInstallButton)
             binding.installButton.visible(true)
             binding.deleteButton.visible(false)
             binding.runButton.visible(false)
@@ -155,14 +169,14 @@ class GameFragment : Fragment() {
 
         binding.deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
-                val deleteDialog = DeleteGameDialog.newInstance(game.name)
+                val deleteDialog = DeleteGameDialog.newInstance(game.name, gamesInteractor)
                 if (isAdded)
                     parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
             }
         }
 
         binding.runButton.setOnClickListener {
-            viewModel.runGame(requireContext())
+            viewModel.runGame()
         }
     }
 
@@ -182,5 +196,4 @@ class GameFragment : Fragment() {
     private fun setInstallMessage(msg: String) {
         binding.installMessage.text = msg
     }
-
 }

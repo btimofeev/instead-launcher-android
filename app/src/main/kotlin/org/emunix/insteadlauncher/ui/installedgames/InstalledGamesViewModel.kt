@@ -9,19 +9,18 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.preference.PreferenceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import org.emunix.instead_api.InsteadApi
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.insteadlauncher.interactor.GamesInteractor
 import org.emunix.insteadlauncher.services.UpdateRepositoryWork
 import javax.inject.Inject
 
 @HiltViewModel
 class InstalledGamesViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val instead: InsteadApi,
+    private val gamesInteractor: GamesInteractor,
     private val gamesDB: GameDao,
     private val preferences: SharedPreferences
 ) : ViewModel() {
@@ -45,6 +44,6 @@ class InstalledGamesViewModel @Inject constructor(
     fun getInstalledGames(): LiveData<List<Game>> = games
 
     fun playGame(gameName: String, playFromBeginning: Boolean = false) {
-        instead.startGame(context, gameName, playFromBeginning)
+        gamesInteractor.startGame(gameName, playFromBeginning)
     }
 }
