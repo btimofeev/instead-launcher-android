@@ -15,9 +15,9 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.helpers.ThemeHelper
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager
 import javax.inject.Inject
 
@@ -45,13 +45,13 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             "pref_repository" -> {
                 val repo: EditTextPreference? = findPreference("pref_repository")
                 if (repo != null && repo.text.isBlank()) {
-                    repo.text = InsteadLauncher.DEFAULT_REPOSITORY
+                    repo.text = PreferencesProvider.DEFAULT_REPOSITORY_URL
                 }
             }
             "pref_sandbox" -> {
                 val sandbox: EditTextPreference? = findPreference("pref_sandbox")
                 if (sandbox != null && sandbox.text.isBlank()) {
-                    sandbox.text = InsteadLauncher.SANDBOX
+                    sandbox.text = PreferencesProvider.SANDBOX_REPOSITORY_URL
                 }
             }
             "app_theme" -> {

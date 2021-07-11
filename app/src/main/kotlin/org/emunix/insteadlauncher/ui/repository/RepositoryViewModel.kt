@@ -6,7 +6,6 @@
 package org.emunix.insteadlauncher.ui.repository
 
 import android.annotation.SuppressLint
-import android.content.SharedPreferences
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,6 +22,7 @@ import org.emunix.insteadlauncher.event.ConsumableEvent
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.interactor.GamesInteractor
 import java.io.IOException
 import java.util.zip.ZipException
@@ -32,7 +32,7 @@ import javax.inject.Inject
 class RepositoryViewModel @Inject constructor(
     private val eventBus: EventBus,
     private val gamesDB: GameDao,
-    private val preferences: SharedPreferences,
+    private val preferencesProvider: PreferencesProvider,
     private val gamesInteractor: GamesInteractor
 ) : ViewModel() {
 
@@ -61,8 +61,7 @@ class RepositoryViewModel @Inject constructor(
             showProgress.value = true
             showGameList.value = false
         } else {
-            val prefUpdateRepo = preferences.getBoolean("pref_update_repo_startup", false)
-            if (prefUpdateRepo) {
+            if (preferencesProvider.updateRepoWhenOpenRepositoryScreen) {
                 updateRepository()
             }
         }

@@ -6,7 +6,6 @@
 
 package org.emunix.instead.ui
 
-import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Point
 import android.os.Bundle
@@ -17,33 +16,34 @@ import android.view.View
 import android.view.Window
 import android.widget.ImageButton
 import android.widget.RelativeLayout
+import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.instead.R
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_BOTTOM_CENTER
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_BOTTOM_LEFT
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_BOTTOM_RIGHT
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_LEFT
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_RIGHT
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_TOP_CENTER
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_TOP_LEFT
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_TOP_RIGHT
 import org.emunix.instead.core_storage_api.data.Storage
-import org.emunix.instead_api.InsteadDependenciesHolder
 import org.libsdl.app.SDLActivity
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 internal class InsteadActivity: SDLActivity() {
 
-    private lateinit var prefs: SharedPreferences
-    private lateinit var storage: Storage
+    @Inject lateinit var preferenceProvider: PreferencesProvider
+    @Inject lateinit var storage: Storage
 
     private var game : String? = ""
     private var playFromBeginning = false
 
     private lateinit var keyboardButton : ImageButton
 
-    private var prefMusic: Boolean = true
-    private var prefCursor: Boolean = false
-    private var prefBuiltinTheme: Boolean = true
-    private var prefDefaultTheme: String? = ""
-    private var prefHires: Boolean = true
-    private var prefTextSize: String? = ""
-    private lateinit var prefKeyboardButton: String
-    private var prefBackButton: String? = ""
-    private var prefGlHack: Boolean = false
-
+    private var prefBackButton: String = ""
 
     override fun getLibraries(): Array<String> {
         return arrayOf("hidapi",
@@ -64,14 +64,14 @@ internal class InsteadActivity: SDLActivity() {
         args[2] = storage.getGamesDirectory().absolutePath
         args[3] = storage.getUserThemesDirectory().absolutePath
         args[4] = Locale.getDefault().language
-        args[5] = if (prefMusic) "y" else "n"
-        args[6] = if (prefCursor) "y" else "n"
-        args[7] = if (prefBuiltinTheme) "y" else "n"
-        args[8] = prefDefaultTheme ?: DEFAULT_THEME
-        args[9] = if (prefHires) "y" else "n"
-        args[10] = prefTextSize ?: DEFAULT_TEXT_SIZE
+        args[5] = if (preferenceProvider.isMusicEnabled) "y" else "n"
+        args[6] = if (preferenceProvider.isCursorEnabled) "y" else "n"
+        args[7] = if (preferenceProvider.isOwnGameThemeEnabled) "y" else "n"
+        args[8] = preferenceProvider.defaultInsteadTheme
+        args[9] = if (preferenceProvider.isHiresEnabled) "y" else "n"
+        args[10] = preferenceProvider.defaultInsteadTextSize
         args[11] = if (playFromBeginning) "y" else "n"
-        args[12] = if (prefGlHack) "y" else "n"
+        args[12] = if (preferenceProvider.isGLHackEnabled) "y" else "n"
         args[13] = game ?: ""
         return args
     }
@@ -81,29 +81,15 @@ internal class InsteadActivity: SDLActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
 
-        prefs = (application as InsteadDependenciesHolder).preferences
-        storage = (application as InsteadDependenciesHolder).storage
-
         game = intent.extras?.getString("game_name")
         playFromBeginning = intent.extras?.getBoolean("play_from_beginning", false) ?: false
 
-        getPreferences()
+        prefBackButton = preferenceProvider.backButton
         initKeyboard()
     }
 
-    private fun getPreferences() {
-        prefMusic = prefs.getBoolean("pref_music", true)
-        prefCursor = prefs.getBoolean("pref_cursor", false)
-        prefBuiltinTheme = prefs.getBoolean("pref_enable_game_theme", true)
-        prefDefaultTheme = prefs.getString("pref_default_theme", DEFAULT_THEME)
-        prefHires = prefs.getBoolean("pref_hires", true)
-        prefTextSize = prefs.getString("pref_text_size", DEFAULT_TEXT_SIZE)
-        prefKeyboardButton = prefs.getString("pref_keyboard_button", "bottom_left") ?: "bottom_left"
-        prefBackButton = prefs.getString("pref_back_button", "exit_game")
-        prefGlHack = prefs.getBoolean("pref_gl_hack", false)
-    }
-
     private fun initKeyboard() {
+        val prefKeyboardButton = preferenceProvider.keyboardButtonPosition
         val keyboardLayout = RelativeLayout(this)
         val rlp = RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -124,21 +110,21 @@ internal class InsteadActivity: SDLActivity() {
         keyboardLayout.addView(keyboardButton)
         addContentView(keyboardLayout, rlp)
 
-        if (prefKeyboardButton == "do_not_show_button") {
+        if (prefKeyboardButton == PreferencesProvider.KEYBOARD_DO_NOT_SHOW_BUTTON) {
             keyboardButton.visibility = View.GONE
         }
     }
 
     private fun getKeyboardButtonGravity(s: String): Int {
         return when (s) {
-            "bottom_left"   -> Gravity.BOTTOM or Gravity.LEFT
-            "bottom_center" -> Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
-            "bottom_right"  -> Gravity.BOTTOM or Gravity.RIGHT
-            "left"          -> Gravity.CENTER_VERTICAL or Gravity.LEFT
-            "right"         -> Gravity.CENTER_VERTICAL or Gravity.RIGHT
-            "top_left"      -> Gravity.TOP or Gravity.LEFT
-            "top_center"    -> Gravity.CENTER_HORIZONTAL or Gravity.TOP
-            "top_right"     -> Gravity.TOP or Gravity.RIGHT
+            KEYBOARD_BUTTON_BOTTOM_LEFT   -> Gravity.BOTTOM or Gravity.LEFT
+            KEYBOARD_BUTTON_BOTTOM_CENTER -> Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
+            KEYBOARD_BUTTON_BOTTOM_RIGHT  -> Gravity.BOTTOM or Gravity.RIGHT
+            KEYBOARD_BUTTON_LEFT          -> Gravity.CENTER_VERTICAL or Gravity.LEFT
+            KEYBOARD_BUTTON_RIGHT         -> Gravity.CENTER_VERTICAL or Gravity.RIGHT
+            KEYBOARD_BUTTON_TOP_LEFT      -> Gravity.TOP or Gravity.LEFT
+            KEYBOARD_BUTTON_TOP_CENTER    -> Gravity.CENTER_HORIZONTAL or Gravity.TOP
+            KEYBOARD_BUTTON_TOP_RIGHT     -> Gravity.TOP or Gravity.RIGHT
             else -> Gravity.BOTTOM or Gravity.LEFT
 
         }
@@ -147,14 +133,14 @@ internal class InsteadActivity: SDLActivity() {
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (event.keyCode == KeyEvent.KEYCODE_BACK) {
             if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
-                if (prefBackButton == "open_menu") {
+                if (prefBackButton == PreferencesProvider.BACK_BUTTON_OPEN_MENU) {
                     keyDispatcherState.startTracking(event, this)
                     return true
                 }
             } else if (event.action == KeyEvent.ACTION_UP) {
                 keyDispatcherState.handleUpEvent(event)
                 if (event.isTracking && !event.isCanceled) {
-                    if (prefBackButton == "open_menu") {
+                    if (prefBackButton == PreferencesProvider.BACK_BUTTON_OPEN_MENU) {
                         toggleMenu()
                         return true
                     }
@@ -208,9 +194,6 @@ internal class InsteadActivity: SDLActivity() {
             display.getSize(size)
             return "${size.x}x${size.y}"
         }
-
-        const val DEFAULT_THEME = "mobile"
-        const val DEFAULT_TEXT_SIZE = "130"
     }
 
 }

@@ -26,7 +26,7 @@ class ResourceUpdater @Inject constructor(private val storage: Storage, private 
                 storage.getLangDirectory().deleteRecursively()
                 storage.copyAsset("lang", storage.getDataDirectory())
 
-                appVersion.saveCurrentVersion(appVersion.getCode())
+                appVersion.saveCurrentVersion()
             }
         } catch (e: IOException) {
             Timber.d(e)

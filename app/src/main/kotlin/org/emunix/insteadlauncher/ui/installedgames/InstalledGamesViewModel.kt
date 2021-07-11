@@ -5,12 +5,12 @@
 
 package org.emunix.insteadlauncher.ui.installedgames
 
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.interactor.GamesInteractor
 import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager
 import javax.inject.Inject
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class InstalledGamesViewModel @Inject constructor(
     private val gamesInteractor: GamesInteractor,
     private val gamesDB: GameDao,
-    private val preferences: SharedPreferences,
+    private val preferencesProvider: PreferencesProvider,
     private val updateRepositoryWorkManager: UpdateRepositoryWorkManager,
 ) : ViewModel() {
 
@@ -30,7 +30,7 @@ class InstalledGamesViewModel @Inject constructor(
     }
 
     private fun startUpdateRepoWorker() {
-        val updatePref = preferences.getBoolean("pref_update_repo_background", true)
+        val updatePref = preferencesProvider.updateRepoInBackground
 
         if (updatePref) {
             updateRepositoryWorkManager.start()

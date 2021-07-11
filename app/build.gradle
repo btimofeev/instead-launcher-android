@@ -89,6 +89,7 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.0"
 
     implementation project(':core-storage')
+    implementation project(':core-preferences')
     implementation project(':instead')
 
     // Support libraries

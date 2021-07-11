@@ -20,9 +20,7 @@ import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.squareup.picasso.Picasso
 import org.apache.commons.io.IOUtils
-import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.util.zip.ZipFile

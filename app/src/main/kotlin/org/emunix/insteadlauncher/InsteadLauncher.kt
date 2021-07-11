@@ -10,7 +10,6 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
@@ -23,8 +22,8 @@ import org.acra.annotation.AcraCore
 import org.acra.annotation.AcraMailSender
 import org.acra.annotation.AcraNotification
 import org.acra.data.StringFormat
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.instead.core_storage_api.data.Storage
-import org.emunix.instead_api.InsteadDependenciesHolder
 import org.emunix.insteadlauncher.helpers.ThemeHelper
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,7 +38,7 @@ import javax.inject.Inject
         resSendButtonText = R.string.error_crash_send_button,
         resDiscardButtonText = R.string.error_crash_discard_button,
         resChannelName = R.string.channel_crash_report)
-class InsteadLauncher: Application(), InsteadDependenciesHolder, Configuration.Provider {
+class InsteadLauncher: Application(), Configuration.Provider {
 
     companion object {
 
@@ -56,19 +55,16 @@ class InsteadLauncher: Application(), InsteadDependenciesHolder, Configuration.P
         const val CHANNEL_UNINSTALL = "org.emunix.insteadlauncher.channel.delete_game"
         const val CHANNEL_UPDATE_RESOURCES = "org.emunix.insteadlauncher.channel.update_resources"
         const val CHANNEL_SCAN_GAMES = "org.emunix.insteadlauncher.channel.scan_games"
-
-        const val DEFAULT_REPOSITORY = "http://instead-games.ru/xml.php"
-        const val SANDBOX = "http://instead-games.ru/xml2.php"
     }
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
     @Inject
-    override lateinit var storage: Storage
+    lateinit var storage: Storage
 
     @Inject
-    override lateinit var preferences: SharedPreferences
+    lateinit var preferencesProvider: PreferencesProvider
 
     override fun onCreate() {
         super.onCreate()
@@ -81,8 +77,7 @@ class InsteadLauncher: Application(), InsteadDependenciesHolder, Configuration.P
             storage.createStorageDirectories()
         }
 
-        val themePref = preferences.getString("app_theme", ThemeHelper.DEFAULT_MODE)
-        ThemeHelper.applyTheme(themePref!!)
+        ThemeHelper.applyTheme(preferencesProvider.appTheme)
 
         InsteadLauncher.storage = storage
     }
