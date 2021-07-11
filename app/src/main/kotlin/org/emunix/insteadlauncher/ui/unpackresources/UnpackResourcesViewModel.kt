@@ -5,25 +5,24 @@
 
 package org.emunix.insteadlauncher.ui.unpackresources
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.helpers.ResourceUpdater
 import javax.inject.Inject
 
-class UnpackResourcesViewModel(var app: Application): AndroidViewModel(app) {
-
-    @Inject lateinit var resourceUpdater: ResourceUpdater
+@HiltViewModel
+class UnpackResourcesViewModel @Inject constructor(
+    private val resourceUpdater: ResourceUpdater
+) : ViewModel() {
 
     private var unpackSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
     private var showError: MutableLiveData<Boolean> = MutableLiveData(false)
 
     init {
-        InsteadLauncher.appComponent.inject(this)
         update()
     }
 

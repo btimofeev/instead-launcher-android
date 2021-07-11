@@ -12,11 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentUnpackResourcesBinding
 import org.emunix.insteadlauncher.helpers.visible
 
 
+@AndroidEntryPoint
 class UnpackResourcesFragment : Fragment() {
 
     private var _binding: FragmentUnpackResourcesBinding? = null

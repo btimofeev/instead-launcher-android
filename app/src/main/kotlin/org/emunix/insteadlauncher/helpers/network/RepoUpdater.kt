@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.data.GameDao
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.repository.fetcher.GameListFetcher
@@ -19,11 +20,14 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import javax.inject.Inject
 
-class RepoUpdater @Inject constructor(private val context: Context,
-                                      private val fetcher: GameListFetcher,
-                                      private val parser: GameListParser,
-                                      private val prefs: SharedPreferences,
-                                      private val eventBus: EventBus) {
+class RepoUpdater @Inject constructor(
+    private val context: Context,
+    private val fetcher: GameListFetcher,
+    private val parser: GameListParser,
+    private val prefs: SharedPreferences,
+    private val eventBus: EventBus,
+    private val gamesDB: GameDao
+) {
 
     fun update(): Boolean {
         eventBus.publish(UpdateRepoEvent(true))
@@ -47,7 +51,7 @@ class RepoUpdater @Inject constructor(private val context: Context,
             return false
         }
 
-        InsteadLauncher.db.games().updateRepository(games)
+        gamesDB.updateRepository(games)
 
         eventBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = true))
 

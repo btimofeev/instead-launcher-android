@@ -12,6 +12,9 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -22,14 +25,11 @@ import org.acra.annotation.AcraNotification
 import org.acra.data.StringFormat
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.instead_api.InsteadDependenciesHolder
-import org.emunix.insteadlauncher.data.GameDatabase
-import org.emunix.insteadlauncher.di.AppComponent
-import org.emunix.insteadlauncher.di.AppModule
-import org.emunix.insteadlauncher.di.DaggerAppComponent
 import org.emunix.insteadlauncher.helpers.ThemeHelper
 import timber.log.Timber
+import javax.inject.Inject
 
-
+@HiltAndroidApp
 @AcraCore(stopServicesOnCrash = true,
         reportFormat = StringFormat.KEY_VALUE_LIST)
 @AcraMailSender(mailTo = "btimofeev@emunix.org",
@@ -39,13 +39,11 @@ import timber.log.Timber
         resSendButtonText = R.string.error_crash_send_button,
         resDiscardButtonText = R.string.error_crash_discard_button,
         resChannelName = R.string.channel_crash_report)
-class InsteadLauncher: Application(), InsteadDependenciesHolder {
+class InsteadLauncher: Application(), InsteadDependenciesHolder, Configuration.Provider {
 
     companion object {
-        lateinit var appComponent: AppComponent
-        private set
 
-        lateinit var db: GameDatabase
+        lateinit var storage: Storage
 
         const val UPDATE_REPOSITORY_NOTIFICATION_ID: Int = 1000
         const val INSTALL_NOTIFICATION_ID: Int = 1001
@@ -63,26 +61,30 @@ class InsteadLauncher: Application(), InsteadDependenciesHolder {
         const val SANDBOX = "http://instead-games.ru/xml2.php"
     }
 
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    @Inject
+    override lateinit var storage: Storage
+
+    @Inject
+    override lateinit var preferences: SharedPreferences
+
     override fun onCreate() {
         super.onCreate()
         if(BuildConfig.DEBUG)
             Timber.plant(Timber.DebugTree())
 
-        appComponent = DaggerAppComponent.builder()
-                .appModule(AppModule(this))
-                .build()
-
         createNotificationChannels()
-        db =  appComponent.db()
 
         GlobalScope.launch(Dispatchers.IO) {
-            val storage = appComponent.storage()
             storage.createStorageDirectories()
         }
 
-        val sharedPreferences = appComponent.sharedPreferences()
-        val themePref = sharedPreferences.getString("app_theme", ThemeHelper.DEFAULT_MODE)
+        val themePref = preferences.getString("app_theme", ThemeHelper.DEFAULT_MODE)
         ThemeHelper.applyTheme(themePref!!)
+
+        InsteadLauncher.storage = storage
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -91,9 +93,10 @@ class InsteadLauncher: Application(), InsteadDependenciesHolder {
             ACRA.init(this)
     }
 
-    override fun getStorage(): Storage = appComponent.storage()
-
-    override fun getPreferences(): SharedPreferences = appComponent.sharedPreferences()
+    override fun getWorkManagerConfiguration() =
+        Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 
     @TargetApi(26)
     fun createNotificationChannels() {

@@ -12,7 +12,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
-import org.emunix.insteadlauncher.InsteadLauncher
+import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UPDATE_REPOSITORY
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UPDATE_REPOSITORY_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
@@ -20,6 +20,7 @@ import org.emunix.insteadlauncher.helpers.network.RepoUpdater
 import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class UpdateRepository: IntentService("UpdateRepository") {
 
     @Inject lateinit var repoUpdater: RepoUpdater
@@ -28,7 +29,6 @@ class UpdateRepository: IntentService("UpdateRepository") {
         val notification = createNotification()
         startForeground(UPDATE_REPOSITORY_NOTIFICATION_ID, notification)
 
-        InsteadLauncher.appComponent.inject(this)
         repoUpdater.update()
 
         stopForeground(true)

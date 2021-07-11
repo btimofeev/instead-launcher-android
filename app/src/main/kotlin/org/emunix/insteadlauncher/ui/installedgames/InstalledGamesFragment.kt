@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentInstalledGamesBinding
 import org.emunix.insteadlauncher.helpers.insetDivider
@@ -25,6 +26,7 @@ import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
 
 
+@AndroidEntryPoint
 class InstalledGamesFragment : Fragment() {
 
     private var _binding: FragmentInstalledGamesBinding? = null

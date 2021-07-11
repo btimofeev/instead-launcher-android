@@ -9,10 +9,11 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
+import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.databinding.ActivityLauncherBinding
 import org.emunix.insteadlauncher.services.ScanGames
 
-
+@AndroidEntryPoint
 class LauncherActivity : AppCompatActivity(), LifecycleOwner {
 
     private val appArgumentViewModel: AppArgumentViewModel by viewModels()

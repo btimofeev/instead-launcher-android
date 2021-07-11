@@ -16,7 +16,7 @@ import java.io.File
 class ThemeListPreference
 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ListPreference(context, attrs) {
 
-    val storage: Storage = InsteadLauncher.appComponent.storage()
+    val storage: Storage = InsteadLauncher.storage
 
     init {
         val themes = getThemes().toTypedArray()

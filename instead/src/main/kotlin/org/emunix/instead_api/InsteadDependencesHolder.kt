@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import org.emunix.instead.core_storage_api.data.Storage
 
 interface InsteadDependenciesHolder {
-    fun getStorage(): Storage
-    fun getPreferences(): SharedPreferences
+
+    val storage: Storage
+    val preferences: SharedPreferences
 }

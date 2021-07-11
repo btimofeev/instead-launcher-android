@@ -81,8 +81,8 @@ internal class InsteadActivity: SDLActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
 
-        prefs = (application as InsteadDependenciesHolder).getPreferences()
-        storage = (application as InsteadDependenciesHolder).getStorage()
+        prefs = (application as InsteadDependenciesHolder).preferences
+        storage = (application as InsteadDependenciesHolder).storage
 
         game = intent.extras?.getString("game_name")
         playFromBeginning = intent.extras?.getBoolean("play_from_beginning", false) ?: false

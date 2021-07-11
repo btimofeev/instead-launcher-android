@@ -141,16 +141,6 @@ fun String.getBrief(): String {
     return s
 }
 
-fun Game.saveStateToDB(state: Game.State) {
-    this.state = state
-    InsteadLauncher.db.games().update(this)
-}
-
-fun Game.saveInstalledVersionToDB(version: String) {
-    this.installedVersion = version
-    InsteadLauncher.db.games().update(this)
-}
-
 // https://gist.github.com/kevinmcmahon/2988931
 @Suppress("DEPRECATION") // Deprecated for third party Services.
 fun <T> Context.isServiceRunning(service: Class<T>) =

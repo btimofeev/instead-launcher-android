@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import org.apache.commons.io.FileUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game
@@ -27,6 +28,8 @@ import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
 import java.lang.IllegalArgumentException
 
+
+@AndroidEntryPoint
 class GameFragment : Fragment() {
     private val viewModel: GameViewModel by viewModels()
 

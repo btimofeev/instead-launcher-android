@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.instead.core_storage_impl.data
+package org.emunix.instead.core_storage_api.data
 
 import android.content.Context
 import android.os.Environment
@@ -12,11 +12,10 @@ import androidx.core.os.EnvironmentCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.FileUtils
-import org.emunix.instead.core_storage_api.data.Storage
 import java.io.File
 import java.io.IOException
 
-internal class StorageImpl (private val context: Context) : Storage {
+class StorageImpl (private val context: Context) : Storage {
 
     override fun getAppFilesDirectory() : File {
         val storage : Array<File?> = context.getExternalFilesDirs(null)

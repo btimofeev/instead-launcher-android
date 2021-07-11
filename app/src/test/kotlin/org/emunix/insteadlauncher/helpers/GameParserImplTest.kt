@@ -5,14 +5,15 @@
 
 package org.emunix.insteadlauncher.helpers
 
+import org.emunix.insteadlauncher.helpers.gameparser.GameParserImpl
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.io.File
 
-class GameParserTest {
+class GameParserImplTest {
 
-    private val gameParser = GameParser()
+    private val gameParser = GameParserImpl()
 
     @Test
     fun `is instead game`() {

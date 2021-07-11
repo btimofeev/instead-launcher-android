@@ -5,45 +5,46 @@
 
 package org.emunix.insteadlauncher.ui.installedgames
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.emunix.instead_api.InsteadApi
-import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.data.GameDao
 import org.emunix.insteadlauncher.services.UpdateRepositoryWork
 import javax.inject.Inject
 
-class InstalledGamesViewModel(var app: Application): AndroidViewModel(app) {
+@HiltViewModel
+class InstalledGamesViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val instead: InsteadApi,
+    private val gamesDB: GameDao,
+    private val preferences: SharedPreferences
+) : ViewModel() {
 
-    @Inject
-    lateinit var instead: InsteadApi
-
-    private val games = InsteadLauncher.db.games().observeInstalledGames()
-
-    init {
-        InsteadLauncher.appComponent.inject(this)
-    }
+    private val games = gamesDB.observeInstalledGames()
 
     fun init() {
         startUpdateRepoWorker()
     }
 
     private fun startUpdateRepoWorker() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
-        val updatePref = sharedPreferences.getBoolean("pref_update_repo_background", true)
+        val updatePref = preferences.getBoolean("pref_update_repo_background", true)
 
         if (updatePref) {
-            UpdateRepositoryWork.start(app)
+            UpdateRepositoryWork.start(context)
         } else {
-            UpdateRepositoryWork.stop(app)
+            UpdateRepositoryWork.stop(context)
         }
     }
 
     fun getInstalledGames(): LiveData<List<Game>> = games
 
     fun playGame(gameName: String, playFromBeginning: Boolean = false) {
-        instead.startGame(app.applicationContext, gameName, playFromBeginning)
+        instead.startGame(context, gameName, playFromBeginning)
     }
 }

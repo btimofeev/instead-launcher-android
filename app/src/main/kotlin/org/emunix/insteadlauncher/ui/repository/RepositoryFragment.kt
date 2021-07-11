@@ -26,12 +26,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
 import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
 
 private const val READ_REQUEST_CODE = 546
 
+@AndroidEntryPoint
 class RepositoryFragment : Fragment() {
     private val viewModel: RepositoryViewModel by viewModels()
     private val appArgumentViewModel: AppArgumentViewModel by activityViewModels()

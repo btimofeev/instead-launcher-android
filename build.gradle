@@ -14,7 +14,7 @@ buildscript {
 
         kotlin_version = '1.4.31'
         kotlin_coroutines_version = '1.4.1'
-        dagger_version = '2.36'
+        hilt_version = '2.36'
         lifecycle_version = '2.3.1'
         room_version = '2.3.0'
         navigation_version = '2.3.5'
@@ -28,6 +28,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "de.mannodermaus.gradle.plugins:android-junit5:1.6.2.0"
     }
 }

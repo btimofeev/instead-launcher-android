@@ -13,20 +13,27 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
-import org.emunix.insteadlauncher.InsteadLauncher
+import dagger.hilt.android.AndroidEntryPoint
+import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UNINSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UNINSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.Game.State.IS_DELETE
 import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
-import org.emunix.insteadlauncher.helpers.saveInstalledVersionToDB
-import org.emunix.insteadlauncher.helpers.saveStateToDB
+import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.insteadlauncher.helpers.GameDbHelper
 import org.emunix.insteadlauncher.helpers.NotificationHelper
 import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DeleteGame : IntentService("DeleteGame") {
+
+    @Inject lateinit var gamesDB: GameDao
+    @Inject lateinit var gamesDbHelper: GameDbHelper
+    @Inject lateinit var storage: Storage
 
     private lateinit var gameName: String
 
@@ -36,22 +43,24 @@ class DeleteGame : IntentService("DeleteGame") {
         val notification = createNotification()
         startForeground(UNINSTALL_NOTIFICATION_ID, notification)
 
-        val game = InsteadLauncher.db.games().getByName(gameName)
+        val game = gamesDB.getByName(gameName)
         try {
-            game.saveStateToDB(IS_DELETE)
-            val gameDir = File(InsteadLauncher.appComponent.storage().getGamesDirectory(), gameName)
+            gamesDbHelper.saveStateToDB(game, IS_DELETE)
+            val gameDir = File(storage.getGamesDirectory(), gameName)
             gameDir.deleteRecursively()
 
             if (game.url.isNotEmpty()) {
-                game.saveStateToDB(NO_INSTALLED)
-                game.saveInstalledVersionToDB("")
+                gamesDbHelper.saveStateToDB(game, NO_INSTALLED)
+                gamesDbHelper.saveInstalledVersionToDB(game, "")
             } else { // delete local game
-                InsteadLauncher.db.games().delete(game)
+                gamesDB.delete(game)
             }
-
         } catch (e: IOException) {
-            NotificationHelper(this).showError(getString(R.string.error), getString(R.string.error_failed_to_delete_file))
-            game.saveStateToDB(NO_INSTALLED)
+            NotificationHelper(this).showError(
+                getString(R.string.error),
+                getString(R.string.error_failed_to_delete_file)
+            )
+            gamesDbHelper.saveStateToDB(game, NO_INSTALLED)
             stopForeground(true)
             return
         }

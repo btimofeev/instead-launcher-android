@@ -6,20 +6,21 @@
 package org.emunix.insteadlauncher.services
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.work.*
-import org.emunix.insteadlauncher.InsteadLauncher
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import org.emunix.insteadlauncher.helpers.network.RepoUpdater
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class UpdateRepositoryWorker(appContext: Context, workerParams: WorkerParameters)
-    : Worker(appContext, workerParams) {
-
-    @Inject lateinit var repoUpdater: RepoUpdater
+@HiltWorker
+class UpdateRepositoryWorker @AssistedInject constructor(
+    @Assisted appContext: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val repoUpdater: RepoUpdater
+) : Worker(appContext, workerParams) {
 
     override fun doWork(): Result {
-        InsteadLauncher.appComponent.inject(this)
-
         return when (repoUpdater.update()) {
             true  -> Result.success()
             false -> Result.retry()

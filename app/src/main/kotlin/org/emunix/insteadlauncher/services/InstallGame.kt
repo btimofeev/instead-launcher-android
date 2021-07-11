@@ -24,10 +24,12 @@ import android.app.PendingIntent
 import android.os.Build
 import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_INSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.data.Game.State.*
+import org.emunix.insteadlauncher.data.GameDao
 import org.emunix.insteadlauncher.event.DownloadProgressEvent
 import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
@@ -37,6 +39,7 @@ import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
 import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class InstallGame : IntentService("InstallGame") {
 
     companion object {
@@ -65,6 +68,8 @@ class InstallGame : IntentService("InstallGame") {
 
     @Inject lateinit var storage: Storage
     @Inject lateinit var eventBus: EventBus
+    @Inject lateinit var gamesDB: GameDao
+    @Inject lateinit var gamesDbHelper: GameDbHelper
 
     override fun onHandleIntent(intent: Intent?) {
         gameName = intent?.getStringExtra("game_name") ?: return
@@ -74,13 +79,11 @@ class InstallGame : IntentService("InstallGame") {
         startForeground(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
         notificationManager= getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        InsteadLauncher.appComponent.inject(this)
-
         val url = intent.getStringExtra("game_url")
-        val game = InsteadLauncher.db.games().getByName(gameName)
+        val game = gamesDB.getByName(gameName)
         if (url != null) {
             try {
-                game.saveStateToDB(IS_INSTALL)
+                gamesDbHelper.saveStateToDB(game, IS_INSTALL)
                 val zipfile = File(storage.getCacheDirectory(), extractFilename(url))
                 download(url, zipfile)
 
@@ -92,22 +95,22 @@ class InstallGame : IntentService("InstallGame") {
                 gameDir.deleteRecursively()
                 zipfile.unzip(storage.getGamesDirectory())
                 zipfile.deleteRecursively()
-                game.saveStateToDB(INSTALLED)
-                game.saveInstalledVersionToDB(game.version)
+                gamesDbHelper.saveStateToDB(game, INSTALLED)
+                gamesDbHelper.saveInstalledVersionToDB(game, game.version)
             } catch (e: IndexOutOfBoundsException) {
                 // invalid url (exception from String.substring)
                 NotificationHelper(this).showError(getString(R.string.error), "Bad url: $url", pendingIntent)
-                game.saveStateToDB(NO_INSTALLED)
+                gamesDbHelper.saveStateToDB(game, NO_INSTALLED)
             } catch (e: IOException) {
                 val message = e.localizedMessage ?: getString(R.string.error_failed_to_download_file, url)
                 NotificationHelper(this).showError(getString(R.string.error), message, pendingIntent)
                 eventBus.publish(DownloadProgressEvent(gameName, 0, "", done = true, error = true, errorMessage = message))
-                game.saveStateToDB(NO_INSTALLED)
+                gamesDbHelper.saveStateToDB(game, NO_INSTALLED)
             } catch (e: ZipException) {
                 val message = getString(R.string.error_failed_to_unpack_zip)
                 NotificationHelper(this).showError(getString(R.string.error), message, pendingIntent)
                 eventBus.publish(DownloadProgressEvent(gameName, 0, "", done = true, error = true, errorMessage = message))
-                game.saveStateToDB(NO_INSTALLED)
+                gamesDbHelper.saveStateToDB(game, NO_INSTALLED)
             }
         }
 
