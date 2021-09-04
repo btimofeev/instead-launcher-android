@@ -8,6 +8,7 @@ package org.emunix.insteadlauncher.helpers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.emunix.instead.core_storage_api.data.Storage
+import org.emunix.insteadlauncher.BuildConfig
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
@@ -16,7 +17,7 @@ class ResourceUpdater @Inject constructor(private val storage: Storage, private 
 
     suspend fun update(): Boolean = withContext(Dispatchers.IO) {
         try {
-            if (appVersion.isNewVersion()) {
+            if (appVersion.isNewVersion() || BuildConfig.DEBUG) {
                 storage.getThemesDirectory().deleteRecursively()
                 storage.copyAsset("themes", storage.getDataDirectory())
 
