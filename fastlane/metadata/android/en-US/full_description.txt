@@ -15,6 +15,7 @@ Most of the games are in Russian, but there are games in English, Spanish and Fr
  - Mirror
  - Kayleth
  - Dark Crystal
+ - The Archive
 
 * in Spanish:
  - Mansion
