@@ -2,6 +2,7 @@
 
 ## [In development] - 2021-?-?
 ### Added
+- INSTEAD updated to version 3.4.0
 - GL Hack option (fixes rendering issues on some phones)
 - Esperanto translation (thanks to Artur Aiwasan)
 

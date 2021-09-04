@@ -10,7 +10,7 @@ buildscript {
         version_code = 80500
         version_name = '0.8.5'
 
-        build_config_instead_version = '3.3.4'
+        build_config_instead_version = '3.4.0'
 
         kotlin_version = '1.4.31'
         kotlin_coroutines_version = '1.4.1'
