@@ -7,7 +7,7 @@ buildscript {
         compile_sdk_version = 30
         ndk_version = '20.1.5948944'
 
-        version_code = 80600
+        version_code = 80601
         version_name = '0.8.6'
 
         build_config_instead_version = '3.4.0'
