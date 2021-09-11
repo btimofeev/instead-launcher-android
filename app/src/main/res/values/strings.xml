@@ -13,8 +13,8 @@
     <string name="repository_badge_content_description">New version available</string>
 
     <string name="game_activity_title">Game</string>
-    <string name="game_activity_button_install">Install</string>
-    <string name="game_activity_button_uninstall">Uninstall</string>
+    <string name="game_activity_button_install">Download</string>
+    <string name="game_activity_button_uninstall">Delete</string>
     <string name="game_activity_button_update">Update</string>
     <string name="game_activity_button_run">Run</string>
     <string name="game_activity_button_feedback">Write feedback</string>
@@ -23,7 +23,7 @@
     <string name="game_activity_label_size">Size: %s</string>
     <string name="game_activity_message_download_pending">Download pending&#8230;</string>
     <string name="game_activity_message_downloading">Downloading: %1$s/%2$s</string>
-    <string name="game_activity_message_installing">Installing&#8230;</string>
+    <string name="game_activity_message_installing">Downloading&#8230;</string>
 
     <string name="installed_games_activity_title">INSTEAD</string>
     <string name="installed_games_empty_text">Are you ready for an adventure?\nTap the red button to install games.</string>

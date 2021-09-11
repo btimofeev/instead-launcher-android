@@ -13,7 +13,7 @@
     <string name="repository_badge_content_description">Доступна новая версия игры</string>
 
     <string name="game_activity_title">Игра</string>
-    <string name="game_activity_button_install">Установить</string>
+    <string name="game_activity_button_install">Скачать</string>
     <string name="game_activity_button_uninstall">Удалить</string>
     <string name="game_activity_button_update">Обновить</string>
     <string name="game_activity_button_run">Играть</string>
@@ -22,8 +22,8 @@
     <string name="game_activity_label_version">Версия: %s</string>
     <string name="game_activity_label_size">Размер: %s</string>
     <string name="game_activity_message_download_pending">Ожидается загрузка&#8230;</string>
-    <string name="game_activity_message_downloading">Загружаю: %1$s/%2$s</string>
-    <string name="game_activity_message_installing">Устанавливаю&#8230;</string>
+    <string name="game_activity_message_downloading">Загружается: %1$s/%2$s</string>
+    <string name="game_activity_message_installing">Загружается&#8230;</string>
 
     <string name="installed_games_activity_title">INSTEAD</string>
     <string name="installed_games_empty_text">Готовы к приключениям?\nНажмите на красную кнопку для выбора игры.</string>
