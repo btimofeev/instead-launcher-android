@@ -110,6 +110,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
             from tarTree(resources.gzip("${buildDir}/instead-${Instead}.tar.gz"))
             into 'src/main/c/Instead/'
         }
+        delete("${buildDir}/instead-${Instead}.tar.gz")
         file("src/main/c/Instead/instead-${Instead}").renameTo(file('src/main/c/Instead/Instead'))
         delete("src/main/c/Instead/instead-${Instead}")
         delete("src/main/c/Instead/pax_global_header")
@@ -122,6 +123,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
             from tarTree(resources.gzip("${buildDir}/lua-${Lua}.tar.gz"))
             into 'src/main/c/Lua/'
         }
+        delete("${buildDir}/lua-${Lua}.tar.gz")
         file("src/main/c/Lua/lua-${Lua}").renameTo(file('src/main/c/Lua/Lua'))
         delete("src/main/c/Lua/lua-${Lua}")
 
@@ -133,6 +135,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
             from tarTree(resources.gzip("${buildDir}/SDL2-${SDL2}.tar.gz"))
             into 'src/main/c/SDL2/'
         }
+        delete("${buildDir}/SDL2-${SDL2}.tar.gz")
         file("src/main/c/SDL2/SDL2-${SDL2}").renameTo(file('src/main/c/SDL2/SDL2'))
         delete("src/main/c/SDL2/SDL2-${SDL2}")
 
@@ -144,6 +147,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
             from tarTree(resources.gzip("${buildDir}/SDL2_image-${SDL2_image}.tar.gz"))
             into 'src/main/c/SDL2_image/'
         }
+        delete("${buildDir}/SDL2_image-${SDL2_image}.tar.gz")
         file("src/main/c/SDL2_image/SDL2_image-${SDL2_image}").renameTo(file('src/main/c/SDL2_image/SDL2_image'))
         delete("src/main/c/SDL2_image/SDL2_image-${SDL2_image}")
 
@@ -155,6 +159,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
             from tarTree(resources.gzip("${buildDir}/SDL2_mixer-${SDL2_mixer}.tar.gz"))
             into 'src/main/c/SDL2_mixer/'
         }
+        delete("${buildDir}/SDL2_mixer-${SDL2_mixer}.tar.gz")
         file("src/main/c/SDL2_mixer/SDL2_mixer-${SDL2_mixer}").renameTo(file('src/main/c/SDL2_mixer/SDL2_mixer'))
         delete("src/main/c/SDL2_mixer/SDL2_mixer-${SDL2_mixer}")
 
@@ -166,6 +171,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
             from tarTree(resources.gzip("${buildDir}/SDL2_ttf-${SDL2_ttf}.tar.gz"))
             into 'src/main/c/SDL2_ttf/'
         }
+        delete("${buildDir}/SDL2_ttf-${SDL2_ttf}.tar.gz")
         file("src/main/c/SDL2_ttf/SDL2_ttf-${SDL2_ttf}").renameTo(file('src/main/c/SDL2_ttf/SDL2_ttf'))
         delete("src/main/c/SDL2_ttf/SDL2_ttf-${SDL2_ttf}")
 
@@ -177,6 +183,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
             from tarTree(resources.gzip("${buildDir}/libiconv-${Iconv}.tar.gz"))
             into 'src/main/c/libiconv/'
         }
+        delete("${buildDir}/libiconv-${Iconv}.tar.gz")
         file("src/main/c/libiconv/libiconv-${Iconv}").renameTo(file('src/main/c/libiconv/libiconv'))
         delete("src/main/c/libiconv/libiconv-${Iconv}")
     }
@@ -205,6 +212,16 @@ task copyStead(type: Copy) {
 
 task cleanAssets(type: Delete) {
     delete 'src/main/assets/lang/', 'src/main/assets/themes/', 'src/main/assets/stead/'
+}
+
+task fdroidRemoveBinaries(type: Delete) {
+    delete 'src/main/c/Instead/Instead/contrib/'
+    delete 'src/main/c/SDL2/SDL2/Xcode/'
+    delete 'src/main/c/SDL2_image/SDL2_image/Xcode/'
+    delete 'src/main/c/SDL2_image/SDL2_image/external/libwebp-1.0.2/swig/'
+    delete 'src/main/c/SDL2_mixer/SDL2_mixer/Xcode/'
+    delete 'src/main/c/SDL2_ttf/SDL2_ttf/Xcode/'
+    delete 'src/main/c/libiconv/libiconv/tests/'
 }
 
 preBuild.dependsOn copyLangs, copyThemes, copyStead
