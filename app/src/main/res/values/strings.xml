@@ -119,7 +119,7 @@
     <string name="about_activity_about_instead_launcher"><b>INSTEAD Launcher for Android</b> v%1$s &#169; Boris Timofeev https://github.com/btimofeev/instead-launcher-android/</string>
     <string name="about_activity_thanks">Thanks to:\n- Andrew Lobanov for the game repository http://instead-games.ru\n- Anton Kolosov for the source code of INSTEAD-NG, partially used in this program.\n- the artist NEUD for the beautiful drawings https://vk.com/neudd</string>
     <string name="about_activity_to_game_authors">If you want to create your own game and publish it in the repository, start by reading the documentation http://bit.ly/instead_doc_en</string>
-    <string name="about_activity_discuss">You can discuss INSTEAD and games on:\n- Forum http://instead-games.ru/forum/\n- Telegram https://t.me/insteadtalk\n- Discord https://discord.gg/RHquRHm\n- Gitter https://gitter.im/instead-hub/instead\n- Jabber instead@conference.jabber.ru\n- IRC http://oftc.net/ #instead</string>
+    <string name="about_activity_discuss">You can discuss INSTEAD and games on:\n- Forum https://instead-games.ru/forum/\n- Telegram https://t.me/insteadtalk\n- Discord https://discord.gg/RHquRHm\n- Gitter https://gitter.im/instead-hub/instead\n- Jabber instead@conference.jabber.ru\n- IRC http://oftc.net/ #instead</string>
 
     <string name="error_crash_title">Crash</string>
     <string name="error_crash_message">Sorry, the application crashed. Please send a report to the developers.</string>
