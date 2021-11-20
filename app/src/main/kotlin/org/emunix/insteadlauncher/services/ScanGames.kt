@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -10,7 +10,6 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.core.app.NotificationCompat
@@ -26,6 +25,7 @@ import org.emunix.insteadlauncher.data.GameDao
 import org.emunix.insteadlauncher.helpers.GameDbHelper
 import org.emunix.insteadlauncher.helpers.gameparser.GameParser
 import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
+import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -37,10 +37,13 @@ class ScanGames : IntentService("ScanGames") {
 
     @Inject
     lateinit var storage: Storage
+
     @Inject
     lateinit var gameParser: GameParser
+
     @Inject
     lateinit var gamesDB: GameDao
+
     @Inject
     lateinit var gamesDbHelper: GameDbHelper
 
@@ -72,19 +75,28 @@ class ScanGames : IntentService("ScanGames") {
             if (gameParser.isInsteadGame(gameDir)) {
                 try {
                     val file = gameParser.getMainGameFile(gameDir)
-
                     val version = gameParser.getVersion(file, lang)
-                    val title = gameParser.getTitle(file, lang)
-                    val author = gameParser.getAuthor(file, lang)
-                    val description = gameParser.getInfo(file, lang)
-                    val size = FileUtils.sizeOfDirectory(gameDir)
-                    val date = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
-                    val newGame = Game(it, title, author, date, version, size, "", "", "", description, "", "", version, INSTALLED)
-                    gamesDB.insert(newGame)
-
+                    gamesDB.insert(
+                        Game(
+                            name = it,
+                            title = gameParser.getTitle(file, lang),
+                            author = gameParser.getAuthor(file, lang),
+                            date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()),
+                            version = version,
+                            size = FileUtils.sizeOfDirectory(gameDir),
+                            url = "",
+                            image = "",
+                            lang = "",
+                            description = gameParser.getInfo(file, lang),
+                            descurl = "",
+                            brief = "",
+                            installedVersion = version,
+                            state = INSTALLED
+                        )
+                    )
                 } catch (e: IllegalStateException) {
-                    e.printStackTrace()
+                    Timber.e(e)
                 }
             }
         }
@@ -142,7 +154,7 @@ class ScanGames : IntentService("ScanGames") {
         @JvmStatic
         fun start(context: Context) {
             val intent = Intent(context, ScanGames::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (VERSION.SDK_INT >= VERSION_CODES.O) {
                 context.startForegroundService(intent)
             } else {
                 context.startService(intent)
