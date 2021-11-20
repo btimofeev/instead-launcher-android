@@ -11,6 +11,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import androidx.core.app.NotificationCompat
 import dagger.hilt.android.AndroidEntryPoint
 import org.apache.commons.io.FileUtils
@@ -115,7 +117,18 @@ class ScanGames : IntentService("ScanGames") {
     private fun createNotification(): Notification {
         val notificationIntent = Intent(this, LauncherActivity::class.java)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val flags = if (VERSION.SDK_INT >= VERSION_CODES.M) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            notificationIntent,
+            flags
+        )
+
         return NotificationCompat.Builder(this, InsteadLauncher.CHANNEL_SCAN_GAMES)
             .setContentTitle(getText(R.string.app_name))
             .setContentText(getText(R.string.notification_scan_games))

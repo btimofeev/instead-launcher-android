@@ -91,6 +91,7 @@ class InsteadLauncher: Application(), Configuration.Provider {
     override fun getWorkManagerConfiguration() =
         Configuration.Builder()
             .setWorkerFactory(workerFactory)
+            .setMinimumLoggingLevel(android.util.Log.DEBUG)
             .build()
 
     @TargetApi(26)

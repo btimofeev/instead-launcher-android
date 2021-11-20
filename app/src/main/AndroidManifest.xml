@@ -3,51 +3,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.emunix.insteadlauncher">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <!-- OpenGL ES 2.0 -->
-    <uses-feature android:glEsVersion="0x00020000"/>
+    <uses-feature android:glEsVersion="0x00020000" />
 
     <application
         android:name=".InsteadLauncher"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:isGame="true"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:isGame="true"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.launcher.LauncherActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="file" />
                 <data android:scheme="content" />
                 <data android:mimeType="application/zip" />
                 <data android:host="*" />
             </intent-filter>
         </activity>
-        <service android:name=".services.UpdateRepository"/>
-        <service android:name=".services.InstallGame"/>
-        <service android:name=".services.DeleteGame"/>
-        <service android:name=".services.ScanGames"/>
 
+        <service android:name=".services.UpdateRepository" />
+        <service android:name=".services.InstallGame" />
+        <service android:name=".services.DeleteGame" />
+        <service android:name=".services.ScanGames" />
+
+<!--        Код ниже это хотфикс проблемы запуска WorkManager совместно с Hilt после обновления WM до 2.6 -->
+<!--        См. https://developer.android.com/jetpack/androidx/releases/work#2.6.0-alpha01 -->
+<!--        Этот код отключает инициаллизацию приложения через androidx.startup, -->
+<!--        т.к. второй пример по ссылке выше не заработал. Надо поисследовать эту проблему. -->
         <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            tools:node="remove" />
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove">
+        </provider>
 
     </application>
 
