@@ -7,8 +7,8 @@ package org.emunix.insteadlauncher.helpers
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 class AppVersion @Inject constructor(
@@ -39,7 +39,7 @@ class AppVersion @Inject constructor(
             val pinfo = context.packageManager.getPackageInfo(context.packageName, 0)
             versionName = pinfo.versionName
         } catch (e: Exception) {
-            Log.e("INSTEAD Launcher", "App version is not available")
+            Timber.tag("INSTEAD Launcher").e("App version is not available")
         }
 
         return versionName
