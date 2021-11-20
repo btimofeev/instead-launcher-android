@@ -12,7 +12,7 @@ import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
-import org.emunix.insteadlauncher.interactor.GamesInteractor
+import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.repository.fetcher.GameListFetcher
 import org.emunix.insteadlauncher.repository.parser.GameListParser
 import org.xmlpull.v1.XmlPullParserException
@@ -25,7 +25,7 @@ class RepoUpdater @Inject constructor(
     private val parser: GameListParser,
     private val eventBus: EventBus,
     private val gamesDB: GameDao,
-    private val gamesInteractor: GamesInteractor,
+    private val gameManager: GameManager,
     private val preferencesProvider: PreferencesProvider
 ) {
 
@@ -66,7 +66,7 @@ class RepoUpdater @Inject constructor(
 
         eventBus.publish(UpdateRepoEvent(isLoading = false, isGamesLoaded = true))
 
-        gamesInteractor.scanGames()
+        gameManager.scanGames()
         return true
     }
 

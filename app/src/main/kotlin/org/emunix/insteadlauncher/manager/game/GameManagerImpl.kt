@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.interactor
+package org.emunix.insteadlauncher.manager.game
 
 import android.content.Context
 import android.net.Uri
@@ -13,24 +13,22 @@ import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.instead_api.InsteadApi
 import org.emunix.insteadlauncher.helpers.gameparser.GameParser
 import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
-import org.emunix.insteadlauncher.helpers.isServiceRunning
 import org.emunix.insteadlauncher.helpers.unzip
 import org.emunix.insteadlauncher.services.DeleteGame
 import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.services.ScanGames
-import org.emunix.insteadlauncher.services.UpdateRepository
 import java.io.IOException
 import javax.inject.Inject
 
-class GamesInteractorImpl @Inject constructor(
+class GameManagerImpl @Inject constructor(
     private val context: Context,
     private val insteadApi: InsteadApi,
     private val gameParser: GameParser,
     private val storage: Storage
-) : GamesInteractor {
+) : GameManager {
 
     override fun startGame(gameName: String, playFromBeginning: Boolean) {
-        insteadApi.startGame(context, gameName, playFromBeginning)
+        insteadApi.startGame(gameName, playFromBeginning)
     }
 
     override fun installGame(gameName: String, gameUrl: String, gameTitle: String) {
@@ -44,13 +42,6 @@ class GamesInteractorImpl @Inject constructor(
     override fun scanGames() {
         ScanGames.start(context)
     }
-
-    override fun updateRepository() {
-        UpdateRepository.start(context)
-    }
-
-    override fun isRepositoryUpdating(): Boolean =
-        context.isServiceRunning(UpdateRepository::class.java)
 
     override suspend fun installGameFromZip(uri: Uri) {
 

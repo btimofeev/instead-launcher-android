@@ -11,13 +11,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import org.emunix.insteadlauncher.data.Game
 import org.emunix.insteadlauncher.data.GameDao
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
-import org.emunix.insteadlauncher.interactor.GamesInteractor
+import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager
 import javax.inject.Inject
 
 @HiltViewModel
 class InstalledGamesViewModel @Inject constructor(
-    private val gamesInteractor: GamesInteractor,
+    private val gameManager: GameManager,
     private val gamesDB: GameDao,
     private val preferencesProvider: PreferencesProvider,
     private val updateRepositoryWorkManager: UpdateRepositoryWorkManager,
@@ -42,6 +42,6 @@ class InstalledGamesViewModel @Inject constructor(
     fun getInstalledGames(): LiveData<List<Game>> = games
 
     fun playGame(gameName: String, playFromBeginning: Boolean = false) {
-        gamesInteractor.startGame(gameName, playFromBeginning)
+        gameManager.startGame(gameName, playFromBeginning)
     }
 }

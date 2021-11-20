@@ -23,7 +23,8 @@ import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
-import org.emunix.insteadlauncher.interactor.GamesInteractor
+import org.emunix.insteadlauncher.manager.game.GameManager
+import org.emunix.insteadlauncher.manager.repository.RepositoryManager
 import java.io.IOException
 import java.util.zip.ZipException
 import javax.inject.Inject
@@ -33,7 +34,8 @@ class RepositoryViewModel @Inject constructor(
     private val eventBus: EventBus,
     private val gamesDB: GameDao,
     private val preferencesProvider: PreferencesProvider,
-    private val gamesInteractor: GamesInteractor
+    private val gameManager: GameManager,
+    private val repositoryManager: RepositoryManager,
 ) : ViewModel() {
 
     private val games = gamesDB.observeAll()
@@ -56,7 +58,7 @@ class RepositoryViewModel @Inject constructor(
                 showGameList.value = it.isGamesLoaded
             }
 
-        if (gamesInteractor.isRepositoryUpdating()) {
+        if (repositoryManager.isRepositoryUpdating()) {
             showErrorView.value = false
             showProgress.value = true
             showGameList.value = false
@@ -80,7 +82,7 @@ class RepositoryViewModel @Inject constructor(
     fun getToastMessage(): LiveData<ConsumableEvent<Int>> = showToast
 
     fun updateRepository() {
-        gamesInteractor.updateRepository()
+        repositoryManager.updateRepository()
     }
 
     fun getGames(): LiveData<List<Game>> = games
@@ -90,7 +92,7 @@ class RepositoryViewModel @Inject constructor(
     fun installGame(uri: Uri) = viewModelScope.launch {
         showInstallGameDialog.value = true
         try {
-            gamesInteractor.installGameFromZip(uri)
+            gameManager.installGameFromZip(uri)
         } catch (e: NotInsteadGameZipException) {
             showSnackbar.value = ConsumableEvent(R.string.error_not_instead_game_zip)
         } catch (e: ZipException) {
@@ -99,7 +101,7 @@ class RepositoryViewModel @Inject constructor(
             showToast.value = ConsumableEvent(R.string.error_failed_to_unpack_zip)
         }
         showInstallGameDialog.value = false
-        gamesInteractor.scanGames()
+        gameManager.scanGames()
     }
 
     override fun onCleared() {

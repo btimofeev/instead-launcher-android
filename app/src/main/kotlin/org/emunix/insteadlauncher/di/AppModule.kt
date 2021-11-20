@@ -32,7 +32,7 @@ class AppModule {
     fun provideEventBus(): EventBus = RxBus
 
     @Provides
-    fun provideFeatureInstead(): InsteadApi = InsteadApiImpl()
+    fun provideFeatureInstead(context: Context): InsteadApi = InsteadApiImpl(context)
 
     @Provides
     fun provideResourceProvider(context: Context): ResourceProvider = ResourceProviderImpl(context)

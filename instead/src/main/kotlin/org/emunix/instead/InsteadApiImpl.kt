@@ -9,10 +9,11 @@ import android.content.Context
 import android.content.Intent
 import org.emunix.instead.ui.InsteadActivity
 import org.emunix.instead_api.InsteadApi
+import javax.inject.Inject
 
+class InsteadApiImpl @Inject constructor(val context: Context) : InsteadApi {
 
-class InsteadApiImpl: InsteadApi {
-    override fun startGame(context: Context, gameName: String, playFromBeginning: Boolean) {
+    override fun startGame(gameName: String, playFromBeginning: Boolean) {
         val intent = Intent(context, InsteadActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.putExtra("game_name", gameName)

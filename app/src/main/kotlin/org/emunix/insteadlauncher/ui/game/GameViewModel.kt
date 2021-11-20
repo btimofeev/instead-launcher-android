@@ -23,7 +23,7 @@ import org.emunix.insteadlauncher.event.DownloadProgressEvent
 import org.emunix.insteadlauncher.helpers.GameDbHelper
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
-import org.emunix.insteadlauncher.interactor.GamesInteractor
+import org.emunix.insteadlauncher.manager.game.GameManager
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +31,7 @@ class GameViewModel @Inject constructor(
     private val eventBus: EventBus,
     private val gamesDB: GameDao,
     private val gamesDbHelper: GameDbHelper,
-    private val gamesInteractor: GamesInteractor,
+    private val gameManager: GameManager,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
 
@@ -67,7 +67,7 @@ class GameViewModel @Inject constructor(
     fun installGame() {
         val gameToInstall = game.value
         if (gameToInstall != null) {
-            gamesInteractor.installGame(gameToInstall.name, gameToInstall.url, gameToInstall.title)
+            gameManager.installGame(gameToInstall.name, gameToInstall.url, gameToInstall.title)
             viewModelScope.launch(Dispatchers.IO) {
                 gamesDbHelper.saveStateToDB(gameToInstall, Game.State.IN_QUEUE_TO_INSTALL)
             }
@@ -77,7 +77,7 @@ class GameViewModel @Inject constructor(
     fun runGame() {
         val gameToRun = game.value
         if (gameToRun != null && gameToRun.state == Game.State.INSTALLED) {
-            gamesInteractor.startGame(gameToRun.name)
+            gameManager.startGame(gameToRun.name)
         }
     }
 

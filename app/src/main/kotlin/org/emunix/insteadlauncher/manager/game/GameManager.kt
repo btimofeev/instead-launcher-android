@@ -3,11 +3,11 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.interactor
+package org.emunix.insteadlauncher.manager.game
 
 import android.net.Uri
 
-interface GamesInteractor {
+interface GameManager {
 
     /**
      * Run game
@@ -45,14 +45,4 @@ interface GamesInteractor {
      * Searches for locally installed games and games that have been removed and updates the information in the database
      */
     fun scanGames()
-
-    /**
-     * Fetch game list from network repository
-     */
-    fun updateRepository()
-
-    /**
-     * Find out if the process of updating the repository is currently running
-     */
-    fun isRepositoryUpdating(): Boolean
 }

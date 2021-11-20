@@ -29,7 +29,7 @@ import org.emunix.insteadlauncher.databinding.FragmentGameBinding
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.helpers.visible
-import org.emunix.insteadlauncher.interactor.GamesInteractor
+import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
 import javax.inject.Inject
 
@@ -37,7 +37,7 @@ import javax.inject.Inject
 class GameFragment : Fragment() {
 
     @Inject
-    lateinit var gamesInteractor: GamesInteractor
+    lateinit var gameManager: GameManager
 
     private val viewModel: GameViewModel by viewModels()
 
@@ -169,7 +169,7 @@ class GameFragment : Fragment() {
 
         binding.deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
-                val deleteDialog = DeleteGameDialog.newInstance(game.name, gamesInteractor)
+                val deleteDialog = DeleteGameDialog.newInstance(game.name, gameManager)
                 if (isAdded)
                     parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
             }
