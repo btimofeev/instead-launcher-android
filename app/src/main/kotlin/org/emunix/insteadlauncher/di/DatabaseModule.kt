@@ -12,8 +12,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.emunix.insteadlauncher.data.GameDao
-import org.emunix.insteadlauncher.data.GameDatabase
+import org.emunix.insteadlauncher.data.db.GameDao
+import org.emunix.insteadlauncher.data.db.GameDatabase
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

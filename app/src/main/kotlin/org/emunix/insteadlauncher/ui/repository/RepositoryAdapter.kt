@@ -13,12 +13,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.data.GameDiffCallback
+import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.data.db.GameDiffCallback
 import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.visible
 
-class RepositoryAdapter(val listener: (Game, ImageView) -> Unit): ListAdapter<Game, RepositoryAdapter.ViewHolder>(GameDiffCallback()) {
+class RepositoryAdapter(val listener: (Game, ImageView) -> Unit): ListAdapter<Game, RepositoryAdapter.ViewHolder>(
+    GameDiffCallback()
+) {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.name)!!

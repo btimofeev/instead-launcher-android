@@ -6,8 +6,8 @@
 package org.emunix.insteadlauncher.helpers.network
 
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider

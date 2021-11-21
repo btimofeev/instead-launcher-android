@@ -18,10 +18,10 @@ import org.apache.commons.io.FileUtils
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.data.Game.State.INSTALLED
-import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
-import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.data.db.Game.State.INSTALLED
+import org.emunix.insteadlauncher.data.db.Game.State.NO_INSTALLED
+import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.helpers.GameDbHelper
 import org.emunix.insteadlauncher.helpers.gameparser.GameParser
 import org.emunix.insteadlauncher.ui.launcher.LauncherActivity

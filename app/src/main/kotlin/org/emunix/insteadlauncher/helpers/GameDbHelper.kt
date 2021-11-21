@@ -5,8 +5,8 @@
 
 package org.emunix.insteadlauncher.helpers
 
-import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.data.db.GameDao
 import javax.inject.Inject
 
 class GameDbHelper @Inject constructor(private val gamesDao: GameDao) {

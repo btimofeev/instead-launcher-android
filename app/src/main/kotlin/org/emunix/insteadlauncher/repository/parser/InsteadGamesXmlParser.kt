@@ -7,7 +7,8 @@ package org.emunix.insteadlauncher.repository.parser
 
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
-import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.data.db.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.helpers.getBrief
 import org.emunix.insteadlauncher.helpers.unescapeHtmlCodes
 import org.xmlpull.v1.XmlPullParserException
@@ -89,7 +90,7 @@ class InsteadGamesXmlParser: GameListParser {
         if (!gImage.contains(".png", true) && !gImage.contains(".jpg", true)) {
             gImage = ""
         }
-        return Game(gName, gTitle, gAuthor, gDate, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl, gBrief, "", Game.State.NO_INSTALLED)
+        return Game(gName, gTitle, gAuthor, gDate, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl, gBrief, "", NO_INSTALLED)
     }
 
     private fun readTag(tag: String, parser: XmlPullParser): String {

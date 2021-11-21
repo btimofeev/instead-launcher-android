@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
 import androidx.core.os.bundleOf

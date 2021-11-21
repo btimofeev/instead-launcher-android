@@ -12,13 +12,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.helpers.loadUrl
 import androidx.recyclerview.widget.ListAdapter
-import org.emunix.insteadlauncher.data.GameDiffCallback
+import org.emunix.insteadlauncher.data.db.GameDiffCallback
 import timber.log.Timber
 
-class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<Game, InstalledGamesAdapter.ViewHolder>(GameDiffCallback()) {
+class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<Game, InstalledGamesAdapter.ViewHolder>(
+    GameDiffCallback()
+) {
 
     lateinit var longClickedGame: Game
     private set

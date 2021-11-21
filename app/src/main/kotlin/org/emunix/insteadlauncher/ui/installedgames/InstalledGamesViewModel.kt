@@ -8,8 +8,8 @@ package org.emunix.insteadlauncher.ui.installedgames
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager

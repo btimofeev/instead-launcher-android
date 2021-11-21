@@ -16,8 +16,8 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game
-import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.event.ConsumableEvent
 import org.emunix.insteadlauncher.event.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus

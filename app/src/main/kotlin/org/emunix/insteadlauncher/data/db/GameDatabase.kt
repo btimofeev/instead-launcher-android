@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2018 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.data
+package org.emunix.insteadlauncher.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

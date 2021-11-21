@@ -5,7 +5,7 @@
 
 package org.emunix.insteadlauncher.repository.parser
 
-import org.emunix.insteadlauncher.data.Game
+import org.emunix.insteadlauncher.data.db.Game
 
 interface GameListParser {
 

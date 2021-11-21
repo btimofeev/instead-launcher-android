@@ -18,9 +18,9 @@ import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UNINSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UNINSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.Game.State.IS_DELETE
-import org.emunix.insteadlauncher.data.Game.State.NO_INSTALLED
-import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.insteadlauncher.data.db.Game.State.IS_DELETE
+import org.emunix.insteadlauncher.data.db.Game.State.NO_INSTALLED
+import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.helpers.GameDbHelper
 import org.emunix.insteadlauncher.helpers.NotificationHelper
 import org.emunix.insteadlauncher.ui.launcher.LauncherActivity

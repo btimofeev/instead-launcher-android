@@ -14,7 +14,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
-import org.emunix.insteadlauncher.InsteadLauncher
 import org.emunix.insteadlauncher.R
 import java.io.File
 import java.io.FileOutputStream
@@ -28,8 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_INSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
-import org.emunix.insteadlauncher.data.Game.State.*
-import org.emunix.insteadlauncher.data.GameDao
+import org.emunix.insteadlauncher.data.db.Game.State.*
+import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.event.DownloadProgressEvent
 import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
