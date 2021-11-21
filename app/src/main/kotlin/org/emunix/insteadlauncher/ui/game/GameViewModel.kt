@@ -18,8 +18,8 @@ import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.data.db.GameDao
-import org.emunix.insteadlauncher.event.ConsumableEvent
-import org.emunix.insteadlauncher.event.DownloadProgressEvent
+import org.emunix.insteadlauncher.helpers.ConsumableEvent
+import org.emunix.insteadlauncher.data.model.DownloadProgressEvent
 import org.emunix.insteadlauncher.helpers.GameDbHelper
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider

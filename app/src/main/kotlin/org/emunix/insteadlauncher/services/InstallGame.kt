@@ -29,7 +29,7 @@ import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_INSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.data.db.Game.State.*
 import org.emunix.insteadlauncher.data.db.GameDao
-import org.emunix.insteadlauncher.event.DownloadProgressEvent
+import org.emunix.insteadlauncher.data.model.DownloadProgressEvent
 import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.network.ProgressListener

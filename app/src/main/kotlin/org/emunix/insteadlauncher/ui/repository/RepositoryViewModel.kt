@@ -15,14 +15,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.launch
-import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.data.db.GameDao
-import org.emunix.insteadlauncher.event.ConsumableEvent
-import org.emunix.insteadlauncher.event.UpdateRepoEvent
+import org.emunix.insteadlauncher.helpers.ConsumableEvent
+import org.emunix.insteadlauncher.data.model.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
+import org.emunix.insteadlauncher.R.string
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.manager.repository.RepositoryManager
 import java.io.IOException
@@ -94,11 +94,11 @@ class RepositoryViewModel @Inject constructor(
         try {
             gameManager.installGameFromZip(uri)
         } catch (e: NotInsteadGameZipException) {
-            showSnackbar.value = ConsumableEvent(R.string.error_not_instead_game_zip)
+            showSnackbar.value = ConsumableEvent(string.error_not_instead_game_zip)
         } catch (e: ZipException) {
-            showToast.value = ConsumableEvent(R.string.error_failed_to_unpack_zip)
+            showToast.value = ConsumableEvent(string.error_failed_to_unpack_zip)
         } catch (e: IOException) {
-            showToast.value = ConsumableEvent(R.string.error_failed_to_unpack_zip)
+            showToast.value = ConsumableEvent(string.error_failed_to_unpack_zip)
         }
         showInstallGameDialog.value = false
         gameManager.scanGames()

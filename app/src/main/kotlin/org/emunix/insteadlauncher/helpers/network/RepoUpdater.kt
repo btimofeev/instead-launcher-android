@@ -5,12 +5,12 @@
 
 package org.emunix.insteadlauncher.helpers.network
 
-import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.data.db.GameDao
-import org.emunix.insteadlauncher.event.UpdateRepoEvent
+import org.emunix.insteadlauncher.data.model.UpdateRepoEvent
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
+import org.emunix.insteadlauncher.R.string
 import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.data.fetcher.GameListFetcher
@@ -45,7 +45,7 @@ class RepoUpdater @Inject constructor(
             eventBus.publish(
                 UpdateRepoEvent(
                     isLoading = false, isGamesLoaded = false, isError = true,
-                    message = resourceProvider.getString(R.string.error_xml_parse, e.message.orEmpty())
+                    message = resourceProvider.getString(string.error_xml_parse, e.message.orEmpty())
                 )
             )
             return false
@@ -54,7 +54,7 @@ class RepoUpdater @Inject constructor(
                 UpdateRepoEvent(
                     isLoading = false, isGamesLoaded = false, isError = true,
                     message = resourceProvider.getString(
-                        R.string.error_server_return_unexpected_code,
+                        string.error_server_return_unexpected_code,
                         e.message.orEmpty()
                     )
                 )
