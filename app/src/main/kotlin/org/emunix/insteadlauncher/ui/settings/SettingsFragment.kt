@@ -15,16 +15,21 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.helpers.ThemeHelper
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
-import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager
+import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
+import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
+import org.emunix.insteadlauncher.helpers.ThemeHelper
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    @Inject lateinit var updateRepositoryWorkManager: UpdateRepositoryWorkManager
+    @Inject
+    lateinit var startUpdateRepositoryWorkUseCase: StartUpdateRepositoryWorkUseCase
+
+    @Inject
+    lateinit var stopUpdateRepositoryWorkUseCase: StopUpdateRepositoryWorkUseCase
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,9 +68,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             "pref_update_repo_background" -> {
                 val pref: SwitchPreference? = findPreference("pref_update_repo_background")
                 if (pref != null && pref.isChecked) {
-                    updateRepositoryWorkManager.start()
+                    startUpdateRepositoryWorkUseCase.execute()
                 } else {
-                    updateRepositoryWorkManager.stop()
+                    stopUpdateRepositoryWorkUseCase.execute()
                 }
             }
         }

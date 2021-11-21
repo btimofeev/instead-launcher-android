@@ -9,15 +9,23 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
+import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCaseImpl
+import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
+import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCaseImpl
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 interface UseCaseModule {
 
-    @Singleton
     @Binds
     fun bindUpdateResourceUseCase(impl: UpdateResourceUseCaseImpl): UpdateResourceUseCase
+
+    @Binds
+    fun bindStartUpdateRepositoryWorkUseCase(impl: StartUpdateRepositoryWorkUseCaseImpl): StartUpdateRepositoryWorkUseCase
+
+    @Binds
+    fun bindStopUpdateRepositoryWorkUseCase(impl: StopUpdateRepositoryWorkUseCaseImpl): StopUpdateRepositoryWorkUseCase
 }

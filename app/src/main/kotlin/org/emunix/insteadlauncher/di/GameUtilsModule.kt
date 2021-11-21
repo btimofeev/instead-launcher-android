@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @Module
 interface GameUtilsModule {
 
-    @Singleton
     @Binds
     fun bindGameParser(impl: GameParserImpl): GameParser
 }
