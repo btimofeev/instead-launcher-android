@@ -8,7 +8,8 @@ package org.emunix.insteadlauncher.di
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.components.ViewModelComponent
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
@@ -16,12 +17,23 @@ import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCaseImpl
 
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 @Module
 interface UseCaseModule {
 
     @Binds
     fun bindUpdateResourceUseCase(impl: UpdateResourceUseCaseImpl): UpdateResourceUseCase
+
+    @Binds
+    fun bindStartUpdateRepositoryWorkUseCase(impl: StartUpdateRepositoryWorkUseCaseImpl): StartUpdateRepositoryWorkUseCase
+
+    @Binds
+    fun bindStopUpdateRepositoryWorkUseCase(impl: StopUpdateRepositoryWorkUseCaseImpl): StopUpdateRepositoryWorkUseCase
+}
+
+@InstallIn(FragmentComponent::class)
+@Module
+interface UseCaseFragmentModule {
 
     @Binds
     fun bindStartUpdateRepositoryWorkUseCase(impl: StartUpdateRepositoryWorkUseCaseImpl): StartUpdateRepositoryWorkUseCase

@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.repository.parser
+package org.emunix.insteadlauncher.data.parser
 
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
@@ -15,21 +15,17 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.StringReader
 
-class InsteadGamesXmlParser: GameListParser {
+class InsteadGamesXmlParser : GameListParser {
 
     override fun parse(input: String): Map<String, Game> {
-        try {
-            val parser = Xml.newPullParser()
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-            parser.setInput(StringReader(input))
-            parser.nextTag()
-            return readFeed(parser)
-        } finally {
-
-        }
+        val parser = Xml.newPullParser()
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+        parser.setInput(StringReader(input))
+        parser.nextTag()
+        return readFeed(parser)
     }
 
-    @Throws (XmlPullParserException::class, IOException::class)
+    @Throws(XmlPullParserException::class, IOException::class)
     private fun readFeed(parser: XmlPullParser): Map<String, Game> {
         val games = mutableMapOf<String, Game>()
 
@@ -61,15 +57,14 @@ class InsteadGamesXmlParser: GameListParser {
         var gLang: String = ""
         var gDescription: String = ""
         var gDescurl: String = ""
-        val gBrief: String
 
         parser.require(XmlPullParser.START_TAG, null, "game")
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
-            when(val name = parser.name) {
-                "name"  -> gName = readTag(name, parser)
+            when (val name = parser.name) {
+                "name" -> gName = readTag(name, parser)
                 "title" -> gTitle = readTag(name, parser)
                 "author" -> gAuthor = readTag(name, parser)
                 "image" -> gImage = readTag(name, parser)
@@ -86,11 +81,26 @@ class InsteadGamesXmlParser: GameListParser {
         gTitle = gTitle.unescapeHtmlCodes()
         gDescription = gDescription.unescapeHtmlCodes()
         gAuthor = gAuthor.unescapeHtmlCodes()
-        gBrief = gDescription.getBrief()
+        val gBrief: String = gDescription.getBrief()
         if (!gImage.contains(".png", true) && !gImage.contains(".jpg", true)) {
             gImage = ""
         }
-        return Game(gName, gTitle, gAuthor, gDate, gVersion, gSize, gUrl, gImage, gLang, gDescription, gDescurl, gBrief, "", NO_INSTALLED)
+        return Game(
+            name = gName,
+            title = gTitle,
+            author = gAuthor,
+            date = gDate,
+            version = gVersion,
+            size = gSize,
+            url = gUrl,
+            image = gImage,
+            lang = gLang,
+            description = gDescription,
+            descurl = gDescurl,
+            brief = gBrief,
+            installedVersion = "",
+            state = NO_INSTALLED
+        )
     }
 
     private fun readTag(tag: String, parser: XmlPullParser): String {

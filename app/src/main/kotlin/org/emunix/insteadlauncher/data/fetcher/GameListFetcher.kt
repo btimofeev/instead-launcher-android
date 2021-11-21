@@ -3,10 +3,9 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.repository.fetcher
+package org.emunix.insteadlauncher.data.fetcher
 
 interface GameListFetcher {
 
     fun fetch(url: String): String
-
 }

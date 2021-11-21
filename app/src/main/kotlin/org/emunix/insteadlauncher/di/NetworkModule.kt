@@ -10,10 +10,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import org.emunix.insteadlauncher.repository.fetcher.GameListFetcher
-import org.emunix.insteadlauncher.repository.fetcher.InsteadGamesXmlFetcher
-import org.emunix.insteadlauncher.repository.parser.GameListParser
-import org.emunix.insteadlauncher.repository.parser.InsteadGamesXmlParser
+import org.emunix.insteadlauncher.data.fetcher.GameListFetcher
+import org.emunix.insteadlauncher.data.fetcher.InsteadGamesXmlFetcher
+import org.emunix.insteadlauncher.data.parser.GameListParser
+import org.emunix.insteadlauncher.data.parser.InsteadGamesXmlParser
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

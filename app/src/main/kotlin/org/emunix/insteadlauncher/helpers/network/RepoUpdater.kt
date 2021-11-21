@@ -13,8 +13,8 @@ import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
 import org.emunix.insteadlauncher.manager.game.GameManager
-import org.emunix.insteadlauncher.repository.fetcher.GameListFetcher
-import org.emunix.insteadlauncher.repository.parser.GameListParser
+import org.emunix.insteadlauncher.data.fetcher.GameListFetcher
+import org.emunix.insteadlauncher.data.parser.GameListParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import javax.inject.Inject
