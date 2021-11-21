@@ -13,25 +13,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.BuildConfig
+import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentAboutBinding
-
-import org.emunix.insteadlauncher.helpers.AppVersion
+import org.emunix.insteadlauncher.domain.repository.AppVersionRepository
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class AboutFragment : Fragment() {
 
     @Inject
-    lateinit var appVersion: AppVersion
+    lateinit var appVersion: AppVersionRepository
 
     private var _binding: FragmentAboutBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentAboutBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,7 +51,7 @@ class AboutFragment : Fragment() {
         }
 
         binding.aboutInstead.text = getString(R.string.about_activity_about_instead, BuildConfig.INSTEAD_VERSION)
-        binding.aboutInsteadLauncher.text = getString(R.string.about_activity_about_instead_launcher, appVersion.getString())
-
+        binding.aboutInsteadLauncher.text =
+            getString(R.string.about_activity_about_instead_launcher, appVersion.versionName)
     }
 }

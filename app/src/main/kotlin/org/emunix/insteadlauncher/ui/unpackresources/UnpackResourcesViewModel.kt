@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2020-2021 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,12 +11,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.emunix.insteadlauncher.helpers.ResourceUpdater
+import org.emunix.insteadlauncher.BuildConfig
+import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class UnpackResourcesViewModel @Inject constructor(
-    private val resourceUpdater: ResourceUpdater
+    private val updateResourceUseCase: UpdateResourceUseCase,
 ) : ViewModel() {
 
     private var unpackSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -32,10 +33,11 @@ class UnpackResourcesViewModel @Inject constructor(
 
     private fun update() = viewModelScope.launch {
         showError.value = false
-        if (resourceUpdater.update())
+        if (updateResourceUseCase.execute(BuildConfig.DEBUG)) {
             unpackSuccess.value = true
-        else
+        } else {
             showError.value = true
+        }
     }
 
     fun getUnpackSuccessStatus(): LiveData<Boolean> = unpackSuccess
