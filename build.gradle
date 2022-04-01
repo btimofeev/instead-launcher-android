@@ -18,7 +18,7 @@ buildscript {
         lifecycle_version = '2.4.0'
         room_version = '2.3.0'
         navigation_version = '2.4.0-beta02'
-        acraVersion = '5.7.0'
+        acraVersion = '5.8.4'
         commons_io_version = '2.5' // 2.6 crashes the application on Android below 8, because java.nio.file is not available in these versions
         appcompat_version = '1.4.0'
         preference_ktx_version = '1.1.1'

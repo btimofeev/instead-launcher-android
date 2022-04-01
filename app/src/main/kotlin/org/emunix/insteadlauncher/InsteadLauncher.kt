@@ -19,11 +19,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.acra.ACRA
-import org.acra.annotation.AcraCore
-import org.acra.annotation.AcraMailSender
-import org.acra.annotation.AcraNotification
+import org.acra.config.mailSender
+import org.acra.config.notification
 import org.acra.data.StringFormat
+import org.acra.ktx.initAcra
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.helpers.ThemeHelper
@@ -32,15 +31,6 @@ import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
 @HiltAndroidApp
-@AcraCore(stopServicesOnCrash = true,
-        reportFormat = StringFormat.KEY_VALUE_LIST)
-@AcraMailSender(mailTo = "btimofeev@emunix.org",
-        reportFileName = "instead_launcher_crash_report.txt")
-@AcraNotification(resText = R.string.error_crash_message,
-        resTitle = R.string.error_crash_title,
-        resSendButtonText = R.string.error_crash_send_button,
-        resDiscardButtonText = R.string.error_crash_discard_button,
-        resChannelName = R.string.channel_crash_report)
 class InsteadLauncher: Application(), Configuration.Provider {
 
     companion object {
@@ -81,7 +71,7 @@ class InsteadLauncher: Application(), Configuration.Provider {
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         if (!BuildConfig.DEBUG) {
-            ACRA.init(this)
+            initCrashReporter()
         }
     }
 
@@ -94,6 +84,27 @@ class InsteadLauncher: Application(), Configuration.Provider {
     private fun initLogger() {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
+        }
+    }
+
+    private fun initCrashReporter() {
+        initAcra {
+            buildConfigClass = BuildConfig::class.java
+            reportFormat = StringFormat.KEY_VALUE_LIST
+            stopServicesOnCrash = true
+
+            mailSender {
+                mailTo = "btimofeev@emunix.org"
+                reportFileName = "instead_launcher_crash_report.txt"
+            }
+
+            notification {
+                withResTitle(R.string.error_crash_title)
+                withResText(R.string.error_crash_message)
+                withResSendButtonText(R.string.error_crash_send_button)
+                withResDiscardButtonText(R.string.error_crash_discard_button)
+                withResChannelName(R.string.channel_crash_report)
+            }
         }
     }
 
