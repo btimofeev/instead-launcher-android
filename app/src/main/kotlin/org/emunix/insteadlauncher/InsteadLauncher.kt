@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2022 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,12 +11,14 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.widget.Toast
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.acra.ACRA
 import org.acra.annotation.AcraCore
 import org.acra.annotation.AcraMailSender
@@ -26,6 +28,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.helpers.ThemeHelper
 import timber.log.Timber
+import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -68,24 +71,18 @@ class InsteadLauncher: Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        if(BuildConfig.DEBUG)
-            Timber.plant(Timber.DebugTree())
-
+        initLogger()
+        createStorageDirectories()
         createNotificationChannels()
-
-        GlobalScope.launch(Dispatchers.IO) {
-            storage.createStorageDirectories()
-        }
-
         ThemeHelper.applyTheme(preferencesProvider.appTheme)
-
         InsteadLauncher.storage = storage
     }
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-        if (!BuildConfig.DEBUG)
+        if (!BuildConfig.DEBUG) {
             ACRA.init(this)
+        }
     }
 
     override fun getWorkManagerConfiguration() =
@@ -94,11 +91,30 @@ class InsteadLauncher: Application(), Configuration.Provider {
             .setMinimumLoggingLevel(android.util.Log.DEBUG)
             .build()
 
+    private fun initLogger() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(DebugTree())
+        }
+    }
+
+    private fun createStorageDirectories() {
+        MainScope().launch {
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    storage.createStorageDirectories()
+                }
+            }.onFailure { err ->
+                Toast.makeText(this@InsteadLauncher, err.toString(), Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     @TargetApi(26)
     fun createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = getSystemService(
-                    Context.NOTIFICATION_SERVICE) as NotificationManager
+                Context.NOTIFICATION_SERVICE
+            ) as NotificationManager
             val importance = NotificationManager.IMPORTANCE_LOW
 
             var name = getString(R.string.channel_install_game)

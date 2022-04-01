@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2022 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -7,10 +7,7 @@ package org.emunix.instead.core_storage_api.data
 
 import android.content.Context
 import android.os.Environment
-import android.widget.Toast
 import androidx.core.os.EnvironmentCompat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
@@ -59,19 +56,10 @@ class StorageImpl (private val context: Context) : Storage {
 
     override fun getUserThemesDirectory(): File = File(getAppFilesDirectory(), "themes")
 
-    override suspend fun createStorageDirectories() {
+    override fun createStorageDirectories() {
         val dirs = arrayOf(getGamesDirectory(), getSavesDirectory(), getUserThemesDirectory())
         for (dir in dirs) {
-            try {
-                FileUtils.forceMkdir(dir)
-            } catch (e: IOException) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context,
-                            "Cannot create directory ${dir.absolutePath}",
-                            Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
+            FileUtils.forceMkdir(dir)
         }
     }
 
