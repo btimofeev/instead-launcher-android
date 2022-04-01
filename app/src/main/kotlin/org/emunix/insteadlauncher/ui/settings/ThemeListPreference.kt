@@ -9,14 +9,14 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.preference.ListPreference
 import org.emunix.instead.core_storage_api.data.Storage
-import org.emunix.insteadlauncher.InsteadLauncher
+import org.emunix.instead.core_storage_api.utils.StorageHolder
 import org.emunix.insteadlauncher.R
 import java.io.File
 
 class ThemeListPreference
 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ListPreference(context, attrs) {
 
-    val storage: Storage = InsteadLauncher.storage
+    val storage: Storage = StorageHolder.storage ?: throw IllegalStateException("Storage is null")
 
     init {
         val themes = getThemes().toTypedArray()

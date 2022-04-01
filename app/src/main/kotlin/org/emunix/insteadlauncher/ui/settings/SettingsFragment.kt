@@ -48,15 +48,17 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                                            key: String) {
         when (key) {
             "pref_repository" -> {
-                val repo: EditTextPreference? = findPreference("pref_repository")
-                if (repo != null && repo.text.isBlank()) {
-                    repo.text = PreferencesProvider.DEFAULT_REPOSITORY_URL
+                findPreference<EditTextPreference?>("pref_repository")?.let { repo ->
+                    if (repo.text.isNullOrBlank()) {
+                        repo.text = PreferencesProvider.DEFAULT_REPOSITORY_URL
+                    }
                 }
             }
             "pref_sandbox" -> {
-                val sandbox: EditTextPreference? = findPreference("pref_sandbox")
-                if (sandbox != null && sandbox.text.isBlank()) {
-                    sandbox.text = PreferencesProvider.SANDBOX_REPOSITORY_URL
+                findPreference<EditTextPreference?>("pref_sandbox")?.let { sandbox ->
+                    if (sandbox.text.isNullOrBlank()) {
+                        sandbox.text = PreferencesProvider.SANDBOX_REPOSITORY_URL
+                    }
                 }
             }
             "app_theme" -> {
@@ -78,11 +80,11 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
     override fun onResume() {
         super.onResume()
-        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
     }
 }

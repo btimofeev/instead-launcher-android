@@ -15,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
@@ -57,7 +56,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.Hashtable;
 import java.util.Locale;
-import org.emunix.instead.utils.GenerateScancode;
+import org.emunix.instead.utils.OnKeyCodeHandler;
+import org.emunix.instead.utils.ScancodeGenerator;
 
 
 /**
@@ -2193,11 +2193,23 @@ class DummyEdit extends View implements View.OnKeyListener {
     }
 }
 
-class SDLInputConnection extends BaseInputConnection {
+class SDLInputConnection extends BaseInputConnection implements OnKeyCodeHandler {
+
+    private final ScancodeGenerator scancodeGenerator;
 
     public SDLInputConnection(View targetView, boolean fullEditor) {
         super(targetView, fullEditor);
+        scancodeGenerator = new ScancodeGenerator(this);
+    }
 
+    @Override
+    public void onKeyDown(final int keyCode) {
+        SDLActivity.onNativeKeyDown(keyCode);
+    }
+
+    @Override
+    public void onKeyUp(final int keyCode) {
+        SDLActivity.onNativeKeyUp(keyCode);
     }
 
     @Override
@@ -2235,7 +2247,7 @@ class SDLInputConnection extends BaseInputConnection {
                 }
             }
             nativeGenerateScancodeForUnichar(c);
-            GenerateScancode.forUnichar(c);
+            scancodeGenerator.sendScancode(c);
         }
 
         SDLInputConnection.nativeCommitText(text.toString(), newCursorPosition);

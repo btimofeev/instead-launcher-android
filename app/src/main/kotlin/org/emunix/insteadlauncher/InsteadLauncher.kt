@@ -25,6 +25,7 @@ import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.instead.core_storage_api.data.Storage
+import org.emunix.instead.core_storage_api.utils.StorageHolder
 import org.emunix.insteadlauncher.helpers.ThemeHelper
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -34,8 +35,6 @@ import javax.inject.Inject
 class InsteadLauncher: Application(), Configuration.Provider {
 
     companion object {
-
-        lateinit var storage: Storage
 
         const val UPDATE_REPOSITORY_NOTIFICATION_ID: Int = 1000
         const val INSTALL_NOTIFICATION_ID: Int = 1001
@@ -65,7 +64,7 @@ class InsteadLauncher: Application(), Configuration.Provider {
         createStorageDirectories()
         createNotificationChannels()
         ThemeHelper.applyTheme(preferencesProvider.appTheme)
-        InsteadLauncher.storage = storage
+        StorageHolder.storage = storage
     }
 
     override fun attachBaseContext(base: Context?) {

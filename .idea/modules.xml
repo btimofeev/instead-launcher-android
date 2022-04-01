@@ -7,6 +7,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core-preferences/InsteadLauncher.core-preferences.iml" filepath="$PROJECT_DIR$/.idea/modules/core-preferences/InsteadLauncher.core-preferences.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core-storage/InsteadLauncher.core-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/core-storage/InsteadLauncher.core-storage.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/instead/InsteadLauncher.instead.iml" filepath="$PROJECT_DIR$/.idea/modules/instead/InsteadLauncher.instead.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scancode-generator/InsteadLauncher.scancode-generator.iml" filepath="$PROJECT_DIR$/.idea/modules/scancode-generator/InsteadLauncher.scancode-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdl-activity/InsteadLauncher.sdl-activity.iml" filepath="$PROJECT_DIR$/.idea/modules/sdl-activity/InsteadLauncher.sdl-activity.iml" />
     </modules>
   </component>
 </project>

@@ -1,22 +1,37 @@
 /*
  * Copyright (C) 2015-2018 Anton Kolosov https://github.com/instead-hub/instead-android-ng
- * Copyright (c) 2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019, 2022 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.instead.utils
 
 import android.view.KeyEvent
-import org.libsdl.app.SDLActivity
+import java.util.Locale
 
-internal object GenerateScancode {
-    
-    @JvmStatic
-    fun forUnichar(c: Char) {
-        val str = Character.toString(c)
+/**
+ * The class sends the scancode of the key to the handler
+ *
+ * Can only work with Cyrillic
+ *
+ * @property handler Handler that accepts scancode
+ */
+class ScancodeGenerator(
+    private val handler: OnKeyCodeHandler
+) {
+
+    /**
+     * Send key scancode to handler
+     *
+     * The function sends two events: first, a key press, then a release
+     *
+     * @param char Scancode symbol
+     */
+    fun sendScancode(char: Char) {
+        val str = char.toString()
         when {
-            str.matches("[а-я]".toRegex()) -> ru(c, false)
-            str.matches("[А-Я]".toRegex()) -> ru(str.toLowerCase()[0], true)
+            str.matches("[а-я]".toRegex()) -> ru(char, false)
+            str.matches("[А-Я]".toRegex()) -> ru(str.lowercase(Locale.getDefault()).first(), true)
         }
     }
 
@@ -74,15 +89,15 @@ internal object GenerateScancode {
 
     private fun keyPress(keyCode: Int, shift: Boolean) {
         if (shift) {
-            SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT)
+            handler.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT)
         }
-        SDLActivity.onNativeKeyDown(keyCode)
+        handler.onKeyDown(keyCode)
     }
 
     private fun keyRelease(keyCode: Int, shift: Boolean) {
-        SDLActivity.onNativeKeyUp(keyCode)
+        handler.onKeyUp(keyCode)
         if (shift) {
-            SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT)
+            handler.onKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT)
         }
     }
 }

@@ -12,23 +12,23 @@ buildscript {
 
         build_config_instead_version = '3.4.0'
 
-        kotlin_version = '1.4.31'
-        kotlin_coroutines_version = '1.4.1'
-        hilt_version = '2.38.1'
-        lifecycle_version = '2.4.0'
-        room_version = '2.3.0'
-        navigation_version = '2.4.0-beta02'
+        kotlin_version = '1.6.10'
+        kotlin_coroutines_version = '1.6.0'
+        hilt_version = '2.41'
+        lifecycle_version = '2.4.1'
+        room_version = '2.4.2'
+        navigation_version = '2.4.1'
         acraVersion = '5.8.4'
         commons_io_version = '2.5' // 2.6 crashes the application on Android below 8, because java.nio.file is not available in these versions
-        appcompat_version = '1.4.0'
-        preference_ktx_version = '1.1.1'
+        appcompat_version = '1.4.1'
+        preference_ktx_version = '1.2.0'
     }
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "de.mannodermaus.gradle.plugins:android-junit5:1.6.2.0"
@@ -36,7 +36,7 @@ buildscript {
 }
 
 plugins {
-    id "de.undercouch.download" version "4.1.2"
+    id "de.undercouch.download" version "5.0.4"
 }
 
 allprojects {

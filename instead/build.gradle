@@ -73,6 +73,7 @@ android {
 dependencies {
     implementation project(':core-storage')
     implementation project(':core-preferences')
+    implementation project(':sdl-activity')
 
     implementation "androidx.appcompat:appcompat:$rootProject.appcompat_version"
 
