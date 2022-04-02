@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2022 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -26,6 +26,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
 import org.emunix.insteadlauncher.helpers.showToast
@@ -34,30 +35,18 @@ import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
 private const val READ_REQUEST_CODE = 546
 
 @AndroidEntryPoint
-class RepositoryFragment : Fragment() {
+class RepositoryFragment : Fragment(R.layout.fragment_repository) {
     private val viewModel: RepositoryViewModel by viewModels()
     private val appArgumentViewModel: AppArgumentViewModel by activityViewModels()
     private lateinit var installDialog: ProgressDialog
 
-    private var _binding: FragmentRepositoryBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentRepositoryBinding::bind)
 
     private lateinit var listAdapter: RepositoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        _binding = FragmentRepositoryBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

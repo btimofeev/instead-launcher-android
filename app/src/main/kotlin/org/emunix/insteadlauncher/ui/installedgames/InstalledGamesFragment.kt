@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2022 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.ui.installedgames
 
 import android.os.Bundle
-import android.view.*
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -17,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentInstalledGamesBinding
@@ -28,12 +33,11 @@ import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class InstalledGamesFragment : Fragment() {
+class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
 
     @Inject lateinit var gameManager: GameManager
 
-    private var _binding: FragmentInstalledGamesBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentInstalledGamesBinding::bind)
 
     private val viewModel: InstalledGamesViewModel by viewModels()
     private val appArgumentViewModel: AppArgumentViewModel by activityViewModels()
@@ -43,17 +47,6 @@ class InstalledGamesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        _binding = FragmentInstalledGamesBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

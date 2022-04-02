@@ -146,6 +146,9 @@ dependencies {
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
+    // ViewBinding Delegate
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.5.3'
+
     // LeakCanary
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
 }

@@ -1,17 +1,16 @@
 /*
- * Copyright (c) 2019-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2022 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.ui.about
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.BuildConfig
 import org.emunix.insteadlauncher.R
@@ -20,26 +19,12 @@ import org.emunix.insteadlauncher.domain.repository.AppVersionRepository
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AboutFragment : Fragment() {
+class AboutFragment : Fragment(R.layout.fragment_about) {
 
     @Inject
     lateinit var appVersion: AppVersionRepository
 
-    private var _binding: FragmentAboutBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentAboutBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+    private val binding by viewBinding(FragmentAboutBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
