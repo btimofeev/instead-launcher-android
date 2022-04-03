@@ -8,7 +8,7 @@ package org.emunix.insteadlauncher.domain.repository
 import java.io.IOException
 
 /**
- * The object directly copies INSTEAD resources to the file system. Works in an IO stream.
+ * Updates INSTEAD resources in the file system (by copying from APK). Works in an IO thread.
  */
 interface ResourceUpdater {
 
