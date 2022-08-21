@@ -36,7 +36,7 @@ buildscript {
 }
 
 plugins {
-    id "de.undercouch.download" version "5.0.4"
+    id "de.undercouch.download" version "5.1.1"
 }
 
 allprojects {
