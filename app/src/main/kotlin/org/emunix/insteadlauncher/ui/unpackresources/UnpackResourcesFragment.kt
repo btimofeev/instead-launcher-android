@@ -26,13 +26,13 @@ class UnpackResourcesFragment : Fragment(R.layout.fragment_unpack_resources) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getUnpackSuccessStatus().observe(viewLifecycleOwner) { isSuccess ->
+        viewModel.unpackSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 findNavController().navigate(R.id.action_unpackResourcesFragment_to_installedGamesFragment)
             }
         }
 
-        viewModel.getErrorStatus().observe(viewLifecycleOwner) { showError ->
+        viewModel.showError.observe(viewLifecycleOwner) { showError ->
             binding.unpackResourcesProgressBar.visible(!showError)
             binding.errorTextView.visible(showError)
             binding.unpackResourcesTryAgainButton.visible(showError)

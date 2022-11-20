@@ -21,14 +21,14 @@ interface StartUpdateRepositoryWorkUseCase {
      * @param repeatInterval The repeat interval in [repeatIntervalTimeUnit] units
      * @param repeatIntervalTimeUnit The [TimeUnit] for [repeatInterval]
      */
-    fun execute(repeatInterval: Long = 1L, repeatIntervalTimeUnit: TimeUnit = DAYS)
+    operator fun invoke(repeatInterval: Long = 1L, repeatIntervalTimeUnit: TimeUnit = DAYS)
 }
 
 class StartUpdateRepositoryWorkUseCaseImpl @Inject constructor(
     private val updateRepositoryWorker: UpdateRepositoryWorker
 ) : StartUpdateRepositoryWorkUseCase {
 
-    override fun execute(repeatInterval: Long, repeatIntervalTimeUnit: TimeUnit) {
+    override fun invoke(repeatInterval: Long, repeatIntervalTimeUnit: TimeUnit) {
         updateRepositoryWorker.start(
             repeatInterval = repeatInterval,
             repeatIntervalTimeUnit = repeatIntervalTimeUnit,

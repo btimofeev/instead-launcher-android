@@ -13,14 +13,14 @@ import javax.inject.Inject
  */
 interface StopUpdateRepositoryWorkUseCase {
 
-    fun execute()
+    operator fun invoke()
 }
 
 class StopUpdateRepositoryWorkUseCaseImpl @Inject constructor(
     private val updateRepositoryWorker: UpdateRepositoryWorker
 ) : StopUpdateRepositoryWorkUseCase {
 
-    override fun execute() {
+    override fun invoke() {
         updateRepositoryWorker.stop()
     }
 }

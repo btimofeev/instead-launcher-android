@@ -35,9 +35,9 @@ class InstalledGamesViewModel @Inject constructor(
         val updatePref = preferencesProvider.updateRepoInBackground
 
         if (updatePref) {
-            startUpdateRepositoryWorkUseCase.execute()
+            startUpdateRepositoryWorkUseCase()
         } else {
-            stopUpdateRepositoryWorkUseCase.execute()
+            stopUpdateRepositoryWorkUseCase()
         }
     }
 

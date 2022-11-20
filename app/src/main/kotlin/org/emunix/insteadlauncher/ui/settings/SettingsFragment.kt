@@ -70,9 +70,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             "pref_update_repo_background" -> {
                 val pref: SwitchPreference? = findPreference("pref_update_repo_background")
                 if (pref != null && pref.isChecked) {
-                    startUpdateRepositoryWorkUseCase.execute()
+                    startUpdateRepositoryWorkUseCase()
                 } else {
-                    stopUpdateRepositoryWorkUseCase.execute()
+                    stopUpdateRepositoryWorkUseCase()
                 }
             }
         }
