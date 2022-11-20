@@ -46,7 +46,7 @@ internal class InsteadActivity: SDLActivity() {
     private var prefBackButton: String = ""
 
     override fun getLibraries(): Array<String> {
-        return arrayOf("hidapi",
+        return arrayOf(
                 "SDL2",
                 "SDL2_image",
                 "SDL2_mixer",

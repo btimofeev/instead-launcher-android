@@ -1,5 +1,11 @@
 # Changelog
 
+## Development
+### Changed
+- INSTEAD updated to version 3.5.0
+- SDL2 updated to version 2.0.22
+- Updated esperanto translation
+
 ## [0.8.6] - 2021-09-04
 ### Changed
 - INSTEAD updated to version 3.4.0

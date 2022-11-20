@@ -32,13 +32,13 @@ set( SOURCES
         "${INSTEAD_SRC_DIR}/ioapi.c"
         "${INSTEAD_SRC_DIR}/unpack.c"
         "${INSTEAD_SRC_DIR}/unix.c"
-        "${INSTEAD_SRC_DIR}/SDL2_rotozoom.c"
+        "${INSTEAD_SRC_DIR}/SDL_rotozoom.c"
         "${INSTEAD_SRC_DIR}/SDL_gif.c"
         "${INSTEAD_SRC_DIR}/SDL_gfxBlitFunc.c"
         "${INSTEAD_SRC_DIR}/noise1234.c" )
 
 add_definitions( -DANDROID -DNOMAIN -D_USE_SDL -D_LOCAL_APPDATA -D_SDL_MOD_BUG -D_HAVE_ICONV )
-add_definitions( -DVERSION=\"3.4.0\" -DGAMES_PATH=\"./games/\" -DTHEME_PATH=\"./themes/\" -DLANG_PATH=\"./lang/\" -DSTEAD_PATH=\"./stead/\" )
+add_definitions( -DVERSION=\"3.5.0\" -DGAMES_PATH=\"./games/\" -DTHEME_PATH=\"./themes/\" -DLANG_PATH=\"./lang/\" -DSTEAD_PATH=\"./stead/\" )
 add_definitions( -DSDL_JAVA_PACKAGE_PATH=org_emunix_instead )
 
 add_library( instead SHARED ${SOURCES} )

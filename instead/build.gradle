@@ -23,7 +23,7 @@ android {
                 cppFlags ""
                 arguments "-DANDROID_PLATFORM=android-21", "-DCMAKE_BUILD_TYPE=Release",
                         "-DANDROID_ARM_MODE=arm"
-                version "3.10.2"
+                version "3.22.1"
             }
         }
         lintOptions {
@@ -94,9 +94,9 @@ task deleteDependencies(type: Delete) {
 }
 
 task downloadDependencies(dependsOn: deleteDependencies) {
-    def Instead = '3.4.0'
+    def Instead = '3.5.0'
     def Lua = '5.1.5'
-    def SDL2 = '2.0.16'
+    def SDL2 = '2.0.22'
     def SDL2_image = '2.0.5'
     def SDL2_mixer = '2.0.4'
     def SDL2_ttf = '2.0.15'
