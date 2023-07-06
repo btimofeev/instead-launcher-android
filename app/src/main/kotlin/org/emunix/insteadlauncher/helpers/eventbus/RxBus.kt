@@ -16,7 +16,7 @@ object RxBus: EventBus {
 
     // Listen should return an Observable and not the publisher
     // Using ofType we filter only events that match that class type
-    override fun <T> listen(eventType: Class<T>): Observable<T> = publisher.ofType(eventType)
+    override fun <T : Any> listen(eventType: Class<T>): Observable<T> = publisher.ofType(eventType)
 
 }
 
