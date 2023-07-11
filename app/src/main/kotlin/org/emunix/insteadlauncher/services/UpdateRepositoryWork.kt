@@ -13,6 +13,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
@@ -51,7 +52,7 @@ class UpdateRepositoryWorkManager @Inject constructor(private val context: Conte
                 .setConstraints(constraints)
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,
-                    PeriodicWorkRequest.DEFAULT_BACKOFF_DELAY_MILLIS,
+                    WorkRequest.DEFAULT_BACKOFF_DELAY_MILLIS,
                     TimeUnit.MILLISECONDS
                 )
                 .build()

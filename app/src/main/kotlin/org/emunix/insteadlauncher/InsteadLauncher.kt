@@ -98,11 +98,11 @@ class InsteadLauncher: Application(), Configuration.Provider {
             }
 
             notification {
-                withResTitle(R.string.error_crash_title)
-                withResText(R.string.error_crash_message)
-                withResSendButtonText(R.string.error_crash_send_button)
-                withResDiscardButtonText(R.string.error_crash_discard_button)
-                withResChannelName(R.string.channel_crash_report)
+                withTitle(getString(R.string.error_crash_title))
+                withText(getString(R.string.error_crash_message))
+                withSendButtonText(getString(R.string.error_crash_send_button))
+                withDiscardButtonText(getString(R.string.error_crash_discard_button))
+                withChannelName(getString(R.string.channel_crash_report))
             }
         }
     }
