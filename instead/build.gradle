@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id "de.undercouch.download" version "5.4.0"
 }
 
 android {
@@ -104,7 +105,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
     def Iconv = '1.15'
 
     doLast {
-        download {
+        download.run {
             src "https://github.com/instead-hub/instead/archive/${Instead}.tar.gz"
             dest new File(buildDir, "instead-${Instead}.tar.gz")
         }
@@ -117,7 +118,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
         delete("src/main/c/Instead/instead-${Instead}")
         delete("src/main/c/Instead/pax_global_header")
 
-        download {
+        download.run {
             src "https://www.lua.org/ftp/lua-${Lua}.tar.gz"
             dest buildDir
         }
@@ -129,7 +130,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
         file("src/main/c/Lua/lua-${Lua}").renameTo(file('src/main/c/Lua/Lua'))
         delete("src/main/c/Lua/lua-${Lua}")
 
-        download {
+        download.run {
             src "https://www.libsdl.org/release/SDL2-${SDL2}.tar.gz"
             dest buildDir
         }
@@ -141,7 +142,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
         file("src/main/c/SDL2/SDL2-${SDL2}").renameTo(file('src/main/c/SDL2/SDL2'))
         delete("src/main/c/SDL2/SDL2-${SDL2}")
 
-        download {
+        download.run {
             src "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${SDL2_image}.tar.gz"
             dest buildDir
         }
@@ -153,7 +154,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
         file("src/main/c/SDL2_image/SDL2_image-${SDL2_image}").renameTo(file('src/main/c/SDL2_image/SDL2_image'))
         delete("src/main/c/SDL2_image/SDL2_image-${SDL2_image}")
 
-        download {
+        download.run {
             src "https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-${SDL2_mixer}.tar.gz"
             dest buildDir
         }
@@ -165,7 +166,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
         file("src/main/c/SDL2_mixer/SDL2_mixer-${SDL2_mixer}").renameTo(file('src/main/c/SDL2_mixer/SDL2_mixer'))
         delete("src/main/c/SDL2_mixer/SDL2_mixer-${SDL2_mixer}")
 
-        download {
+        download.run {
             src "https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-${SDL2_ttf}.tar.gz"
             dest buildDir
         }
@@ -177,7 +178,7 @@ task downloadDependencies(dependsOn: deleteDependencies) {
         file("src/main/c/SDL2_ttf/SDL2_ttf-${SDL2_ttf}").renameTo(file('src/main/c/SDL2_ttf/SDL2_ttf'))
         delete("src/main/c/SDL2_ttf/SDL2_ttf-${SDL2_ttf}")
 
-        download {
+        download.run {
             src "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${Iconv}.tar.gz"
             dest buildDir
         }
