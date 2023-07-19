@@ -49,7 +49,7 @@
 
 <!--        Код ниже это хотфикс проблемы запуска WorkManager совместно с Hilt после обновления WM до 2.6 -->
 <!--        См. https://developer.android.com/jetpack/androidx/releases/work#2.6.0-alpha01 -->
-<!--        Этот код отключает инициаллизацию приложения через androidx.startup, -->
+<!--        Этот код отключает инициализацию приложения через androidx.startup, -->
 <!--        т.к. второй пример по ссылке выше не заработал. Надо поисследовать эту проблему. -->
         <provider
             android:name="androidx.startup.InitializationProvider"

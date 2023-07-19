@@ -12,7 +12,6 @@
     <string name="repository_nothing_found">Ludoj ne trovitaj</string>
     <string name="repository_badge_content_description">Nova versio estas disponebla</string>
 
-    <string name="game_activity_title">Ludo</string>
     <string name="game_activity_button_install">Elŝuti</string>
     <string name="game_activity_button_uninstall">Forigi</string>
     <string name="game_activity_button_update">Ĝisdatigi</string>
@@ -61,7 +60,6 @@
     <string name="error_failed_to_delete_file">Malsukcesis forigi dosiero</string>
     <string name="error_server_return_unexpected_code">Servilo redonis neatenditan kodon %s</string>
     <string name="error_xml_parse">Malsukcesis ŝargi liston de ludoj: %s</string>
-    <string name="error_failed_to_copy_assets">Malsukcesis malpaki risurcojn de Instead. Aplikaĵo povas funkcii malkorekte.</string>
 
     <string name="settings_activity_title">Agordoj</string>
     <string name="prefs_category_game_settings">Luda agordoj</string>
@@ -96,7 +94,6 @@
     </string-array>
     <string name="prefs_gl_hack_title">GL Hack</string>
     <string name="prefs_gl_hack_summary">Li korektas problemojn de bildbildigo en iuj telefonoj</string>
-    <string name="prefs_category_network">Reto</string>
     <string name="prefs_category_repositories">Deponejoj</string>
     <string name="prefs_repository_title">Baza deponejo</string>
     <string name="prefs_repository_summary">Almontru adreson de XML-dosiero</string>

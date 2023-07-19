@@ -75,7 +75,7 @@ fun File.unzip(dir: File) {
                     if (entry.isDirectory) {
                         entryFile.mkdirs()
                     } else {
-                        entryFile.parentFile.mkdirs()
+                        entryFile.parentFile?.mkdirs()
                         FileOutputStream(entryFile).use {
                             IOUtils.copy(zip.getInputStream(entry), it)
                         }
@@ -95,7 +95,7 @@ fun InputStream.unzip(dir: File) {
             if (entry.isDirectory) {
                 entryFile.mkdirs()
             } else {
-                entryFile.parentFile.mkdirs()
+                entryFile.parentFile?.mkdirs()
                 FileOutputStream(entryFile).use { output ->
                     val buf = ByteArray(BUFFER_SIZE)
                     while (true) {
@@ -111,7 +111,6 @@ fun InputStream.unzip(dir: File) {
     }
 }
 
-//todo переписать когда-нибудь
 fun String.unescapeHtmlCodes(): String {
     var s = this.replace("&lt;", "<")
     s = s.replace("&gt;", ">")

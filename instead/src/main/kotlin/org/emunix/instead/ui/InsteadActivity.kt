@@ -78,7 +78,7 @@ internal class InsteadActivity: SDLActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // The following line is to workaround AndroidRuntimeException: requestFeature() must be called before adding content
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
 
         game = intent.extras?.getString("game_name")

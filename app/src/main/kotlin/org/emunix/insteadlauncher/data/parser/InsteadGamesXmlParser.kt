@@ -46,17 +46,17 @@ class InsteadGamesXmlParser : GameListParser {
     }
 
     private fun readEntry(parser: XmlPullParser): Game {
-        var gName: String = ""
-        var gTitle: String = ""
-        var gAuthor: String = ""
-        var gImage: String = ""
-        var gDate: String = ""
-        var gVersion: String = ""
-        var gUrl: String = ""
-        var gSize: Long = 0
-        var gLang: String = ""
-        var gDescription: String = ""
-        var gDescurl: String = ""
+        var gName = ""
+        var gTitle = ""
+        var gAuthor = ""
+        var gImage = ""
+        var gDate = ""
+        var gVersion = ""
+        var gUrl = ""
+        var gSize = 0L
+        var gLang = ""
+        var gDescription = ""
+        var gDescUrl = ""
 
         parser.require(XmlPullParser.START_TAG, null, "game")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -74,7 +74,7 @@ class InsteadGamesXmlParser : GameListParser {
                 "size" -> gSize = readTag(name, parser).toLong()
                 "lang" -> gLang = readTag(name, parser)
                 "description" -> gDescription = readTag(name, parser)
-                "descurl" -> gDescurl = readTag(name, parser)
+                "descurl" -> gDescUrl = readTag(name, parser)
                 else -> skip(parser)
             }
         }
@@ -96,7 +96,7 @@ class InsteadGamesXmlParser : GameListParser {
             image = gImage,
             lang = gLang,
             description = gDescription,
-            descurl = gDescurl,
+            descurl = gDescUrl,
             brief = gBrief,
             installedVersion = "",
             state = NO_INSTALLED

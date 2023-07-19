@@ -11,7 +11,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.emunix.insteadlauncher.helpers.gameparser.GameParser
 import org.emunix.insteadlauncher.helpers.gameparser.GameParserImpl
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module

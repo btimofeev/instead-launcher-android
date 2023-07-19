@@ -39,7 +39,6 @@ class InsteadLauncher: Application(), Configuration.Provider {
         const val UPDATE_REPOSITORY_NOTIFICATION_ID: Int = 1000
         const val INSTALL_NOTIFICATION_ID: Int = 1001
         const val UNINSTALL_NOTIFICATION_ID: Int = 1002
-        const val UPDATE_RESOURCES_NOTIFICATION_ID: Int = 1004
         const val SCAN_GAMES_NOTIFICATION_ID: Int = 1005
 
         const val CHANNEL_UPDATE_REPOSITORY = "org.emunix.insteadlauncher.channel.update_repo"
