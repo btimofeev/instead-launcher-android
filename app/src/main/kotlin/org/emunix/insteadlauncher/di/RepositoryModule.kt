@@ -10,9 +10,9 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.emunix.insteadlauncher.data.repository.AppVersionRepositoryImpl
-import org.emunix.insteadlauncher.data.repository.ResourceUpdaterImpl
+import org.emunix.insteadlauncher.data.repository.FileSystemRepositoryImpl
 import org.emunix.insteadlauncher.domain.repository.AppVersionRepository
-import org.emunix.insteadlauncher.domain.repository.ResourceUpdater
+import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.worker.UpdateRepositoryWorker
 import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager
 
@@ -24,7 +24,7 @@ interface RepositoryModule {
     fun bindAppVersionRepository(impl: AppVersionRepositoryImpl): AppVersionRepository
 
     @Binds
-    fun bindResourceUpdater(impl:  ResourceUpdaterImpl): ResourceUpdater
+    fun bindFileSystemRepository(impl: FileSystemRepositoryImpl): FileSystemRepository
 
     @Binds
     fun bindUpdateRepositoryWorker(impl: UpdateRepositoryWorkManager): UpdateRepositoryWorker

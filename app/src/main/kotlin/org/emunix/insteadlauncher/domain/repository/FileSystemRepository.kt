@@ -7,11 +7,11 @@ package org.emunix.insteadlauncher.domain.repository
 
 import java.io.IOException
 
-/**
- * Updates INSTEAD resources in the file system (by copying from APK). Works in an IO thread.
- */
-interface ResourceUpdater {
+interface FileSystemRepository {
 
     @Throws(IOException::class)
-    suspend fun update()
+    suspend fun createStorageDirectories()
+
+    @Throws(IOException::class)
+    suspend fun copyResourcesFromAssets()
 }

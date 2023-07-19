@@ -10,6 +10,8 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.components.ViewModelComponent
+import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCase
+import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
@@ -23,6 +25,9 @@ interface UseCaseModule {
 
     @Binds
     fun bindUpdateResourceUseCase(impl: UpdateResourceUseCaseImpl): UpdateResourceUseCase
+
+    @Binds
+    fun bindCreateDirectoriesUseCase(impl: CreateDirectoriesUseCaseImpl): CreateDirectoriesUseCase
 
     @Binds
     fun bindStartUpdateRepositoryWorkUseCase(impl: StartUpdateRepositoryWorkUseCaseImpl): StartUpdateRepositoryWorkUseCase

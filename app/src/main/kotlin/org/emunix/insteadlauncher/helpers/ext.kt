@@ -20,6 +20,7 @@ import coil.load
 import coil.size.Precision.EXACT
 import org.apache.commons.io.IOUtils
 import org.emunix.insteadlauncher.R
+import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -134,3 +135,7 @@ fun <T> Context.isServiceRunning(service: Class<T>) =
         (getSystemService(ACTIVITY_SERVICE) as ActivityManager)
                 .getRunningServices(Integer.MAX_VALUE)
                 .any { it.service.className == service.name }
+
+fun Throwable.writeToLog() {
+    Timber.tag("InsteadLauncher").e(this)
+}

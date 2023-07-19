@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2020-2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -12,15 +12,18 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.BuildConfig
+import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.ERROR
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.NO_UPDATE_REQUIRED
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.SUCCESS
+import org.emunix.insteadlauncher.helpers.writeToLog
 import javax.inject.Inject
 
 @HiltViewModel
 class UnpackResourcesViewModel @Inject constructor(
     private val updateResourceUseCase: UpdateResourceUseCase,
+    private val createDirectoriesUseCase: CreateDirectoriesUseCase,
 ) : ViewModel() {
 
     private var _unpackSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -39,9 +42,15 @@ class UnpackResourcesViewModel @Inject constructor(
 
     private fun update() = viewModelScope.launch {
         _showError.value = false
-        when (updateResourceUseCase(forceUpdate = BuildConfig.DEBUG)) {
-            SUCCESS, NO_UPDATE_REQUIRED -> _unpackSuccess.value = true
-            ERROR -> _showError.value = true
+        runCatching {
+            createDirectoriesUseCase()
+            when (updateResourceUseCase(forceUpdate = BuildConfig.DEBUG)) {
+                SUCCESS, NO_UPDATE_REQUIRED -> _unpackSuccess.value = true
+                ERROR -> _showError.value = true
+            }
+        }.onFailure { err ->
+            err.writeToLog()
+            _showError.value = true
         }
     }
 }

@@ -6,17 +6,17 @@
 package org.emunix.insteadlauncher.domain.usecase
 
 import org.emunix.insteadlauncher.domain.repository.AppVersionRepository
-import org.emunix.insteadlauncher.domain.repository.ResourceUpdater
+import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.ERROR
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.NO_UPDATE_REQUIRED
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.SUCCESS
-import timber.log.Timber
+import org.emunix.insteadlauncher.helpers.writeToLog
 import javax.inject.Inject
 
 class UpdateResourceUseCaseImpl @Inject constructor(
     private val appVersionRepository: AppVersionRepository,
-    private val resourceUpdater: ResourceUpdater,
+    private val fileSystemRepository: FileSystemRepository,
 ) : UpdateResourceUseCase {
 
     override suspend fun invoke(forceUpdate: Boolean): UpdateResult {
@@ -31,11 +31,11 @@ class UpdateResourceUseCaseImpl @Inject constructor(
         var result = ERROR
 
         runCatching {
-            resourceUpdater.update()
+            fileSystemRepository.copyResourcesFromAssets()
             appVersionRepository.saveCurrentVersion()
         }
             .onSuccess { result = SUCCESS }
-            .onFailure { Timber.e(it) }
+            .onFailure { it.writeToLog() }
 
         return result
     }

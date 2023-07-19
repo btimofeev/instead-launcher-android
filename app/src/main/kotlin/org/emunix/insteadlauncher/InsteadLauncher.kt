@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2022 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,14 +11,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.widget.Toast
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.acra.config.mailSender
 import org.acra.config.notification
 import org.acra.data.StringFormat
@@ -60,7 +55,6 @@ class InsteadLauncher: Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         initLogger()
-        createStorageDirectories()
         createNotificationChannels()
         ThemeHelper.applyTheme(preferencesProvider.appTheme)
         StorageHolder.storage = storage
@@ -102,18 +96,6 @@ class InsteadLauncher: Application(), Configuration.Provider {
                 withSendButtonText(getString(R.string.error_crash_send_button))
                 withDiscardButtonText(getString(R.string.error_crash_discard_button))
                 withChannelName(getString(R.string.channel_crash_report))
-            }
-        }
-    }
-
-    private fun createStorageDirectories() {
-        MainScope().launch {
-            runCatching {
-                withContext(Dispatchers.IO) {
-                    storage.createStorageDirectories()
-                }
-            }.onFailure { err ->
-                Toast.makeText(this@InsteadLauncher, err.toString(), Toast.LENGTH_LONG).show()
             }
         }
     }
