@@ -129,7 +129,7 @@ dependencies {
 
     // Network
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'io.coil-kt:coil:2.4.0'
 
     // DI
     implementation "com.google.dagger:hilt-android:$rootProject.hilt_version"

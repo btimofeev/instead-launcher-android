@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2022 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -93,7 +93,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
             binding.version.text = getString(R.string.game_activity_label_version, game.version)
         }
         binding.size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
-        binding.gameImage.loadUrl(game.image)
+        binding.gameImage.loadUrl(url = game.image, highQuality = true)
         binding.description.text = game.description
 
         if (game.descurl.isNotBlank()) {

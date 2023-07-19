@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,41 +11,31 @@ import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.text.TextUtils
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.squareup.picasso.Picasso
+import coil.load
+import coil.size.Precision.EXACT
 import org.apache.commons.io.IOUtils
 import org.emunix.insteadlauncher.R
 import java.io.ByteArrayInputStream
 import java.io.File
-import java.util.zip.ZipFile
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.*
 import java.util.zip.ZipException
+import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream
 
-
-fun ViewGroup.inflate(layoutRes: Int): View {
-    return LayoutInflater.from(context).inflate(layoutRes, this, false)
-}
-
-fun ImageView.loadUrl(url: String) {
-    if (url.isEmpty()) {
-        Picasso.get()
-                .load(R.drawable.sleeping_cat)
-                .into(this)
-    } else {
-        Picasso.get()
-                .load(url)
-                .placeholder(R.drawable.walking_cat)
-                .error(R.drawable.sleeping_cat)
-                .into(this)
+fun ImageView.loadUrl(url: String, highQuality: Boolean = false) {
+    load(url.ifEmpty { R.drawable.sleeping_cat }) {
+        placeholder(R.drawable.walking_cat)
+        error(R.drawable.sleeping_cat)
+        if (highQuality) {
+            precision(EXACT)
+        }
     }
 }
 
