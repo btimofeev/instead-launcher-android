@@ -8,6 +8,7 @@ package org.emunix.insteadlauncher.presentation.settings
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
@@ -15,8 +16,10 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate
@@ -31,6 +34,12 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     @Inject
     lateinit var stopUpdateRepositoryWorkUseCase: StopUpdateRepositoryWorkUseCase
 
+    @Inject
+    lateinit var fileSystemRepository: FileSystemRepository
+
+    @Inject
+    lateinit var preferencesProvider: PreferencesProvider
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val toolbar: MaterialToolbar = view.findViewById(R.id.toolbar) as MaterialToolbar
@@ -42,10 +51,13 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
+        setupInsteadThemesMenu()
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences,
-                                           key: String) {
+    override fun onSharedPreferenceChanged(
+        sharedPreferences: SharedPreferences,
+        key: String
+    ) {
         when (key) {
             "pref_repository" -> {
                 findPreference<EditTextPreference?>("pref_repository")?.let { repo ->
@@ -54,6 +66,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                     }
                 }
             }
+
             "pref_sandbox" -> {
                 findPreference<EditTextPreference?>("pref_sandbox")?.let { sandbox ->
                     if (sandbox.text.isNullOrBlank()) {
@@ -61,18 +74,26 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                     }
                 }
             }
+
             "app_theme" -> {
                 val theme: ListPreference? = findPreference("app_theme")
                 if (theme != null) {
                     ThemeSwitcherDelegate().applyTheme(theme.value)
                 }
             }
+
             "pref_update_repo_background" -> {
                 val pref: SwitchPreference? = findPreference("pref_update_repo_background")
                 if (pref != null && pref.isChecked) {
                     startUpdateRepositoryWorkUseCase()
                 } else {
                     stopUpdateRepositoryWorkUseCase()
+                }
+            }
+
+            "pref_default_theme" -> {
+                findPreference<ListPreference>("pref_default_theme")?.let { pref ->
+                    pref.summary = pref.entry
                 }
             }
         }
@@ -86,5 +107,33 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     override fun onPause() {
         super.onPause()
         preferenceScreen.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    private fun setupInsteadThemesMenu() {
+        lifecycleScope.launch {
+            setInsteadThemes(fileSystemRepository.getInstalledThemeNames().toTypedArray())
+        }
+    }
+
+    private fun setInsteadThemes(themes: Array<String>) {
+        findPreference<ListPreference>("pref_default_theme")?.let { pref ->
+            val savedTheme = preferencesProvider.defaultInsteadTheme
+            if (themes.isNotEmpty()) {
+                pref.entries = themes
+                pref.entryValues = themes
+                when {
+                    themes.contains(savedTheme) -> pref.value = savedTheme
+                    themes.contains("mobile") -> pref.value = "mobile"
+                    themes.contains("wide") -> pref.value = "wide"
+                    themes.contains("default") -> pref.value = "default"
+                    else -> pref.setValueIndex(0)
+                }
+            } else {
+                pref.entries = requireContext().resources.getStringArray(R.array.prefs_themes_entries)
+                pref.entryValues = requireContext().resources.getStringArray(R.array.prefs_themes_values)
+                pref.setValueIndex(0)
+            }
+            pref.summary = pref.entry
+        }
     }
 }

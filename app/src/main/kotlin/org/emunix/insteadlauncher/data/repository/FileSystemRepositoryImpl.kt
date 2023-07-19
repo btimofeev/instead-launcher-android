@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
+import java.io.File
 import javax.inject.Inject
 
 class FileSystemRepositoryImpl @Inject constructor(
@@ -28,5 +29,32 @@ class FileSystemRepositoryImpl @Inject constructor(
 
         storage.getLangDirectory().deleteRecursively()
         storage.copyAsset("lang", storage.getDataDirectory())
+    }
+
+    override suspend fun getInstalledThemeNames(): List<String> = withContext(Dispatchers.IO) {
+        val themes = mutableListOf<String>()
+        val internalThemesDir = storage.getThemesDirectory()
+        val externalThemesDir = storage.getUserThemesDirectory()
+        themes.addAll(getInstalledThemeNamesFrom(internalThemesDir))
+        if (internalThemesDir.canonicalFile != externalThemesDir.canonicalFile) {
+            for (theme in getInstalledThemeNamesFrom(externalThemesDir)) {
+                if (!themes.contains(theme))
+                    themes.add(theme)
+            }
+        }
+        return@withContext themes
+    }
+
+    private fun getInstalledThemeNamesFrom(path: File): List<String> {
+        val themes = mutableListOf<String>()
+        if (path.exists()) {
+            val dirs = path.listFiles()?.filter { it.isDirectory }
+            dirs?.forEach { dir ->
+                if (File(dir, "theme.ini").exists()) {
+                    themes.add(dir.name)
+                }
+            }
+        }
+        return themes
     }
 }

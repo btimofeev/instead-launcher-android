@@ -19,8 +19,6 @@ import org.acra.config.notification
 import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
-import org.emunix.instead.core_storage_api.data.Storage
-import org.emunix.instead.core_storage_api.utils.StorageHolder
 import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -47,9 +45,6 @@ class InsteadLauncher: Application(), Configuration.Provider {
     lateinit var workerFactory: HiltWorkerFactory
 
     @Inject
-    lateinit var storage: Storage
-
-    @Inject
     lateinit var preferencesProvider: PreferencesProvider
 
     override fun onCreate() {
@@ -57,7 +52,6 @@ class InsteadLauncher: Application(), Configuration.Provider {
         initLogger()
         createNotificationChannels()
         ThemeSwitcherDelegate().applyTheme(preferencesProvider.appTheme)
-        StorageHolder.storage = storage
     }
 
     override fun attachBaseContext(base: Context?) {
