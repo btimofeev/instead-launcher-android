@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.ui.about
+package org.emunix.insteadlauncher.presentation.about
 
 import android.os.Bundle
 import android.view.View

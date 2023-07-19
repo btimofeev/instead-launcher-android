@@ -17,7 +17,7 @@ import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UPDATE_REPOS
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UPDATE_REPOSITORY_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.helpers.network.RepoUpdater
-import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
+import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint

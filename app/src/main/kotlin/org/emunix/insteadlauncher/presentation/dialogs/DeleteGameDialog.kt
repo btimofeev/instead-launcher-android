@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.ui.dialogs
+package org.emunix.insteadlauncher.presentation.dialogs
 
 import android.app.Dialog
 import android.os.Bundle

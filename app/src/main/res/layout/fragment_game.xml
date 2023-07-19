@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    tools:context=".ui.game.GameFragment">
+    tools:context=".presentation.game.GameFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

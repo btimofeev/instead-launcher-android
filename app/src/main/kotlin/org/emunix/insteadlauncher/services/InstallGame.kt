@@ -34,7 +34,7 @@ import org.emunix.insteadlauncher.helpers.*
 import org.emunix.insteadlauncher.helpers.eventbus.EventBus
 import org.emunix.insteadlauncher.helpers.network.ProgressListener
 import org.emunix.insteadlauncher.helpers.network.ProgressResponseBody
-import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
+import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
 import javax.inject.Inject
 
 

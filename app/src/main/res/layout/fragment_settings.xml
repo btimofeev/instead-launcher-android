@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
     android:fitsSystemWindows="true"
-    tools:context="org.emunix.insteadlauncher.ui.settings.SettingsFragment">
+    tools:context="org.emunix.insteadlauncher.presentation.settings.SettingsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.ui.installedgames
+package org.emunix.insteadlauncher.presentation.installedgames
 
 import android.os.Bundle
 import android.view.ContextMenu
@@ -28,8 +28,8 @@ import org.emunix.insteadlauncher.databinding.FragmentInstalledGamesBinding
 import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.manager.game.GameManager
-import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
-import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
+import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
+import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint

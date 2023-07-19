@@ -21,7 +21,7 @@
             android:key="pref_enable_game_theme"
             android:summary="@string/prefs_enable_game_theme_summary"
             android:title="@string/prefs_enable_game_theme_title"/>
-        <org.emunix.insteadlauncher.ui.settings.ThemeListPreference
+        <org.emunix.insteadlauncher.presentation.settings.ThemeListPreference
             android:dependency="pref_enable_game_theme"
             android:icon="@drawable/ic_image_album_24dp"
             android:key="pref_default_theme"

@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.ui.settings
+package org.emunix.insteadlauncher.presentation.settings
 
 import android.content.Context
 import android.util.AttributeSet

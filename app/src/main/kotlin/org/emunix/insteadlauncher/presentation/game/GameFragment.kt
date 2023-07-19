@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.ui.game
+package org.emunix.insteadlauncher.presentation.game
 
 import android.content.Intent
 import android.net.Uri
@@ -29,7 +29,7 @@ import org.emunix.insteadlauncher.helpers.loadUrl
 import org.emunix.insteadlauncher.helpers.showToast
 import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.manager.game.GameManager
-import org.emunix.insteadlauncher.ui.dialogs.DeleteGameDialog
+import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
 import javax.inject.Inject
 
 @AndroidEntryPoint

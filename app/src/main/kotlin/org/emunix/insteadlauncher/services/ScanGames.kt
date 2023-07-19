@@ -24,7 +24,7 @@ import org.emunix.insteadlauncher.data.db.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.helpers.GameDbHelper
 import org.emunix.insteadlauncher.helpers.gameparser.GameParser
-import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
+import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat

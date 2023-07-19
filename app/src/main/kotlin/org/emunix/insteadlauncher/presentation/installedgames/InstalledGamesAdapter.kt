@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.ui.installedgames
+package org.emunix.insteadlauncher.presentation.installedgames
 
 import android.view.LayoutInflater
 import android.view.View

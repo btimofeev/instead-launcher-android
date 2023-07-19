@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.ui.repository
+package org.emunix.insteadlauncher.presentation.repository
 
 import android.app.Activity
 import android.app.ProgressDialog
@@ -30,7 +30,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
 import org.emunix.insteadlauncher.helpers.showToast
-import org.emunix.insteadlauncher.ui.launcher.AppArgumentViewModel
+import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
 
 private const val READ_REQUEST_CODE = 546
 

@@ -23,7 +23,7 @@ import org.emunix.insteadlauncher.data.db.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.helpers.GameDbHelper
 import org.emunix.insteadlauncher.helpers.NotificationHelper
-import org.emunix.insteadlauncher.ui.launcher.LauncherActivity
+import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject

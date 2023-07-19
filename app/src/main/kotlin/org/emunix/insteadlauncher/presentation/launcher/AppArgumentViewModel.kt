@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.ui.launcher
+package org.emunix.insteadlauncher.presentation.launcher
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData

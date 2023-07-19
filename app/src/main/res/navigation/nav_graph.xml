@@ -11,7 +11,7 @@
     app:startDestination="@id/unpackResourcesFragment">
     <fragment
         android:id="@+id/unpackResourcesFragment"
-        android:name="org.emunix.insteadlauncher.ui.unpackresources.UnpackResourcesFragment"
+        android:name="org.emunix.insteadlauncher.presentation.unpackresources.UnpackResourcesFragment"
         android:label="fragment_unpack_resources"
         tools:layout="@layout/fragment_unpack_resources" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/installedGamesFragment"
-        android:name="org.emunix.insteadlauncher.ui.installedgames.InstalledGamesFragment"
+        android:name="org.emunix.insteadlauncher.presentation.installedgames.InstalledGamesFragment"
         android:label="fragment_installed_games"
         tools:layout="@layout/fragment_installed_games" >
         <action
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/repositoryFragment"
-        android:name="org.emunix.insteadlauncher.ui.repository.RepositoryFragment"
+        android:name="org.emunix.insteadlauncher.presentation.repository.RepositoryFragment"
         android:label="fragment_repository"
         tools:layout="@layout/fragment_repository" >
         <action
@@ -71,7 +71,7 @@
         android:label="InsteadActivity" />
     <fragment
         android:id="@+id/gameFragment"
-        android:name="org.emunix.insteadlauncher.ui.game.GameFragment"
+        android:name="org.emunix.insteadlauncher.presentation.game.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" >
         <action
@@ -83,11 +83,11 @@
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="org.emunix.insteadlauncher.ui.about.AboutFragment"
+        android:name="org.emunix.insteadlauncher.presentation.about.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="org.emunix.insteadlauncher.ui.settings.SettingsFragment"
+        android:name="org.emunix.insteadlauncher.presentation.settings.SettingsFragment"
         android:label="SettingsFragment" />
 </navigation>
