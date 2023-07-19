@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -19,7 +19,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
-import org.emunix.insteadlauncher.helpers.ThemeHelper
+import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -64,7 +64,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             "app_theme" -> {
                 val theme: ListPreference? = findPreference("app_theme")
                 if (theme != null) {
-                    ThemeHelper.applyTheme(theme.value)
+                    ThemeSwitcherDelegate().applyTheme(theme.value)
                 }
             }
             "pref_update_repo_background" -> {

@@ -21,7 +21,7 @@ import org.acra.ktx.initAcra
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.instead.core_storage_api.utils.StorageHolder
-import org.emunix.insteadlauncher.helpers.ThemeHelper
+import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import javax.inject.Inject
@@ -56,7 +56,7 @@ class InsteadLauncher: Application(), Configuration.Provider {
         super.onCreate()
         initLogger()
         createNotificationChannels()
-        ThemeHelper.applyTheme(preferencesProvider.appTheme)
+        ThemeSwitcherDelegate().applyTheme(preferencesProvider.appTheme)
         StorageHolder.storage = storage
     }
 
