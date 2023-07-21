@@ -23,6 +23,10 @@ class DataBaseRepositoryImpl @Inject constructor(
         gameDao.insert(game.toData())
     }
 
+    override suspend fun replaceAll(games: List<GameModel>) = withContext(Dispatchers.IO) {
+        gameDao.updateRepository(games.map { it.toData() })
+    }
+
     override suspend fun updateGame(game: GameModel) = withContext(Dispatchers.IO) {
         gameDao.update(game.toData())
     }

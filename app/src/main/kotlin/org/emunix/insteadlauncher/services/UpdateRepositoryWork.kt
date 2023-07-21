@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -9,12 +9,12 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
+import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -28,9 +28,9 @@ class UpdateRepositoryWork @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val repoUpdater: RepoUpdater
-) : Worker(appContext, workerParams) {
+) : CoroutineWorker(appContext, workerParams) {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         return when (repoUpdater.update()) {
             true -> Result.success()
             false -> Result.retry()

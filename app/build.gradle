@@ -121,7 +121,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navigation_version"
 
     // WorkManager
-    implementation 'androidx.work:work-runtime:2.8.1'
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
     // RxJava
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'

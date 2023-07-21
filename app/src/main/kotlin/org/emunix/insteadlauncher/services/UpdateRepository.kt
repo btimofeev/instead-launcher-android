@@ -13,6 +13,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UPDATE_REPOSITORY
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UPDATE_REPOSITORY_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
@@ -29,7 +30,9 @@ class UpdateRepository: IntentService("UpdateRepository") {
         val notification = createNotification()
         startForeground(UPDATE_REPOSITORY_NOTIFICATION_ID, notification)
 
-        repoUpdater.update()
+        runBlocking {
+            repoUpdater.update()
+        }
 
         stopForeground(true)
     }

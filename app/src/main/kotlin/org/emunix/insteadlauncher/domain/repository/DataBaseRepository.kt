@@ -11,6 +11,8 @@ interface DataBaseRepository {
 
     suspend fun addOrReplaceGame(game: GameModel)
 
+    suspend fun replaceAll(games: List<GameModel>)
+
     suspend fun updateGame(game: GameModel)
 
     suspend fun deleteGame(name: String)
