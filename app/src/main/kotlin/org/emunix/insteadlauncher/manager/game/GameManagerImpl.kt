@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.instead_api.InsteadApi
-import org.emunix.insteadlauncher.helpers.gameparser.GameParser
+import org.emunix.insteadlauncher.domain.parser.GameParser
 import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
 import org.emunix.insteadlauncher.helpers.unzip
 import org.emunix.insteadlauncher.services.DeleteGame

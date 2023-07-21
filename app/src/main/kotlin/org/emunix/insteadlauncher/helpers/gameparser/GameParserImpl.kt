@@ -5,6 +5,7 @@
 
 package org.emunix.insteadlauncher.helpers.gameparser
 
+import org.emunix.insteadlauncher.domain.parser.GameParser
 import java.io.File
 import java.io.InputStream
 import java.util.regex.Pattern

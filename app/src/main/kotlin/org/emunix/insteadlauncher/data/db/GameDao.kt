@@ -17,7 +17,7 @@ interface GameDao {
     fun observeByName(name: String): LiveData<Game>
 
     @Query("SELECT * FROM games WHERE name LIKE :name LIMIT 1")
-    fun getByName(name: String): Game
+    fun getByName(name: String): Game // TODO похоже должно возвращать nullable, пока обработано в репозитории, но потом нужно оттуда удалить try catch
 
     @Query("SELECT * FROM games WHERE state = 1")
     fun observeInstalledGames(): LiveData<List<Game>>
@@ -39,6 +39,9 @@ interface GameDao {
 
     @Delete
     fun delete(game: Game)
+
+    @Query("DELETE FROM games WHERE name = :name")
+    fun deleteByName(name: String)
 
     @Query("DELETE FROM games")
     fun deleteAll()

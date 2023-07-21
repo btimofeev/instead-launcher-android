@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -10,8 +10,10 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.emunix.insteadlauncher.data.repository.AppVersionRepositoryImpl
+import org.emunix.insteadlauncher.data.repository.DataBaseRepositoryImpl
 import org.emunix.insteadlauncher.data.repository.FileSystemRepositoryImpl
 import org.emunix.insteadlauncher.domain.repository.AppVersionRepository
+import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.worker.UpdateRepositoryWorker
 import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager
@@ -28,4 +30,7 @@ interface RepositoryModule {
 
     @Binds
     fun bindUpdateRepositoryWorker(impl: UpdateRepositoryWorkManager): UpdateRepositoryWorker
+
+    @Binds
+    fun bindDataBaseRepository(impl: DataBaseRepositoryImpl): DataBaseRepository
 }

@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers.gameparser
+package org.emunix.insteadlauncher.domain.parser
 
 import java.io.File
 import java.io.InputStream

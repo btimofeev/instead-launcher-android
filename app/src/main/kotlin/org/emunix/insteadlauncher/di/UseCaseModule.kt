@@ -9,9 +9,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.components.ViewModelComponent
 import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCase
 import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCaseImpl
+import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCase
+import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
@@ -45,4 +48,12 @@ interface UseCaseFragmentModule {
 
     @Binds
     fun bindStopUpdateRepositoryWorkUseCase(impl: StopUpdateRepositoryWorkUseCaseImpl): StopUpdateRepositoryWorkUseCase
+}
+
+@InstallIn(ServiceComponent::class)
+@Module
+interface UseCaseServiceModule {
+
+    @Binds
+    fun bindScanAndUpdateLocalGamesUseCase(impl: ScanAndUpdateLocalGamesUseCaseImpl): ScanAndUpdateLocalGamesUseCase
 }
