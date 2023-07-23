@@ -13,6 +13,8 @@ import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.components.ViewModelComponent
 import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCase
 import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCaseImpl
+import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCase
+import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCase
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
@@ -56,4 +58,7 @@ interface UseCaseServiceModule {
 
     @Binds
     fun bindScanAndUpdateLocalGamesUseCase(impl: ScanAndUpdateLocalGamesUseCaseImpl): ScanAndUpdateLocalGamesUseCase
+
+    @Binds
+    fun bindDeleteGameUseCase(impl: DeleteGameUseCaseImpl): DeleteGameUseCase
 }

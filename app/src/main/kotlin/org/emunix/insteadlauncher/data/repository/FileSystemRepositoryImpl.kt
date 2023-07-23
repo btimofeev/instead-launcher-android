@@ -20,6 +20,12 @@ class FileSystemRepositoryImpl @Inject constructor(
         storage.createStorageDirectories()
     }
 
+    override suspend fun deleteGameFromDisk(gameName: String) = withContext(Dispatchers.IO) {
+        val gameDir = File(storage.getGamesDirectory(), gameName)
+        gameDir.deleteRecursively()
+        return@withContext
+    }
+
     override suspend fun copyResourcesFromAssets() = withContext(Dispatchers.IO) {
         storage.getThemesDirectory().deleteRecursively()
         storage.copyAsset("themes", storage.getDataDirectory())

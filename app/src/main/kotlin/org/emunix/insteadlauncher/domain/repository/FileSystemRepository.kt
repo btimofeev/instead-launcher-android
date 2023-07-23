@@ -13,6 +13,9 @@ interface FileSystemRepository {
     suspend fun createStorageDirectories()
 
     @Throws(IOException::class)
+    suspend fun deleteGameFromDisk(gameName: String)
+
+    @Throws(IOException::class)
     suspend fun copyResourcesFromAssets()
 
     suspend fun getInstalledThemeNames(): List<String>
