@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2020-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018, 2020-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -11,57 +11,41 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.data.db.GameDao
+import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
+import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Error
+import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Success
+import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
 import org.emunix.insteadlauncher.helpers.ConsumableEvent
-import org.emunix.insteadlauncher.data.model.DownloadProgressEvent
 import org.emunix.insteadlauncher.helpers.GameDbHelper
-import org.emunix.insteadlauncher.helpers.eventbus.EventBus
+import org.emunix.insteadlauncher.helpers.getDownloadingMessage
 import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
 import org.emunix.insteadlauncher.manager.game.GameManager
 import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    private val eventBus: EventBus,
     private val gamesDB: GameDao,
     private val gamesDbHelper: GameDbHelper,
     private val gameManager: GameManager,
-    private val resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider,
+    private val getDownloadGamesStatusUseCase: GetDownloadGamesStatusUseCase,
 ) : ViewModel() {
 
     private lateinit var game: LiveData<Game>
     private val progress: MutableLiveData<Int> = MutableLiveData()
     private val progressMessage: MutableLiveData<String> = MutableLiveData()
     private val errorMessage: MutableLiveData<ConsumableEvent<String>> = MutableLiveData()
-    private var eventDisposable: Disposable? = null
 
     @SuppressLint("CheckResult")
     fun init(gameName: String) {
         game = gamesDB.observeByName(gameName)
-
-        eventDisposable = eventBus.listen(DownloadProgressEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (it.gameName == gameName) {
-                        if (it.error) {
-                            errorMessage.value = ConsumableEvent(it.errorMessage)
-                        }
-
-                        progress.value = it.progressValue
-                        progressMessage.value = it.progressMessage
-
-                        if (it.done) {
-                            progress.value = -1
-                            progressMessage.value = resourceProvider.getString(R.string.game_activity_message_installing)
-                        }
-                    }
-                }
+        observeDownloadStatus(gameName)
     }
 
     fun installGame() {
@@ -89,8 +73,23 @@ class GameViewModel @Inject constructor(
 
     fun getErrorMessage(): LiveData<ConsumableEvent<String>> = errorMessage
 
-    override fun onCleared() {
-        eventDisposable?.dispose()
-        super.onCleared()
+    private fun observeDownloadStatus(gameName: String) = viewModelScope.launch {
+        getDownloadGamesStatusUseCase()
+            .filter { it.gameName == gameName }
+            .collect { downloadStatus ->
+                when (downloadStatus) {
+                    is Downloading -> {
+                        progress.value = downloadStatus.downloadedInPercentage
+                        progressMessage.value = downloadStatus.getDownloadingMessage(resourceProvider)
+                    }
+                    is Success -> {
+                        progress.value = -1
+                        progressMessage.value = resourceProvider.getString(R.string.game_activity_message_installing)
+                    }
+                    is Error -> {
+                        errorMessage.value = ConsumableEvent(downloadStatus.errorMessage)
+                    }
+                }
+            }
     }
 }

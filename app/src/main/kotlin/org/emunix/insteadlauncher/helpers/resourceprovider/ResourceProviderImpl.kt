@@ -12,5 +12,5 @@ class ResourceProviderImpl @Inject constructor(private val context: Context) : R
 
     override fun getString(stringResId: Int): String = context.getString(stringResId)
 
-    override fun getString(stringResId: Int, vararg args: Any): String = context.getString(stringResId, args)
+    override fun getString(stringResId: Int, vararg args: Any): String = context.getString(stringResId, *args)
 }

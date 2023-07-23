@@ -18,8 +18,11 @@ import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.DividerItemDecoration
 import coil.load
 import coil.size.Precision.EXACT
+import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
+import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -139,3 +142,10 @@ fun <T> Context.isServiceRunning(service: Class<T>) =
 fun Throwable.writeToLog() {
     Timber.tag("InsteadLauncher").e(this)
 }
+
+fun Downloading.getDownloadingMessage(resourceProvider: ResourceProvider): String =
+    resourceProvider.getString(
+        R.string.game_activity_message_downloading,
+        FileUtils.byteCountToDisplaySize(downloadedBytes),
+        if (contentLength == -1L) "??" else FileUtils.byteCountToDisplaySize(contentLength)
+    )

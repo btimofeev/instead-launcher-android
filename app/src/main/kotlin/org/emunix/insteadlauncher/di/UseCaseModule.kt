@@ -15,6 +15,8 @@ import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCase
 import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCase
 import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCaseImpl
+import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
+import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCase
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
@@ -39,6 +41,9 @@ interface UseCaseModule {
 
     @Binds
     fun bindStopUpdateRepositoryWorkUseCase(impl: StopUpdateRepositoryWorkUseCaseImpl): StopUpdateRepositoryWorkUseCase
+
+    @Binds
+    fun bindGetDownloadGamesStatusUseCase(impl: GetDownloadGamesStatusUseCaseImpl): GetDownloadGamesStatusUseCase
 }
 
 @InstallIn(FragmentComponent::class)
@@ -61,4 +66,7 @@ interface UseCaseServiceModule {
 
     @Binds
     fun bindDeleteGameUseCase(impl: DeleteGameUseCaseImpl): DeleteGameUseCase
+
+    @Binds
+    fun bindGetDownloadGamesStatusUseCase(impl: GetDownloadGamesStatusUseCaseImpl): GetDownloadGamesStatusUseCase
 }
