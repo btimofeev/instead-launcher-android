@@ -117,15 +117,15 @@ internal class InsteadActivity: SDLActivity() {
 
     private fun getKeyboardButtonGravity(s: String): Int {
         return when (s) {
-            KEYBOARD_BUTTON_BOTTOM_LEFT   -> Gravity.BOTTOM or Gravity.START
+            KEYBOARD_BUTTON_BOTTOM_LEFT   -> Gravity.BOTTOM or Gravity.LEFT
             KEYBOARD_BUTTON_BOTTOM_CENTER -> Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
-            KEYBOARD_BUTTON_BOTTOM_RIGHT  -> Gravity.BOTTOM or Gravity.END
-            KEYBOARD_BUTTON_LEFT          -> Gravity.CENTER_VERTICAL or Gravity.START
-            KEYBOARD_BUTTON_RIGHT         -> Gravity.CENTER_VERTICAL or Gravity.END
-            KEYBOARD_BUTTON_TOP_LEFT      -> Gravity.TOP or Gravity.START
+            KEYBOARD_BUTTON_BOTTOM_RIGHT  -> Gravity.BOTTOM or Gravity.RIGHT
+            KEYBOARD_BUTTON_LEFT          -> Gravity.CENTER_VERTICAL or Gravity.LEFT
+            KEYBOARD_BUTTON_RIGHT         -> Gravity.CENTER_VERTICAL or Gravity.RIGHT
+            KEYBOARD_BUTTON_TOP_LEFT      -> Gravity.TOP or Gravity.LEFT
             KEYBOARD_BUTTON_TOP_CENTER    -> Gravity.CENTER_HORIZONTAL or Gravity.TOP
-            KEYBOARD_BUTTON_TOP_RIGHT     -> Gravity.TOP or Gravity.END
-            else -> Gravity.BOTTOM or Gravity.START
+            KEYBOARD_BUTTON_TOP_RIGHT     -> Gravity.TOP or Gravity.RIGHT
+            else -> Gravity.BOTTOM or Gravity.LEFT
 
         }
     }
