@@ -7,6 +7,7 @@ package org.emunix.insteadlauncher.presentation.unpackresources
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,7 +15,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentUnpackResourcesBinding
-import org.emunix.insteadlauncher.utils.visible
 
 @AndroidEntryPoint
 class UnpackResourcesFragment : Fragment(R.layout.fragment_unpack_resources) {
@@ -33,9 +33,9 @@ class UnpackResourcesFragment : Fragment(R.layout.fragment_unpack_resources) {
         }
 
         viewModel.showError.observe(viewLifecycleOwner) { showError ->
-            binding.unpackResourcesProgressBar.visible(!showError)
-            binding.errorTextView.visible(showError)
-            binding.unpackResourcesTryAgainButton.visible(showError)
+            binding.unpackResourcesProgressBar.isVisible = !showError
+            binding.errorTextView.isVisible = showError
+            binding.unpackResourcesTryAgainButton.isVisible = showError
         }
 
         binding.unpackResourcesTryAgainButton.setOnClickListener { viewModel.tryAgainIsClicked() }

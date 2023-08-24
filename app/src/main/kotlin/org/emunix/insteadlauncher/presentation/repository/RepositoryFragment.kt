@@ -13,31 +13,28 @@ import android.view.*
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.utils.insetDivider
-import org.emunix.insteadlauncher.utils.visible
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
-import org.emunix.insteadlauncher.domain.model.GameModel
-import org.emunix.insteadlauncher.utils.showToast
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
 import org.emunix.insteadlauncher.presentation.models.RepoGame
+import org.emunix.insteadlauncher.utils.insetDivider
+import org.emunix.insteadlauncher.utils.showToast
 
 private const val READ_REQUEST_CODE = 546
 
@@ -109,12 +106,12 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
 
         viewModel.getErrorViewState().observe(viewLifecycleOwner) { state ->
             if (state != null)
-                binding.errorView.visible(state)
+                binding.errorView.isVisible = state
         }
 
         viewModel.getGameListState().observe(viewLifecycleOwner) { state ->
             if (state != null)
-                binding.list.visible(state)
+                binding.list.isVisible = state
         }
 
         installDialog = ProgressDialog(activity)

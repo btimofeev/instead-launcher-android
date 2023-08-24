@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -34,7 +35,6 @@ import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
 import org.emunix.insteadlauncher.utils.insetDivider
-import org.emunix.insteadlauncher.utils.visible
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -137,7 +137,7 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
             repeatOnLifecycle(State.STARTED) {
                 viewModel.gameItems.collect { games ->
                     listAdapter.submitList(games.toList())
-                    binding.emptyView.visible(games.isEmpty())
+                    binding.emptyView.isVisible = games.isEmpty()
                 }
             }
         }

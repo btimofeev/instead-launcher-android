@@ -40,13 +40,6 @@ fun ImageView.loadUrl(url: String, highQuality: Boolean = false) {
     }
 }
 
-fun View.visible(visible: Boolean) {
-    if (visible)
-        this.visibility = View.VISIBLE
-    else
-        this.visibility = View.GONE
-}
-
 fun Context.showToast(msg: String, length: Int = Toast.LENGTH_LONG) {
     Toast.makeText(this, msg, length).show()
 }

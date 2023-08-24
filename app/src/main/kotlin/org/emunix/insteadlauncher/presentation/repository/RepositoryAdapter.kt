@@ -8,13 +8,13 @@ package org.emunix.insteadlauncher.presentation.repository
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.databinding.ItemRepositoryBinding
 import org.emunix.insteadlauncher.presentation.models.RepoGame
 import org.emunix.insteadlauncher.utils.loadUrl
-import org.emunix.insteadlauncher.utils.visible
 
 class RepositoryAdapter(
     val listener: (RepoGame, ImageView) -> Unit
@@ -35,7 +35,7 @@ class RepositoryAdapter(
             name.text = game.title
             description.text = game.description
             image.loadUrl(game.imageUrl)
-            badge.visible(game.isHasNewVersion)
+            badge.isVisible = game.isHasNewVersion
         }
     }
 

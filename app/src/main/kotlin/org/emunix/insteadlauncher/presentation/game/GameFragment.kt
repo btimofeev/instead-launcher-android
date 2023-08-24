@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -32,7 +33,6 @@ import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.presentation.models.GameInfo
 import org.emunix.insteadlauncher.utils.loadUrl
 import org.emunix.insteadlauncher.utils.showToast
-import org.emunix.insteadlauncher.utils.visible
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -102,28 +102,28 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         binding.description.text = game.description
 
         if (game.siteUrl.isNotBlank()) {
-            binding.feedbackButton.visible(true)
+            binding.feedbackButton.isVisible = true
             binding.feedbackButton.setOnClickListener {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(game.siteUrl))
                 browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 requireActivity().startActivity(browserIntent)
             }
         } else {
-            binding.feedbackButton.visible(false)
+            binding.feedbackButton.isVisible = false
         }
 
         if (game.state == INSTALLED) {
-            binding.installMessage.visible(false)
-            binding.progressBar.visible(false)
-            binding.installButton.visible(false)
-            binding.deleteButton.visible(true)
-            binding.runButton.visible(true)
+            binding.installMessage.isVisible = false
+            binding.progressBar.isVisible = false
+            binding.installButton.isVisible = false
+            binding.deleteButton.isVisible = true
+            binding.runButton.isVisible = true
 
             if (game.isUpdateButtonShow) {
                 binding.installButton.text = getText(R.string.game_activity_button_update)
                 binding.installButton.backgroundTintList =
                     ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
-                binding.installButton.visible(true)
+                binding.installButton.isVisible = true
             }
         }
 
@@ -131,11 +131,11 @@ class GameFragment : Fragment(R.layout.fragment_game) {
             binding.installButton.text = getText(R.string.game_activity_button_install)
             binding.installButton.backgroundTintList =
                 ContextCompat.getColorStateList(activity, R.color.colorInstallButton)
-            binding.installButton.visible(true)
-            binding.deleteButton.visible(false)
-            binding.runButton.visible(false)
-            binding.progressBar.visible(false)
-            binding.installMessage.visible(false)
+            binding.installButton.isVisible = true
+            binding.deleteButton.isVisible = false
+            binding.runButton.isVisible = false
+            binding.progressBar.isVisible = false
+            binding.installMessage.isVisible = false
         }
 
         if (game.state == IS_INSTALL) {
@@ -172,11 +172,11 @@ class GameFragment : Fragment(R.layout.fragment_game) {
     }
 
     private fun showProgress(flag: Boolean) {
-        binding.installMessage.visible(flag)
-        binding.progressBar.visible(flag)
-        binding.installButton.visible(!flag)
-        binding.deleteButton.visible(!flag)
-        binding.runButton.visible(!flag)
+        binding.installMessage.isVisible = flag
+        binding.progressBar.isVisible = flag
+        binding.installButton.isVisible = !flag
+        binding.deleteButton.isVisible = !flag
+        binding.runButton.isVisible = !flag
     }
 
     private fun setIndeterminateProgress(indeterminate: Boolean, value: Int = 0) {
