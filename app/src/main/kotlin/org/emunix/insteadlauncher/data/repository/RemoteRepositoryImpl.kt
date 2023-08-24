@@ -10,9 +10,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
+import org.emunix.insteadlauncher.data.fetcher.GameListFetcher
 import org.emunix.insteadlauncher.data.mapper.DownloadProgress
+import org.emunix.insteadlauncher.data.parser.GameListParser
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Success
+import org.emunix.insteadlauncher.domain.model.GameModel
 import org.emunix.insteadlauncher.domain.repository.NotificationRepository
 import org.emunix.insteadlauncher.domain.repository.RemoteRepository
 import org.emunix.insteadlauncher.helpers.network.ProgressResponseBody
@@ -23,6 +27,9 @@ import javax.inject.Inject
 class RemoteRepositoryImpl @Inject constructor(
     private val httpClient: OkHttpClient.Builder,
     private val notificationRepository: NotificationRepository,
+    private val preferencesProvider: PreferencesProvider,
+    private val fetcher: GameListFetcher,
+    private val parser: GameListParser,
 ) : RemoteRepository {
 
     override suspend fun download(
@@ -46,6 +53,19 @@ class RemoteRepositoryImpl @Inject constructor(
         }
         return@withContext response.body.byteStream()
     }
+
+    override suspend fun getGameList(): List<GameModel> = withContext(Dispatchers.IO) {
+        val gamesMap = mutableMapOf<String, GameModel>()
+        if (preferencesProvider.isSandboxEnabled) {
+            gamesMap.putAll(parseXML(fetchXML(preferencesProvider.sandboxUrl)))
+        }
+        gamesMap.putAll(parseXML(fetchXML(preferencesProvider.repositoryUrl)))
+        return@withContext gamesMap.values.toList()
+    }
+
+    private fun fetchXML(url: String): String = fetcher.fetch(url)
+
+    private fun parseXML(xml: String): Map<String, GameModel> = parser.parse(xml)
 
     private fun sendNotification(gameName: String, downloadProgress: DownloadProgress) {
         val status = if (downloadProgress.isDone) {

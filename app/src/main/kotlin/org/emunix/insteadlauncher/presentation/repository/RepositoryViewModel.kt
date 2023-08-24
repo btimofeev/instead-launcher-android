@@ -1,41 +1,37 @@
 /*
- * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.presentation.repository
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.launch
-import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.data.db.GameDao
-import org.emunix.insteadlauncher.helpers.ConsumableEvent
-import org.emunix.insteadlauncher.data.model.UpdateRepoEvent
-import org.emunix.insteadlauncher.helpers.eventbus.EventBus
-import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.R.string
+import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.data.db.GameDao
+import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Error
+import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Success
+import org.emunix.insteadlauncher.domain.usecase.UpdateGameListUseCase
+import org.emunix.insteadlauncher.helpers.ConsumableEvent
+import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
 import org.emunix.insteadlauncher.manager.game.GameManager
-import org.emunix.insteadlauncher.manager.repository.RepositoryManager
 import java.io.IOException
 import java.util.zip.ZipException
 import javax.inject.Inject
 
 @HiltViewModel
 class RepositoryViewModel @Inject constructor(
-    private val eventBus: EventBus,
     private val gamesDB: GameDao,
     private val preferencesProvider: PreferencesProvider,
     private val gameManager: GameManager,
-    private val repositoryManager: RepositoryManager,
+    private val updateGameListUseCase: UpdateGameListUseCase,
 ) : ViewModel() {
 
     private val games = gamesDB.observeAll()
@@ -46,26 +42,9 @@ class RepositoryViewModel @Inject constructor(
     private val showSnackbar = MutableLiveData<ConsumableEvent<Int>>()
     private val showToast = MutableLiveData<ConsumableEvent<Int>>()
 
-    private var eventDisposable: Disposable? = null
-
-    @SuppressLint("CheckResult")
     fun init() {
-        eventDisposable = eventBus.listen(UpdateRepoEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                showErrorView.value = it.isError
-                showProgress.value = it.isLoading
-                showGameList.value = it.isGamesLoaded
-            }
-
-        if (repositoryManager.isRepositoryUpdating()) {
-            showErrorView.value = false
-            showProgress.value = true
-            showGameList.value = false
-        } else {
-            if (preferencesProvider.updateRepoWhenOpenRepositoryScreen) {
-                updateRepository()
-            }
+        if (preferencesProvider.updateRepoWhenOpenRepositoryScreen) {
+            updateRepository()
         }
     }
 
@@ -81,8 +60,21 @@ class RepositoryViewModel @Inject constructor(
 
     fun getToastMessage(): LiveData<ConsumableEvent<Int>> = showToast
 
-    fun updateRepository() {
-        repositoryManager.updateRepository()
+    fun updateRepository() = viewModelScope.launch {
+        showProgress.value = true
+        showGameList.value = false
+        showErrorView.value = false
+
+        when (updateGameListUseCase()) {
+            is Success -> {
+                showGameList.value = true
+                showProgress.value = false
+            }
+            is Error -> {
+                showProgress.value = false
+                showErrorView.value = true
+            }
+        }
     }
 
     fun getGames(): LiveData<List<Game>> = games
@@ -102,10 +94,5 @@ class RepositoryViewModel @Inject constructor(
         }
         showInstallGameDialog.value = false
         gameManager.scanGames()
-    }
-
-    override fun onCleared() {
-        eventDisposable?.dispose()
-        super.onCleared()
     }
 }

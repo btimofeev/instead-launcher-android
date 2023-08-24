@@ -11,6 +11,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCase
 import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCase
@@ -25,6 +26,8 @@ import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCas
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCaseImpl
+import org.emunix.insteadlauncher.domain.usecase.UpdateGameListUseCase
+import org.emunix.insteadlauncher.domain.usecase.UpdateGameListUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCaseImpl
 
@@ -64,9 +67,6 @@ interface UseCaseFragmentModule {
 interface UseCaseServiceModule {
 
     @Binds
-    fun bindScanAndUpdateLocalGamesUseCase(impl: ScanAndUpdateLocalGamesUseCaseImpl): ScanAndUpdateLocalGamesUseCase
-
-    @Binds
     fun bindDeleteGameUseCase(impl: DeleteGameUseCaseImpl): DeleteGameUseCase
 
     @Binds
@@ -74,4 +74,15 @@ interface UseCaseServiceModule {
 
     @Binds
     fun bindInstallGameUseCase(impl: InstallGameUseCaseImpl): InstallGameUseCase
+}
+
+@InstallIn(SingletonComponent::class)
+@Module
+interface UseCaseSingletonModule {
+
+    @Binds
+    fun bindScanAndUpdateLocalGamesUseCase(impl: ScanAndUpdateLocalGamesUseCaseImpl): ScanAndUpdateLocalGamesUseCase
+
+    @Binds
+    fun bindUpdateGameListUseCase(impl: UpdateGameListUseCaseImpl): UpdateGameListUseCase
 }

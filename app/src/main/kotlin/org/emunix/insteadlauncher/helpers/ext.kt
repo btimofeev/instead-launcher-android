@@ -68,26 +68,6 @@ fun DividerItemDecoration.insetDivider(c: Context, @DimenRes start_offset_dimens
     }
 }
 
-@Throws(ZipException::class)
-fun File.unzip(dir: File) {
-    ZipFile(this)
-            .use { zip ->
-                val entries = zip.entries()
-                while (entries.hasMoreElements()) {
-                    val entry = entries.nextElement()
-                    val entryFile = File(dir, entry.name)
-                    if (entry.isDirectory) {
-                        entryFile.mkdirs()
-                    } else {
-                        entryFile.parentFile?.mkdirs()
-                        FileOutputStream(entryFile).use {
-                            IOUtils.copy(zip.getInputStream(entry), it)
-                        }
-                    }
-                }
-            }
-}
-
 private const val BUFFER_SIZE = 102400
 
 @Throws(ZipException::class)
@@ -131,13 +111,6 @@ fun String.getBrief(): String {
     s = s.trim()
     return s
 }
-
-// https://gist.github.com/kevinmcmahon/2988931
-@Suppress("DEPRECATION") // Deprecated for third party Services.
-fun <T> Context.isServiceRunning(service: Class<T>) =
-        (getSystemService(ACTIVITY_SERVICE) as ActivityManager)
-                .getRunningServices(Integer.MAX_VALUE)
-                .any { it.service.className == service.name }
 
 fun Throwable.writeToLog() {
     Timber.tag("InsteadLauncher").e(this)

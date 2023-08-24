@@ -123,10 +123,6 @@ dependencies {
     // WorkManager
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
-    // RxJava
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
-    implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
-
     // Network
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
     implementation 'io.coil-kt:coil:2.4.0'
