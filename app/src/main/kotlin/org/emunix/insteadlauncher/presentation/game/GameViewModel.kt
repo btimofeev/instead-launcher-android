@@ -5,67 +5,79 @@
 
 package org.emunix.insteadlauncher.presentation.game
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Error
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Success
+import org.emunix.insteadlauncher.domain.model.GameModel
+import org.emunix.insteadlauncher.domain.model.GameState.INSTALLED
 import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
+import org.emunix.insteadlauncher.domain.usecase.GetGameInfoFlowUseCase
+import org.emunix.insteadlauncher.manager.game.GameManager
+import org.emunix.insteadlauncher.presentation.models.GameInfo
+import org.emunix.insteadlauncher.presentation.models.toGameInfo
 import org.emunix.insteadlauncher.utils.ConsumableEvent
 import org.emunix.insteadlauncher.utils.getDownloadingMessage
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
-import org.emunix.insteadlauncher.manager.game.GameManager
 import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    private val gamesDB: GameDao,
+    private val getGameInfoFlowUseCase: GetGameInfoFlowUseCase,
+    private val getDownloadGamesStatusUseCase: GetDownloadGamesStatusUseCase,
     private val gameManager: GameManager,
     private val resourceProvider: ResourceProvider,
-    private val getDownloadGamesStatusUseCase: GetDownloadGamesStatusUseCase,
 ) : ViewModel() {
 
-    private lateinit var game: LiveData<Game>
+    private val _game = MutableStateFlow<GameInfo?>(null)
+
+    val game: StateFlow<GameInfo?> = _game
+
     private val progress: MutableLiveData<Int> = MutableLiveData()
     private val progressMessage: MutableLiveData<String> = MutableLiveData()
     private val errorMessage: MutableLiveData<ConsumableEvent<String>> = MutableLiveData()
+    private var gameModel: GameModel? = null
 
-    @SuppressLint("CheckResult")
     fun init(gameName: String) {
-        game = gamesDB.observeByName(gameName)
+        observeGameInfo(gameName)
         observeDownloadStatus(gameName)
     }
 
     fun installGame() {
-        val gameToInstall = game.value
-        if (gameToInstall != null) {
-            gameManager.installGame(gameToInstall.name, gameToInstall.url, gameToInstall.title)
+        gameModel?.let {
+            gameManager.installGame(it.name, it.url.download, it.info.title)
         }
     }
 
     fun runGame() {
         val gameToRun = game.value
-        if (gameToRun != null && gameToRun.state == Game.State.INSTALLED) {
+        if (gameToRun != null && gameToRun.state == INSTALLED) {
             gameManager.startGame(gameToRun.name)
         }
     }
 
     fun getProgress(): LiveData<Int> = progress
 
-    fun getGame(): LiveData<Game> = game
-
     fun getProgressMessage(): LiveData<String> = progressMessage
 
     fun getErrorMessage(): LiveData<ConsumableEvent<String>> = errorMessage
+
+    private fun observeGameInfo(gameName: String) = viewModelScope.launch {
+        getGameInfoFlowUseCase(gameName)
+            .collect { game ->
+                gameModel = game
+                _game.value = game.toGameInfo(resourceProvider)
+            }
+    }
 
     private fun observeDownloadStatus(gameName: String) = viewModelScope.launch {
         getDownloadGamesStatusUseCase()

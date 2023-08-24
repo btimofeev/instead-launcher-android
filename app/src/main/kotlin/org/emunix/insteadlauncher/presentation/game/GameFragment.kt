@@ -13,23 +13,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import org.apache.commons.io.FileUtils
+import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.data.db.Game.State.INSTALLED
-import org.emunix.insteadlauncher.data.db.Game.State.IN_QUEUE_TO_INSTALL
-import org.emunix.insteadlauncher.data.db.Game.State.IS_DELETE
-import org.emunix.insteadlauncher.data.db.Game.State.IS_INSTALL
-import org.emunix.insteadlauncher.data.db.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.databinding.FragmentGameBinding
+import org.emunix.insteadlauncher.domain.model.GameState.INSTALLED
+import org.emunix.insteadlauncher.domain.model.GameState.IN_QUEUE_TO_INSTALL
+import org.emunix.insteadlauncher.domain.model.GameState.IS_DELETE
+import org.emunix.insteadlauncher.domain.model.GameState.IS_INSTALL
+import org.emunix.insteadlauncher.domain.model.GameState.NO_INSTALLED
+import org.emunix.insteadlauncher.manager.game.GameManager
+import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
+import org.emunix.insteadlauncher.presentation.models.GameInfo
 import org.emunix.insteadlauncher.utils.loadUrl
 import org.emunix.insteadlauncher.utils.showToast
 import org.emunix.insteadlauncher.utils.visible
-import org.emunix.insteadlauncher.manager.game.GameManager
-import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,13 +58,20 @@ class GameFragment : Fragment(R.layout.fragment_game) {
             ?: throw IllegalArgumentException("GameFragment require game_name passed as argument")
         viewModel.init(gameName)
 
-        viewModel.getGame().observe(viewLifecycleOwner) { game ->
-            if (game != null) {
-                setViews(game)
-            } else {
-                activity?.finish()
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.game.collect { game ->
+                    if (game != null) {
+                        setViews(game)
+                    }
+                }
             }
         }
+
         viewModel.getProgress().observe(viewLifecycleOwner) { value ->
             if (value == -1) {
                 setIndeterminateProgress(true)
@@ -79,27 +89,22 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         }
     }
 
-    private fun setViews(game: Game) {
+    private fun setViews(game: GameInfo) {
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = ""
         binding.collapsingToolbar?.isTitleEnabled = false
 
         binding.name.text = game.title
         binding.author.text = game.author
-        if (game.installedVersion.isNotBlank() and (game.version != game.installedVersion)) {
-            binding.version.text =
-                getString(R.string.game_activity_label_version, game.installedVersion + " (\u2191${game.version})")
-        } else {
-            binding.version.text = getString(R.string.game_activity_label_version, game.version)
-        }
-        binding.size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
-        binding.gameImage.loadUrl(url = game.image, highQuality = true)
+        binding.version.text = game.version
+        binding.size.text = game.size
+        binding.gameImage.loadUrl(url = game.imageUrl, highQuality = true)
         binding.description.text = game.description
 
-        if (game.descurl.isNotBlank()) {
+        if (game.siteUrl.isNotBlank()) {
             binding.feedbackButton.visible(true)
             binding.feedbackButton.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(game.descurl))
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(game.siteUrl))
                 browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 requireActivity().startActivity(browserIntent)
             }
@@ -114,7 +119,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
             binding.deleteButton.visible(true)
             binding.runButton.visible(true)
 
-            if (game.version != game.installedVersion) {
+            if (game.isUpdateButtonShow) {
                 binding.installButton.text = getText(R.string.game_activity_button_update)
                 binding.installButton.backgroundTintList =
                     ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
@@ -154,9 +159,10 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
         binding.deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
-                val deleteDialog = DeleteGameDialog.newInstance(game.name, gameManager)
-                if (isAdded)
+                if (isAdded) {
+                    val deleteDialog = DeleteGameDialog.newInstance(game.name, gameManager)
                     parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
+                }
             }
         }
 

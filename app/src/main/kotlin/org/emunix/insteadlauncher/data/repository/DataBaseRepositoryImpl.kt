@@ -55,6 +55,10 @@ class DataBaseRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun observeGameByName(name: String): Flow<GameModel> = withContext(Dispatchers.IO) {
+        return@withContext gameDao.observeByName(name).map { it.toDomain() }
+    }
+
     override suspend fun search(query: String): List<GameModel> = withContext(Dispatchers.IO) {
         return@withContext gameDao.search(query).map { it.toDomain() }
     }
