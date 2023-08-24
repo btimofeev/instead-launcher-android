@@ -11,7 +11,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
@@ -22,7 +21,6 @@ import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Error
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Success
 import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
 import org.emunix.insteadlauncher.helpers.ConsumableEvent
-import org.emunix.insteadlauncher.helpers.GameDbHelper
 import org.emunix.insteadlauncher.helpers.getDownloadingMessage
 import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
 import org.emunix.insteadlauncher.manager.game.GameManager
@@ -31,7 +29,6 @@ import javax.inject.Inject
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val gamesDB: GameDao,
-    private val gamesDbHelper: GameDbHelper,
     private val gameManager: GameManager,
     private val resourceProvider: ResourceProvider,
     private val getDownloadGamesStatusUseCase: GetDownloadGamesStatusUseCase,
@@ -52,9 +49,6 @@ class GameViewModel @Inject constructor(
         val gameToInstall = game.value
         if (gameToInstall != null) {
             gameManager.installGame(gameToInstall.name, gameToInstall.url, gameToInstall.title)
-            viewModelScope.launch(Dispatchers.IO) {
-                gamesDbHelper.saveStateToDB(gameToInstall, Game.State.IN_QUEUE_TO_INSTALL)
-            }
         }
     }
 
