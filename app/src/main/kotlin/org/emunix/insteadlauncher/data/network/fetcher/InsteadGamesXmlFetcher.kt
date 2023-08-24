@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2018, 2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.data.fetcher
+package org.emunix.insteadlauncher.data.network.fetcher
 
 import okhttp3.OkHttpClient
 import okhttp3.Request

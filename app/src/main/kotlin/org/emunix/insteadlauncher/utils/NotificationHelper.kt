@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers
+package org.emunix.insteadlauncher.utils
 
 import android.app.NotificationManager
 import android.app.PendingIntent

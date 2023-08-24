@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
-import org.emunix.insteadlauncher.data.fetcher.GameListFetcher
+import org.emunix.insteadlauncher.data.network.fetcher.GameListFetcher
 import org.emunix.insteadlauncher.data.mapper.DownloadProgress
 import org.emunix.insteadlauncher.data.parser.GameListParser
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
@@ -19,7 +19,7 @@ import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Success
 import org.emunix.insteadlauncher.domain.model.GameModel
 import org.emunix.insteadlauncher.domain.repository.NotificationRepository
 import org.emunix.insteadlauncher.domain.repository.RemoteRepository
-import org.emunix.insteadlauncher.helpers.network.ProgressResponseBody
+import org.emunix.insteadlauncher.data.network.ProgressResponseBody
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject

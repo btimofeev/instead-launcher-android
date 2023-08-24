@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers.resourceprovider
+package org.emunix.insteadlauncher.utils.resourceprovider
 
 import android.content.Context
 import javax.inject.Inject

@@ -19,7 +19,7 @@ import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_UNINSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.UNINSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCase
-import org.emunix.insteadlauncher.helpers.NotificationHelper
+import org.emunix.insteadlauncher.utils.NotificationHelper
 import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
 import javax.inject.Inject
 

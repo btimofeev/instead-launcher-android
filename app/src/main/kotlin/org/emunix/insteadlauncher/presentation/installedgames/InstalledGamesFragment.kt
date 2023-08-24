@@ -25,8 +25,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentInstalledGamesBinding
-import org.emunix.insteadlauncher.helpers.insetDivider
-import org.emunix.insteadlauncher.helpers.visible
+import org.emunix.insteadlauncher.utils.insetDivider
+import org.emunix.insteadlauncher.utils.visible
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel

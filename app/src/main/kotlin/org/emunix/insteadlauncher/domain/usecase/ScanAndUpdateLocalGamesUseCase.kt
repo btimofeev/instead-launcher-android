@@ -16,7 +16,7 @@ import org.emunix.insteadlauncher.domain.model.GameUrl
 import org.emunix.insteadlauncher.domain.model.GameVersion
 import org.emunix.insteadlauncher.domain.parser.GameParser
 import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
-import org.emunix.insteadlauncher.helpers.writeToLog
+import org.emunix.insteadlauncher.utils.writeToLog
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date

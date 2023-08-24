@@ -19,8 +19,8 @@ import org.acra.config.notification
 import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
-import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate
-import org.emunix.insteadlauncher.helpers.writeToLog
+import org.emunix.insteadlauncher.utils.ThemeSwitcherDelegate
+import org.emunix.insteadlauncher.utils.writeToLog
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import javax.inject.Inject

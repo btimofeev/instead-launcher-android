@@ -20,9 +20,9 @@ import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Error
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Success
 import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
-import org.emunix.insteadlauncher.helpers.ConsumableEvent
-import org.emunix.insteadlauncher.helpers.getDownloadingMessage
-import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
+import org.emunix.insteadlauncher.utils.ConsumableEvent
+import org.emunix.insteadlauncher.utils.getDownloadingMessage
+import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
 import org.emunix.insteadlauncher.manager.game.GameManager
 import javax.inject.Inject
 

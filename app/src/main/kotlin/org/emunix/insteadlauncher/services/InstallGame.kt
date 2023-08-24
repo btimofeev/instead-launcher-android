@@ -33,8 +33,8 @@ import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.UNPA
 import org.emunix.insteadlauncher.domain.repository.NotificationRepository
 import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
 import org.emunix.insteadlauncher.domain.usecase.InstallGameUseCase
-import org.emunix.insteadlauncher.helpers.NotificationHelper
-import org.emunix.insteadlauncher.helpers.writeToLog
+import org.emunix.insteadlauncher.utils.NotificationHelper
+import org.emunix.insteadlauncher.utils.writeToLog
 import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
 import javax.inject.Inject
 

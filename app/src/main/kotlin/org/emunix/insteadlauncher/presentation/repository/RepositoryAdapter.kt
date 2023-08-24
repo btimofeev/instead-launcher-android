@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.data.db.GameDiffCallback
-import org.emunix.insteadlauncher.helpers.loadUrl
-import org.emunix.insteadlauncher.helpers.visible
+import org.emunix.insteadlauncher.utils.loadUrl
+import org.emunix.insteadlauncher.utils.visible
 
 class RepositoryAdapter(val listener: (Game, ImageView) -> Unit): ListAdapter<Game, RepositoryAdapter.ViewHolder>(
     GameDiffCallback()

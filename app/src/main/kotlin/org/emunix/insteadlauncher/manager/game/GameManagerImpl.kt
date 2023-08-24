@@ -16,8 +16,8 @@ import org.emunix.instead_api.InsteadApi
 import org.emunix.insteadlauncher.domain.model.GameState.IN_QUEUE_TO_INSTALL
 import org.emunix.insteadlauncher.domain.parser.GameParser
 import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
-import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
-import org.emunix.insteadlauncher.helpers.unzip
+import org.emunix.insteadlauncher.domain.model.NotInsteadGameZipException
+import org.emunix.insteadlauncher.utils.unzip
 import org.emunix.insteadlauncher.services.DeleteGame
 import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.services.ScanGames
@@ -76,8 +76,9 @@ class GameManagerImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             if (isGameZip(uri)) {
                 unzip(uri)
-            } else
+            } else {
                 throw NotInsteadGameZipException("main.lua not found")
+            }
         }
     }
 }

@@ -3,13 +3,13 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers
+package org.emunix.insteadlauncher.utils
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate.Theme.DARK
-import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate.Theme.DEFAULT
-import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate.Theme.LIGHT
+import org.emunix.insteadlauncher.utils.ThemeSwitcherDelegate.Theme.DARK
+import org.emunix.insteadlauncher.utils.ThemeSwitcherDelegate.Theme.DEFAULT
+import org.emunix.insteadlauncher.utils.ThemeSwitcherDelegate.Theme.LIGHT
 
 internal class ThemeSwitcherDelegate {
 

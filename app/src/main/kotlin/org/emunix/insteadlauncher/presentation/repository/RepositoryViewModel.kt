@@ -19,8 +19,8 @@ import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Error
 import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Success
 import org.emunix.insteadlauncher.domain.usecase.UpdateGameListUseCase
-import org.emunix.insteadlauncher.helpers.ConsumableEvent
-import org.emunix.insteadlauncher.helpers.gameparser.NotInsteadGameZipException
+import org.emunix.insteadlauncher.utils.ConsumableEvent
+import org.emunix.insteadlauncher.domain.model.NotInsteadGameZipException
 import org.emunix.insteadlauncher.manager.game.GameManager
 import java.io.IOException
 import java.util.zip.ZipException

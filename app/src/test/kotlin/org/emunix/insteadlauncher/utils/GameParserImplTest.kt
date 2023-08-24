@@ -3,9 +3,9 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers
+package org.emunix.insteadlauncher.utils
 
-import org.emunix.insteadlauncher.helpers.gameparser.GameParserImpl
+import org.emunix.insteadlauncher.domain.parser.GameParserImpl
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertEquals

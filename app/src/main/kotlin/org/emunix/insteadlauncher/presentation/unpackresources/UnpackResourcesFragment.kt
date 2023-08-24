@@ -14,7 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentUnpackResourcesBinding
-import org.emunix.insteadlauncher.helpers.visible
+import org.emunix.insteadlauncher.utils.visible
 
 @AndroidEntryPoint
 class UnpackResourcesFragment : Fragment(R.layout.fragment_unpack_resources) {

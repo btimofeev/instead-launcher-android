@@ -25,9 +25,9 @@ import org.emunix.insteadlauncher.data.db.Game.State.IS_DELETE
 import org.emunix.insteadlauncher.data.db.Game.State.IS_INSTALL
 import org.emunix.insteadlauncher.data.db.Game.State.NO_INSTALLED
 import org.emunix.insteadlauncher.databinding.FragmentGameBinding
-import org.emunix.insteadlauncher.helpers.loadUrl
-import org.emunix.insteadlauncher.helpers.showToast
-import org.emunix.insteadlauncher.helpers.visible
+import org.emunix.insteadlauncher.utils.loadUrl
+import org.emunix.insteadlauncher.utils.showToast
+import org.emunix.insteadlauncher.utils.visible
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
 import javax.inject.Inject

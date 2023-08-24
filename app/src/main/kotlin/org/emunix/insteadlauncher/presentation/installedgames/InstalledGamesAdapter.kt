@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.helpers.loadUrl
+import org.emunix.insteadlauncher.utils.loadUrl
 import androidx.recyclerview.widget.ListAdapter
 import org.emunix.insteadlauncher.data.db.GameDiffCallback
 import timber.log.Timber

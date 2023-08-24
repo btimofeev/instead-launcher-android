@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
-import org.emunix.insteadlauncher.helpers.unzip
+import org.emunix.insteadlauncher.utils.unzip
 import java.io.File
 import java.io.InputStream
 import javax.inject.Inject

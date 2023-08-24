@@ -3,11 +3,9 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers
+package org.emunix.insteadlauncher.utils
 
-import android.app.ActivityManager
 import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.text.TextUtils
@@ -22,7 +20,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
-import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
+import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -30,7 +28,6 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.*
 import java.util.zip.ZipException
-import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream
 
 fun ImageView.loadUrl(url: String, highQuality: Boolean = false) {

@@ -22,7 +22,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
-import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate
+import org.emunix.insteadlauncher.utils.ThemeSwitcherDelegate
 import javax.inject.Inject
 
 @AndroidEntryPoint

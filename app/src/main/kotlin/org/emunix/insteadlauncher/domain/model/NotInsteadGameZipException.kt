@@ -3,6 +3,6 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers.gameparser
+package org.emunix.insteadlauncher.domain.model
 
 class NotInsteadGameZipException(message:String): Exception(message)

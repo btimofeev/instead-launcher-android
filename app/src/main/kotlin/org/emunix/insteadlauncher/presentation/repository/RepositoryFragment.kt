@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.helpers.insetDivider
-import org.emunix.insteadlauncher.helpers.visible
+import org.emunix.insteadlauncher.utils.insetDivider
+import org.emunix.insteadlauncher.utils.visible
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -29,7 +29,7 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
-import org.emunix.insteadlauncher.helpers.showToast
+import org.emunix.insteadlauncher.utils.showToast
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
 
 private const val READ_REQUEST_CODE = 546

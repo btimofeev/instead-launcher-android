@@ -3,7 +3,7 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.helpers.network
+package org.emunix.insteadlauncher.data.network
 
 import okhttp3.MediaType
 import okhttp3.ResponseBody

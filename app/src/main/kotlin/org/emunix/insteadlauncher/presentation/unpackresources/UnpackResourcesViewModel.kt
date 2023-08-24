@@ -17,7 +17,7 @@ import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.ERROR
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.NO_UPDATE_REQUIRED
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.SUCCESS
-import org.emunix.insteadlauncher.helpers.writeToLog
+import org.emunix.insteadlauncher.utils.writeToLog
 import javax.inject.Inject
 
 @HiltViewModel

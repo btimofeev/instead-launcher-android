@@ -13,8 +13,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.emunix.instead.InsteadApiImpl
 import org.emunix.instead_api.InsteadApi
-import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
-import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProviderImpl
+import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
+import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProviderImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

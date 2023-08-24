@@ -12,8 +12,8 @@ import org.emunix.insteadlauncher.domain.model.GameModel
 import org.emunix.insteadlauncher.domain.model.GameState.NO_INSTALLED
 import org.emunix.insteadlauncher.domain.model.GameUrl
 import org.emunix.insteadlauncher.domain.model.GameVersion
-import org.emunix.insteadlauncher.helpers.getBrief
-import org.emunix.insteadlauncher.helpers.unescapeHtmlCodes
+import org.emunix.insteadlauncher.utils.getBrief
+import org.emunix.insteadlauncher.utils.unescapeHtmlCodes
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.StringReader
