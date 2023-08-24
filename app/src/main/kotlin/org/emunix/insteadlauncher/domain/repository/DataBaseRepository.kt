@@ -5,6 +5,7 @@
 
 package org.emunix.insteadlauncher.domain.repository
 
+import kotlinx.coroutines.flow.Flow
 import org.emunix.insteadlauncher.domain.model.GameModel
 
 interface DataBaseRepository {
@@ -20,6 +21,8 @@ interface DataBaseRepository {
     suspend fun getGame(name: String): GameModel?
 
     suspend fun getInstalledGames(): List<GameModel>
+
+    suspend fun observeGames(): Flow<List<GameModel>>
 
     suspend fun markAsNotInstalled(game: GameModel)
 }

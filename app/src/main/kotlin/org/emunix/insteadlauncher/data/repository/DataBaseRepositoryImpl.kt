@@ -6,6 +6,8 @@
 package org.emunix.insteadlauncher.data.repository
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.data.mapper.toData
@@ -45,6 +47,12 @@ class DataBaseRepositoryImpl @Inject constructor(
 
     override suspend fun getInstalledGames(): List<GameModel> = withContext(Dispatchers.IO) {
         gameDao.getInstalledGames().map { it.toDomain() }
+    }
+
+    override suspend fun observeGames(): Flow<List<GameModel>> = withContext(Dispatchers.IO) {
+        return@withContext gameDao.observeAllFlow().map { list ->
+            list.map { it.toDomain() }
+        }
     }
 
     override suspend fun markAsNotInstalled(game: GameModel) = withContext(Dispatchers.IO) {

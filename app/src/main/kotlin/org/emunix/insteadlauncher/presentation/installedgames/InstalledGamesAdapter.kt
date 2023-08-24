@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -10,32 +10,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.presentation.models.InstalledGame
 import org.emunix.insteadlauncher.utils.loadUrl
-import androidx.recyclerview.widget.ListAdapter
-import org.emunix.insteadlauncher.data.db.GameDiffCallback
-import timber.log.Timber
 
-class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<Game, InstalledGamesAdapter.ViewHolder>(
-    GameDiffCallback()
-) {
+class InstalledGamesAdapter(
+    val onClickListener: (gameName: String) -> Unit
+) : ListAdapter<InstalledGame, InstalledGamesAdapter.ViewHolder>(DiffCallback()) {
 
-    lateinit var longClickedGame: Game
-    private set
+    val longClickedGameName
+        get() = longClickedGame?.name
+
+    private var longClickedGame: InstalledGame? = null
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.findViewById<TextView>(R.id.name)!!
-        val image = itemView.findViewById<ImageView>(R.id.image)!!
+        val name : TextView? = itemView.findViewById(R.id.name)
+        val image : ImageView? = itemView.findViewById(R.id.image)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val holder = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_installed_games, parent, false))
-        holder.itemView.setOnClickListener { onClickListener(getItem(holder.adapterPosition)) }
+        holder.itemView.setOnClickListener { onClickListener(getItem(holder.bindingAdapterPosition).name) }
         holder.itemView.setOnLongClickListener {
-            Timber.d("Long clicked game: ${getItem(holder.adapterPosition).name}")
-            longClickedGame = getItem(holder.adapterPosition)
+            longClickedGame = getItem(holder.bindingAdapterPosition)
             false
         }
         return holder
@@ -43,11 +43,22 @@ class InstalledGamesAdapter(val onClickListener: (Game) -> Unit) : ListAdapter<G
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val game = getItem(position)
-        holder.name.text = game.title
-        holder.image.loadUrl(game.image)
+        holder.name?.text = game.title
+        holder.image?.loadUrl(game.imageUrl)
     }
 
     override fun getItemId(position: Int): Long {
         return getItem(position).name.hashCode().toLong()
+    }
+
+    class DiffCallback : DiffUtil.ItemCallback<InstalledGame>() {
+
+        override fun areItemsTheSame(oldItem: InstalledGame, newItem: InstalledGame): Boolean {
+            return oldItem.name == newItem.name
+        }
+
+        override fun areContentsTheSame(oldItem: InstalledGame, newItem: InstalledGame): Boolean {
+            return oldItem == newItem
+        }
     }
 }

@@ -17,19 +17,24 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.State
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentInstalledGamesBinding
-import org.emunix.insteadlauncher.utils.insetDivider
-import org.emunix.insteadlauncher.utils.visible
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
+import org.emunix.insteadlauncher.utils.insetDivider
+import org.emunix.insteadlauncher.utils.visible
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -63,23 +68,15 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
         val insetDivider = dividerItemDecoration.insetDivider(binding.list.context, R.dimen.installed_game_fragment_inset_divider_margin_start)
         dividerItemDecoration.setDrawable(insetDivider)
         binding.list.addItemDecoration(dividerItemDecoration)
-        listAdapter = InstalledGamesAdapter { viewModel.playGame(it.name) }
+        listAdapter = InstalledGamesAdapter { viewModel.playGame(it) }
         listAdapter.setHasStableIds(true)
         binding.list.adapter = listAdapter
         binding.list.setHasFixedSize(true)
         registerForContextMenu(binding.list)
 
         viewModel.init()
-        viewModel.getInstalledGames().observe(viewLifecycleOwner) { games ->
-            listAdapter.submitList(games.toList())
-            binding.emptyView.visible(games.isEmpty())
-        }
 
-        appArgumentViewModel.zipUri.observe(viewLifecycleOwner) { zipUri ->
-            zipUri?.let {
-                findNavController().navigate(R.id.action_installedGamesFragment_to_repositoryFragment)
-            }
-        }
+        setupObservers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -108,7 +105,7 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val gameName = listAdapter.longClickedGame.name
+        val gameName = listAdapter.longClickedGameName ?: return false
         when (item.itemId) {
             R.id.installed_games_activity_context_menu_play -> {
                 viewModel.playGame(gameName)
@@ -127,5 +124,22 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
             }
         }
         return super.onContextItemSelected(item)
+    }
+
+    private fun setupObservers() {
+        appArgumentViewModel.zipUri.observe(viewLifecycleOwner) { zipUri ->
+            zipUri?.let {
+                findNavController().navigate(R.id.action_installedGamesFragment_to_repositoryFragment)
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(State.STARTED) {
+                viewModel.gameItems.collect { games ->
+                    listAdapter.submitList(games.toList())
+                    binding.emptyView.visible(games.isEmpty())
+                }
+            }
+        }
     }
 }

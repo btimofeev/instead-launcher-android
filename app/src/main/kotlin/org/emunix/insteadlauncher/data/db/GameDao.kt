@@ -7,11 +7,15 @@ package org.emunix.insteadlauncher.data.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GameDao {
     @Query("SELECT * FROM games")
     fun observeAll(): LiveData<List<Game>>
+
+    @Query("SELECT * FROM games")
+    fun observeAllFlow(): Flow<List<Game>>
 
     @Query("SELECT * FROM games WHERE name LIKE :name LIMIT 1")
     fun observeByName(name: String): LiveData<Game>

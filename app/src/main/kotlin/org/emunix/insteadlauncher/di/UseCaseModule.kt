@@ -18,6 +18,8 @@ import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCase
 import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
 import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCaseImpl
+import org.emunix.insteadlauncher.domain.usecase.GetGamesFlowUseCase
+import org.emunix.insteadlauncher.domain.usecase.GetGamesFlowUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.InstallGameUseCase
 import org.emunix.insteadlauncher.domain.usecase.InstallGameUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCase
@@ -49,6 +51,9 @@ interface UseCaseModule {
 
     @Binds
     fun bindGetDownloadGamesStatusUseCase(impl: GetDownloadGamesStatusUseCaseImpl): GetDownloadGamesStatusUseCase
+
+    @Binds
+    fun bindGetGamesFlowUseCase(impl: GetGamesFlowUseCaseImpl): GetGamesFlowUseCase
 }
 
 @InstallIn(FragmentComponent::class)
