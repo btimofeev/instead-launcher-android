@@ -12,5 +12,5 @@ interface NotificationRepository {
 
     val downloadGame: Flow<DownloadGameStatus>
 
-    suspend fun publishDownloadGameStatus(status: DownloadGameStatus)
+    fun publishDownloadGameStatus(status: DownloadGameStatus)
 }

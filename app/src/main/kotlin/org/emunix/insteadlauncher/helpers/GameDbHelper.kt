@@ -9,15 +9,11 @@ import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.data.db.GameDao
 import javax.inject.Inject
 
+@Deprecated(replaceWith = ReplaceWith("DataBaseRepository"), message = "Будет удалено")
 class GameDbHelper @Inject constructor(private val gamesDao: GameDao) {
 
     fun saveStateToDB(game: Game, state: Game.State) {
         game.state = state
-        gamesDao.update(game)
-    }
-
-    fun saveInstalledVersionToDB(game: Game, version: String) {
-        game.installedVersion = version
         gamesDao.update(game)
     }
 }

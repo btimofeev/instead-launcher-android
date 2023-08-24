@@ -5,13 +5,17 @@
 
 package org.emunix.insteadlauncher.helpers.network
 
-import java.io.IOException
-
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import okio.*
+import org.emunix.insteadlauncher.data.mapper.DownloadProgress
+import java.io.IOException
 
-class ProgressResponseBody internal constructor(private val responseBody: ResponseBody, private val progressListener: ProgressListener) : ResponseBody() {
+class ProgressResponseBody constructor(
+    private val responseBody: ResponseBody,
+    private val progressListener: (DownloadProgress) -> Unit,
+) : ResponseBody() {
+
     private var bufferedSource: BufferedSource? = null
 
     override fun contentType(): MediaType? {
@@ -42,7 +46,13 @@ class ProgressResponseBody internal constructor(private val responseBody: Respon
                 val time = System.currentTimeMillis()
                 if (bytesRead == -1L || time - updateProgressLastTime >= 500) {
                     updateProgressLastTime = time
-                    progressListener.update(totalBytesRead, responseBody.contentLength(), bytesRead == -1L)
+                    progressListener.invoke(
+                        DownloadProgress(
+                            bytesRead = totalBytesRead,
+                            contentLength = responseBody.contentLength(),
+                            isDone = bytesRead == -1L
+                        )
+                    )
                 }
                 return bytesRead
             }

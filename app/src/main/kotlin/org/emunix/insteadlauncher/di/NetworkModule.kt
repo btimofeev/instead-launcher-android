@@ -25,6 +25,10 @@ class NetworkModule {
     fun provideOkHttpClient(): OkHttpClient = OkHttpClient()
 
     @Provides
+    @Singleton
+    fun provideOkHttpClientBuilder(): OkHttpClient.Builder = OkHttpClient.Builder()
+
+    @Provides
     fun provideGameListFetcher(client: OkHttpClient): GameListFetcher = InsteadGamesXmlFetcher(client)
 
     @Provides

@@ -19,35 +19,33 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.apache.commons.io.IOUtils
-import org.emunix.instead.core_storage_api.data.Storage
+import kotlinx.coroutines.runBlocking
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_INSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.db.Game.State.*
-import org.emunix.insteadlauncher.data.db.GameDao
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Error
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Success
+import org.emunix.insteadlauncher.domain.model.InstallGameResult
+import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.DOWNLOAD_ERROR
+import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.GAME_NOT_FOUND_IN_DATABASE
+import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.UNPACKING_ERROR
 import org.emunix.insteadlauncher.domain.repository.NotificationRepository
 import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
-import org.emunix.insteadlauncher.helpers.*
-import org.emunix.insteadlauncher.helpers.network.ProgressListener
-import org.emunix.insteadlauncher.helpers.network.ProgressResponseBody
+import org.emunix.insteadlauncher.domain.usecase.InstallGameUseCase
+import org.emunix.insteadlauncher.helpers.NotificationHelper
+import org.emunix.insteadlauncher.helpers.writeToLog
 import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.util.zip.ZipException
 import javax.inject.Inject
+
+// TODO Рассмотреть вариант замены IntentService на WorkManager
 
 @AndroidEntryPoint
 class InstallGame : IntentService("InstallGame") {
 
     private lateinit var gameName: String
     private lateinit var gameTitle: String
+    private lateinit var url: String
     private lateinit var pendingIntent: PendingIntent
     private lateinit var notificationManager: NotificationManager
     private lateinit var notificationBuilder: NotificationCompat.Builder
@@ -56,54 +54,32 @@ class InstallGame : IntentService("InstallGame") {
     private val serviceScope = CoroutineScope(serviceJob)
 
     @Inject
-    lateinit var storage: Storage
-
-    @Inject
-    lateinit var gamesDB: GameDao
-
-    @Inject
-    lateinit var gamesDbHelper: GameDbHelper
-
-    @Inject
     lateinit var notificationRepository: NotificationRepository
 
     @Inject
     lateinit var getDownloadGamesStatusUseCase: GetDownloadGamesStatusUseCase
 
+    @Inject
+    lateinit var installGameUseCase: InstallGameUseCase
+
     override fun onHandleIntent(intent: Intent?) {
         gameName = intent?.getStringExtra(EXTRA_GAME_NAME) ?: return
         gameTitle = intent.getStringExtra(EXTRA_GAME_TITLE) ?: ""
+        url = intent.getStringExtra(EXTRA_GAME_URL) ?: ""
 
         notificationBuilder = createNotification()
         startForeground(INSTALL_NOTIFICATION_ID, notificationBuilder.build())
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         observeDownloadStatus(gameName)
 
-        val url = intent.getStringExtra(EXTRA_GAME_URL)
-        val game = gamesDB.getByName(gameName)
-        if (url != null) {
-            try {
-                gamesDbHelper.saveStateToDB(game, IS_INSTALL)
-                val zipfile = File(storage.getCacheDirectory(), extractFilename(url))
-                download(url, zipfile, gameName)
-
-                val gameDir = File(storage.getGamesDirectory(), gameName)
-                gameDir.deleteRecursively()
-                zipfile.unzip(storage.getGamesDirectory())
-                zipfile.deleteRecursively()
-                gamesDbHelper.saveStateToDB(game, INSTALLED)
-                gamesDbHelper.saveInstalledVersionToDB(game, game.version)
-            } catch (e: IndexOutOfBoundsException) {
-                // invalid url (exception from String.substring)
-                publishErrorNotification("Bad url: $url")
-                gamesDbHelper.saveStateToDB(game, NO_INSTALLED)
-            } catch (e: IOException) {
-                publishErrorNotification(e.localizedMessage ?: getString(R.string.error_failed_to_download_file, url))
-                gamesDbHelper.saveStateToDB(game, NO_INSTALLED)
-            } catch (e: ZipException) {
-                publishErrorNotification(getString(R.string.error_failed_to_unpack_zip))
-                gamesDbHelper.saveStateToDB(game, NO_INSTALLED)
-            }
+        runBlocking {
+            runCatching { installGameUseCase(gameName) }
+                .onSuccess { result ->
+                    when (result) {
+                        is InstallGameResult.Error -> handleError(result)
+                        is InstallGameResult.Success -> Unit
+                    }
+                }
         }
 
         stopForeground(true)
@@ -112,6 +88,16 @@ class InstallGame : IntentService("InstallGame") {
     override fun onDestroy() {
         super.onDestroy()
         serviceJob.cancel()
+    }
+
+    private fun handleError(error: InstallGameResult.Error) {
+        error.throwable?.writeToLog()
+        val errorText = when (error.type) {
+            DOWNLOAD_ERROR -> getString(R.string.error_failed_to_download_file, url)
+            UNPACKING_ERROR -> getString(R.string.error_failed_to_unpack_zip)
+            GAME_NOT_FOUND_IN_DATABASE -> getString(R.string.error)
+        }
+        publishErrorNotification(errorText)
     }
 
     private fun createNotification(): NotificationCompat.Builder {
@@ -130,49 +116,6 @@ class InstallGame : IntentService("InstallGame") {
             .setProgress(100, 0, false)
             .setSmallIcon(R.drawable.ic_download_white_24dp)
             .setContentIntent(pendingIntent)
-    }
-
-    @Throws(IOException::class)
-    private fun download(url: String, file: File, gameName: String) {
-
-        val progressListener = object : ProgressListener {
-            override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-                serviceScope.launch {
-                    val status = if (done) {
-                        Success(gameName)
-                    } else {
-                        Downloading(
-                            gameName = gameName,
-                            downloadedBytes = bytesRead,
-                            contentLength = contentLength,
-                        )
-                    }
-                    notificationRepository.publishDownloadGameStatus(status)
-                }
-            }
-        }
-
-        val request = Request.Builder().url(url).build()
-        val client = OkHttpClient.Builder()
-            .addNetworkInterceptor { chain ->
-                val originalResponse = chain.proceed(chain.request())
-                originalResponse.newBuilder()
-                    .body(ProgressResponseBody(originalResponse.body, progressListener))
-                    .build()
-            }
-            .build()
-        val response = client.newCall(request).execute()
-        if (!response.isSuccessful) {
-            val msg = application.getString(R.string.error_failed_to_download_file, url)
-            throw IOException(msg)
-        }
-        FileOutputStream(file).use { toFile ->
-            IOUtils.copy(response.body.byteStream(), toFile)
-        }
-    }
-
-    private fun extractFilename(url: String): String {
-        return url.substring(url.lastIndexOf('/') + 1)
     }
 
     private fun publishErrorNotification(message: String) = serviceScope.launch {
