@@ -55,6 +55,10 @@ class DataBaseRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun search(query: String): List<GameModel> = withContext(Dispatchers.IO) {
+        return@withContext gameDao.search(query).map { it.toDomain() }
+    }
+
     override suspend fun markAsNotInstalled(game: GameModel) = withContext(Dispatchers.IO) {
         gameDao.update(
             game.copy(

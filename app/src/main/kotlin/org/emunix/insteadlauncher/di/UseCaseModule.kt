@@ -24,6 +24,8 @@ import org.emunix.insteadlauncher.domain.usecase.InstallGameUseCase
 import org.emunix.insteadlauncher.domain.usecase.InstallGameUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCase
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCaseImpl
+import org.emunix.insteadlauncher.domain.usecase.SearchGamesUseCase
+import org.emunix.insteadlauncher.domain.usecase.SearchGamesUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
@@ -54,6 +56,9 @@ interface UseCaseModule {
 
     @Binds
     fun bindGetGamesFlowUseCase(impl: GetGamesFlowUseCaseImpl): GetGamesFlowUseCase
+
+    @Binds
+    fun bindSearchGamesUseCase(impl: SearchGamesUseCaseImpl): SearchGamesUseCase
 }
 
 @InstallIn(FragmentComponent::class)

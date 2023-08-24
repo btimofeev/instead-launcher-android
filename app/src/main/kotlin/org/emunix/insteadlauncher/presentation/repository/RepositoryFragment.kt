@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2022 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -23,14 +23,21 @@ import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.utils.insetDivider
 import org.emunix.insteadlauncher.utils.visible
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
+import org.emunix.insteadlauncher.domain.model.GameModel
 import org.emunix.insteadlauncher.utils.showToast
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
+import org.emunix.insteadlauncher.presentation.models.RepoGame
 
 private const val READ_REQUEST_CODE = 546
 
@@ -77,12 +84,19 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
 
         binding.swipeToRefresh.setOnRefreshListener { viewModel.updateRepository() }
 
-        viewModel.getGames().observe(viewLifecycleOwner) { games ->
-            if (games != null) {
-                if (!games.isEmpty()) {
-                    showGames(games)
-                } else {
-                    viewModel.updateRepository()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.gameItems.collect { games ->
+                        showGames(games)
+                    }
+                }
+
+                launch {
+                    viewModel.showSearchNotFoundError.collect { isShowError ->
+                        binding.nothingFoundText.isVisible = isShowError
+                        binding.list.isVisible = !isShowError
+                    }
                 }
             }
         }
@@ -156,12 +170,7 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
 
             fun search(text: String) {
                 val query = "%$text%"
-                viewModel.searchGames(query).observe(this@RepositoryFragment) { games ->
-                    if (games != null) {
-                        showGames(games)
-                        binding.nothingFoundText.visible(games.isEmpty())
-                    }
-                }
+                viewModel.searchGames(query)
             }
         })
     }
@@ -195,8 +204,7 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
         }
     }
 
-    private fun showGames(games: List<Game>) {
-        val sortedGames = games.sortedByDescending { it.date }
-        listAdapter.submitList(sortedGames)
+    private fun showGames(games: List<RepoGame>) {
+        listAdapter.submitList(games)
     }
 }

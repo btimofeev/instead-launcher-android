@@ -24,5 +24,7 @@ interface DataBaseRepository {
 
     suspend fun observeGames(): Flow<List<GameModel>>
 
+    suspend fun search(query: String): List<GameModel>
+
     suspend fun markAsNotInstalled(game: GameModel)
 }

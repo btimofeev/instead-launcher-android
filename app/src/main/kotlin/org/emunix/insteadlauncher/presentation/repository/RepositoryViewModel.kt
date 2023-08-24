@@ -11,30 +11,40 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.R.string
-import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.data.db.GameDao
+import org.emunix.insteadlauncher.domain.model.NotInsteadGameZipException
 import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Error
 import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Success
+import org.emunix.insteadlauncher.domain.usecase.GetGamesFlowUseCase
+import org.emunix.insteadlauncher.domain.usecase.SearchGamesUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateGameListUseCase
-import org.emunix.insteadlauncher.utils.ConsumableEvent
-import org.emunix.insteadlauncher.domain.model.NotInsteadGameZipException
 import org.emunix.insteadlauncher.manager.game.GameManager
+import org.emunix.insteadlauncher.presentation.models.RepoGame
+import org.emunix.insteadlauncher.presentation.models.toRepoGames
+import org.emunix.insteadlauncher.utils.ConsumableEvent
 import java.io.IOException
 import java.util.zip.ZipException
 import javax.inject.Inject
 
 @HiltViewModel
 class RepositoryViewModel @Inject constructor(
-    private val gamesDB: GameDao,
+    private val getGamesFlowUseCase: GetGamesFlowUseCase,
     private val preferencesProvider: PreferencesProvider,
     private val gameManager: GameManager,
     private val updateGameListUseCase: UpdateGameListUseCase,
+    private val searchGamesUseCase: SearchGamesUseCase,
 ) : ViewModel() {
 
-    private val games = gamesDB.observeAll()
+    private val _gameItems = MutableStateFlow<List<RepoGame>>(emptyList())
+    private val _showSearchNotFoundError = MutableStateFlow(false)
+
+    val gameItems: StateFlow<List<RepoGame>> = _gameItems
+    val showSearchNotFoundError: StateFlow<Boolean> = _showSearchNotFoundError
+
     private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
     private val showErrorView: MutableLiveData<Boolean> = MutableLiveData()
     private val showGameList: MutableLiveData<Boolean> = MutableLiveData()
@@ -46,6 +56,7 @@ class RepositoryViewModel @Inject constructor(
         if (preferencesProvider.updateRepoWhenOpenRepositoryScreen) {
             updateRepository()
         }
+        observeGames()
     }
 
     fun getProgressState(): LiveData<Boolean> = showProgress
@@ -64,6 +75,7 @@ class RepositoryViewModel @Inject constructor(
         showProgress.value = true
         showGameList.value = false
         showErrorView.value = false
+        _showSearchNotFoundError.value = false
 
         when (updateGameListUseCase()) {
             is Success -> {
@@ -77,9 +89,11 @@ class RepositoryViewModel @Inject constructor(
         }
     }
 
-    fun getGames(): LiveData<List<Game>> = games
-
-    fun searchGames(query: String): LiveData<List<Game>> = gamesDB.search(query)
+    fun searchGames(query: String) = viewModelScope.launch {
+        val games = searchGamesUseCase(query)
+        _gameItems.value = games.toRepoGames()
+        _showSearchNotFoundError.value = games.isEmpty()
+    }
 
     fun installGame(uri: Uri) = viewModelScope.launch {
         showInstallGameDialog.value = true
@@ -94,5 +108,14 @@ class RepositoryViewModel @Inject constructor(
         }
         showInstallGameDialog.value = false
         gameManager.scanGames()
+    }
+
+    private fun observeGames() = viewModelScope.launch {
+        getGamesFlowUseCase()
+            .collect { games ->
+                _gameItems.value = games
+                    .sortedByDescending { it.info.lastReleaseDate }
+                    .toRepoGames()
+            }
     }
 }

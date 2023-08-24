@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -30,7 +30,7 @@ interface GameDao {
     fun getInstalledGames(): List<Game>
 
     @Query("SELECT * FROM games WHERE (name || title || author || description) LIKE :query")
-    fun search(query: String): LiveData<List<Game>>
+    fun search(query: String): List<Game>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(game: Game)
