@@ -12,8 +12,6 @@ import org.emunix.insteadlauncher.domain.model.GameModel
 import org.emunix.insteadlauncher.domain.model.GameState.NO_INSTALLED
 import org.emunix.insteadlauncher.domain.model.GameUrl
 import org.emunix.insteadlauncher.domain.model.GameVersion
-import org.emunix.insteadlauncher.utils.getBrief
-import org.emunix.insteadlauncher.utils.unescapeHtmlCodes
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.StringReader
@@ -138,5 +136,22 @@ class InsteadGamesXmlParser : GameListParser {
                 XmlPullParser.START_TAG -> depth++
             }
         }
+    }
+
+    private fun String.unescapeHtmlCodes(): String {
+        var s = this.replace("&lt;", "<")
+        s = s.replace("&gt;", ">")
+        s = s.replace("&#039;", "\'")
+        s = s.replace("&quot;", "\"")
+        s = s.replace("&amp;", "&")
+        return s
+    }
+
+    private fun String.getBrief(): String {
+        var s = this.take(300)
+        s = s.replace("\n", " ").replace("\r", " ") // remove newlines
+        s = s.replace("\\s+".toRegex(), " ") // remove double spaces
+        s = s.trim()
+        return s
     }
 }

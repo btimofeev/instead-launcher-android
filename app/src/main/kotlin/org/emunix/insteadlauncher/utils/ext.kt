@@ -85,23 +85,6 @@ fun InputStream.unzip(dir: File) {
     }
 }
 
-fun String.unescapeHtmlCodes(): String {
-    var s = this.replace("&lt;", "<")
-    s = s.replace("&gt;", ">")
-    s = s.replace("&#039;", "\'")
-    s = s.replace("&quot;", "\"")
-    s = s.replace("&amp;", "&")
-    return s
-}
-
-fun String.getBrief(): String {
-    var s = this.take(300)
-    s = s.replace("\n", " ").replace("\r", " ") // remove newlines
-    s = s.replace("\\s+".toRegex(), " ") // remove double spaces
-    s = s.trim()
-    return s
-}
-
 fun Throwable.writeToLog() {
     Timber.tag("InsteadLauncher").e(this)
 }
