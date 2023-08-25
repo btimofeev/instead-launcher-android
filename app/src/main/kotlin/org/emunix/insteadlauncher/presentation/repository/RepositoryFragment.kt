@@ -9,7 +9,10 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -18,7 +21,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -30,19 +33,30 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.R.dimen
+import org.emunix.insteadlauncher.R.drawable
+import org.emunix.insteadlauncher.R.string
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
 import org.emunix.insteadlauncher.presentation.models.RepoGame
 import org.emunix.insteadlauncher.utils.insetDivider
 import org.emunix.insteadlauncher.utils.showToast
+import kotlin.LazyThreadSafetyMode
 
 private const val READ_REQUEST_CODE = 546
 
 @AndroidEntryPoint
 class RepositoryFragment : Fragment(R.layout.fragment_repository) {
+
     private val viewModel: RepositoryViewModel by viewModels()
-    private val appArgumentViewModel: AppArgumentViewModel by activityViewModels()
-    private lateinit var installDialog: ProgressDialog
+
+    private val installDialog: ProgressDialog by lazy(mode = LazyThreadSafetyMode.NONE) {
+        ProgressDialog(activity).apply {
+            setMessage(activity?.getString(string.notification_install_game))
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+        }
+    }
 
     private val binding by viewBinding(FragmentRepositoryBinding::bind)
 
@@ -55,34 +69,109 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel.init()
+        setupViews()
+        setupObservers()
+        handleApplicationZipArgument()
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_repository, menu)
+
+        val searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                search(newText)
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                search(query)
+                return false
+            }
+
+            fun search(text: String) {
+                val query = "%$text%" // todo перенести в репозиторий
+                viewModel.searchGames(query)
+            }
+        })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_update_repo -> {
+                viewModel.updateRepository()
+                return true
+            }
+
+            R.id.action_install_local_game -> {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "application/zip"
+                startActivityForResult(intent, READ_REQUEST_CODE, null)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK && resultData != null) {
+            val uri = resultData.data
+            if (uri != null) {
+                viewModel.installGame(uri)
+            }
+        }
+    }
+
+    private fun setupViews() {
+        setupToolbar()
+        setupGameList()
+        binding.tryAgainButton.setOnClickListener { viewModel.updateRepository() }
+        binding.swipeToRefresh.setOnRefreshListener { viewModel.updateRepository() }
+    }
+
+    private fun setupToolbar() {
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back_24dp)
+        binding.toolbar.setNavigationIcon(drawable.ic_back_24dp)
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+    }
 
+    private fun setupGameList() {
         binding.list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        setupGameListDecoration()
+        setupGameListAdapter()
+        binding.list.setHasFixedSize(true)
+    }
+
+    private fun setupGameListDecoration() {
         val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
-        val insetDivider = dividerItemDecoration.insetDivider(binding.list.context, R.dimen.installed_game_fragment_inset_divider_margin_start)
+        val insetDivider = dividerItemDecoration.insetDivider(
+            context = binding.list.context,
+            start_offset_dimension = dimen.installed_game_fragment_inset_divider_margin_start
+        )
         dividerItemDecoration.setDrawable(insetDivider)
         binding.list.addItemDecoration(dividerItemDecoration)
+    }
+
+    private fun setupGameListAdapter() {
         listAdapter = RepositoryAdapter { game, image ->
             val bundle = bundleOf("game_name" to game.name)
             findNavController().navigate(R.id.action_repositoryFragment_to_gameFragment, bundle)
         }
         listAdapter.setHasStableIds(true)
         binding.list.adapter = listAdapter
-        binding.list.setHasFixedSize(true)
+    }
 
-        binding.tryAgainButton.setOnClickListener { viewModel.updateRepository() }
-
-        binding.swipeToRefresh.setOnRefreshListener { viewModel.updateRepository() }
-
+    private fun setupObservers() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(State.STARTED) {
                 launch {
                     viewModel.gameItems.collect { games ->
                         showGames(games)
@@ -105,26 +194,17 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
         }
 
         viewModel.getErrorViewState().observe(viewLifecycleOwner) { state ->
-            if (state != null)
-                binding.errorView.isVisible = state
+            if (state != null) binding.errorView.isVisible = state
         }
 
         viewModel.getGameListState().observe(viewLifecycleOwner) { state ->
-            if (state != null)
-                binding.list.isVisible = state
+            if (state != null) binding.list.isVisible = state
         }
-
-        installDialog = ProgressDialog(activity)
-        installDialog.setMessage(activity?.getString(R.string.notification_install_game))
-        installDialog.setCancelable(false)
-        installDialog.setCanceledOnTouchOutside(false)
 
         viewModel.getInstallGameDialogState().observe(viewLifecycleOwner) { state ->
             if (state != null) {
-                if (state == true)
-                    installDialog.show()
-                else
-                    installDialog.cancel()
+                if (state == true) installDialog.show()
+                else installDialog.cancel()
             }
         }
 
@@ -139,65 +219,13 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                 context?.showToast(getString(resId))
             }
         }
-
-        appArgumentViewModel.zipUri.observe(viewLifecycleOwner) { zipUri ->
-            zipUri?.let { uri ->
-                viewModel.installGame(uri)
-                appArgumentViewModel.zipUri.value = null
-            }
-        }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_repository, menu)
-
-        val searchView = menu.findItem(R.id.action_search)!!.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                search(newText)
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String): Boolean {
-                search(query)
-                return false
-            }
-
-            fun search(text: String) {
-                val query = "%$text%"
-                viewModel.searchGames(query)
-            }
-        })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_update_repo -> {
-                viewModel.updateRepository()
-                return true
-            }
-            R.id.action_install_local_game -> {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.type = "application/zip"
-                startActivityForResult(intent, READ_REQUEST_CODE, null)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-
-        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (resultData != null) {
-                val uri = resultData.data
-                if (uri != null)
-                    viewModel.installGame(uri)
-            }
+    private fun handleApplicationZipArgument() {
+        val appArgumentViewModel: AppArgumentViewModel by activityViewModels()
+        appArgumentViewModel.zipUri?.let { uri ->
+            viewModel.installGame(uri)
+            appArgumentViewModel.zipUri = null
         }
     }
 

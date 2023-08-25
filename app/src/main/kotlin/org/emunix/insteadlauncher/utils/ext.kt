@@ -44,11 +44,11 @@ fun Context.showToast(msg: String, length: Int = Toast.LENGTH_LONG) {
     Toast.makeText(this, msg, length).show()
 }
 
-fun DividerItemDecoration.insetDivider(c: Context, @DimenRes start_offset_dimension: Int): Drawable {
-    val a = c.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
+fun DividerItemDecoration.insetDivider(context: Context, @DimenRes start_offset_dimension: Int): Drawable {
+    val a = context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
     val divider = a.getDrawable(0)
     a.recycle()
-    val inset = c.resources.getDimensionPixelSize(start_offset_dimension)
+    val inset = context.resources.getDimensionPixelSize(start_offset_dimension)
     val isLeftToRight = TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_LTR
 
     return if (isLeftToRight) {

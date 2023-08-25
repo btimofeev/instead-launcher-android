@@ -28,7 +28,7 @@ class LauncherActivity : AppCompatActivity(), LifecycleOwner {
         val intent = intent
         if (intent.type == "application/zip") {
             intent.data?.let { uri ->
-                appArgumentViewModel.zipUri.value = uri
+                appArgumentViewModel.zipUri = uri
             }
         }
     }
