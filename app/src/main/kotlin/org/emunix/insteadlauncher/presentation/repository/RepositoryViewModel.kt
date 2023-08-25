@@ -6,8 +6,6 @@
 package org.emunix.insteadlauncher.presentation.repository
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +26,10 @@ import org.emunix.insteadlauncher.domain.usecase.UpdateGameListUseCase
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.presentation.models.ErrorDialogModel
 import org.emunix.insteadlauncher.presentation.models.RepoGame
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState.SEARCH_ERROR
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState.SHOW_GAMES
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REPOSITORY
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REPOSITORY_ERROR
 import org.emunix.insteadlauncher.presentation.models.toRepoGames
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
 import javax.inject.Inject
@@ -43,17 +45,15 @@ class RepositoryViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _gameItems = MutableStateFlow<List<RepoGame>>(emptyList())
-    private val _showSearchNotFoundError = MutableStateFlow(false)
+    private val _uiState = MutableStateFlow(SHOW_GAMES)
+    private val _showInstallGameDialog = MutableStateFlow(false)
     private val _showErrorDialog = Channel<ErrorDialogModel>()
 
     val gameItems: StateFlow<List<RepoGame>> = _gameItems.asStateFlow()
-    val showSearchNotFoundError: StateFlow<Boolean> = _showSearchNotFoundError.asStateFlow()
+    val showInstallGameDialog: StateFlow<Boolean> = _showInstallGameDialog.asStateFlow()
     val showErrorDialog = _showErrorDialog.receiveAsFlow()
+    val uiState = _uiState.asStateFlow()
 
-    private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
-    private val showErrorView: MutableLiveData<Boolean> = MutableLiveData()
-    private val showGameList: MutableLiveData<Boolean> = MutableLiveData()
-    private val showInstallGameDialog: MutableLiveData<Boolean> = MutableLiveData()
 
     fun init() {
         if (preferencesProvider.updateRepoWhenOpenRepositoryScreen) {
@@ -62,29 +62,16 @@ class RepositoryViewModel @Inject constructor(
         observeGames()
     }
 
-    fun getProgressState(): LiveData<Boolean> = showProgress
-
-    fun getErrorViewState(): LiveData<Boolean> = showErrorView
-
-    fun getGameListState(): LiveData<Boolean> = showGameList
-
-    fun getInstallGameDialogState(): LiveData<Boolean> = showInstallGameDialog
-
     fun updateRepository() = viewModelScope.launch {
-        showProgress.value = true
-        showGameList.value = false
-        showErrorView.value = false
-        _showSearchNotFoundError.value = false
+        _uiState.value = UPDATE_REPOSITORY
 
         when (updateGameListUseCase()) {
             is Success -> {
-                showGameList.value = true
-                showProgress.value = false
+                _uiState.value = SHOW_GAMES
             }
 
             is Error -> {
-                showProgress.value = false
-                showErrorView.value = true
+                _uiState.value = UPDATE_REPOSITORY_ERROR
             }
         }
     }
@@ -92,11 +79,15 @@ class RepositoryViewModel @Inject constructor(
     fun searchGames(query: String) = viewModelScope.launch {
         val games = searchGamesUseCase(query)
         _gameItems.value = games.toRepoGames()
-        _showSearchNotFoundError.value = games.isEmpty()
+        if (games.isEmpty()) {
+            _uiState.value = SEARCH_ERROR
+        } else {
+            _uiState.value = SHOW_GAMES
+        }
     }
 
     fun installGame(uri: Uri) = viewModelScope.launch {
-        showInstallGameDialog.value = true
+        _showInstallGameDialog.value = true
         try {
             gameManager.installGameFromZip(uri)
         } catch (e: NotInsteadGameZipException) {
@@ -104,7 +95,7 @@ class RepositoryViewModel @Inject constructor(
         } catch (e: Throwable) {
             showErrorDialog(text = resourceProvider.getString(string.error_failed_to_unpack_zip))
         }
-        showInstallGameDialog.value = false
+        _showInstallGameDialog.value = false
         gameManager.scanGames()
     }
 

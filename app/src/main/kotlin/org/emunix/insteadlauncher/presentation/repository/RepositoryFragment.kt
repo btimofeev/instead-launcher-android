@@ -40,6 +40,11 @@ import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
 import org.emunix.insteadlauncher.presentation.models.ErrorDialogModel
 import org.emunix.insteadlauncher.presentation.models.RepoGame
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState.SEARCH_ERROR
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState.SHOW_GAMES
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REPOSITORY
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REPOSITORY_ERROR
 import org.emunix.insteadlauncher.utils.insetDivider
 
 private const val READ_REQUEST_CODE = 546
@@ -188,27 +193,56 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                         showErrorDialog(data)
                     }
                 }
+
+                launch {
+                    viewModel.uiState.collect { state ->
+                        setUiState(state)
+                    }
+                }
+
+                launch {
+                    viewModel.showInstallGameDialog.collect { isShow ->
+                        showInstallGameDialog(isShow)
+                    }
+                }
             }
         }
+    }
 
-        viewModel.getProgressState().observe(viewLifecycleOwner) { state ->
-            if (state != null) {
-                binding.swipeToRefresh.isRefreshing = state
+    private fun setUiState(state: RepoScreenState) {
+        when (state) {
+            SHOW_GAMES -> {
+                with(binding) {
+                    list.isVisible = true
+                    errorView.isVisible = false
+                    swipeToRefresh.isRefreshing = false
+                    nothingFoundText.isVisible = false
+                }
+
             }
-        }
-
-        viewModel.getErrorViewState().observe(viewLifecycleOwner) { state ->
-            if (state != null) binding.errorView.isVisible = state
-        }
-
-        viewModel.getGameListState().observe(viewLifecycleOwner) { state ->
-            if (state != null) binding.list.isVisible = state
-        }
-
-        viewModel.getInstallGameDialogState().observe(viewLifecycleOwner) { state ->
-            if (state != null) {
-                if (state == true) installDialog.show()
-                else installDialog.cancel()
+            UPDATE_REPOSITORY -> {
+                with(binding) {
+                    list.isVisible = false
+                    errorView.isVisible = false
+                    swipeToRefresh.isRefreshing = true
+                    nothingFoundText.isVisible = false
+                }
+            }
+            UPDATE_REPOSITORY_ERROR -> {
+                with(binding) {
+                    list.isVisible = false
+                    errorView.isVisible = true
+                    swipeToRefresh.isRefreshing = false
+                    nothingFoundText.isVisible = false
+                }
+            }
+            SEARCH_ERROR -> {
+                with(binding) {
+                    list.isVisible = false
+                    errorView.isVisible = false
+                    swipeToRefresh.isRefreshing = false
+                    binding.nothingFoundText.isVisible = true
+                }
             }
         }
     }
@@ -233,5 +267,13 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                 dialog.cancel()
             }
             .show()
+    }
+
+    private fun showInstallGameDialog(isShow: Boolean) {
+        if (isShow) {
+            installDialog.show()
+        } else {
+            installDialog.cancel()
+        }
     }
 }
