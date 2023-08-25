@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
@@ -38,10 +38,9 @@ import org.emunix.insteadlauncher.R.drawable
 import org.emunix.insteadlauncher.R.string
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
+import org.emunix.insteadlauncher.presentation.models.ErrorDialogModel
 import org.emunix.insteadlauncher.presentation.models.RepoGame
 import org.emunix.insteadlauncher.utils.insetDivider
-import org.emunix.insteadlauncher.utils.showToast
-import kotlin.LazyThreadSafetyMode
 
 private const val READ_REQUEST_CODE = 546
 
@@ -183,6 +182,12 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                         binding.list.isVisible = !isShowError
                     }
                 }
+
+                launch {
+                    viewModel.showErrorDialog.collect { data ->
+                        showErrorDialog(data)
+                    }
+                }
             }
         }
 
@@ -206,18 +211,6 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                 else installDialog.cancel()
             }
         }
-
-        viewModel.getSnackbarMessage().observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { resId ->
-                Snackbar.make(binding.list, getString(resId), Snackbar.LENGTH_LONG).show()
-            }
-        }
-
-        viewModel.getToastMessage().observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { resId ->
-                context?.showToast(getString(resId))
-            }
-        }
     }
 
     private fun handleApplicationZipArgument() {
@@ -230,5 +223,15 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
 
     private fun showGames(games: List<RepoGame>) {
         listAdapter.submitList(games)
+    }
+
+    private fun showErrorDialog(data: ErrorDialogModel) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(data.title)
+            .setMessage(data.message)
+            .setPositiveButton(string.dialog_error_close_button) { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
     }
 }

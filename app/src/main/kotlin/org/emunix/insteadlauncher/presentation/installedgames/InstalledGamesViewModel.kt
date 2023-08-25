@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.domain.usecase.GetGamesFlowUseCase
@@ -31,7 +32,7 @@ class InstalledGamesViewModel @Inject constructor(
 
     private val _gameItems = MutableStateFlow<List<InstalledGame>>(emptyList())
 
-    val gameItems: StateFlow<List<InstalledGame>> = _gameItems
+    val gameItems: StateFlow<List<InstalledGame>> = _gameItems.asStateFlow()
 
     fun init() {
         startUpdateRepoWorker()

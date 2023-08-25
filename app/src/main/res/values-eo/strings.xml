@@ -37,6 +37,8 @@
     <string name="dialog_delete_game_positive_button">Forigi</string>
     <string name="dialog_delete_game_negative_button">Rezigni</string>
 
+    <string name="dialog_error_close_button">Fermu</string>
+
     <string name="unpack_resources_fragment_try_again_button">Provi denove</string>
     <string name="unpack_resources_fragment_error_message">Elpako de risurcoj ne sukcesis. Kontrolu liberan spacon sur aparato kaj provu denove.</string>
 

@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -43,7 +44,7 @@ class GameViewModel @Inject constructor(
     private val _game = MutableStateFlow<GameInfo?>(null)
     private val _closeScreenCommand = Channel<Unit>()
 
-    val game: StateFlow<GameInfo?> = _game
+    val game: StateFlow<GameInfo?> = _game.asStateFlow()
     val closeScreenCommand = _closeScreenCommand.receiveAsFlow()
 
     private val progress: MutableLiveData<Int> = MutableLiveData()

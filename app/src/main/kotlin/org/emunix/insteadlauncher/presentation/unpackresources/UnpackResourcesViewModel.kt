@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.BuildConfig
 import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCase
@@ -30,7 +31,7 @@ class UnpackResourcesViewModel @Inject constructor(
 
     private val _screenState = MutableStateFlow(UNPACKING)
 
-    val screenState: StateFlow<UnpackResourcesScreenState> = _screenState
+    val screenState: StateFlow<UnpackResourcesScreenState> = _screenState.asStateFlow()
 
     init {
         update()

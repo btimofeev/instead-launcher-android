@@ -37,6 +37,8 @@
     <string name="dialog_delete_game_positive_button">Delete</string>
     <string name="dialog_delete_game_negative_button">Cancel</string>
 
+    <string name="dialog_error_close_button">Close</string>
+
     <string name="unpack_resources_fragment_try_again_button">Try again</string>
     <string name="unpack_resources_fragment_error_message">Failed to unpack resources. Check the free space on the internal storage and try again.</string>
 

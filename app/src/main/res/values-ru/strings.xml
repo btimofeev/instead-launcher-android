@@ -37,6 +37,8 @@
     <string name="dialog_delete_game_positive_button">Удалить</string>
     <string name="dialog_delete_game_negative_button">Отмена</string>
 
+    <string name="dialog_error_close_button">Закрыть</string>
+
     <string name="unpack_resources_fragment_try_again_button">Повторить попытку</string>
     <string name="unpack_resources_fragment_error_message">Не удалось распаковать ресурсы. Проверьте свободное место на внутреннем накопителе и повторите попытку.</string>
 
