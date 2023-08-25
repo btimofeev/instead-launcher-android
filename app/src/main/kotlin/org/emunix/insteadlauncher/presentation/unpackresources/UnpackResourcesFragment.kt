@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021-2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -10,11 +10,18 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.FragmentUnpackResourcesBinding
+import org.emunix.insteadlauncher.presentation.models.UnpackResourcesScreenState.ERROR
+import org.emunix.insteadlauncher.presentation.models.UnpackResourcesScreenState.SUCCESS
+import org.emunix.insteadlauncher.presentation.models.UnpackResourcesScreenState.UNPACKING
 
 @AndroidEntryPoint
 class UnpackResourcesFragment : Fragment(R.layout.fragment_unpack_resources) {
@@ -25,19 +32,37 @@ class UnpackResourcesFragment : Fragment(R.layout.fragment_unpack_resources) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupViews()
+        setupObservers()
+    }
 
-        viewModel.unpackSuccess.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess) {
-                findNavController().navigate(R.id.action_unpackResourcesFragment_to_installedGamesFragment)
+    private fun setupViews() {
+        binding.unpackResourcesTryAgainButton.setOnClickListener { viewModel.tryAgainIsClicked() }
+    }
+
+    private fun setupObservers() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.screenState.collect { state ->
+                    when (state) {
+                        SUCCESS -> navigateToInstalledGamesScreen()
+                        UNPACKING -> showError(false)
+                        ERROR -> showError(true)
+                    }
+                }
             }
         }
+    }
 
-        viewModel.showError.observe(viewLifecycleOwner) { showError ->
-            binding.unpackResourcesProgressBar.isVisible = !showError
-            binding.errorTextView.isVisible = showError
-            binding.unpackResourcesTryAgainButton.isVisible = showError
+    private fun navigateToInstalledGamesScreen() {
+        findNavController().navigate(R.id.action_unpackResourcesFragment_to_installedGamesFragment)
+    }
+
+    private fun showError(isErrorVisible: Boolean) {
+        with(binding) {
+            unpackResourcesProgressBar.isVisible = !isErrorVisible
+            errorTextView.isVisible = isErrorVisible
+            unpackResourcesTryAgainButton.isVisible = isErrorVisible
         }
-
-        binding.unpackResourcesTryAgainButton.setOnClickListener { viewModel.tryAgainIsClicked() }
     }
 }

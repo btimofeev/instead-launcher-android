@@ -5,11 +5,11 @@
 
 package org.emunix.insteadlauncher.presentation.unpackresources
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.BuildConfig
 import org.emunix.insteadlauncher.domain.usecase.CreateDirectoriesUseCase
@@ -17,6 +17,8 @@ import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.ERROR
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.NO_UPDATE_REQUIRED
 import org.emunix.insteadlauncher.domain.usecase.UpdateResourceUseCase.UpdateResult.SUCCESS
+import org.emunix.insteadlauncher.presentation.models.UnpackResourcesScreenState
+import org.emunix.insteadlauncher.presentation.models.UnpackResourcesScreenState.UNPACKING
 import org.emunix.insteadlauncher.utils.writeToLog
 import javax.inject.Inject
 
@@ -26,11 +28,9 @@ class UnpackResourcesViewModel @Inject constructor(
     private val createDirectoriesUseCase: CreateDirectoriesUseCase,
 ) : ViewModel() {
 
-    private var _unpackSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
-    private var _showError: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _screenState = MutableStateFlow(UNPACKING)
 
-    val unpackSuccess: LiveData<Boolean> = _unpackSuccess
-    val showError: LiveData<Boolean> = _showError
+    val screenState: StateFlow<UnpackResourcesScreenState> = _screenState
 
     init {
         update()
@@ -41,16 +41,16 @@ class UnpackResourcesViewModel @Inject constructor(
     }
 
     private fun update() = viewModelScope.launch {
-        _showError.value = false
+        _screenState.value = UNPACKING
         runCatching {
             createDirectoriesUseCase()
             when (updateResourceUseCase(forceUpdate = BuildConfig.DEBUG)) {
-                SUCCESS, NO_UPDATE_REQUIRED -> _unpackSuccess.value = true
-                ERROR -> _showError.value = true
+                SUCCESS, NO_UPDATE_REQUIRED -> _screenState.value = UnpackResourcesScreenState.SUCCESS
+                ERROR -> _screenState.value = UnpackResourcesScreenState.ERROR
             }
         }.onFailure { err ->
             err.writeToLog()
-            _showError.value = true
+            _screenState.value = UnpackResourcesScreenState.ERROR
         }
     }
 }
