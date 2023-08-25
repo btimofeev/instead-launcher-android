@@ -11,7 +11,6 @@ import android.graphics.drawable.InsetDrawable
 import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.DividerItemDecoration
 import coil.load
@@ -38,10 +37,6 @@ fun ImageView.loadUrl(url: String, highQuality: Boolean = false) {
             precision(EXACT)
         }
     }
-}
-
-fun Context.showToast(msg: String, length: Int = Toast.LENGTH_LONG) {
-    Toast.makeText(this, msg, length).show()
 }
 
 fun DividerItemDecoration.insetDivider(context: Context, @DimenRes start_offset_dimension: Int): Drawable {

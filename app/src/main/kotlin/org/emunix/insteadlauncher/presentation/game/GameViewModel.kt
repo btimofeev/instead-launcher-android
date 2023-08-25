@@ -5,8 +5,6 @@
 
 package org.emunix.insteadlauncher.presentation.game
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,9 +24,10 @@ import org.emunix.insteadlauncher.domain.model.GameState.INSTALLED
 import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
 import org.emunix.insteadlauncher.domain.usecase.GetGameInfoFlowUseCase
 import org.emunix.insteadlauncher.manager.game.GameManager
+import org.emunix.insteadlauncher.presentation.models.DownloadError
+import org.emunix.insteadlauncher.presentation.models.DownloadState
 import org.emunix.insteadlauncher.presentation.models.GameInfo
 import org.emunix.insteadlauncher.presentation.models.toGameInfo
-import org.emunix.insteadlauncher.utils.ConsumableEvent
 import org.emunix.insteadlauncher.utils.getDownloadingMessage
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
 import javax.inject.Inject
@@ -42,14 +41,15 @@ class GameViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _game = MutableStateFlow<GameInfo?>(null)
+    private val _downloadState = MutableStateFlow<DownloadState?>(null)
+    private val _downloadErrorCommand = Channel<DownloadError>()
     private val _closeScreenCommand = Channel<Unit>()
 
     val game: StateFlow<GameInfo?> = _game.asStateFlow()
+    val downloadState: StateFlow<DownloadState?> = _downloadState.asStateFlow()
+    val downloadErrorCommand = _downloadErrorCommand.receiveAsFlow()
     val closeScreenCommand = _closeScreenCommand.receiveAsFlow()
 
-    private val progress: MutableLiveData<Int> = MutableLiveData()
-    private val progressMessage: MutableLiveData<String> = MutableLiveData()
-    private val errorMessage: MutableLiveData<ConsumableEvent<String>> = MutableLiveData()
     private var gameModel: GameModel? = null
 
     fun init(gameName: String) {
@@ -70,12 +70,6 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    fun getProgress(): LiveData<Int> = progress
-
-    fun getProgressMessage(): LiveData<String> = progressMessage
-
-    fun getErrorMessage(): LiveData<ConsumableEvent<String>> = errorMessage
-
     private fun observeGameInfo(gameName: String) = viewModelScope.launch {
         getGameInfoFlowUseCase(gameName)
             .collect { game ->
@@ -94,15 +88,25 @@ class GameViewModel @Inject constructor(
             .collect { downloadStatus ->
                 when (downloadStatus) {
                     is Downloading -> {
-                        progress.value = downloadStatus.downloadedInPercentage
-                        progressMessage.value = downloadStatus.getDownloadingMessage(resourceProvider)
+                        _downloadState.value = DownloadState(
+                            progress = downloadStatus.downloadedInPercentage,
+                            message = downloadStatus.getDownloadingMessage(resourceProvider)
+                        )
                     }
+
                     is Success -> {
-                        progress.value = -1
-                        progressMessage.value = resourceProvider.getString(R.string.game_activity_message_installing)
+                        _downloadState.value = DownloadState(
+                            progress = -1,
+                            message = resourceProvider.getString(R.string.game_activity_message_installing)
+                        )
                     }
+
                     is Error -> {
-                        errorMessage.value = ConsumableEvent(downloadStatus.errorMessage)
+                        _downloadErrorCommand.trySend(
+                            DownloadError(
+                                message = downloadStatus.errorMessage
+                            )
+                        )
                     }
                 }
             }

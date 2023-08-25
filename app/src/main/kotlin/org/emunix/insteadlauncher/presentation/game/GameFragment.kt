@@ -19,9 +19,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.R.string
 import org.emunix.insteadlauncher.databinding.FragmentGameBinding
 import org.emunix.insteadlauncher.domain.model.GameState.INSTALLED
 import org.emunix.insteadlauncher.domain.model.GameState.IN_QUEUE_TO_INSTALL
@@ -30,9 +32,9 @@ import org.emunix.insteadlauncher.domain.model.GameState.IS_INSTALL
 import org.emunix.insteadlauncher.domain.model.GameState.NO_INSTALLED
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
+import org.emunix.insteadlauncher.presentation.models.DownloadState
 import org.emunix.insteadlauncher.presentation.models.GameInfo
 import org.emunix.insteadlauncher.utils.loadUrl
-import org.emunix.insteadlauncher.utils.showToast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -75,22 +77,18 @@ class GameFragment : Fragment(R.layout.fragment_game) {
                         closeScreen()
                     }
                 }
-            }
-        }
 
-        viewModel.getProgress().observe(viewLifecycleOwner) { value ->
-            if (value == -1) {
-                setIndeterminateProgress(true)
-            } else {
-                setIndeterminateProgress(false, value)
-            }
-        }
-        viewModel.getProgressMessage().observe(viewLifecycleOwner) { msg ->
-            setInstallMessage(msg)
-        }
-        viewModel.getErrorMessage().observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
-                requireContext().showToast(it)
+                launch {
+                    viewModel.downloadState.collect { state ->
+                        setDownloadState(state)
+                    }
+                }
+
+                launch {
+                    viewModel.downloadErrorCommand.collect { command ->
+                        showErrorDialog(command.message)
+                    }
+                }
             }
         }
     }
@@ -196,5 +194,26 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
     private fun closeScreen() {
         findNavController().popBackStack()
+    }
+
+    private fun setDownloadState(state: DownloadState?) {
+        if (state != null) {
+            setInstallMessage(state.message)
+            if (state.progress == -1) {
+                setIndeterminateProgress(true)
+            } else {
+                setIndeterminateProgress(false, state.progress)
+            }
+        }
+    }
+
+    private fun showErrorDialog(message: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(string.error)
+            .setMessage(message)
+            .setPositiveButton(string.dialog_error_close_button) { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
     }
 }
