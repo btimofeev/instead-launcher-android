@@ -182,13 +182,6 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                 }
 
                 launch {
-                    viewModel.showSearchNotFoundError.collect { isShowError ->
-                        binding.nothingFoundText.isVisible = isShowError
-                        binding.list.isVisible = !isShowError
-                    }
-                }
-
-                launch {
                     viewModel.showErrorDialog.collect { data ->
                         showErrorDialog(data)
                     }
