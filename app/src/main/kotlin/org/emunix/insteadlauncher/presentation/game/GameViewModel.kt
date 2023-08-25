@@ -10,9 +10,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
@@ -39,8 +41,10 @@ class GameViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _game = MutableStateFlow<GameInfo?>(null)
+    private val _closeScreenCommand = Channel<Unit>()
 
     val game: StateFlow<GameInfo?> = _game
+    val closeScreenCommand = _closeScreenCommand.receiveAsFlow()
 
     private val progress: MutableLiveData<Int> = MutableLiveData()
     private val progressMessage: MutableLiveData<String> = MutableLiveData()
@@ -74,8 +78,12 @@ class GameViewModel @Inject constructor(
     private fun observeGameInfo(gameName: String) = viewModelScope.launch {
         getGameInfoFlowUseCase(gameName)
             .collect { game ->
-                gameModel = game
-                _game.value = game.toGameInfo(resourceProvider)
+                if (game == null) {
+                    _closeScreenCommand.send(Unit)
+                } else {
+                    gameModel = game
+                    _game.value = game.toGameInfo(resourceProvider)
+                }
             }
     }
 

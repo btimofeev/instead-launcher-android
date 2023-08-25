@@ -15,10 +15,10 @@ interface GameDao {
     fun observeAllFlow(): Flow<List<Game>>
 
     @Query("SELECT * FROM games WHERE name LIKE :name LIMIT 1")
-    fun observeByName(name: String): Flow<Game>
+    fun observeByName(name: String): Flow<Game?>
 
     @Query("SELECT * FROM games WHERE name LIKE :name LIMIT 1")
-    fun getByName(name: String): Game // TODO похоже должно возвращать nullable, пока обработано в репозитории, но потом нужно оттуда удалить try catch
+    fun getByName(name: String): Game?
 
     @Query("SELECT * FROM games WHERE state = 1")
     fun getInstalledGames(): List<Game>

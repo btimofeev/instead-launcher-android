@@ -50,9 +50,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
         binding.toolbar.setNavigationIcon(R.drawable.ic_close_24dp)
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+        binding.toolbar.setNavigationOnClickListener { closeScreen() }
 
         val gameName = arguments?.getString("game_name")
             ?: throw IllegalArgumentException("GameFragment require game_name passed as argument")
@@ -64,9 +62,17 @@ class GameFragment : Fragment(R.layout.fragment_game) {
     private fun setupObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.game.collect { game ->
-                    if (game != null) {
-                        setViews(game)
+                launch {
+                    viewModel.game.collect { game ->
+                        if (game != null) {
+                            setViews(game)
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.closeScreenCommand.collect {
+                        closeScreen()
                     }
                 }
             }
@@ -186,5 +192,9 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
     private fun setInstallMessage(msg: String) {
         binding.installMessage.text = msg
+    }
+
+    private fun closeScreen() {
+        findNavController().popBackStack()
     }
 }

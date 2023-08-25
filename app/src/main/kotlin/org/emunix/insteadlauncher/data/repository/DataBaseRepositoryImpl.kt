@@ -38,11 +38,7 @@ class DataBaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getGame(name: String): GameModel? = withContext(Dispatchers.IO) {
-        return@withContext try {
-            gameDao.getByName(name).toDomain()
-        } catch (e: Throwable) {
-            null
-        }
+        return@withContext gameDao.getByName(name)?.toDomain()
     }
 
     override suspend fun getInstalledGames(): List<GameModel> = withContext(Dispatchers.IO) {
@@ -55,8 +51,8 @@ class DataBaseRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun observeGameByName(name: String): Flow<GameModel> = withContext(Dispatchers.IO) {
-        return@withContext gameDao.observeByName(name).map { it.toDomain() }
+    override suspend fun observeGameByName(name: String): Flow<GameModel?> = withContext(Dispatchers.IO) {
+        return@withContext gameDao.observeByName(name).map { it?.toDomain() }
     }
 
     override suspend fun search(query: String): List<GameModel> = withContext(Dispatchers.IO) {

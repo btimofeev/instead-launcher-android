@@ -12,14 +12,14 @@ import javax.inject.Inject
 
 interface GetGameInfoFlowUseCase {
 
-    suspend operator fun invoke(gameName: String): Flow<GameModel>
+    suspend operator fun invoke(gameName: String): Flow<GameModel?>
 }
 
 class GetGameInfoFlowUseCaseImpl @Inject constructor(
     private val dataBaseRepository: DataBaseRepository
 ) : GetGameInfoFlowUseCase {
 
-    override suspend fun invoke(gameName: String): Flow<GameModel> {
+    override suspend fun invoke(gameName: String): Flow<GameModel?> {
         return dataBaseRepository.observeGameByName(gameName)
     }
 }
