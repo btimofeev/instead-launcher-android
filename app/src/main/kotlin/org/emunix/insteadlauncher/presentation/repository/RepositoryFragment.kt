@@ -93,8 +93,7 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
             }
 
             fun search(text: String) {
-                val query = "%$text%" // todo перенести в репозиторий
-                viewModel.searchGames(query)
+                viewModel.searchGames(text)
             }
         })
     }
