@@ -21,12 +21,12 @@ import dagger.assisted.AssistedInject
 import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Error
 import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Success
 import org.emunix.insteadlauncher.domain.usecase.UpdateGameListUseCase
-import org.emunix.insteadlauncher.domain.worker.UpdateRepositoryWorker
+import org.emunix.insteadlauncher.domain.work.UpdateRepositoryWork
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltWorker
-class UpdateRepositoryWork @AssistedInject constructor(
+class UpdateRepositoryWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val updateGameListUseCase: UpdateGameListUseCase
@@ -40,7 +40,8 @@ class UpdateRepositoryWork @AssistedInject constructor(
     }
 }
 
-class UpdateRepositoryWorkManager @Inject constructor(private val context: Context) : UpdateRepositoryWorker {
+class UpdateRepositoryWorkImpl @Inject constructor(private val context: Context) :
+    UpdateRepositoryWork {
 
     override fun start(repeatInterval: Long, repeatIntervalTimeUnit: TimeUnit) {
         val constraints = Constraints.Builder()
@@ -49,7 +50,7 @@ class UpdateRepositoryWorkManager @Inject constructor(private val context: Conte
             .build()
 
         val updateRequest =
-            PeriodicWorkRequest.Builder(UpdateRepositoryWork::class.java, repeatInterval, repeatIntervalTimeUnit)
+            PeriodicWorkRequest.Builder(UpdateRepositoryWorker::class.java, repeatInterval, repeatIntervalTimeUnit)
                 .setConstraints(constraints)
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,

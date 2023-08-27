@@ -17,7 +17,7 @@ import org.emunix.insteadlauncher.domain.model.GameState.IN_QUEUE_TO_INSTALL
 import org.emunix.insteadlauncher.domain.parser.GameParser
 import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
 import org.emunix.insteadlauncher.domain.model.NotInsteadGameZipException
-import org.emunix.insteadlauncher.domain.worker.DeleteGameWork
+import org.emunix.insteadlauncher.domain.work.DeleteGameWork
 import org.emunix.insteadlauncher.utils.unzip
 import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.services.ScanGames

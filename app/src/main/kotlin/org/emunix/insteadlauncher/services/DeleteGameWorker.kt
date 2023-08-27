@@ -21,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.emunix.insteadlauncher.R.string
 import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCase
-import org.emunix.insteadlauncher.domain.worker.DeleteGameWork
+import org.emunix.insteadlauncher.domain.work.DeleteGameWork
 import org.emunix.insteadlauncher.services.DeleteGameWorker.Companion.GAME_NAME_KEY
 import javax.inject.Inject
 
