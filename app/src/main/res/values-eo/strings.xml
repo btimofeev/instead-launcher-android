@@ -49,8 +49,6 @@
     <string name="notification_scan_games">Serĉo de lokaj ŝanĝoj en dosierujo kun ludoj</string>
 
     <string name="channel_install_game">Instalado de ludoj</string>
-    <string name="channel_delete_game">Forigado de ludoj</string>
-    <string name="channel_update_resources">Ĝisdatigo de risurcoj la aplikaĵo</string>
     <string name="channel_scan_games">Serĉo lokaj ŝanĝoj en dosierujo kun ludoj</string>
     <string name="channel_crash_report">Sendi erarraporton</string>
 

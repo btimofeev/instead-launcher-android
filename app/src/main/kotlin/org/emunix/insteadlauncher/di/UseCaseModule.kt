@@ -82,9 +82,6 @@ interface UseCaseFragmentModule {
 interface UseCaseServiceModule {
 
     @Binds
-    fun bindDeleteGameUseCase(impl: DeleteGameUseCaseImpl): DeleteGameUseCase
-
-    @Binds
     fun bindGetDownloadGamesStatusUseCase(impl: GetDownloadGamesStatusUseCaseImpl): GetDownloadGamesStatusUseCase
 
     @Binds
@@ -100,4 +97,7 @@ interface UseCaseSingletonModule {
 
     @Binds
     fun bindUpdateGameListUseCase(impl: UpdateGameListUseCaseImpl): UpdateGameListUseCase
+
+    @Binds
+    fun bindDeleteGameUseCase(impl: DeleteGameUseCaseImpl): DeleteGameUseCase
 }

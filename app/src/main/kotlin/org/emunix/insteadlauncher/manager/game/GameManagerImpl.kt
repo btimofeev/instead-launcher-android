@@ -17,8 +17,8 @@ import org.emunix.insteadlauncher.domain.model.GameState.IN_QUEUE_TO_INSTALL
 import org.emunix.insteadlauncher.domain.parser.GameParser
 import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
 import org.emunix.insteadlauncher.domain.model.NotInsteadGameZipException
+import org.emunix.insteadlauncher.domain.worker.DeleteGameWork
 import org.emunix.insteadlauncher.utils.unzip
-import org.emunix.insteadlauncher.services.DeleteGame
 import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.services.ScanGames
 import java.io.IOException
@@ -30,6 +30,7 @@ class GameManagerImpl @Inject constructor(
     private val gameParser: GameParser,
     private val storage: Storage,
     private val dataBaseRepository: DataBaseRepository,
+    private val deleteGameWork: DeleteGameWork,
 ) : GameManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -48,14 +49,14 @@ class GameManagerImpl @Inject constructor(
     }
 
     override fun deleteGame(gameName: String) {
-        DeleteGame.start(context, gameName)
+        deleteGameWork.delete(gameName)
     }
 
     override fun scanGames() {
         ScanGames.start(context)
     }
 
-    override suspend fun installGameFromZip(uri: Uri) {
+    override suspend fun installGameFromZip(uri: Uri) { // todo перенести код метода в usecase
 
         fun isGameZip(uri: Uri): Boolean {
             val inputStream = context.contentResolver.openInputStream(uri)

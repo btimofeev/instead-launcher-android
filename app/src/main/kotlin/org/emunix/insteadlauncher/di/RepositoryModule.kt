@@ -19,7 +19,9 @@ import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.repository.NotificationRepository
 import org.emunix.insteadlauncher.domain.repository.RemoteRepository
+import org.emunix.insteadlauncher.domain.worker.DeleteGameWork
 import org.emunix.insteadlauncher.domain.worker.UpdateRepositoryWorker
+import org.emunix.insteadlauncher.services.DeleteGameWorkImpl
 import org.emunix.insteadlauncher.services.UpdateRepositoryWorkManager
 import javax.inject.Singleton
 
@@ -37,6 +39,9 @@ interface RepositoryModule {
 
     @Binds
     fun bindUpdateRepositoryWorker(impl: UpdateRepositoryWorkManager): UpdateRepositoryWorker
+
+    @Binds
+    fun bindDeleteGameWork(impl: DeleteGameWorkImpl): DeleteGameWork
 
     @Binds
     @Singleton

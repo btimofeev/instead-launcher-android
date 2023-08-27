@@ -43,7 +43,6 @@
         </activity>
 
         <service android:name=".services.InstallGame" />
-        <service android:name=".services.DeleteGame" />
         <service android:name=".services.ScanGames" />
 
 <!--        Код ниже это хотфикс проблемы запуска WorkManager совместно с Hilt после обновления WM до 2.6 -->
