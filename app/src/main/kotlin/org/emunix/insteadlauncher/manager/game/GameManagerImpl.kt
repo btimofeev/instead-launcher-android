@@ -14,13 +14,13 @@ import kotlinx.coroutines.withContext
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.instead_api.InsteadApi
 import org.emunix.insteadlauncher.domain.model.GameState.IN_QUEUE_TO_INSTALL
+import org.emunix.insteadlauncher.domain.model.NotInsteadGameZipException
 import org.emunix.insteadlauncher.domain.parser.GameParser
 import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
-import org.emunix.insteadlauncher.domain.model.NotInsteadGameZipException
 import org.emunix.insteadlauncher.domain.work.DeleteGameWork
-import org.emunix.insteadlauncher.utils.unzip
+import org.emunix.insteadlauncher.domain.work.ScanGamesWork
 import org.emunix.insteadlauncher.services.InstallGame
-import org.emunix.insteadlauncher.services.ScanGames
+import org.emunix.insteadlauncher.utils.unzip
 import java.io.IOException
 import javax.inject.Inject
 
@@ -31,6 +31,7 @@ class GameManagerImpl @Inject constructor(
     private val storage: Storage,
     private val dataBaseRepository: DataBaseRepository,
     private val deleteGameWork: DeleteGameWork,
+    private val scanGamesWork: ScanGamesWork,
 ) : GameManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -53,7 +54,7 @@ class GameManagerImpl @Inject constructor(
     }
 
     override fun scanGames() {
-        ScanGames.start(context)
+        scanGamesWork.scan()
     }
 
     override suspend fun installGameFromZip(uri: Uri) { // todo перенести код метода в usecase
