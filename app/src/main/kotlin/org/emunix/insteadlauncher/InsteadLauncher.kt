@@ -11,6 +11,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
@@ -45,6 +46,12 @@ class InsteadLauncher : Application(), Configuration.Provider {
     @Inject
     lateinit var preferencesProvider: PreferencesProvider
 
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .setMinimumLoggingLevel(Log.DEBUG)
+            .build()
+
     override fun onCreate() {
         super.onCreate()
         initLogger()
@@ -58,12 +65,6 @@ class InsteadLauncher : Application(), Configuration.Provider {
             initCrashReporter()
         }
     }
-
-    override fun getWorkManagerConfiguration() =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(android.util.Log.DEBUG)
-            .build()
 
     private fun initLogger() {
         if (BuildConfig.DEBUG) {
