@@ -50,16 +50,35 @@ class RepoUpdater @Inject constructor(
             )
             return false
         } catch (e: IOException) {
-            eventBus.publish(
-                UpdateRepoEvent(
-                    isLoading = false, isGamesLoaded = false, isError = true,
-                    message = resourceProvider.getString(
-                        string.error_server_return_unexpected_code,
-                        e.message.orEmpty()
+            try {
+                val gamesMap: MutableMap<String, Game> = mutableMapOf()
+                if (preferencesProvider.isSandboxEnabled) {
+                    val fallbackSandbox = preferencesProvider.sandboxUrl.replace("https://" , "http://")
+                    gamesMap.putAll(parseXML(fetchXML(fallbackSandbox)))
+                }
+                val fallbackRepo = preferencesProvider.repositoryUrl.replace("https://" , "http://")
+                gamesMap.putAll(parseXML(fetchXML(fallbackRepo)))
+                gamesMap.forEach { (_, value) -> games.add(value) }
+            } catch (e: XmlPullParserException) {
+                eventBus.publish(
+                    UpdateRepoEvent(
+                        isLoading = false, isGamesLoaded = false, isError = true,
+                        message = resourceProvider.getString(string.error_xml_parse, e.message.orEmpty())
                     )
                 )
-            )
-            return false
+                return false
+            } catch (e: IOException) {
+                eventBus.publish(
+                    UpdateRepoEvent(
+                        isLoading = false, isGamesLoaded = false, isError = true,
+                        message = resourceProvider.getString(
+                            string.error_server_return_unexpected_code,
+                            e.message.orEmpty()
+                        )
+                    )
+                )
+                return false
+            }
         }
 
         gamesDB.updateRepository(games)
