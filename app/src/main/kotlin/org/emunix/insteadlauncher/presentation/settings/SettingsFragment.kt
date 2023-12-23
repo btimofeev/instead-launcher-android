@@ -55,8 +55,8 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
     override fun onSharedPreferenceChanged(
-        sharedPreferences: SharedPreferences,
-        key: String
+        sharedPreferences: SharedPreferences?,
+        key: String?
     ) {
         when (key) {
             "pref_repository" -> {
