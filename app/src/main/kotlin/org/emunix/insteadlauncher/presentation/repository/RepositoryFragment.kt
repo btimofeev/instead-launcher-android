@@ -9,30 +9,35 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.helpers.insetDivider
-import org.emunix.insteadlauncher.helpers.visible
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.data.db.Game
 import org.emunix.insteadlauncher.databinding.FragmentRepositoryBinding
+import org.emunix.insteadlauncher.helpers.insetDivider
 import org.emunix.insteadlauncher.helpers.showToast
+import org.emunix.insteadlauncher.helpers.visible
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
-
-private const val READ_REQUEST_CODE = 546
 
 @AndroidEntryPoint
 class RepositoryFragment : Fragment(R.layout.fragment_repository) {
@@ -44,9 +49,14 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
 
     private lateinit var listAdapter: RepositoryAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
+    private val defaultContract = ActivityResultContracts.StartActivityForResult()
+
+    private val repoResult = registerForActivityResult(defaultContract) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data
+            if (uri != null)
+                viewModel.installGame(uri)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,9 +70,14 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
             findNavController().popBackStack()
         }
 
-        binding.list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
-        val insetDivider = dividerItemDecoration.insetDivider(binding.list.context, R.dimen.installed_game_fragment_inset_divider_margin_start)
+        binding.list.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        val dividerItemDecoration =
+            DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
+        val insetDivider = dividerItemDecoration.insetDivider(
+            binding.list.context,
+            R.dimen.installed_game_fragment_inset_divider_margin_start
+        )
         dividerItemDecoration.setDrawable(insetDivider)
         binding.list.addItemDecoration(dividerItemDecoration)
         listAdapter = RepositoryAdapter { game, image ->
@@ -135,64 +150,56 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                 appArgumentViewModel.zipUri.value = null
             }
         }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_repository, menu)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_repository, menu)
 
-        val searchView = menu.findItem(R.id.action_search)!!.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                val searchView = menu.findItem(R.id.action_search)!!.actionView as SearchView
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                search(newText)
-                return true
+                    override fun onQueryTextChange(newText: String): Boolean {
+                        search(newText)
+                        return true
+                    }
+
+                    override fun onQueryTextSubmit(query: String): Boolean {
+                        search(query)
+                        return false
+                    }
+
+                    fun search(text: String) {
+                        val query = "%$text%"
+                        viewModel.searchGames(query).observe(viewLifecycleOwner) { games ->
+                            if (games != null) {
+                                showGames(games)
+                                binding.nothingFoundText.visible(games.isEmpty())
+                            }
+                        }
+                    }
+                })
             }
 
-            override fun onQueryTextSubmit(query: String): Boolean {
-                search(query)
-                return false
-            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.action_update_repo -> {
+                        viewModel.updateRepository()
+                        return true
+                    }
 
-            fun search(text: String) {
-                val query = "%$text%"
-                viewModel.searchGames(query).observe(this@RepositoryFragment) { games ->
-                    if (games != null) {
-                        showGames(games)
-                        binding.nothingFoundText.visible(games.isEmpty())
+                    R.id.action_install_local_game -> {
+                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+                        intent.type = "application/zip"
+                        repoResult.launch(intent)
+                        return true
                     }
                 }
-            }
-        })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_update_repo -> {
-                viewModel.updateRepository()
                 return true
             }
-            R.id.action_install_local_game -> {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.type = "application/zip"
-                startActivityForResult(intent, READ_REQUEST_CODE, null)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+        }, viewLifecycleOwner)
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-
-        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (resultData != null) {
-                val uri = resultData.data
-                if (uri != null)
-                    viewModel.installGame(uri)
-            }
-        }
     }
 
     private fun showGames(games: List<Game>) {
