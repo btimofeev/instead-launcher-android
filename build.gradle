@@ -12,17 +12,17 @@ buildscript {
 
         build_config_instead_version = '3.5.0'
 
-        kotlin_version = '1.8.0'
-        kotlin_coroutines_version = '1.7.2'
-        hilt_version = '2.46.1'
-        lifecycle_version = '2.6.1'
-        room_version = '2.5.2'
-        navigation_version = '2.6.0'
-        acraVersion = '5.10.1'
+        kotlin_version = '1.9.22'
+        kotlin_coroutines_version = '1.7.3'
+        hilt_version = '2.50'
+        lifecycle_version = '2.6.2'
+        room_version = '2.6.1'
+        navigation_version = '2.7.6'
+        acraVersion = '5.11.3'
         commons_io_version = '2.5' // 2.6 crashes the application on Android below 8, because java.nio.file is not available in these versions
         appcompat_version = '1.6.1'
-        preference_ktx_version = '1.2.0'
-        junit_version = '5.8.2'
+        preference_ktx_version = '1.2.1'
+        junit_version = '5.10.1'
     }
     repositories {
         mavenCentral()
