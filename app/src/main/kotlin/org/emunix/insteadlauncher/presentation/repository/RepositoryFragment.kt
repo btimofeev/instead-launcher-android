@@ -17,6 +17,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -67,8 +69,52 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
     private lateinit var listAdapter: RepositoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object: MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_repository, menu)
+
+                val searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+                    override fun onQueryTextChange(newText: String): Boolean {
+                        search(newText)
+                        return true
+                    }
+
+                    override fun onQueryTextSubmit(query: String): Boolean {
+                        search(query)
+                        return false
+                    }
+
+                    fun search(text: String) {
+                        viewModel.searchGames(text)
+                    }
+                })
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_update_repo -> {
+                        viewModel.updateRepository()
+                        return true
+                    }
+
+                    R.id.action_install_local_game -> {
+                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+                        intent.type = "application/zip"
+                        startActivityForResult(intent, READ_REQUEST_CODE, null)
+                        return true
+                    }
+
+                    else -> false
+                }
+            }
+
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,47 +123,6 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
         setupViews()
         setupObservers()
         handleApplicationZipArgument()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_repository, menu)
-
-        val searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                search(newText)
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String): Boolean {
-                search(query)
-                return false
-            }
-
-            fun search(text: String) {
-                viewModel.searchGames(text)
-            }
-        })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_update_repo -> {
-                viewModel.updateRepository()
-                return true
-            }
-
-            R.id.action_install_local_game -> {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.type = "application/zip"
-                startActivityForResult(intent, READ_REQUEST_CODE, null)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
