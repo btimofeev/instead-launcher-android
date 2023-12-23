@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
 
@@ -42,9 +42,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.InstallGame" />
-        <service android:name=".services.DeleteGame" />
-        <service android:name=".services.ScanGames" />
+        <service android:name=".services.InstallGame" android:foregroundServiceType="dataSync" />
+        <service android:name=".services.DeleteGame" android:foregroundServiceType="dataSync" />
+        <service android:name=".services.ScanGames" android:foregroundServiceType="dataSync" />
 
 <!--        Код ниже это хотфикс проблемы запуска WorkManager совместно с Hilt после обновления WM до 2.6 -->
 <!--        См. https://developer.android.com/jetpack/androidx/releases/work#2.6.0-alpha01 -->
