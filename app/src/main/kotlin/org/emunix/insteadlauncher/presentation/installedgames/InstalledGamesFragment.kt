@@ -14,6 +14,8 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -53,6 +55,7 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
         super.onViewCreated(view, savedInstanceState)
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        val menuHost: MenuHost = requireActivity()
 
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_installedGamesFragment_to_repositoryFragment)
@@ -80,26 +83,27 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
                 findNavController().navigate(R.id.action_installedGamesFragment_to_repositoryFragment)
             }
         }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_installed_games, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_installed_games, menu)
+            }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> {
-                findNavController().navigate(R.id.action_installedGamesFragment_to_settingsFragment)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.action_settings -> {
+                        findNavController().navigate(R.id.action_installedGamesFragment_to_settingsFragment)
+                        return true
+                    }
+                    R.id.action_about -> {
+                        findNavController().navigate(R.id.action_installedGamesFragment_to_aboutFragment)
+                        return true
+                    }
+                }
                 return true
             }
-            R.id.action_about -> {
-                findNavController().navigate(R.id.action_installedGamesFragment_to_aboutFragment)
-                return true
-            }
-        }
+        }, viewLifecycleOwner)
 
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
