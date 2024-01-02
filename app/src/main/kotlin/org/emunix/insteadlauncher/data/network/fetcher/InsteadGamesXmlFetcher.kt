@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 class InsteadGamesXmlFetcher(private val client: OkHttpClient): GameListFetcher {
 
@@ -21,7 +22,7 @@ class InsteadGamesXmlFetcher(private val client: OkHttpClient): GameListFetcher 
 
         val response: Response = try {
             client.newCall(request).execute()
-        } catch (ex: IOException) {
+        } catch (ex: SocketTimeoutException) {
             client.newCall(modRequest).execute()
         }
 
