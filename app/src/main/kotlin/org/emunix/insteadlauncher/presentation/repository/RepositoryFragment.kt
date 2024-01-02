@@ -68,11 +68,6 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
 
     private lateinit var listAdapter: RepositoryAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMenu()
