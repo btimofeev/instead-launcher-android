@@ -14,6 +14,8 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -40,8 +42,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
 
-    @Inject
-    lateinit var gameManager: GameManager
+    @Inject lateinit var gameManager: GameManager
 
     private val binding by viewBinding(FragmentInstalledGamesBinding::bind)
 
@@ -50,13 +51,9 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
 
     private lateinit var listAdapter: InstalledGamesAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initMenu()
         if (appArgumentViewModel.zipUri != null) {
             navigateToRepositoryScreen()
         }
@@ -65,28 +62,36 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
         setupObservers()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_installed_games, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> {
-                navigateToSettingsScreen()
-                return true
+    private fun initMenu() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_installed_games, menu)
             }
 
-            R.id.action_about -> {
-                navigateToAboutAppScreen()
-                return true
-            }
-        }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.action_settings -> {
+                        navigateToSettingsScreen()
+                        return true
+                    }
 
-        return super.onOptionsItemSelected(item)
+                    R.id.action_about -> {
+                        navigateToAboutAppScreen()
+                        return true
+                    }
+                }
+                return false
+            }
+
+        }, viewLifecycleOwner, State.RESUMED)
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
         requireActivity().menuInflater.inflate(R.menu.menu_context_installed_games, menu)
     }
 
@@ -127,7 +132,8 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
     }
 
     private fun setupGameListDecoration() {
-        val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
+        val dividerItemDecoration =
+            DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
         val insetDivider = dividerItemDecoration.insetDivider(
             context = binding.list.context,
             start_offset_dimension = dimen.installed_game_fragment_inset_divider_margin_start

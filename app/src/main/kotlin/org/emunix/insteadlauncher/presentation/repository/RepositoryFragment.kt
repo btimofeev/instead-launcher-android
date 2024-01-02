@@ -17,6 +17,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -67,57 +69,62 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
     private lateinit var listAdapter: RepositoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
+
         super.onCreate(savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initMenu()
         viewModel.init()
         setupViews()
         setupObservers()
         handleApplicationZipArgument()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_repository, menu)
+    private fun initMenu() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_repository, menu)
 
-        val searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                val searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextChange(newText: String): Boolean {
+                        search(newText)
+                        return true
+                    }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                search(newText)
-                return true
+                    override fun onQueryTextSubmit(query: String): Boolean {
+                        search(query)
+                        return false
+                    }
+
+                    fun search(text: String) {
+                        viewModel.searchGames(text)
+                    }
+                })
             }
 
-            override fun onQueryTextSubmit(query: String): Boolean {
-                search(query)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.action_update_repo -> {
+                        viewModel.updateRepository()
+                        return true
+                    }
+
+                    R.id.action_install_local_game -> {
+                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+                        intent.type = "application/zip"
+                        startActivityForResult(intent, READ_REQUEST_CODE, null)
+                        return true
+                    }
+                }
                 return false
             }
 
-            fun search(text: String) {
-                viewModel.searchGames(text)
-            }
-        })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_update_repo -> {
-                viewModel.updateRepository()
-                return true
-            }
-
-            R.id.action_install_local_game -> {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.type = "application/zip"
-                startActivityForResult(intent, READ_REQUEST_CODE, null)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
+        }, viewLifecycleOwner, State.RESUMED)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
@@ -147,14 +154,16 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
     }
 
     private fun setupGameList() {
-        binding.list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        binding.list.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         setupGameListDecoration()
         setupGameListAdapter()
         binding.list.setHasFixedSize(true)
     }
 
     private fun setupGameListDecoration() {
-        val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
+        val dividerItemDecoration =
+            DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
         val insetDivider = dividerItemDecoration.insetDivider(
             context = binding.list.context,
             start_offset_dimension = dimen.installed_game_fragment_inset_divider_margin_start
@@ -213,6 +222,7 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                 }
 
             }
+
             UPDATE_REPOSITORY -> {
                 with(binding) {
                     list.isVisible = false
@@ -221,6 +231,7 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                     nothingFoundText.isVisible = false
                 }
             }
+
             UPDATE_REPOSITORY_ERROR -> {
                 with(binding) {
                     list.isVisible = false
@@ -229,6 +240,7 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                     nothingFoundText.isVisible = false
                 }
             }
+
             SEARCH_ERROR -> {
                 with(binding) {
                     list.isVisible = false
