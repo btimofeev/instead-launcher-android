@@ -26,17 +26,17 @@ class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDe
 
     private static final String TAG = "hidapi";
     private HIDDeviceManager mManager;
-    private final BluetoothDevice mDevice;
-    private final int mDeviceId;
+    private BluetoothDevice mDevice;
+    private int mDeviceId;
     private BluetoothGatt mGatt;
-    private boolean mIsRegistered;
+    private boolean mIsRegistered = false;
     private boolean mIsConnected = false;
-    private boolean mIsChromebook;
+    private boolean mIsChromebook = false;
     private boolean mIsReconnecting = false;
     private boolean mFrozen = false;
-    private final LinkedList<GattOperation> mOperations;
+    private LinkedList<GattOperation> mOperations;
     GattOperation mCurrentOperation = null;
-    private final Handler mHandler;
+    private Handler mHandler;
 
     private static final int TRANSPORT_AUTO = 0;
     private static final int TRANSPORT_BREDR = 1;
@@ -80,28 +80,28 @@ class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDe
             BluetoothGattCharacteristic chr;
 
             switch (mOp) {
-                case CHR_READ -> {
+                case CHR_READ:
                     chr = getCharacteristic(mUuid);
                     //Log.v(TAG, "Reading characteristic " + chr.getUuid());
                     if (!mGatt.readCharacteristic(chr)) {
-                        Log.e(TAG , "Unable to read characteristic " + mUuid.toString());
+                        Log.e(TAG, "Unable to read characteristic " + mUuid.toString());
                         mResult = false;
                         break;
                     }
                     mResult = true;
-                }
-                case CHR_WRITE -> {
+                    break;
+                case CHR_WRITE:
                     chr = getCharacteristic(mUuid);
                     //Log.v(TAG, "Writing characteristic " + chr.getUuid() + " value=" + HexDump.toHexString(value));
                     chr.setValue(mValue);
                     if (!mGatt.writeCharacteristic(chr)) {
-                        Log.e(TAG , "Unable to write characteristic " + mUuid.toString());
+                        Log.e(TAG, "Unable to write characteristic " + mUuid.toString());
                         mResult = false;
                         break;
                     }
                     mResult = true;
-                }
-                case ENABLE_NOTIFICATION -> {
+                    break;
+                case ENABLE_NOTIFICATION:
                     chr = getCharacteristic(mUuid);
                     //Log.v(TAG, "Writing descriptor of " + chr.getUuid());
                     if (chr != null) {
@@ -114,22 +114,21 @@ class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDe
                             } else if ((properties & BluetoothGattCharacteristic.PROPERTY_INDICATE) == BluetoothGattCharacteristic.PROPERTY_INDICATE) {
                                 value = BluetoothGattDescriptor.ENABLE_INDICATION_VALUE;
                             } else {
-                                Log.e(TAG , "Unable to start notifications on input characteristic");
+                                Log.e(TAG, "Unable to start notifications on input characteristic");
                                 mResult = false;
                                 return;
                             }
 
-                            mGatt.setCharacteristicNotification(chr , true);
+                            mGatt.setCharacteristicNotification(chr, true);
                             cccd.setValue(value);
                             if (!mGatt.writeDescriptor(cccd)) {
-                                Log.e(TAG , "Unable to write descriptor " + mUuid.toString());
+                                Log.e(TAG, "Unable to write descriptor " + mUuid.toString());
                                 mResult = false;
                                 return;
                             }
                             mResult = true;
                         }
                     }
-                }
             }
         }
 
@@ -163,7 +162,7 @@ class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDe
         mDeviceId = mManager.getDeviceIDForIdentifier(getIdentifier());
         mIsRegistered = false;
         mIsChromebook = mManager.getContext().getPackageManager().hasSystemFeature("org.chromium.arc.device_management");
-        mOperations = new LinkedList<>();
+        mOperations = new LinkedList<GattOperation>();
         mHandler = new Handler(Looper.getMainLooper());
 
         mGatt = connectGatt();
@@ -239,37 +238,46 @@ class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDe
         int connectionState = getConnectionState();
 
         switch (connectionState) {
-            case BluetoothProfile.STATE_CONNECTED -> {
+            case BluetoothProfile.STATE_CONNECTED:
                 if (!mIsConnected) {
                     // We are in the Bad Chromebook Place.  We can force a disconnect
                     // to try to recover.
-                    Log.v(TAG , "Chromebook: We are in a very bad state; the controller shows as connected in the underlying Bluetooth layer, but we never received a callback.  Forcing a reconnect.");
+                    Log.v(TAG, "Chromebook: We are in a very bad state; the controller shows as connected in the underlying Bluetooth layer, but we never received a callback.  Forcing a reconnect.");
                     mIsReconnecting = true;
                     mGatt.disconnect();
                     mGatt = connectGatt(false);
-                } else if (!isRegistered()) {
+                    break;
+                }
+                else if (!isRegistered()) {
                     if (mGatt.getServices().size() > 0) {
-                        Log.v(TAG , "Chromebook: We are connected to a controller, but never got our registration.  Trying to recover.");
+                        Log.v(TAG, "Chromebook: We are connected to a controller, but never got our registration.  Trying to recover.");
                         probeService(this);
-                    } else {
-                        Log.v(TAG , "Chromebook: We are connected to a controller, but never discovered services.  Trying to recover.");
+                    }
+                    else {
+                        Log.v(TAG, "Chromebook: We are connected to a controller, but never discovered services.  Trying to recover.");
                         mIsReconnecting = true;
                         mGatt.disconnect();
                         mGatt = connectGatt(false);
+                        break;
                     }
-                } else {
-                    Log.v(TAG , "Chromebook: We are connected, and registered.  Everything's good!");
+                }
+                else {
+                    Log.v(TAG, "Chromebook: We are connected, and registered.  Everything's good!");
                     return;
                 }
-            }
-            case BluetoothProfile.STATE_DISCONNECTED -> {
-                Log.v(TAG , "Chromebook: We have either been disconnected, or the Chromebook BtGatt.ContextMap bug has bitten us.  Attempting a disconnect/reconnect, but we may not be able to recover.");
+                break;
+
+            case BluetoothProfile.STATE_DISCONNECTED:
+                Log.v(TAG, "Chromebook: We have either been disconnected, or the Chromebook BtGatt.ContextMap bug has bitten us.  Attempting a disconnect/reconnect, but we may not be able to recover.");
+
                 mIsReconnecting = true;
                 mGatt.disconnect();
                 mGatt = connectGatt(false);
-            }
-            case BluetoothProfile.STATE_CONNECTING ->
-                    Log.v(TAG , "Chromebook: We're still trying to connect.  Waiting a bit longer.");
+                break;
+
+            case BluetoothProfile.STATE_CONNECTING:
+                Log.v(TAG, "Chromebook: We're still trying to connect.  Waiting a bit longer.");
+                break;
         }
 
         final HIDDeviceBLESteamController finalThis = this;
@@ -365,15 +373,18 @@ class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDe
         }
 
         // Run in main thread
-        mHandler.post(() -> {
-            synchronized (mOperations) {
-                if (mCurrentOperation == null) {
-                    Log.e(TAG, "Current operation null in executor?");
-                    return;
-                }
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mOperations) {
+                    if (mCurrentOperation == null) {
+                        Log.e(TAG, "Current operation null in executor?");
+                        return;
+                    }
 
-                mCurrentOperation.run();
-                // now wait for the GATT callback and when it comes, finish this operation
+                    mCurrentOperation.run();
+                    // now wait for the GATT callback and when it comes, finish this operation
+                }
             }
         });
     }
@@ -411,7 +422,12 @@ class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDe
             mIsConnected = true;
             // Run directly, without GattOperation
             if (!isRegistered()) {
-                mHandler.post(() -> mGatt.discoverServices());
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGatt.discoverServices();
+                    }
+                });
             }
         } 
         else if (newState == 0) {
@@ -516,13 +532,15 @@ class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDe
     @Override
     public int getVendorId() {
         // Valve Corporation
-        return 0x28DE;
+        final int VALVE_USB_VID = 0x28DE;
+        return VALVE_USB_VID;
     }
 
     @Override
     public int getProductId() {
         // We don't have an easy way to query from the Bluetooth device, but we know what it is
-        return 0x1106;
+        final int D0G_BLE2_PID = 0x1106;
+        return D0G_BLE2_PID;
     }
 
     @Override
