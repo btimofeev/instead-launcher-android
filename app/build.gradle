@@ -103,7 +103,7 @@ dependencies {
 
     // Architecture components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common:$rootProject.lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
     // Room
