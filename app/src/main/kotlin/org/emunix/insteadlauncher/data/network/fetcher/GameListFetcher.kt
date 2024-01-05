@@ -7,5 +7,5 @@ package org.emunix.insteadlauncher.data.network.fetcher
 
 interface GameListFetcher {
 
-    fun fetch(url: String): String
+    fun fetch(url: String, isRedirectToHttp: Boolean): String
 }

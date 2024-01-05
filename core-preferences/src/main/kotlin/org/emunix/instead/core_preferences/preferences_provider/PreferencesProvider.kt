@@ -31,6 +31,8 @@ interface PreferencesProvider {
 
     val sandboxUrl: String
 
+    val isRedirectToHttp: Boolean
+
     val updateRepoInBackground: Boolean
 
     val updateRepoWhenOpenRepositoryScreen: Boolean

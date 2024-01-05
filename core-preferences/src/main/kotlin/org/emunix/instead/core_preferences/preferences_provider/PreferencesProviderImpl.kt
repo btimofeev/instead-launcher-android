@@ -54,6 +54,9 @@ class PreferencesProviderImpl @Inject constructor(private val preferences: Share
     override val sandboxUrl: String
         get() = preferences.getString("pref_sandbox", null) ?: SANDBOX_REPOSITORY_URL
 
+    override val isRedirectToHttp: Boolean
+        get() = preferences.getBoolean("pref_redirect_http", false)
+
     override val updateRepoInBackground: Boolean
         get() = preferences.getBoolean("pref_update_repo_background", true)
 

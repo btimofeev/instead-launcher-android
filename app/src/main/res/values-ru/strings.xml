@@ -103,6 +103,7 @@
     <string name="pref_update_repo_background">Обновлять репозиторий в фоне</string>
     <string name="pref_update_repo_background_summary">Один раз в день</string>
     <string name="pref_update_repo_when_open">Обновлять репозиторий при открытии</string>
+    <string name="pref_redirect_http">Если репозиторий не доступен по https, используем http</string>
 
     <string name="prefs_category_interface">Внешний вид</string>
     <string name="prefs_theme">Тема приложения</string>

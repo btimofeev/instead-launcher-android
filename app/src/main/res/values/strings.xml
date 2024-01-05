@@ -103,6 +103,7 @@
     <string name="pref_update_repo_background">Update repository in background</string>
     <string name="pref_update_repo_background_summary">Once a day</string>
     <string name="pref_update_repo_when_open">Update repository on startup</string>
+    <string name="pref_redirect_http">If the repository is not accessible via https, use http</string>
 
     <string name="prefs_category_interface">User interface</string>
     <string name="prefs_theme">Launcher theme</string>
