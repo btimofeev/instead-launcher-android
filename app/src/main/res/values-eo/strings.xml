@@ -103,7 +103,7 @@
     <string name="pref_update_repo_background">Ĝisdatigi deponejon en fono</string>
     <string name="pref_update_repo_background_summary">Unu foje en tago</string>
     <string name="pref_update_repo_when_open">Ĝisdatigi deponejon je malfermo</string>
-    <string name="pref_redirect_http">Se la deponejo ne estas alirebla per https, uzu http</string>
+    <string name="pref_redirect_http">Alidirektilo al http</string>
 
     <string name="prefs_category_interface">Uzulinterfaco</string>
     <string name="prefs_theme">Etoso de aplikaĵo</string>

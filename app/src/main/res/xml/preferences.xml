@@ -104,8 +104,7 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_redirect_http"
-            android:title="Redirect to http"
-            android:summary=""/>
+            android:title="@string/pref_redirect_http"/>
     </PreferenceCategory>
 
     <PreferenceCategory
