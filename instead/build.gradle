@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id "de.undercouch.download" version "5.4.0"
+    id "de.undercouch.download" version "5.5.0"
 }
 
 android {

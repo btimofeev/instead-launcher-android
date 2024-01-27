@@ -14,7 +14,7 @@ buildscript {
         kotlin_version = '1.9.22'
         kotlin_coroutines_version = '1.7.3'
         hilt_version = '2.50'
-        lifecycle_version = '2.6.2'
+        lifecycle_version = '2.7.0'
         room_version = '2.6.1'
         navigation_version = '2.7.6'
         acraVersion = '5.11.3'
@@ -28,7 +28,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.1'
+        classpath 'com.android.tools.build:gradle:8.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "de.mannodermaus.gradle.plugins:android-junit5:1.8.2.1"
@@ -36,8 +36,8 @@ buildscript {
 }
 
 plugins {
-    id 'de.undercouch.download' version '5.4.0'
-    id 'com.google.devtools.ksp' version '1.9.10-1.0.13' apply false
+    id 'de.undercouch.download' version '5.5.0'
+    id 'com.google.devtools.ksp' version '1.9.22-1.0.17' apply false
 }
 
 allprojects {
