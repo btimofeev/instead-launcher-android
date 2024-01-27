@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2020 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018, 2020, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -7,17 +7,18 @@ package org.emunix.insteadlauncher.data.parser
 
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
-import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.data.db.Game.State.NO_INSTALLED
-import org.emunix.insteadlauncher.helpers.getBrief
-import org.emunix.insteadlauncher.helpers.unescapeHtmlCodes
+import org.emunix.insteadlauncher.domain.model.GameInfo
+import org.emunix.insteadlauncher.domain.model.GameModel
+import org.emunix.insteadlauncher.domain.model.GameState.NO_INSTALLED
+import org.emunix.insteadlauncher.domain.model.GameUrl
+import org.emunix.insteadlauncher.domain.model.GameVersion
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.StringReader
 
 class InsteadGamesXmlParser : GameListParser {
 
-    override fun parse(input: String): Map<String, Game> {
+    override fun parse(input: String): Map<String, GameModel> {
         val parser = Xml.newPullParser()
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
         parser.setInput(StringReader(input))
@@ -26,8 +27,8 @@ class InsteadGamesXmlParser : GameListParser {
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
-    private fun readFeed(parser: XmlPullParser): Map<String, Game> {
-        val games = mutableMapOf<String, Game>()
+    private fun readFeed(parser: XmlPullParser): Map<String, GameModel> {
+        val games = mutableMapOf<String, GameModel>()
 
         parser.require(XmlPullParser.START_TAG, null, "game_list")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -45,7 +46,7 @@ class InsteadGamesXmlParser : GameListParser {
         return games
     }
 
-    private fun readEntry(parser: XmlPullParser): Game {
+    private fun readEntry(parser: XmlPullParser): GameModel {
         var gName = ""
         var gTitle = ""
         var gAuthor = ""
@@ -85,20 +86,25 @@ class InsteadGamesXmlParser : GameListParser {
         if (!gImage.contains(".png", true) && !gImage.contains(".jpg", true)) {
             gImage = ""
         }
-        return Game(
+        return GameModel(
             name = gName,
-            title = gTitle,
-            author = gAuthor,
-            date = gDate,
-            version = gVersion,
-            size = gSize,
-            url = gUrl,
-            image = gImage,
-            lang = gLang,
-            description = gDescription,
-            descurl = gDescUrl,
-            brief = gBrief,
-            installedVersion = "",
+            info = GameInfo(
+                title = gTitle,
+                author = gAuthor,
+                description = gDescription,
+                shortDescription = gBrief,
+                lastReleaseDate = gDate,
+                gameSize = gSize,
+                lang = gLang,
+            ),
+            url = GameUrl(
+                image = gImage,
+                site = gDescUrl,
+                download = gUrl,
+            ),
+            version = GameVersion(
+                availableOnSite = gVersion,
+            ),
             state = NO_INSTALLED
         )
     }
@@ -130,5 +136,22 @@ class InsteadGamesXmlParser : GameListParser {
                 XmlPullParser.START_TAG -> depth++
             }
         }
+    }
+
+    private fun String.unescapeHtmlCodes(): String {
+        var s = this.replace("&lt;", "<")
+        s = s.replace("&gt;", ">")
+        s = s.replace("&#039;", "\'")
+        s = s.replace("&quot;", "\"")
+        s = s.replace("&amp;", "&")
+        return s
+    }
+
+    private fun String.getBrief(): String {
+        var s = this.take(300)
+        s = s.replace("\n", " ").replace("\r", " ") // remove newlines
+        s = s.replace("\\s+".toRegex(), " ") // remove double spaces
+        s = s.trim()
+        return s
     }
 }

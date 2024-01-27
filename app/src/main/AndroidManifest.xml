@@ -42,20 +42,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.UpdateRepository" android:foregroundServiceType="dataSync" />
         <service android:name=".services.InstallGame" android:foregroundServiceType="dataSync" />
         <service android:name=".services.DeleteGame" android:foregroundServiceType="dataSync" />
         <service android:name=".services.ScanGames" android:foregroundServiceType="dataSync" />
-
-<!--        Код ниже это хотфикс проблемы запуска WorkManager совместно с Hilt после обновления WM до 2.6 -->
-<!--        См. https://developer.android.com/jetpack/androidx/releases/work#2.6.0-alpha01 -->
-<!--        Этот код отключает инициализацию приложения через androidx.startup, -->
-<!--        т.к. второй пример по ссылке выше не заработал. Надо поисследовать эту проблему. -->
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove">
-        </provider>
 
     </application>
 

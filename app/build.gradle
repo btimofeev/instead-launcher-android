@@ -3,16 +3,15 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.devtools.ksp'
     id 'de.mannodermaus.android-junit5'
 }
 
 android {
-    compileSdkVersion rootProject.compile_sdk_version
-    buildToolsVersion rootProject.build_tools_version
-
     defaultConfig {
         applicationId "org.emunix.insteadlauncher"
         minSdkVersion rootProject.min_sdk_version
+        compileSdk rootProject.compile_sdk_version
         targetSdkVersion rootProject.compile_sdk_version
         versionCode rootProject.version_code
         versionName rootProject.version_name
@@ -104,13 +103,13 @@ dependencies {
 
     // Architecture components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common:$rootProject.lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
     // Room
     implementation "androidx.room:room-runtime:$rootProject.room_version"
-    kapt "androidx.room:room-compiler:$rootProject.room_version"
+    implementation "androidx.room:room-ktx:$rootProject.room_version"
+    ksp "androidx.room:room-compiler:$rootProject.room_version"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.kotlin_version"
@@ -121,11 +120,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navigation_version"
 
     // WorkManager
-    implementation 'androidx.work:work-runtime:2.9.0'
-
-    // RxJava
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
-    implementation 'io.reactivex.rxjava3:rxjava:3.1.8'
+    implementation 'androidx.work:work-runtime-ktx:2.9.0'
 
     // Network
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'

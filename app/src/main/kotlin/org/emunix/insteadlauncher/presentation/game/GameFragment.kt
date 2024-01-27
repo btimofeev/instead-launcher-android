@@ -11,25 +11,30 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import org.apache.commons.io.FileUtils
+import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.data.db.Game.State.INSTALLED
-import org.emunix.insteadlauncher.data.db.Game.State.IN_QUEUE_TO_INSTALL
-import org.emunix.insteadlauncher.data.db.Game.State.IS_DELETE
-import org.emunix.insteadlauncher.data.db.Game.State.IS_INSTALL
-import org.emunix.insteadlauncher.data.db.Game.State.NO_INSTALLED
+import org.emunix.insteadlauncher.R.string
 import org.emunix.insteadlauncher.databinding.FragmentGameBinding
-import org.emunix.insteadlauncher.helpers.loadUrl
-import org.emunix.insteadlauncher.helpers.showToast
-import org.emunix.insteadlauncher.helpers.visible
+import org.emunix.insteadlauncher.domain.model.GameState.INSTALLED
+import org.emunix.insteadlauncher.domain.model.GameState.IN_QUEUE_TO_INSTALL
+import org.emunix.insteadlauncher.domain.model.GameState.IS_DELETE
+import org.emunix.insteadlauncher.domain.model.GameState.IS_INSTALL
+import org.emunix.insteadlauncher.domain.model.GameState.NO_INSTALLED
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
+import org.emunix.insteadlauncher.presentation.models.DownloadState
+import org.emunix.insteadlauncher.presentation.models.GameInfo
+import org.emunix.insteadlauncher.utils.loadUrl
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,78 +52,82 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
         binding.toolbar.setNavigationIcon(R.drawable.ic_close_24dp)
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+        binding.toolbar.setNavigationOnClickListener { closeScreen() }
 
         val gameName = arguments?.getString("game_name")
             ?: throw IllegalArgumentException("GameFragment require game_name passed as argument")
         viewModel.init(gameName)
 
-        viewModel.getGame().observe(viewLifecycleOwner) { game ->
-            if (game != null) {
-                setViews(game)
-            } else {
-                activity?.finish()
-            }
-        }
-        viewModel.getProgress().observe(viewLifecycleOwner) { value ->
-            if (value == -1) {
-                setIndeterminateProgress(true)
-            } else {
-                setIndeterminateProgress(false, value)
-            }
-        }
-        viewModel.getProgressMessage().observe(viewLifecycleOwner) { msg ->
-            setInstallMessage(msg)
-        }
-        viewModel.getErrorMessage().observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
-                requireContext().showToast(it)
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.game.collect { game ->
+                        if (game != null) {
+                            setViews(game)
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.closeScreenCommand.collect {
+                        closeScreen()
+                    }
+                }
+
+                launch {
+                    viewModel.downloadState.collect { state ->
+                        setDownloadState(state)
+                    }
+                }
+
+                launch {
+                    viewModel.downloadErrorCommand.collect { command ->
+                        showErrorDialog(command.message)
+                    }
+                }
             }
         }
     }
 
-    private fun setViews(game: Game) {
+    private fun setViews(game: GameInfo) {
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = ""
         binding.collapsingToolbar?.isTitleEnabled = false
 
         binding.name.text = game.title
         binding.author.text = game.author
-        if (game.installedVersion.isNotBlank() and (game.version != game.installedVersion)) {
-            binding.version.text =
-                getString(R.string.game_activity_label_version, game.installedVersion + " (\u2191${game.version})")
-        } else {
-            binding.version.text = getString(R.string.game_activity_label_version, game.version)
-        }
-        binding.size.text = getString(R.string.game_activity_label_size, FileUtils.byteCountToDisplaySize(game.size))
-        binding.gameImage.loadUrl(url = game.image, highQuality = true)
+        binding.version.text = game.version
+        binding.size.text = game.size
+        binding.gameImage.loadUrl(url = game.imageUrl, highQuality = true)
         binding.description.text = game.description
 
-        if (game.descurl.isNotBlank()) {
-            binding.feedbackButton.visible(true)
+        if (game.siteUrl.isNotBlank()) {
+            binding.feedbackButton.isVisible = true
             binding.feedbackButton.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(game.descurl))
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(game.siteUrl))
                 browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 requireActivity().startActivity(browserIntent)
             }
         } else {
-            binding.feedbackButton.visible(false)
+            binding.feedbackButton.isVisible = false
         }
 
         if (game.state == INSTALLED) {
-            binding.installMessage.visible(false)
-            binding.progressBar.visible(false)
-            binding.installButton.visible(false)
-            binding.deleteButton.visible(true)
-            binding.runButton.visible(true)
+            binding.installMessage.isVisible = false
+            binding.progressBar.isVisible = false
+            binding.installButton.isVisible = false
+            binding.deleteButton.isVisible = true
+            binding.runButton.isVisible = true
 
-            if (game.version != game.installedVersion) {
+            if (game.isUpdateButtonShow) {
                 binding.installButton.text = getText(R.string.game_activity_button_update)
                 binding.installButton.backgroundTintList =
                     ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
-                binding.installButton.visible(true)
+                binding.installButton.isVisible = true
             }
         }
 
@@ -126,11 +135,11 @@ class GameFragment : Fragment(R.layout.fragment_game) {
             binding.installButton.text = getText(R.string.game_activity_button_install)
             binding.installButton.backgroundTintList =
                 ContextCompat.getColorStateList(activity, R.color.colorInstallButton)
-            binding.installButton.visible(true)
-            binding.deleteButton.visible(false)
-            binding.runButton.visible(false)
-            binding.progressBar.visible(false)
-            binding.installMessage.visible(false)
+            binding.installButton.isVisible = true
+            binding.deleteButton.isVisible = false
+            binding.runButton.isVisible = false
+            binding.progressBar.isVisible = false
+            binding.installMessage.isVisible = false
         }
 
         if (game.state == IS_INSTALL) {
@@ -154,9 +163,10 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
         binding.deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
-                val deleteDialog = DeleteGameDialog.newInstance(game.name, gameManager)
-                if (isAdded)
+                if (isAdded) {
+                    val deleteDialog = DeleteGameDialog.newInstance(game.name, gameManager)
                     parentFragmentManager.let { deleteDialog.show(it, "delete_dialog") }
+                }
             }
         }
 
@@ -166,11 +176,11 @@ class GameFragment : Fragment(R.layout.fragment_game) {
     }
 
     private fun showProgress(flag: Boolean) {
-        binding.installMessage.visible(flag)
-        binding.progressBar.visible(flag)
-        binding.installButton.visible(!flag)
-        binding.deleteButton.visible(!flag)
-        binding.runButton.visible(!flag)
+        binding.installMessage.isVisible = flag
+        binding.progressBar.isVisible = flag
+        binding.installButton.isVisible = !flag
+        binding.deleteButton.isVisible = !flag
+        binding.runButton.isVisible = !flag
     }
 
     private fun setIndeterminateProgress(indeterminate: Boolean, value: Int = 0) {
@@ -180,5 +190,30 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
     private fun setInstallMessage(msg: String) {
         binding.installMessage.text = msg
+    }
+
+    private fun closeScreen() {
+        findNavController().popBackStack()
+    }
+
+    private fun setDownloadState(state: DownloadState?) {
+        if (state != null) {
+            setInstallMessage(state.message)
+            if (state.progress == -1) {
+                setIndeterminateProgress(true)
+            } else {
+                setIndeterminateProgress(false, state.progress)
+            }
+        }
+    }
+
+    private fun showErrorDialog(message: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(string.error)
+            .setMessage(message)
+            .setPositiveButton(string.dialog_error_close_button) { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
     }
 }

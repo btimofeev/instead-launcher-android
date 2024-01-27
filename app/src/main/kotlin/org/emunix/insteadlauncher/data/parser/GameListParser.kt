@@ -5,9 +5,9 @@
 
 package org.emunix.insteadlauncher.data.parser
 
-import org.emunix.insteadlauncher.data.db.Game
+import org.emunix.insteadlauncher.domain.model.GameModel
 
 interface GameListParser {
 
-    fun parse(input: String): Map<String, Game>
+    fun parse(input: String): Map<String, GameModel>
 }

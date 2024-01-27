@@ -9,7 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
+import org.emunix.insteadlauncher.utils.unzip
 import java.io.File
+import java.io.InputStream
 import javax.inject.Inject
 
 class FileSystemRepositoryImpl @Inject constructor(
@@ -18,6 +20,12 @@ class FileSystemRepositoryImpl @Inject constructor(
 
     override suspend fun createStorageDirectories() = withContext(Dispatchers.IO) {
         storage.createStorageDirectories()
+    }
+
+    override suspend fun deleteGameFromDisk(gameName: String) = withContext(Dispatchers.IO) {
+        val gameDir = File(storage.getGamesDirectory(), gameName)
+        gameDir.deleteRecursively()
+        return@withContext
     }
 
     override suspend fun copyResourcesFromAssets() = withContext(Dispatchers.IO) {
@@ -43,6 +51,12 @@ class FileSystemRepositoryImpl @Inject constructor(
             }
         }
         return@withContext themes
+    }
+
+    override suspend fun installGame(gameName: String, zipStream: InputStream) = withContext(Dispatchers.IO) {
+        val gameDir = File(storage.getGamesDirectory(), gameName)
+        gameDir.deleteRecursively()
+        zipStream.unzip(storage.getGamesDirectory())
     }
 
     private fun getInstalledThemeNamesFrom(path: File): List<String> {

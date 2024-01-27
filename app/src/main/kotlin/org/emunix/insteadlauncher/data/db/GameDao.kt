@@ -1,32 +1,30 @@
 /*
- * Copyright (c) 2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.data.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GameDao {
+
     @Query("SELECT * FROM games")
-    fun observeAll(): LiveData<List<Game>>
+    fun observeAllFlow(): Flow<List<Game>>
 
     @Query("SELECT * FROM games WHERE name LIKE :name LIMIT 1")
-    fun observeByName(name: String): LiveData<Game>
+    fun observeByName(name: String): Flow<Game?>
 
     @Query("SELECT * FROM games WHERE name LIKE :name LIMIT 1")
-    fun getByName(name: String): Game
-
-    @Query("SELECT * FROM games WHERE state = 1")
-    fun observeInstalledGames(): LiveData<List<Game>>
+    fun getByName(name: String): Game?
 
     @Query("SELECT * FROM games WHERE state = 1")
     fun getInstalledGames(): List<Game>
 
     @Query("SELECT * FROM games WHERE (name || title || author || description) LIKE :query")
-    fun search(query: String): LiveData<List<Game>>
+    fun search(query: String): List<Game>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(game: Game)
@@ -39,6 +37,9 @@ interface GameDao {
 
     @Delete
     fun delete(game: Game)
+
+    @Query("DELETE FROM games WHERE name = :name")
+    fun deleteByName(name: String)
 
     @Query("DELETE FROM games")
     fun deleteAll()

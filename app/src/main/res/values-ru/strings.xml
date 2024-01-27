@@ -37,6 +37,8 @@
     <string name="dialog_delete_game_positive_button">Удалить</string>
     <string name="dialog_delete_game_negative_button">Отмена</string>
 
+    <string name="dialog_error_close_button">Закрыть</string>
+
     <string name="unpack_resources_fragment_try_again_button">Повторить попытку</string>
     <string name="unpack_resources_fragment_error_message">Не удалось распаковать ресурсы. Проверьте свободное место на внутреннем накопителе и повторите попытку.</string>
 
@@ -48,7 +50,6 @@
 
     <string name="channel_install_game">Установка игр</string>
     <string name="channel_delete_game">Удаление игр</string>
-    <string name="channel_update_repo">Обновление репозитория</string>
     <string name="channel_update_resources">Обновление ресурсов приложения</string>
     <string name="channel_scan_games">Поиск локальных изменений в директории с играми</string>
     <string name="channel_crash_report">Отправить отчет об ошибке</string>
@@ -102,6 +103,7 @@
     <string name="pref_update_repo_background">Обновлять репозиторий в фоне</string>
     <string name="pref_update_repo_background_summary">Один раз в день</string>
     <string name="pref_update_repo_when_open">Обновлять репозиторий при открытии</string>
+    <string name="pref_redirect_http">Если репозиторий не доступен по https, используем http</string>
 
     <string name="prefs_category_interface">Внешний вид</string>
     <string name="prefs_theme">Тема приложения</string>

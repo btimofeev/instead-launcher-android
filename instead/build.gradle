@@ -7,11 +7,10 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.compile_sdk_version
-    buildToolsVersion rootProject.build_tools_version
 
     defaultConfig {
         minSdkVersion rootProject.min_sdk_version
+        compileSdk rootProject.compile_sdk_version
         targetSdkVersion rootProject.compile_sdk_version
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -88,14 +87,15 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$rootProject.hilt_version"
 }
 
-task deleteDependencies(type: Delete) {
+tasks.register('deleteDependencies', Delete) {
     delete 'src/main/c/Instead/Instead', 'src/main/c/Lua/Lua'
     delete 'src/main/c/SDL2/SDL2', 'src/main/c/SDL2_image/SDL2_image'
     delete 'src/main/c/SDL2_mixer/SDL2_mixer', 'src/main/c/SDL2_ttf/SDL2_ttf'
     delete 'src/main/c/libiconv/libiconv'
 }
 
-task downloadDependencies(dependsOn: deleteDependencies) {
+tasks.register('downloadDependencies') {
+    dependsOn deleteDependencies
     def Instead = '3.5.0'
     def Lua = '5.1.5'
     def SDL2 = '2.0.22'
@@ -192,32 +192,32 @@ task downloadDependencies(dependsOn: deleteDependencies) {
     }
 }
 
-task copyLangs(type: Copy) {
+tasks.register('copyLangs', Copy) {
     description = 'Copies langs from Instead to assets'
     from 'src/main/c/Instead/Instead/lang/'
     into 'src/main/assets/lang/'
     include '*.ini'
 }
 
-task copyThemes(type: Copy) {
+tasks.register('copyThemes', Copy) {
     description = 'Copies themes from Instead to assets'
     from 'src/main/c/Instead/Instead/themes/'
     into 'src/main/assets/themes/'
     exclude 'CMakeLists.txt', 'Makefile'
 }
 
-task copyStead(type: Copy) {
+tasks.register('copyStead', Copy) {
     description = 'Copies stead folder from Instead to assets'
     from 'src/main/c/Instead/Instead/stead/'
     into 'src/main/assets/stead/'
     exclude '**/CMakeLists.txt', 'Makefile'
 }
 
-task cleanAssets(type: Delete) {
+tasks.register('cleanAssets', Delete) {
     delete 'src/main/assets/lang/', 'src/main/assets/themes/', 'src/main/assets/stead/'
 }
 
-task fdroidRemoveBinaries(type: Delete) {
+tasks.register('fdroidRemoveBinaries', Delete) {
     delete 'src/main/c/Instead/Instead/contrib/'
     delete 'src/main/c/SDL2/SDL2/Xcode/'
     delete 'src/main/c/SDL2_image/SDL2_image/Xcode/'

@@ -37,6 +37,8 @@
     <string name="dialog_delete_game_positive_button">Forigi</string>
     <string name="dialog_delete_game_negative_button">Rezigni</string>
 
+    <string name="dialog_error_close_button">Fermu</string>
+
     <string name="unpack_resources_fragment_try_again_button">Provi denove</string>
     <string name="unpack_resources_fragment_error_message">Elpako de risurcoj ne sukcesis. Kontrolu liberan spacon sur aparato kaj provu denove.</string>
 
@@ -48,7 +50,6 @@
 
     <string name="channel_install_game">Instalado de ludoj</string>
     <string name="channel_delete_game">Forigado de ludoj</string>
-    <string name="channel_update_repo">Ĝisdatigo de deponejo</string>
     <string name="channel_update_resources">Ĝisdatigo de risurcoj la aplikaĵo</string>
     <string name="channel_scan_games">Serĉo lokaj ŝanĝoj en dosierujo kun ludoj</string>
     <string name="channel_crash_report">Sendi erarraporton</string>
@@ -102,6 +103,7 @@
     <string name="pref_update_repo_background">Ĝisdatigi deponejon en fono</string>
     <string name="pref_update_repo_background_summary">Unu foje en tago</string>
     <string name="pref_update_repo_when_open">Ĝisdatigi deponejon je malfermo</string>
+    <string name="pref_redirect_http">Se la deponejo ne estas alirebla per https, uzu http</string>
 
     <string name="prefs_category_interface">Uzulinterfaco</string>
     <string name="prefs_theme">Etoso de aplikaĵo</string>

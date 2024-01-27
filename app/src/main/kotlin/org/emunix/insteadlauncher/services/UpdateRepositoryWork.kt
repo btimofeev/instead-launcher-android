@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -9,17 +9,19 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
+import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Error
+import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Success
+import org.emunix.insteadlauncher.domain.usecase.UpdateGameListUseCase
 import org.emunix.insteadlauncher.domain.worker.UpdateRepositoryWorker
-import org.emunix.insteadlauncher.helpers.network.RepoUpdater
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -27,17 +29,16 @@ import javax.inject.Inject
 class UpdateRepositoryWork @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val repoUpdater: RepoUpdater
-) : Worker(appContext, workerParams) {
+    private val updateGameListUseCase: UpdateGameListUseCase
+) : CoroutineWorker(appContext, workerParams) {
 
-    override fun doWork(): Result {
-        return when (repoUpdater.update()) {
-            true -> Result.success()
-            false -> Result.retry()
+    override suspend fun doWork(): Result {
+        return when (updateGameListUseCase()) {
+            is Success -> Result.success()
+            is Error -> Result.retry()
         }
     }
 }
-
 
 class UpdateRepositoryWorkManager @Inject constructor(private val context: Context) : UpdateRepositoryWorker {
 

@@ -11,7 +11,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
@@ -20,17 +19,17 @@ import org.acra.config.notification
 import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
-import org.emunix.insteadlauncher.helpers.ThemeSwitcherDelegate
+import org.emunix.insteadlauncher.utils.ThemeSwitcherDelegate
+import org.emunix.insteadlauncher.utils.writeToLog
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
 @HiltAndroidApp
-class InsteadLauncher : Application(), Configuration.Provider {
+class InsteadLauncher: Application(), Configuration.Provider {
 
     companion object {
 
-        const val UPDATE_REPOSITORY_NOTIFICATION_ID: Int = 1000
         const val INSTALL_NOTIFICATION_ID: Int = 1001
         const val UNINSTALL_NOTIFICATION_ID: Int = 1002
         const val SCAN_GAMES_NOTIFICATION_ID: Int = 1005
@@ -51,7 +50,7 @@ class InsteadLauncher : Application(), Configuration.Provider {
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(Log.DEBUG)
+            .setMinimumLoggingLevel(android.util.Log.DEBUG)
             .build()
 
     override fun onCreate() {
@@ -111,10 +110,6 @@ class InsteadLauncher : Application(), Configuration.Provider {
             channel = NotificationChannel(CHANNEL_UNINSTALL, name, importance)
             notificationManager.createNotificationChannel(channel)
 
-            name = getString(R.string.channel_update_repo)
-            channel = NotificationChannel(CHANNEL_UPDATE_REPOSITORY, name, importance)
-            notificationManager.createNotificationChannel(channel)
-
             name = getString(R.string.channel_update_resources)
             channel = NotificationChannel(CHANNEL_UPDATE_RESOURCES, name, importance)
             notificationManager.createNotificationChannel(channel)
@@ -122,6 +117,13 @@ class InsteadLauncher : Application(), Configuration.Provider {
             name = getString(R.string.channel_scan_games)
             channel = NotificationChannel(CHANNEL_SCAN_GAMES, name, importance)
             notificationManager.createNotificationChannel(channel)
+
+            // delete old channels
+            try {
+                notificationManager.deleteNotificationChannel(CHANNEL_UPDATE_REPOSITORY)
+            } catch (e : Throwable) {
+                e.writeToLog()
+            }
         }
     }
 }

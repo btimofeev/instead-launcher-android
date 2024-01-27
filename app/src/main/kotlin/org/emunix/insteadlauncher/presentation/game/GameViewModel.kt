@@ -1,96 +1,114 @@
 /*
- * Copyright (c) 2018, 2020-2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018, 2020-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.presentation.game
 
-import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.Disposable
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.data.db.Game
-import org.emunix.insteadlauncher.data.db.GameDao
-import org.emunix.insteadlauncher.helpers.ConsumableEvent
-import org.emunix.insteadlauncher.data.model.DownloadProgressEvent
-import org.emunix.insteadlauncher.helpers.GameDbHelper
-import org.emunix.insteadlauncher.helpers.eventbus.EventBus
-import org.emunix.insteadlauncher.helpers.resourceprovider.ResourceProvider
+import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
+import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Error
+import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Success
+import org.emunix.insteadlauncher.domain.model.GameModel
+import org.emunix.insteadlauncher.domain.model.GameState.INSTALLED
+import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
+import org.emunix.insteadlauncher.domain.usecase.GetGameInfoFlowUseCase
 import org.emunix.insteadlauncher.manager.game.GameManager
+import org.emunix.insteadlauncher.presentation.models.DownloadError
+import org.emunix.insteadlauncher.presentation.models.DownloadState
+import org.emunix.insteadlauncher.presentation.models.GameInfo
+import org.emunix.insteadlauncher.presentation.models.toGameInfo
+import org.emunix.insteadlauncher.utils.getDownloadingMessage
+import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
 import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    private val eventBus: EventBus,
-    private val gamesDB: GameDao,
-    private val gamesDbHelper: GameDbHelper,
+    private val getGameInfoFlowUseCase: GetGameInfoFlowUseCase,
+    private val getDownloadGamesStatusUseCase: GetDownloadGamesStatusUseCase,
     private val gameManager: GameManager,
-    private val resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider,
 ) : ViewModel() {
 
-    private lateinit var game: LiveData<Game>
-    private val progress: MutableLiveData<Int> = MutableLiveData()
-    private val progressMessage: MutableLiveData<String> = MutableLiveData()
-    private val errorMessage: MutableLiveData<ConsumableEvent<String>> = MutableLiveData()
-    private var eventDisposable: Disposable? = null
+    private val _game = MutableStateFlow<GameInfo?>(null)
+    private val _downloadState = MutableStateFlow<DownloadState?>(null)
+    private val _downloadErrorCommand = Channel<DownloadError>()
+    private val _closeScreenCommand = Channel<Unit>()
 
-    @SuppressLint("CheckResult")
+    val game: StateFlow<GameInfo?> = _game.asStateFlow()
+    val downloadState: StateFlow<DownloadState?> = _downloadState.asStateFlow()
+    val downloadErrorCommand = _downloadErrorCommand.receiveAsFlow()
+    val closeScreenCommand = _closeScreenCommand.receiveAsFlow()
+
+    private var gameModel: GameModel? = null
+
     fun init(gameName: String) {
-        game = gamesDB.observeByName(gameName)
-
-        eventDisposable = eventBus.listen(DownloadProgressEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (it.gameName == gameName) {
-                        if (it.error) {
-                            errorMessage.value = ConsumableEvent(it.errorMessage)
-                        }
-
-                        progress.value = it.progressValue
-                        progressMessage.value = it.progressMessage
-
-                        if (it.done) {
-                            progress.value = -1
-                            progressMessage.value = resourceProvider.getString(R.string.game_activity_message_installing)
-                        }
-                    }
-                }
+        observeGameInfo(gameName)
+        observeDownloadStatus(gameName)
     }
 
     fun installGame() {
-        val gameToInstall = game.value
-        if (gameToInstall != null) {
-            gameManager.installGame(gameToInstall.name, gameToInstall.url, gameToInstall.title)
-            viewModelScope.launch(Dispatchers.IO) {
-                gamesDbHelper.saveStateToDB(gameToInstall, Game.State.IN_QUEUE_TO_INSTALL)
-            }
+        gameModel?.let {
+            gameManager.installGame(it.name, it.url.download, it.info.title)
         }
     }
 
     fun runGame() {
         val gameToRun = game.value
-        if (gameToRun != null && gameToRun.state == Game.State.INSTALLED) {
+        if (gameToRun != null && gameToRun.state == INSTALLED) {
             gameManager.startGame(gameToRun.name)
         }
     }
 
-    fun getProgress(): LiveData<Int> = progress
+    private fun observeGameInfo(gameName: String) = viewModelScope.launch {
+        getGameInfoFlowUseCase(gameName)
+            .collect { game ->
+                if (game == null) {
+                    _closeScreenCommand.send(Unit)
+                } else {
+                    gameModel = game
+                    _game.value = game.toGameInfo(resourceProvider)
+                }
+            }
+    }
 
-    fun getGame(): LiveData<Game> = game
+    private fun observeDownloadStatus(gameName: String) = viewModelScope.launch {
+        getDownloadGamesStatusUseCase()
+            .filter { it.gameName == gameName }
+            .collect { downloadStatus ->
+                when (downloadStatus) {
+                    is Downloading -> {
+                        _downloadState.value = DownloadState(
+                            progress = downloadStatus.downloadedInPercentage,
+                            message = downloadStatus.getDownloadingMessage(resourceProvider)
+                        )
+                    }
 
-    fun getProgressMessage(): LiveData<String> = progressMessage
+                    is Success -> {
+                        _downloadState.value = DownloadState(
+                            progress = -1,
+                            message = resourceProvider.getString(R.string.game_activity_message_installing)
+                        )
+                    }
 
-    fun getErrorMessage(): LiveData<ConsumableEvent<String>> = errorMessage
-
-    override fun onCleared() {
-        eventDisposable?.dispose()
-        super.onCleared()
+                    is Error -> {
+                        _downloadErrorCommand.trySend(
+                            DownloadError(
+                                message = downloadStatus.errorMessage
+                            )
+                        )
+                    }
+                }
+            }
     }
 }

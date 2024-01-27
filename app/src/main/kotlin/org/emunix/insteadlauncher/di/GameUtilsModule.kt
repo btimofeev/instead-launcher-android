@@ -9,8 +9,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.emunix.insteadlauncher.helpers.gameparser.GameParser
-import org.emunix.insteadlauncher.helpers.gameparser.GameParserImpl
+import org.emunix.insteadlauncher.domain.parser.GameParser
+import org.emunix.insteadlauncher.domain.parser.GameParserImpl
 
 @InstallIn(SingletonComponent::class)
 @Module

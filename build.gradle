@@ -2,7 +2,6 @@
 
 buildscript {
     ext {
-        build_tools_version = '34.0.0'
         min_sdk_version = 21
         compile_sdk_version = 34
         ndk_version = '20.1.5948944'
@@ -29,7 +28,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.0'
+        classpath 'com.android.tools.build:gradle:8.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "de.mannodermaus.gradle.plugins:android-junit5:1.8.2.1"
@@ -37,7 +36,8 @@ buildscript {
 }
 
 plugins {
-    id "de.undercouch.download" version "5.4.0"
+    id 'de.undercouch.download' version '5.4.0'
+    id 'com.google.devtools.ksp' version '1.9.10-1.0.13' apply false
 }
 
 allprojects {
@@ -47,6 +47,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
