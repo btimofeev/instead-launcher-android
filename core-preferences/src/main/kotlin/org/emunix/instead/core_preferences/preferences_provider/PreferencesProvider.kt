@@ -41,8 +41,8 @@ interface PreferencesProvider {
 
     companion object {
 
-        const val DEFAULT_REPOSITORY_URL = "https://instead-games.ru/xml.php"
-        const val SANDBOX_REPOSITORY_URL = "https://instead-games.ru/xml2.php"
+        const val DEFAULT_REPOSITORY_URL = "http://instead-games.ru/xml.php"
+        const val SANDBOX_REPOSITORY_URL = "http://instead-games.ru/xml2.php"
 
         const val DEFAULT_THEME = "default"
 
