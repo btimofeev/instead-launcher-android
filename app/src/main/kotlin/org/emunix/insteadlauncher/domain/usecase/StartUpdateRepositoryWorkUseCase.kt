@@ -5,7 +5,7 @@
 
 package org.emunix.insteadlauncher.domain.usecase
 
-import org.emunix.insteadlauncher.domain.worker.UpdateRepositoryWorker
+import org.emunix.insteadlauncher.domain.work.UpdateRepositoryWork
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.DAYS
 import javax.inject.Inject
@@ -25,11 +25,11 @@ interface StartUpdateRepositoryWorkUseCase {
 }
 
 class StartUpdateRepositoryWorkUseCaseImpl @Inject constructor(
-    private val updateRepositoryWorker: UpdateRepositoryWorker
+    private val updateRepositoryWork: UpdateRepositoryWork
 ) : StartUpdateRepositoryWorkUseCase {
 
     override fun invoke(repeatInterval: Long, repeatIntervalTimeUnit: TimeUnit) {
-        updateRepositoryWorker.start(
+        updateRepositoryWork.start(
             repeatInterval = repeatInterval,
             repeatIntervalTimeUnit = repeatIntervalTimeUnit,
         )

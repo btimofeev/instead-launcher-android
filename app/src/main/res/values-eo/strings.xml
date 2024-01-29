@@ -45,13 +45,8 @@
     <string name="notification_download_game">Elŝutas</string>
     <string name="notification_install_game">Instalas</string>
     <string name="notification_delete_game">Forigas ludon, atendu&#8230;</string>
-    <string name="notification_updating_repository">Ĝisdatigas deponejon, atendu&#8230;</string>
-    <string name="notification_scan_games">Serĉo de lokaj ŝanĝoj en dosierujo kun ludoj</string>
 
     <string name="channel_install_game">Instalado de ludoj</string>
-    <string name="channel_delete_game">Forigado de ludoj</string>
-    <string name="channel_update_resources">Ĝisdatigo de risurcoj la aplikaĵo</string>
-    <string name="channel_scan_games">Serĉo lokaj ŝanĝoj en dosierujo kun ludoj</string>
     <string name="channel_crash_report">Sendi erarraporton</string>
 
     <string name="error">Eraro</string>

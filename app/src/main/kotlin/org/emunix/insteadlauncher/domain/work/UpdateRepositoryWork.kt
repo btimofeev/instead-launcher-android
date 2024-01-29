@@ -3,15 +3,15 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-package org.emunix.insteadlauncher.domain.worker
+package org.emunix.insteadlauncher.domain.work
 
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.DAYS
 
 /**
- * Worker for starting and stopping a background update of a repository
+ * Interface for starting and stopping a background update of a repository
  */
-interface UpdateRepositoryWorker {
+interface UpdateRepositoryWork {
 
     /**
      * Run the worker to periodically update the repository

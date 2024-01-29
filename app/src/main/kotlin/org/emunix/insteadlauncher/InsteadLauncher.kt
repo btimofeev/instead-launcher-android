@@ -26,13 +26,11 @@ import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
 @HiltAndroidApp
-class InsteadLauncher: Application(), Configuration.Provider {
+class InsteadLauncher : Application(), Configuration.Provider {
 
     companion object {
 
         const val INSTALL_NOTIFICATION_ID: Int = 1001
-        const val UNINSTALL_NOTIFICATION_ID: Int = 1002
-        const val SCAN_GAMES_NOTIFICATION_ID: Int = 1005
 
         const val CHANNEL_UPDATE_REPOSITORY = "org.emunix.insteadlauncher.channel.update_repo"
         const val CHANNEL_INSTALL = "org.emunix.insteadlauncher.channel.install_game"
@@ -50,7 +48,7 @@ class InsteadLauncher: Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         initLogger()
-        createNotificationChannels()
+        setupNotificationChannels()
         ThemeSwitcherDelegate().applyTheme(preferencesProvider.appTheme)
     }
 
@@ -95,7 +93,7 @@ class InsteadLauncher: Application(), Configuration.Provider {
     }
 
     @TargetApi(26)
-    fun createNotificationChannels() {
+    fun setupNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = getSystemService(
                 Context.NOTIFICATION_SERVICE
@@ -106,24 +104,21 @@ class InsteadLauncher: Application(), Configuration.Provider {
             var channel = NotificationChannel(CHANNEL_INSTALL, name, importance)
             notificationManager.createNotificationChannel(channel)
 
-            name = getString(R.string.channel_delete_game)
-            channel = NotificationChannel(CHANNEL_UNINSTALL, name, importance)
-            notificationManager.createNotificationChannel(channel)
+            unregisterLegacyNotificationChannels(notificationManager)
+        }
+    }
 
-            name = getString(R.string.channel_update_resources)
-            channel = NotificationChannel(CHANNEL_UPDATE_RESOURCES, name, importance)
-            notificationManager.createNotificationChannel(channel)
-
-            name = getString(R.string.channel_scan_games)
-            channel = NotificationChannel(CHANNEL_SCAN_GAMES, name, importance)
-            notificationManager.createNotificationChannel(channel)
-
-            // delete old channels
-            try {
-                notificationManager.deleteNotificationChannel(CHANNEL_UPDATE_REPOSITORY)
-            } catch (e : Throwable) {
-                e.writeToLog()
+    @TargetApi(26)
+    private fun unregisterLegacyNotificationChannels(notificationManager: NotificationManager) {
+        try {
+            with(notificationManager) {
+                deleteNotificationChannel(CHANNEL_UPDATE_REPOSITORY)
+                deleteNotificationChannel(CHANNEL_UPDATE_RESOURCES)
+                deleteNotificationChannel(CHANNEL_UNINSTALL)
+                deleteNotificationChannel(CHANNEL_SCAN_GAMES)
             }
+        } catch (e: Throwable) {
+            e.writeToLog()
         }
     }
 }

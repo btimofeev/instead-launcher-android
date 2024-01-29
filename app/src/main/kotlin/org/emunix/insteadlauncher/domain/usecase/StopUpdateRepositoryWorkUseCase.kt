@@ -5,7 +5,7 @@
 
 package org.emunix.insteadlauncher.domain.usecase
 
-import org.emunix.insteadlauncher.domain.worker.UpdateRepositoryWorker
+import org.emunix.insteadlauncher.domain.work.UpdateRepositoryWork
 import javax.inject.Inject
 
 /**
@@ -17,10 +17,10 @@ interface StopUpdateRepositoryWorkUseCase {
 }
 
 class StopUpdateRepositoryWorkUseCaseImpl @Inject constructor(
-    private val updateRepositoryWorker: UpdateRepositoryWorker
+    private val updateRepositoryWork: UpdateRepositoryWork
 ) : StopUpdateRepositoryWorkUseCase {
 
     override fun invoke() {
-        updateRepositoryWorker.stop()
+        updateRepositoryWork.stop()
     }
 }
