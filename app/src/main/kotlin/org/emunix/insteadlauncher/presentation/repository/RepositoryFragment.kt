@@ -14,6 +14,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -47,8 +49,6 @@ import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REP
 import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REPOSITORY_ERROR
 import org.emunix.insteadlauncher.utils.insetDivider
 
-private const val READ_REQUEST_CODE = 546
-
 @AndroidEntryPoint
 class RepositoryFragment : Fragment(R.layout.fragment_repository) {
 
@@ -65,6 +65,17 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
     private val binding by viewBinding(FragmentRepositoryBinding::bind)
 
     private lateinit var listAdapter: RepositoryAdapter
+
+    private val defaultContract = ActivityResultContracts.StartActivityForResult()
+
+    private val repoResult = registerForActivityResult(defaultContract) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data
+            if (uri != null) {
+                viewModel.installGame(uri)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -113,22 +124,11 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 intent.type = "application/zip"
-                startActivityForResult(intent, READ_REQUEST_CODE, null)
+                repoResult.launch(intent)
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-
-        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK && resultData != null) {
-            val uri = resultData.data
-            if (uri != null) {
-                viewModel.installGame(uri)
-            }
-        }
     }
 
     private fun setupViews() {
