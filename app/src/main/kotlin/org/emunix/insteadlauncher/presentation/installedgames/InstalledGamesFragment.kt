@@ -76,7 +76,7 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
                     else -> false
                 }
             }
-        })
+        }, viewLifecycleOwner)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

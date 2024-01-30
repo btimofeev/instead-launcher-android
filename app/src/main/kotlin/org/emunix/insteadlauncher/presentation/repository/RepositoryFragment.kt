@@ -125,7 +125,7 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
                 }
             }
 
-        })
+        }, viewLifecycleOwner)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
