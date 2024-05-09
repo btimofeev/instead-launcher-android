@@ -45,9 +45,12 @@
     <string name="notification_download_game">Загружаю</string>
     <string name="notification_install_game">Устанавливаю</string>
     <string name="notification_delete_game">Удаляю игру, подождите&#8230;</string>
+    <string name="notification_updating_repository">Обновляю репозиторий, подождите&#8230;</string>
+    <string name="notification_scan_games">Поиск локальных изменений в директории с играми</string>
 
     <string name="channel_install_game">Установка игр</string>
     <string name="channel_crash_report">Отправить отчет об ошибке</string>
+    <string name="channel_scan_games">Поиск локальных изменений в директории с играми</string>
 
     <string name="error">Ошибка</string>
     <string name="error_failed_to_download_file">Не удалось скачать файл: %s</string>

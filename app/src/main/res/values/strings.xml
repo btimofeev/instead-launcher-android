@@ -45,9 +45,12 @@
     <string name="notification_download_game">Downloading</string>
     <string name="notification_install_game">Installing</string>
     <string name="notification_delete_game">Deleting the game, please wait&#8230;</string>
+    <string name="notification_updating_repository">Updating the repository, please wait&#8230;</string>
+    <string name="notification_scan_games">Search for local changes in the game directory</string>
 
     <string name="channel_install_game">Install game</string>
     <string name="channel_crash_report">Send crash report</string>
+    <string name="channel_scan_games">Search for local changes in the game directory</string>
 
     <string name="error">Error</string>
     <string name="error_failed_to_download_file">Failed to download file: %s</string>
