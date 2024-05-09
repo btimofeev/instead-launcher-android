@@ -32,6 +32,7 @@ import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REP
 import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REPOSITORY_ERROR
 import org.emunix.insteadlauncher.presentation.models.toRepoGames
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,12 +66,13 @@ class RepositoryViewModel @Inject constructor(
     fun updateRepository() = viewModelScope.launch {
         _uiState.value = UPDATE_REPOSITORY
 
-        when (updateGameListUseCase()) {
+        when (val result = updateGameListUseCase()) {
             is Success -> {
                 _uiState.value = SHOW_GAMES
             }
 
             is Error -> {
+                Timber.e(result.e)
                 _uiState.value = UPDATE_REPOSITORY_ERROR
             }
         }
