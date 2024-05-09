@@ -40,18 +40,24 @@ class RemoteRepositoryImpl @Inject constructor(
         val client = httpClient
             .addNetworkInterceptor { chain ->
                 val originalResponse = chain.proceed(chain.request())
-                originalResponse.newBuilder()
-                    .body(ProgressResponseBody(originalResponse.body) { downloadProgress ->
-                        sendNotification(gameName, downloadProgress)
-                    })
-                    .build()
+                val responseBody = originalResponse.body
+                if (responseBody != null) {
+                    originalResponse.newBuilder()
+                        .body(ProgressResponseBody(responseBody) { downloadProgress ->
+                            sendNotification(gameName, downloadProgress)
+                        })
+                        .build()
+                } else {
+                    originalResponse
+                }
             }
             .build()
         val response = async { client.newCall(request).execute() }.await()
-        if (!response.isSuccessful) {
+        val responseBody = response.body
+        if (!response.isSuccessful || responseBody == null) {
             throw IOException("Failed to download file")
         }
-        return@withContext response.body.byteStream()
+        return@withContext responseBody.byteStream()
     }
 
     override suspend fun getGameList(): List<GameModel> = withContext(Dispatchers.IO) {

@@ -18,6 +18,6 @@ class InsteadGamesXmlFetcher(private val client: OkHttpClient): GameListFetcher 
                 .build()
         val response = client.newCall(request).execute()
         if (!response.isSuccessful) throw IOException("${response.code}")
-        return response.body.string()
+        return response.body?.string().orEmpty()
     }
 }
