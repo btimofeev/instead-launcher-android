@@ -5,6 +5,7 @@
 
 package org.emunix.insteadlauncher.services
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
@@ -28,6 +29,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCase
 import org.emunix.insteadlauncher.domain.work.ScanGamesWork
 import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
+import org.emunix.insteadlauncher.utils.createForegroundInfoCompat
 import javax.inject.Inject
 
 @HiltWorker
@@ -46,20 +48,13 @@ class ScanGamesWorker @AssistedInject constructor(
         return Result.success()
     }
 
-    override suspend fun getForegroundInfo(): ForegroundInfo {
-        return if (VERSION.SDK_INT >= VERSION_CODES.Q) {
-            ForegroundInfo(
-                InsteadLauncher.SCAN_GAMES_NOTIFICATION_ID,
-                createNotification(),
-                FOREGROUND_SERVICE_TYPE_DATA_SYNC
-            )
-        } else {
-            ForegroundInfo(
-                InsteadLauncher.SCAN_GAMES_NOTIFICATION_ID,
-                createNotification()
-            )
-        }
-    }
+    @SuppressLint("InlinedApi")
+    override suspend fun getForegroundInfo(): ForegroundInfo =
+        createForegroundInfoCompat(
+            notificationId = InsteadLauncher.SCAN_GAMES_NOTIFICATION_ID,
+            notification = createNotification(),
+            foregroundServiceType = FOREGROUND_SERVICE_TYPE_DATA_SYNC
+        )
 
     private fun createNotification(): Notification {
         val notificationIntent = Intent(appContext, LauncherActivity::class.java)

@@ -5,12 +5,11 @@
 
 package org.emunix.insteadlauncher.services
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.os.bundleOf
@@ -34,6 +33,7 @@ import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCase
 import org.emunix.insteadlauncher.domain.work.DeleteGameWork
 import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
 import org.emunix.insteadlauncher.services.DeleteGameWorker.Companion.GAME_NAME_KEY
+import org.emunix.insteadlauncher.utils.createForegroundInfoCompat
 import javax.inject.Inject
 
 @HiltWorker
@@ -54,20 +54,13 @@ class DeleteGameWorker @AssistedInject constructor(
         return Result.success()
     }
 
-    override suspend fun getForegroundInfo(): ForegroundInfo {
-        return if (VERSION.SDK_INT >= VERSION_CODES.Q) {
-            ForegroundInfo(
-                InsteadLauncher.UNINSTALL_NOTIFICATION_ID,
-                createNotification(),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
-            )
-        } else {
-            ForegroundInfo(
-                InsteadLauncher.UNINSTALL_NOTIFICATION_ID,
-                createNotification()
-            )
-        }
-    }
+    @SuppressLint("InlinedApi")
+    override suspend fun getForegroundInfo(): ForegroundInfo =
+        createForegroundInfoCompat(
+            notificationId = InsteadLauncher.UNINSTALL_NOTIFICATION_ID,
+            notification = createNotification(),
+            foregroundServiceType = ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+        )
 
     private fun createNotification(): Notification {
         val gameName = inputData.getString(GAME_NAME_KEY)
