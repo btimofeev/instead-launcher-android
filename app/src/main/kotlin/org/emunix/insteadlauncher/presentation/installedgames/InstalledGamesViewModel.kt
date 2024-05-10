@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, 2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2024 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -30,9 +30,9 @@ class InstalledGamesViewModel @Inject constructor(
     private val stopUpdateRepositoryWorkUseCase: StopUpdateRepositoryWorkUseCase
 ) : ViewModel() {
 
-    private val _gameItems = MutableStateFlow<List<InstalledGame>>(emptyList())
+    private val _gameItems = MutableStateFlow<List<InstalledGame>?>(null)
 
-    val gameItems: StateFlow<List<InstalledGame>> = _gameItems.asStateFlow()
+    val gameItems: StateFlow<List<InstalledGame>?> = _gameItems.asStateFlow()
 
     fun init() {
         startUpdateRepoWorker()

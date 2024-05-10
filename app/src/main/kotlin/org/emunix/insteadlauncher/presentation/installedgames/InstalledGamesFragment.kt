@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2023 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2024 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -146,8 +146,10 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
         lifecycleScope.launch {
             repeatOnLifecycle(State.STARTED) {
                 viewModel.gameItems.collect { games ->
-                    listAdapter.submitList(games.toList())
-                    binding.emptyView.isVisible = games.isEmpty()
+                    if (games != null) {
+                        listAdapter.submitList(games.toList())
+                        binding.emptyView.isVisible = games.isEmpty()
+                    }
                 }
             }
         }
