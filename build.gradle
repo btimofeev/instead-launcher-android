@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        min_sdk_version = 21
+        min_sdk_version = 25
         compile_sdk_version = 34
         ndk_version = '20.1.5948944'
 
