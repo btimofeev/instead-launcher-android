@@ -2,7 +2,7 @@
 
 ## Development
 ### Changed
-- INSTEAD updated to version 3.5.0
+- INSTEAD updated to version 3.5.1
 - SDL2 updated to version 2.0.22
 - Updated esperanto translation
 
