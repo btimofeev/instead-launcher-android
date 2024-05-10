@@ -49,6 +49,7 @@
     <string name="notification_scan_games">Поиск локальных изменений в директории с играми</string>
 
     <string name="channel_install_game">Установка игр</string>
+    <string name="channel_delete_game">Удаление игр</string>
     <string name="channel_crash_report">Отправить отчет об ошибке</string>
     <string name="channel_scan_games">Поиск локальных изменений в директории с играми</string>
 

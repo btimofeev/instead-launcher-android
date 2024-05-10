@@ -49,6 +49,7 @@
     <string name="notification_scan_games">Search for local changes in the game directory</string>
 
     <string name="channel_install_game">Install game</string>
+    <string name="channel_delete_game">Delete game</string>
     <string name="channel_crash_report">Send crash report</string>
     <string name="channel_scan_games">Search for local changes in the game directory</string>
 

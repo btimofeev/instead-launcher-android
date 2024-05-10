@@ -32,6 +32,7 @@ class InsteadLauncher : Application(), Configuration.Provider {
     companion object {
 
         const val INSTALL_NOTIFICATION_ID: Int = 1001
+        const val UNINSTALL_NOTIFICATION_ID: Int = 1002
         const val SCAN_GAMES_NOTIFICATION_ID: Int = 1005
 
         const val CHANNEL_UPDATE_REPOSITORY = "org.emunix.insteadlauncher.channel.update_repo"
@@ -106,6 +107,10 @@ class InsteadLauncher : Application(), Configuration.Provider {
             var channel = NotificationChannel(CHANNEL_INSTALL, name, importance)
             notificationManager.createNotificationChannel(channel)
 
+            name = getString(R.string.channel_delete_game)
+            channel = NotificationChannel(CHANNEL_UNINSTALL, name, importance)
+            notificationManager.createNotificationChannel(channel)
+
             name = getString(R.string.channel_scan_games)
             channel = NotificationChannel(CHANNEL_SCAN_GAMES, name, importance)
             notificationManager.createNotificationChannel(channel)
@@ -120,7 +125,6 @@ class InsteadLauncher : Application(), Configuration.Provider {
             with(notificationManager) {
                 deleteNotificationChannel(CHANNEL_UPDATE_REPOSITORY)
                 deleteNotificationChannel(CHANNEL_UPDATE_RESOURCES)
-                deleteNotificationChannel(CHANNEL_UNINSTALL)
             }
         } catch (e: Throwable) {
             e.writeToLog()
