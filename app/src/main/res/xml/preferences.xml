@@ -69,7 +69,7 @@
         android:title="@string/prefs_category_repositories">
 
         <EditTextPreference
-            android:defaultValue="https://instead-games.ru/xml.php"
+            android:defaultValue="http://instead-games.ru/xml.php"
             android:icon="@drawable/ic_web_24dp"
             android:key="pref_repository"
             android:selectAllOnFocus="true"
@@ -85,7 +85,7 @@
             android:summary="@string/prefs_sandbox_summary"/>
         <EditTextPreference
             android:dependency="pref_sandbox_enabled"
-            android:defaultValue="https://instead-games.ru/xml2.php"
+            android:defaultValue="http://instead-games.ru/xml2.php"
             android:key="pref_sandbox"
             android:selectAllOnFocus="true"
             android:singleLine="true"
