@@ -19,6 +19,7 @@ Most of the games are in Russian, but there are games in English, Spanish and Fr
 
 * in Spanish:
  - Mansion
+ - Leñador
 
 * in French:
  - Dark Crystal

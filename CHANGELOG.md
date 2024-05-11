@@ -2,10 +2,14 @@
 
 ## Development
 ### Changed
+
+## [0.9] - 2024-05-11
+### Changed
 - INSTEAD updated to version 3.5.1
 - SDL2 updated to version 2.0.22
 - Support Android 7.1.1 - 14
 - Updated esperanto translation
+- Many internal changes
 
 ## [0.8.6] - 2021-09-04
 ### Changed
