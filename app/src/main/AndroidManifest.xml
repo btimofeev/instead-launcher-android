@@ -46,6 +46,13 @@
         <service android:name=".services.InstallGame"
             android:foregroundServiceType="dataSync" />
 
+<!--        Объявляем тип foreground сервиса для WorkManager, что бы не было крэша -->
+<!--        https://stackoverflow.com/questions/76949759/foregroundservicetype-0x00000001-is-not-a-subset-of-foregroundservicetype-attrib   -->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
+
 <!--        Код ниже это хотфикс проблемы запуска WorkManager совместно с Hilt после обновления WM до 2.6 -->
 <!--        См. https://developer.android.com/jetpack/androidx/releases/work#2.6.0-alpha01 -->
 <!--        Этот код отключает инициализацию приложения через androidx.startup, -->
