@@ -1,0 +1,2 @@
+- The application allows other applications to access its files through the standard Android file dialog. This feature can be used to create games or share saved data with other devices.
+- Fixed crash on startup on some phones
