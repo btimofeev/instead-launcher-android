@@ -38,7 +38,7 @@ class InsteadDocumentProvider : DocumentsProvider() {
                     add(Root.COLUMN_ROOT_ID, getDocumentId(baseDir))
                     add(Root.COLUMN_DOCUMENT_ID, getDocumentId(baseDir))
                     add(Root.COLUMN_TITLE, appName)
-                    add(Root.COLUMN_SUMMARY, appName)
+                    add(Root.COLUMN_SUMMARY, null)
                     add(Root.COLUMN_FLAGS, rootFlags)
                     add(Root.COLUMN_MIME_TYPES, ALL_MIME_TYPES)
                     add(Root.COLUMN_AVAILABLE_BYTES, baseDir.getFreeSpace())
