@@ -96,7 +96,7 @@ tasks.register('deleteDependencies', Delete) {
 
 tasks.register('downloadDependencies') {
     dependsOn deleteDependencies
-    def Instead = '3.5.1'
+    def Instead = '3.5.2'
     def Lua = '5.1.5'
     def SDL2 = '2.0.22'
     def SDL2_image = '2.0.5'

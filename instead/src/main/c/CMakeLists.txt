@@ -1,6 +1,8 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+project(libinstead)
+
 add_subdirectory( Lua/ )
 add_subdirectory( SDL2/SDL2 )
 add_subdirectory( SDL2_image/ )

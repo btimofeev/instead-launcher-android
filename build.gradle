@@ -9,7 +9,7 @@ buildscript {
         version_code = 90100
         version_name = '0.9.1'
 
-        build_config_instead_version = '3.5.1'
+        build_config_instead_version = '3.5.2'
 
         kotlin_version = '1.9.24'
         kotlin_coroutines_version = '1.8.1'
