@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id "de.undercouch.download" version "5.5.0"
+    id "de.undercouch.download" version "5.6.0"
 }
 
 android {
@@ -21,9 +21,9 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
-                arguments "-DANDROID_PLATFORM=android-21", "-DCMAKE_BUILD_TYPE=Release",
+                arguments "-DANDROID_PLATFORM=android-25", "-DCMAKE_BUILD_TYPE=Release",
                         "-DANDROID_ARM_MODE=arm"
-                version "3.22.1"
+                version "3.31.0"
             }
         }
         lintOptions {
