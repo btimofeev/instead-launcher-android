@@ -3,6 +3,10 @@
 ## Development
 ### Changed
 
+## [0.9.2] - 2024-10-15
+### Changed
+- INSTEAD updated to version 3.5.2
+
 ## [0.9.1] - 2024-05-21
 ### Added
 - The application allows other applications to access its files through the standard Android file dialog. This feature can be used to create games or share saved data with other devices.
