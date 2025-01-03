@@ -1,12 +1,11 @@
 /*
- * Copyright (c) 2018-2023 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2023, 2025 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.presentation.game
 
-import android.content.Intent
-import android.net.Uri
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +33,7 @@ import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.presentation.models.DownloadState
 import org.emunix.insteadlauncher.presentation.models.GameInfo
+import org.emunix.insteadlauncher.utils.launchBrowser
 import org.emunix.insteadlauncher.utils.loadUrl
 import javax.inject.Inject
 
@@ -50,7 +50,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         binding.toolbar.setNavigationIcon(R.drawable.ic_close_24dp)
         binding.toolbar.setNavigationOnClickListener { closeScreen() }
 
@@ -67,7 +67,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
                 launch {
                     viewModel.game.collect { game ->
                         if (game != null) {
-                            setViews(game)
+                            binding.setViews(game)
                         }
                     }
                 }
@@ -86,82 +86,78 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
                 launch {
                     viewModel.downloadErrorCommand.collect { command ->
-                        showErrorDialog(command.message)
+                        context?.showErrorDialog(command.message)
                     }
                 }
             }
         }
     }
 
-    private fun setViews(game: GameInfo) {
-        val activity = activity as AppCompatActivity
+    private fun FragmentGameBinding.setViews(game: GameInfo) {
+        val activity = activity as? AppCompatActivity ?: return
         activity.supportActionBar?.title = ""
-        binding.collapsingToolbar?.isTitleEnabled = false
+        collapsingToolbar?.isTitleEnabled = false
 
-        binding.name.text = game.title
-        binding.author.text = game.author
-        binding.version.text = game.version
-        binding.size.text = game.size
-        binding.gameImage.loadUrl(url = game.imageUrl, highQuality = true)
-        binding.description.text = game.description
+        name.text = game.title
+        author.text = game.author
+        version.text = game.version
+        size.text = game.size
+        gameImage.loadUrl(url = game.imageUrl, highQuality = true)
+        description.text = game.description
 
         if (game.siteUrl.isNotBlank()) {
-            binding.feedbackButton.isVisible = true
-            binding.feedbackButton.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(game.siteUrl))
-                browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                requireActivity().startActivity(browserIntent)
-            }
+            feedbackButton.isVisible = true
+            feedbackButton.setOnClickListener { activity.launchBrowser(game.siteUrl) }
         } else {
-            binding.feedbackButton.isVisible = false
+            feedbackButton.isVisible = false
         }
 
         if (game.state == INSTALLED) {
-            binding.installMessage.isVisible = false
-            binding.progressBar.isVisible = false
-            binding.installButton.isVisible = false
-            binding.deleteButton.isVisible = true
-            binding.runButton.isVisible = true
+            installMessage.isVisible = false
+            progressBar.isVisible = false
+            installButton.isVisible = false
+            deleteButton.isVisible = true
+            runButton.isVisible = true
 
             if (game.isUpdateButtonShow) {
-                binding.installButton.text = getText(R.string.game_activity_button_update)
-                binding.installButton.backgroundTintList =
+                installButton.text = getText(R.string.game_activity_button_update)
+                installButton.backgroundTintList =
                     ContextCompat.getColorStateList(activity, R.color.colorUpdateButton)
-                binding.installButton.isVisible = true
+                installButton.isVisible = true
             }
         }
 
         if (game.state == NO_INSTALLED) {
-            binding.installButton.text = getText(R.string.game_activity_button_install)
-            binding.installButton.backgroundTintList =
+            installButton.text = getText(R.string.game_activity_button_install)
+            installButton.backgroundTintList =
                 ContextCompat.getColorStateList(activity, R.color.colorInstallButton)
-            binding.installButton.isVisible = true
-            binding.deleteButton.isVisible = false
-            binding.runButton.isVisible = false
-            binding.progressBar.isVisible = false
-            binding.installMessage.isVisible = false
+            installButton.isVisible = true
+            deleteButton.isVisible = false
+            runButton.isVisible = false
+            progressBar.isVisible = false
+            installMessage.isVisible = false
         }
 
         if (game.state == IS_INSTALL) {
-            binding.installMessage.text = getString(R.string.game_activity_message_installing)
+            installMessage.text = getString(R.string.game_activity_message_installing)
             showProgress(true)
         }
 
         if (game.state == IS_DELETE) {
-            binding.installMessage.text = getString(R.string.notification_delete_game)
+            installMessage.text = getString(R.string.notification_delete_game)
             showProgress(true)
         }
 
         if (game.state == IN_QUEUE_TO_INSTALL) {
-            binding.installMessage.text = getString(R.string.game_activity_message_download_pending)
+            installMessage.text = getString(R.string.game_activity_message_download_pending)
             showProgress(true)
         }
 
-        binding.installButton.setOnClickListener {
+        installButton.setOnClickListener {
             viewModel.installGame()
         }
 
-        binding.deleteButton.setOnClickListener {
+        deleteButton.setOnClickListener {
             if (game.state == INSTALLED) {
                 if (isAdded) {
                     val deleteDialog = DeleteGameDialog.newInstance(game.name, gameManager)
@@ -170,17 +166,19 @@ class GameFragment : Fragment(R.layout.fragment_game) {
             }
         }
 
-        binding.runButton.setOnClickListener {
+        runButton.setOnClickListener {
             viewModel.runGame()
         }
     }
 
     private fun showProgress(flag: Boolean) {
-        binding.installMessage.isVisible = flag
-        binding.progressBar.isVisible = flag
-        binding.installButton.isVisible = !flag
-        binding.deleteButton.isVisible = !flag
-        binding.runButton.isVisible = !flag
+        with(binding) {
+            installMessage.isVisible = flag
+            progressBar.isVisible = flag
+            installButton.isVisible = !flag
+            deleteButton.isVisible = !flag
+            runButton.isVisible = !flag
+        }
     }
 
     private fun setIndeterminateProgress(indeterminate: Boolean, value: Int = 0) {
@@ -207,8 +205,8 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         }
     }
 
-    private fun showErrorDialog(message: String) {
-        MaterialAlertDialogBuilder(requireContext())
+    private fun Context.showErrorDialog(message: String) {
+        MaterialAlertDialogBuilder(this)
             .setTitle(string.error)
             .setMessage(message)
             .setPositiveButton(string.dialog_error_close_button) { dialog, _ ->

@@ -1,13 +1,15 @@
 /*
- * Copyright (c) 2018-2023 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2023, 2025 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.utils
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
+import android.net.Uri
 import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
@@ -90,3 +92,9 @@ fun Downloading.getDownloadingMessage(resourceProvider: ResourceProvider): Strin
         FileUtils.byteCountToDisplaySize(downloadedBytes),
         if (contentLength == -1L) "??" else FileUtils.byteCountToDisplaySize(contentLength)
     )
+
+fun Context.launchBrowser(url: String) {
+    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    startActivity(browserIntent)
+}

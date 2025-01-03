@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2023, 2025 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -7,6 +7,7 @@ package org.emunix.insteadlauncher.presentation.repository
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -139,7 +140,7 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
     }
 
     private fun setupToolbar() {
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         binding.toolbar.setNavigationIcon(drawable.ic_back_24dp)
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -183,7 +184,7 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
 
                 launch {
                     viewModel.showErrorDialog.collect { data ->
-                        showErrorDialog(data)
+                        context?.showErrorDialog(data)
                     }
                 }
 
@@ -252,8 +253,8 @@ class RepositoryFragment : Fragment(R.layout.fragment_repository) {
         listAdapter.submitList(games)
     }
 
-    private fun showErrorDialog(data: ErrorDialogModel) {
-        MaterialAlertDialogBuilder(requireContext())
+    private fun Context.showErrorDialog(data: ErrorDialogModel) {
+        MaterialAlertDialogBuilder(this)
             .setTitle(data.title)
             .setMessage(data.message)
             .setPositiveButton(string.dialog_error_close_button) { dialog, _ ->

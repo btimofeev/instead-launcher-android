@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021, 2025 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -62,5 +62,22 @@ interface PreferencesProvider {
 
         const val BACK_BUTTON_EXIT_GAME = "exit_game"
         const val BACK_BUTTON_OPEN_MENU = "open_menu"
+
+        const val PREF_APP_THEME_KEY = "app_theme"
+        const val PREF_BACK_BUTTON_KEY = "pref_back_button"
+        const val PREF_CURSOR_KEY = "pref_cursor"
+        const val PREF_DEFAULT_THEME_KEY = "pref_default_theme"
+        const val PREF_ENABLE_GAME_THEME_KEY = "pref_enable_game_theme"
+        const val PREF_GL_HACK_KEY = "pref_gl_hack"
+        const val PREF_HIRES_KEY = "pref_hires"
+        const val PREF_MUSIC_KEY = "pref_music"
+        const val PREF_KEYBOARD_BUTTON_KEY = "pref_keyboard_button"
+        const val PREF_REPOSITORY_KEY = "pref_repository"
+        const val PREF_RESOURCES_LAST_UPDATE_KEY = "resources_last_update"
+        const val PREF_SANDBOX_KEY = "pref_sandbox"
+        const val PREF_SANDBOX_ENABLED_KEY = "pref_sandbox_enabled"
+        const val PREF_TEXT_SIZE_KEY = "pref_text_size"
+        const val PREF_UPDATE_REPO_BACKGROUND_KEY = "pref_update_repo_background"
+        const val PREF_UPDATE_REPO_STARTUP_KEY = "pref_update_repo_startup"
     }
 }
