@@ -18,12 +18,11 @@ This application allows you to download and run games for the popular text quest
 <img src="/images/screenshots/screenshot_1.png" width="270"> <img src="/images/screenshots/screenshot_2.png" width="270"> <img src="/images/screenshots/screenshot_3.png" width="270">
 
 ### How to compile
-To compile the application, you need to execute two commands in the project root directory:
-
+To compile the application, you need to run these commands in the root directory of the project:
 ```
 ./gradlew :instead:downloadDependencies
-./gradlew assembleRelease
-./gradlew installRelease
+./gradlew assembleDebug
+./gradlew installDebug
 ```
 
 ### License
