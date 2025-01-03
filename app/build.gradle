@@ -81,72 +81,67 @@ if (propFile.canRead()) {
 }
 
 dependencies {
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.5.1', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$rootProject.junit_version"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$rootProject.junit_version"
-
     implementation project(':core-storage')
     implementation project(':core-preferences')
     implementation project(':instead')
 
     // Support libraries
-    implementation "androidx.appcompat:appcompat:$rootProject.appcompat_version"
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.fragment:fragment-ktx:1.8.5'
-    implementation "androidx.preference:preference-ktx:$rootProject.preference_ktx_version"
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.preference.ktx
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.swiperefreshlayout
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.legacy.support.v4
 
     // Architecture components
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.common.java8
+    implementation libs.androidx.lifecycle.extensions
 
     // Room
-    implementation "androidx.room:room-runtime:$rootProject.room_version"
-    implementation "androidx.room:room-ktx:$rootProject.room_version"
-    ksp "androidx.room:room-compiler:$rootProject.room_version"
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    ksp libs.androidx.room.compiler
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.kotlin_coroutines_version"
+    implementation libs.kotlin.stdlib
+    implementation libs.kotlinx.coroutines.android
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navigation_version"
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
 
     // WorkManager
-    implementation 'androidx.work:work-runtime-ktx:2.9.0'
+    implementation libs.androidx.work.runtime.ktx
 
     // Network
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation 'io.coil-kt:coil:2.5.0'
+    implementation libs.okhttp
+    implementation libs.coil
 
     // DI
-    implementation "com.google.dagger:hilt-android:$rootProject.hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$rootProject.hilt_version"
-    implementation 'androidx.hilt:hilt-work:1.2.0'
-    kapt('androidx.hilt:hilt-compiler:1.2.0')
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+    implementation libs.androidx.hilt.work
+    kapt libs.androidx.hilt.compiler
 
     // Files
-    implementation "commons-io:commons-io:$rootProject.commons_io_version"
+    implementation libs.commons.io
 
     // Crash reports
-    implementation "ch.acra:acra-mail:$rootProject.acraVersion"
-    implementation "ch.acra:acra-notification:$rootProject.acraVersion"
+    implementation libs.acra.mail
+    implementation libs.acra.notification
 
     // Logging
-    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation libs.timber
 
     // ViewBinding Delegate
-    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.5.9'
+    implementation libs.viewbindingpropertydelegate.noreflection
 
-    // LeakCanary
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+    // Test
+    testImplementation libs.junit.jupiter.api
+    testRuntimeOnly libs.junit.jupiter.engine
 }
 
 repositories {
