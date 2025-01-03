@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021, 2025 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -39,8 +39,8 @@ class AppVersionRepositoryImpl @Inject constructor(
         get() {
             var versionName = "N/A"
             try {
-                val pinfo = context.packageManager.getPackageInfo(context.packageName, 0)
-                versionName = pinfo.versionName
+                val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+                versionName = packageInfo.versionName ?: throw IllegalArgumentException()
             } catch (e: Exception) {
                 Timber.tag("INSTEAD Launcher").e("App version is not available")
             }
