@@ -103,90 +103,91 @@ tasks.register('downloadDependencies') {
     def SDL2_mixer = '2.0.4'
     def SDL2_ttf = '2.0.15'
     def Iconv = '1.15'
+    def downloadDir = layout.buildDirectory.get().asFile.path
 
     doLast {
         download.run {
             src "https://github.com/instead-hub/instead/archive/${Instead}.tar.gz"
-            dest new File(buildDir, "instead-${Instead}.tar.gz")
+            dest new File(downloadDir, "instead-${Instead}.tar.gz")
         }
         copy {
-            from tarTree(resources.gzip("${buildDir}/instead-${Instead}.tar.gz"))
+            from tarTree(resources.gzip("${downloadDir}/instead-${Instead}.tar.gz"))
             into 'src/main/c/Instead/'
         }
-        delete("${buildDir}/instead-${Instead}.tar.gz")
+        delete("${downloadDir}/instead-${Instead}.tar.gz")
         file("src/main/c/Instead/instead-${Instead}").renameTo(file('src/main/c/Instead/Instead'))
         delete("src/main/c/Instead/instead-${Instead}")
         delete("src/main/c/Instead/pax_global_header")
 
         download.run {
             src "https://www.lua.org/ftp/lua-${Lua}.tar.gz"
-            dest buildDir
+            dest downloadDir
         }
         copy {
-            from tarTree(resources.gzip("${buildDir}/lua-${Lua}.tar.gz"))
+            from tarTree(resources.gzip("${downloadDir}/lua-${Lua}.tar.gz"))
             into 'src/main/c/Lua/'
         }
-        delete("${buildDir}/lua-${Lua}.tar.gz")
+        delete("${downloadDir}/lua-${Lua}.tar.gz")
         file("src/main/c/Lua/lua-${Lua}").renameTo(file('src/main/c/Lua/Lua'))
         delete("src/main/c/Lua/lua-${Lua}")
 
         download.run {
             src "https://github.com/libsdl-org/SDL/releases/download/release-${SDL2}/SDL2-${SDL2}.tar.gz"
-            dest buildDir
+            dest downloadDir
         }
         copy {
-            from tarTree(resources.gzip("${buildDir}/SDL2-${SDL2}.tar.gz"))
+            from tarTree(resources.gzip("${downloadDir}/SDL2-${SDL2}.tar.gz"))
             into 'src/main/c/SDL2/'
         }
-        delete("${buildDir}/SDL2-${SDL2}.tar.gz")
+        delete("${downloadDir}/SDL2-${SDL2}.tar.gz")
         file("src/main/c/SDL2/SDL2-${SDL2}").renameTo(file('src/main/c/SDL2/SDL2'))
         delete("src/main/c/SDL2/SDL2-${SDL2}")
 
         download.run {
             src "https://github.com/libsdl-org/SDL_image/archive/refs/tags/release-${SDL2_image}.tar.gz"
-            dest buildDir
+            dest downloadDir
         }
         copy {
-            from tarTree(resources.gzip("${buildDir}/release-${SDL2_image}.tar.gz"))
+            from tarTree(resources.gzip("${downloadDir}/release-${SDL2_image}.tar.gz"))
             into 'src/main/c/SDL2_image/'
         }
-        delete("${buildDir}/release-${SDL2_image}.tar.gz")
+        delete("${downloadDir}/release-${SDL2_image}.tar.gz")
         file("src/main/c/SDL2_image/SDL_image-release-${SDL2_image}").renameTo(file('src/main/c/SDL2_image/SDL2_image'))
         delete("src/main/c/SDL2_image/SDL2_image-${SDL2_image}")
 
         download.run {
             src "https://github.com/libsdl-org/SDL_mixer/archive/refs/tags/release-${SDL2_mixer}.tar.gz"
-            dest buildDir
+            dest downloadDir
         }
         copy {
-            from tarTree(resources.gzip("${buildDir}/release-${SDL2_mixer}.tar.gz"))
+            from tarTree(resources.gzip("${downloadDir}/release-${SDL2_mixer}.tar.gz"))
             into 'src/main/c/SDL2_mixer/'
         }
-        delete("${buildDir}/release-${SDL2_mixer}.tar.gz")
+        delete("${downloadDir}/release-${SDL2_mixer}.tar.gz")
         file("src/main/c/SDL2_mixer/SDL_mixer-release-${SDL2_mixer}").renameTo(file('src/main/c/SDL2_mixer/SDL2_mixer'))
         delete("src/main/c/SDL2_mixer/SDL2_mixer-${SDL2_mixer}")
 
         download.run {
             src "https://github.com/libsdl-org/SDL_ttf/releases/download/release-${SDL2_ttf}/SDL2_ttf-${SDL2_ttf}.tar.gz"
-            dest buildDir
+            dest downloadDir
         }
         copy {
-            from tarTree(resources.gzip("${buildDir}/SDL2_ttf-${SDL2_ttf}.tar.gz"))
+            from tarTree(resources.gzip("${downloadDir}/SDL2_ttf-${SDL2_ttf}.tar.gz"))
             into 'src/main/c/SDL2_ttf/'
         }
-        delete("${buildDir}/SDL2_ttf-${SDL2_ttf}.tar.gz")
+        delete("${downloadDir}/SDL2_ttf-${SDL2_ttf}.tar.gz")
         file("src/main/c/SDL2_ttf/SDL2_ttf-${SDL2_ttf}").renameTo(file('src/main/c/SDL2_ttf/SDL2_ttf'))
         delete("src/main/c/SDL2_ttf/SDL2_ttf-${SDL2_ttf}")
 
         download.run {
             src "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${Iconv}.tar.gz"
-            dest buildDir
+            dest downloadDir
         }
         copy {
-            from tarTree(resources.gzip("${buildDir}/libiconv-${Iconv}.tar.gz"))
+            from tarTree(resources.gzip("${downloadDir}/libiconv-${Iconv}.tar.gz"))
             into 'src/main/c/libiconv/'
         }
-        delete("${buildDir}/libiconv-${Iconv}.tar.gz")
+        delete("${downloadDir}/libiconv-${Iconv}.tar.gz")
         file("src/main/c/libiconv/libiconv-${Iconv}").renameTo(file('src/main/c/libiconv/libiconv'))
         delete("src/main/c/libiconv/libiconv-${Iconv}")
     }
