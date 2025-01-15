@@ -130,7 +130,7 @@ class InstalledGamesFragment : Fragment(R.layout.fragment_installed_games) {
         val dividerItemDecoration = DividerItemDecoration(binding.list.context, LinearLayout.VERTICAL)
         val insetDivider = dividerItemDecoration.insetDivider(
             context = binding.list.context,
-            start_offset_dimension = dimen.installed_game_fragment_inset_divider_margin_start
+            startOffsetDimension = dimen.installed_game_fragment_inset_divider_margin_start
         )
         dividerItemDecoration.setDrawable(insetDivider)
         binding.list.addItemDecoration(dividerItemDecoration)

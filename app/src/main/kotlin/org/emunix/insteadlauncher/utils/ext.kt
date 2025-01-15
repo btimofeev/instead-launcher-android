@@ -41,11 +41,11 @@ fun ImageView.loadUrl(url: String, highQuality: Boolean = false) {
     }
 }
 
-fun DividerItemDecoration.insetDivider(context: Context, @DimenRes start_offset_dimension: Int): Drawable {
+fun DividerItemDecoration.insetDivider(context: Context, @DimenRes startOffsetDimension: Int): Drawable {
     val a = context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
     val divider = a.getDrawable(0)
     a.recycle()
-    val inset = context.resources.getDimensionPixelSize(start_offset_dimension)
+    val inset = context.resources.getDimensionPixelSize(startOffsetDimension)
     val isLeftToRight = TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_LTR
 
     return if (isLeftToRight) {
