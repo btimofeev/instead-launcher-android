@@ -25,6 +25,8 @@ To compile the application, you need to run these commands in the root directory
 ./gradlew installDebug
 ```
 
+or just run ```make``` which will run the three commands above in sequence.
+
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
