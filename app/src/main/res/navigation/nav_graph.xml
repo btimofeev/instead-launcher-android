@@ -13,7 +13,7 @@
         android:id="@+id/unpackResourcesFragment"
         android:name="org.emunix.insteadlauncher.presentation.unpackresources.UnpackResourcesFragment"
         android:label="fragment_unpack_resources"
-        tools:layout="@layout/fragment_unpack_resources" >
+        tools:layout="@layout/fragment_compose" >
         <action
             android:id="@+id/action_unpackResourcesFragment_to_installedGamesFragment"
             app:destination="@id/installedGamesFragment"
@@ -85,7 +85,7 @@
         android:id="@+id/aboutFragment"
         android:name="org.emunix.insteadlauncher.presentation.about.AboutFragment"
         android:label="fragment_about"
-        tools:layout="@layout/fragment_about" />
+        tools:layout="@layout/fragment_compose" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="org.emunix.insteadlauncher.presentation.settings.SettingsFragment"
