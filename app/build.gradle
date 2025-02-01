@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.devtools.ksp'
     id 'de.mannodermaus.android-junit5'
+    alias libs.plugins.compose.compiler
 }
 
 android {
@@ -48,6 +49,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
+        compose true
         viewBinding true
     }
     lint {
@@ -94,6 +96,13 @@ dependencies {
     implementation libs.androidx.swiperefreshlayout
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.legacy.support.v4
+
+    // Compose
+    implementation libs.androidx.material.icons.extended
+    implementation libs.androidx.material3.android
+    implementation libs.androidx.ui
+    implementation libs.androidx.ui.tooling.preview
+    debugImplementation libs.androidx.ui.tooling
 
     // Architecture components
     implementation libs.androidx.lifecycle.viewmodel.ktx
