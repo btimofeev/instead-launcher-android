@@ -128,9 +128,7 @@ private fun ToolbarMenu(
     onAboutClick: () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    Box(
-        modifier = Modifier.padding(16.dp)
-    ) {
+    Box {
         IconButton(onClick = { expanded = !expanded }) {
             Icon(Icons.Default.MoreVert, contentDescription = null)
         }
@@ -191,8 +189,12 @@ private fun GamesScreen(
     gameActions: GameActions,
 ) {
     LazyColumn {
-        items(games) { item ->
-            GameItem(item, gameActions)
+        items(games, key = { it.name }) { item ->
+            GameItem(
+                modifier = Modifier.animateItem(),
+                item = item,
+                gameActions = gameActions
+            )
         }
     }
 }
@@ -200,13 +202,14 @@ private fun GamesScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun GameItem(
+    modifier: Modifier,
     item: InstalledGame,
     gameActions: GameActions,
 ) {
     var contextMenu by rememberSaveable { mutableStateOf<String?>(null) }
     val haptics = LocalHapticFeedback.current
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .combinedClickable(
                 onClick = { gameActions.onPlayClick(item.name) },
