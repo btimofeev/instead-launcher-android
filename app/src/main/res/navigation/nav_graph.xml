@@ -24,7 +24,7 @@
         android:id="@+id/installedGamesFragment"
         android:name="org.emunix.insteadlauncher.presentation.installedgames.InstalledGamesFragment"
         android:label="fragment_installed_games"
-        tools:layout="@layout/fragment_installed_games" >
+        tools:layout="@layout/fragment_compose" >
         <action
             android:id="@+id/action_installedGamesFragment_to_repositoryFragment"
             app:destination="@id/repositoryFragment"

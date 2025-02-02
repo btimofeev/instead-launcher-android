@@ -24,13 +24,13 @@
     <string name="game_activity_message_downloading">Elŝutigas: %1$s/%2$s</string>
     <string name="game_activity_message_installing">Elŝutigas&#8230;</string>
 
-    <string name="installed_games_activity_title">INSTEAD</string>
+    <string name="installed_games_screen_title">INSTEAD</string>
     <string name="installed_games_empty_text">Vi estas preta por aventuroj?\nPremu la ruĝan butonon por elekti ludon.</string>
-    <string name="installed_games_activity_context_menu_play">Ludi</string>
-    <string name="installed_games_activity_context_menu_play_from_beginning">Komenci novan ludon</string>
-    <string name="installed_games_activity_context_menu_delete">Forigi</string>
-    <string name="installed_games_activity_context_menu_about">Pri ludo</string>
-    <string name="installed_games_fragment_fab_content_description">Instali ludojn</string>
+    <string name="installed_games_context_menu_play">Ludi</string>
+    <string name="installed_games_context_menu_play_from_beginning">Komenci novan ludon</string>
+    <string name="installed_games_context_menu_delete">Forigi</string>
+    <string name="installed_games_context_menu_about">Pri ludo</string>
+    <string name="installed_games_screen_fab_content_description">Instali ludojn</string>
 
     <string name="dialog_delete_game_title">Forigi ludon?</string>
     <string name="dialog_delete_game_text">Konservitaj datumoj de ludo restos en aparato</string>

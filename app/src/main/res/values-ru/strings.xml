@@ -24,13 +24,13 @@
     <string name="game_activity_message_downloading">Загружается: %1$s/%2$s</string>
     <string name="game_activity_message_installing">Загружается&#8230;</string>
 
-    <string name="installed_games_activity_title">INSTEAD</string>
+    <string name="installed_games_screen_title">INSTEAD</string>
     <string name="installed_games_empty_text">Готовы к приключениям?\nНажмите на красную кнопку для выбора игры.</string>
-    <string name="installed_games_activity_context_menu_play">Играть</string>
-    <string name="installed_games_activity_context_menu_play_from_beginning">Начать новую игру</string>
-    <string name="installed_games_activity_context_menu_delete">Удалить</string>
-    <string name="installed_games_activity_context_menu_about">Об игре</string>
-    <string name="installed_games_fragment_fab_content_description">Установить игры</string>
+    <string name="installed_games_context_menu_play">Играть</string>
+    <string name="installed_games_context_menu_play_from_beginning">Начать новую игру</string>
+    <string name="installed_games_context_menu_delete">Удалить</string>
+    <string name="installed_games_context_menu_about">Об игре</string>
+    <string name="installed_games_screen_fab_content_description">Установить игры</string>
 
     <string name="dialog_delete_game_title">Удалить игру?</string>
     <string name="dialog_delete_game_text">Сохранёные данные игры останутся на устройстве</string>
