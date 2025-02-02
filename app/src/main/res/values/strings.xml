@@ -24,13 +24,13 @@
     <string name="game_activity_message_downloading">Downloading: %1$s/%2$s</string>
     <string name="game_activity_message_installing">Downloading&#8230;</string>
 
-    <string name="installed_games_activity_title">INSTEAD</string>
+    <string name="installed_games_screen_title">INSTEAD</string>
     <string name="installed_games_empty_text">Are you ready for an adventure?\nTap the red button to install games.</string>
-    <string name="installed_games_activity_context_menu_play">Play</string>
-    <string name="installed_games_activity_context_menu_play_from_beginning">Restart game</string>
-    <string name="installed_games_activity_context_menu_delete">Delete</string>
-    <string name="installed_games_activity_context_menu_about">About</string>
-    <string name="installed_games_fragment_fab_content_description">Install games</string>
+    <string name="installed_games_context_menu_play">Play</string>
+    <string name="installed_games_context_menu_play_from_beginning">Restart game</string>
+    <string name="installed_games_context_menu_delete">Delete</string>
+    <string name="installed_games_context_menu_about">About</string>
+    <string name="installed_games_screen_fab_content_description">Install games</string>
 
     <string name="dialog_delete_game_title">Delete game?</string>
     <string name="dialog_delete_game_text">Saved game data will remain on the device</string>

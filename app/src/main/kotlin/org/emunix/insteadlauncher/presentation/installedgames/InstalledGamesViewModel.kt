@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2024 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2025 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -31,8 +31,10 @@ class InstalledGamesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _gameItems = MutableStateFlow<List<InstalledGame>?>(null)
+    private val _showDeleteGameDialog = MutableStateFlow<String?>(null)
 
     val gameItems: StateFlow<List<InstalledGame>?> = _gameItems.asStateFlow()
+    val showDeleteGameDialog = _showDeleteGameDialog.asStateFlow()
 
     fun init() {
         startUpdateRepoWorker()
@@ -41,6 +43,19 @@ class InstalledGamesViewModel @Inject constructor(
 
     fun playGame(gameName: String, playFromBeginning: Boolean = false) {
         gameManager.startGame(gameName, playFromBeginning)
+    }
+
+    fun onDeleteGameClicked(gameName: String) {
+        _showDeleteGameDialog.value = gameName
+    }
+
+    fun onDeleteGameConfirmed(gameName: String) {
+        gameManager.deleteGame(gameName)
+        _showDeleteGameDialog.value = null
+    }
+
+    fun onDeleteGameRejected() {
+        _showDeleteGameDialog.value = null
     }
 
     private fun observeGames() = viewModelScope.launch {

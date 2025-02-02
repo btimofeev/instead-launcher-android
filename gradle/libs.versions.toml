@@ -3,6 +3,7 @@ acra = "5.11.3"
 androidJunit5 = "1.8.2.1"
 appcompat = "1.7.0"
 coil = "2.5.0"
+coil3 = "3.0.4"
 commonsIo = "2.5" # 2.6 crashes the application on Android below 8, because java.nio.file is not available in these versions
 constraintlayout = "2.2.0"
 composeUi = "1.7.6"
@@ -59,6 +60,8 @@ androidx-ui = { module = "androidx.compose.ui:ui", version.ref = "composeUi" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeUi" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeUi" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3"}
+coil-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil3" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
