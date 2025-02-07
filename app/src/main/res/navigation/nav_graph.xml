@@ -57,7 +57,7 @@
         android:id="@+id/repositoryFragment"
         android:name="org.emunix.insteadlauncher.presentation.repository.RepositoryFragment"
         android:label="fragment_repository"
-        tools:layout="@layout/fragment_repository" >
+        tools:layout="@layout/fragment_compose" >
         <action
             android:id="@+id/action_repositoryFragment_to_gameFragment"
             app:destination="@id/gameFragment"

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021, 2023, 2025 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -9,11 +9,9 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.R.string
@@ -21,15 +19,11 @@ import org.emunix.insteadlauncher.domain.model.NotInsteadGameZipException
 import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Error
 import org.emunix.insteadlauncher.domain.model.UpdateGameListResult.Success
 import org.emunix.insteadlauncher.domain.usecase.GetGamesFlowUseCase
-import org.emunix.insteadlauncher.domain.usecase.SearchGamesUseCase
 import org.emunix.insteadlauncher.domain.usecase.UpdateGameListUseCase
 import org.emunix.insteadlauncher.manager.game.GameManager
 import org.emunix.insteadlauncher.presentation.models.ErrorDialogModel
-import org.emunix.insteadlauncher.presentation.models.RepoGame
-import org.emunix.insteadlauncher.presentation.models.RepoScreenState.SEARCH_ERROR
-import org.emunix.insteadlauncher.presentation.models.RepoScreenState.SHOW_GAMES
-import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REPOSITORY
-import org.emunix.insteadlauncher.presentation.models.RepoScreenState.UPDATE_REPOSITORY_ERROR
+import org.emunix.insteadlauncher.presentation.models.RepoScreenState
+import org.emunix.insteadlauncher.presentation.models.UpdateRepoState
 import org.emunix.insteadlauncher.presentation.models.toRepoGames
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
 import timber.log.Timber
@@ -41,20 +35,14 @@ class RepositoryViewModel @Inject constructor(
     private val preferencesProvider: PreferencesProvider,
     private val gameManager: GameManager,
     private val updateGameListUseCase: UpdateGameListUseCase,
-    private val searchGamesUseCase: SearchGamesUseCase,
     private val resourceProvider: ResourceProvider,
 ) : ViewModel() {
 
-    private val _gameItems = MutableStateFlow<List<RepoGame>>(emptyList())
-    private val _uiState = MutableStateFlow(SHOW_GAMES)
-    private val _showInstallGameDialog = MutableStateFlow(false)
-    private val _showErrorDialog = Channel<ErrorDialogModel>()
+    private val _state = MutableStateFlow(RepoScreenState())
+    private val _showErrorDialog = MutableStateFlow<ErrorDialogModel?>(null)
 
-    val gameItems: StateFlow<List<RepoGame>> = _gameItems.asStateFlow()
-    val showInstallGameDialog: StateFlow<Boolean> = _showInstallGameDialog.asStateFlow()
-    val showErrorDialog = _showErrorDialog.receiveAsFlow()
-    val uiState = _uiState.asStateFlow()
-
+    val state = _state.asStateFlow()
+    val showErrorDialog = _showErrorDialog.asStateFlow()
 
     fun init() {
         if (preferencesProvider.updateRepoWhenOpenRepositoryScreen) {
@@ -64,32 +52,22 @@ class RepositoryViewModel @Inject constructor(
     }
 
     fun updateRepository() = viewModelScope.launch {
-        _uiState.value = UPDATE_REPOSITORY
+        _state.update { it.copy(updateRepo = UpdateRepoState.UPDATING) }
 
         when (val result = updateGameListUseCase()) {
             is Success -> {
-                _uiState.value = SHOW_GAMES
+                _state.update { it.copy(updateRepo = UpdateRepoState.HIDDEN) }
             }
 
             is Error -> {
                 Timber.e(result.e)
-                _uiState.value = UPDATE_REPOSITORY_ERROR
+                _state.update { it.copy(updateRepo = UpdateRepoState.ERROR) }
             }
         }
     }
 
-    fun searchGames(query: String) = viewModelScope.launch {
-        val games = searchGamesUseCase(query)
-        _gameItems.value = games.toRepoGames()
-        if (games.isEmpty()) {
-            _uiState.value = SEARCH_ERROR
-        } else {
-            _uiState.value = SHOW_GAMES
-        }
-    }
-
     fun installGame(uri: Uri) = viewModelScope.launch {
-        _showInstallGameDialog.value = true
+        _state.update { it.copy(installGameProgress = true) }
         try {
             gameManager.installGameFromZip(uri)
         } catch (e: NotInsteadGameZipException) {
@@ -97,25 +75,31 @@ class RepositoryViewModel @Inject constructor(
         } catch (e: Throwable) {
             showErrorDialog(text = resourceProvider.getString(string.error_failed_to_unpack_zip))
         }
-        _showInstallGameDialog.value = false
+        _state.update { it.copy(installGameProgress = false) }
         gameManager.scanGames()
+    }
+
+    fun onErrorDialogDismiss() {
+        _showErrorDialog.value = null
     }
 
     private fun observeGames() = viewModelScope.launch {
         getGamesFlowUseCase()
             .collect { games ->
-                _gameItems.value = games
-                    .sortedByDescending { it.info.lastReleaseDate }
-                    .toRepoGames()
+                _state.update { prev ->
+                    prev.copy(
+                        games = games
+                            .sortedByDescending { it.info.lastReleaseDate }
+                            .toRepoGames()
+                    )
+                }
             }
     }
 
     private fun showErrorDialog(text: String) {
-        _showErrorDialog.trySend(
-            ErrorDialogModel(
-                title = resourceProvider.getString(string.error),
-                message = text
-            )
+        _showErrorDialog.value = ErrorDialogModel(
+            title = resourceProvider.getString(string.error),
+            message = text
         )
     }
 }
