@@ -36,8 +36,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -45,7 +43,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,16 +68,12 @@ import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 @Composable
 fun RepositoryScreen(
     state: RepoScreenState,
-
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
     onUpdateRepositoryClick: () -> Unit,
     onInstallFromZipClick: () -> Unit,
     onGameClick: (gameName: String) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
-
     Scaffold(
         modifier = Modifier.safeDrawingPadding(),
         topBar = {
@@ -106,9 +99,6 @@ fun RepositoryScreen(
                     )
                 }
             )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
         PullToRefreshBox(
