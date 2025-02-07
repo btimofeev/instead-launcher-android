@@ -1,17 +1,22 @@
 /*
- * Copyright (c) 2023 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2023, 2025 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.presentation.models
 
-enum class RepoScreenState {
+data class RepoScreenState(
+    val games: List<RepoGame> = emptyList(),
+    val updateRepo: UpdateRepoState = UpdateRepoState.HIDDEN,
+    val installGameProgress: Boolean = false,
+    val errorMessage: String? = null,
+)
 
-    SHOW_GAMES,
+enum class UpdateRepoState {
 
-    UPDATE_REPOSITORY,
+    HIDDEN,
 
-    UPDATE_REPOSITORY_ERROR,
+    UPDATING,
 
-    SEARCH_ERROR,
+    ERROR,
 }
