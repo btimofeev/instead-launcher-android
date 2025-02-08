@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.emunix.insteadlauncher.R
@@ -84,12 +85,14 @@ fun SearchScreen(
                     )
                 }
 
-                var value by rememberSaveable { mutableStateOf("") }
+                var value by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+                    mutableStateOf(TextFieldValue(text = ""))
+                }
                 TextField(
                     value = value,
                     onValueChange = { newValue ->
                         value = newValue
-                        onSearchQueryChange(newValue)
+                        onSearchQueryChange(newValue.text)
                     },
                     singleLine = true,
                     textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
@@ -107,7 +110,7 @@ fun SearchScreen(
 
                 IconButton(
                     onClick = {
-                        value = ""
+                        value = TextFieldValue(text = "")
                         onSearchQueryChange("")
                     }
                 ) {
