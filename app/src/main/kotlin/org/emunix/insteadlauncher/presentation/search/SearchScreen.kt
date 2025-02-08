@@ -6,21 +6,17 @@
 package org.emunix.insteadlauncher.presentation.search
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -47,19 +43,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.presentation.models.RepoGame
 import org.emunix.insteadlauncher.presentation.models.SearchScreenState
+import org.emunix.insteadlauncher.presentation.repository.GameItem
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 
 @Composable
@@ -173,70 +163,14 @@ private fun GamesScreen(
     games: List<RepoGame>,
     onGameClick: (gameName: String) -> Unit,
 ) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = PaddingValues(vertical = 8.dp)
+    ) {
         items(games, key = { it.name }) { item ->
             GameItem(
                 modifier = Modifier.animateItem(),
                 item = item,
                 onGameClick = onGameClick,
-            )
-        }
-    }
-}
-
-@Composable
-private fun GameItem(
-    modifier: Modifier,
-    item: RepoGame,
-    onGameClick: (gameName: String) -> Unit,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onGameClick(item.name) },
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current).data(item.imageUrl).crossfade(true)
-                .build(),
-            placeholder = painterResource(R.drawable.walking_cat),
-            error = painterResource(R.drawable.sleeping_cat),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .width(100.dp)
-                .height(56.dp),
-        )
-        Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = item.title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-                if (item.isHasNewVersion) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_new_red_16dp),
-                        modifier = Modifier.size(16.dp),
-                        contentDescription = stringResource(R.string.repository_badge_content_description),
-                    )
-                }
-            }
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                text = item.description,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodySmall,
             )
         }
     }
