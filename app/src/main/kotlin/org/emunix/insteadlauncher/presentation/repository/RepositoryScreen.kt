@@ -22,18 +22,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ErrorOutline
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.NewReleases
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -90,7 +89,7 @@ fun RepositoryScreen(
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = null
                         )
                     }
@@ -185,10 +184,10 @@ private fun ToolbarMenu(
     Box {
         Row {
             IconButton(onClick = { onSearchClick() }) {
-                Icon(Icons.Default.Search, contentDescription = null)
+                Icon(Icons.Rounded.Search, contentDescription = null)
             }
             IconButton(onClick = { expanded = !expanded }) {
-                Icon(Icons.Default.MoreVert, contentDescription = null)
+                Icon(Icons.Rounded.MoreVert, contentDescription = null)
             }
         }
         DropdownMenu(
@@ -296,7 +295,7 @@ fun ErrorDialog(
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
-        icon = { Icon(Icons.Default.ErrorOutline, contentDescription = null) },
+        icon = { Icon(Icons.Rounded.ErrorOutline, contentDescription = null) },
         title = { Text(text = model.title) },
         text = { Text(text = model.message) },
         onDismissRequest = onDismiss,

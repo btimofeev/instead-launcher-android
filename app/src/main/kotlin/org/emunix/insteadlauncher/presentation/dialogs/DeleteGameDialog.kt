@@ -9,7 +9,7 @@ import android.app.Dialog
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -59,7 +59,7 @@ fun DeleteGameDialog(
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
-        icon = { Icon(Icons.Default.Delete, contentDescription = null) },
+        icon = { Icon(Icons.Rounded.Delete, contentDescription = null) },
         title = { Text(text = stringResource(R.string.dialog_delete_game_title)) },
         text = { Text(text = stringResource(R.string.dialog_delete_game_text)) },
         onDismissRequest = { onDismiss() },
