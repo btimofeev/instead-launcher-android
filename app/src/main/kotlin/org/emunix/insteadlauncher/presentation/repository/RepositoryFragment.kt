@@ -60,7 +60,7 @@ class RepositoryFragment : Fragment() {
                     RepositoryScreen(
                         state = state,
                         onBackClick = { findNavController().popBackStack() },
-                        onSearchClick = { }, // TODO search screen
+                        onSearchClick = { findNavController().navigate(R.id.action_repositoryFragment_to_searchFragment) },
                         onUpdateRepositoryClick = { viewModel.updateRepository() },
                         onInstallFromZipClick = ::chooseZip,
                         onGameClick = { gameName ->

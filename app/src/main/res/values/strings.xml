@@ -42,6 +42,8 @@
     <string name="unpack_resources_fragment_try_again_button">Try again</string>
     <string name="unpack_resources_fragment_error_message">Failed to unpack resources. Check the free space on the internal storage and try again.</string>
 
+    <string name="search_placeholder">Search query</string>
+
     <string name="notification_download_game">Downloading</string>
     <string name="notification_install_game">Installing</string>
     <string name="notification_delete_game">Deleting the game, please wait&#8230;</string>

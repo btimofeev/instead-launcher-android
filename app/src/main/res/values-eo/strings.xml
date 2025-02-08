@@ -42,6 +42,8 @@
     <string name="unpack_resources_fragment_try_again_button">Provi denove</string>
     <string name="unpack_resources_fragment_error_message">Elpako de risurcoj ne sukcesis. Kontrolu liberan spacon sur aparato kaj provu denove.</string>
 
+    <string name="search_placeholder">Serĉu demandon</string>
+
     <string name="notification_download_game">Elŝutas</string>
     <string name="notification_install_game">Instalas</string>
     <string name="notification_delete_game">Forigas ludon, atendu&#8230;</string>

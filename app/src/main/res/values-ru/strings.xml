@@ -42,6 +42,8 @@
     <string name="unpack_resources_fragment_try_again_button">Повторить попытку</string>
     <string name="unpack_resources_fragment_error_message">Не удалось распаковать ресурсы. Проверьте свободное место на внутреннем накопителе и повторите попытку.</string>
 
+    <string name="search_placeholder">Поисковый запрос</string>
+
     <string name="notification_download_game">Загружаю</string>
     <string name="notification_install_game">Устанавливаю</string>
     <string name="notification_delete_game">Удаляю игру, подождите&#8230;</string>
