@@ -13,6 +13,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -188,7 +189,9 @@ private fun GamesScreen(
     games: List<InstalledGame>,
     gameActions: GameActions,
 ) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = PaddingValues(vertical = 8.dp)
+    ) {
         items(games, key = { it.name }) { item ->
             GameItem(
                 modifier = Modifier.animateItem(),
@@ -230,9 +233,9 @@ private fun GameItem(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .padding(vertical = 12.dp)
                 .width(100.dp)
-                .height(56.dp),
+                .height(64.dp),
         )
         Text(
             modifier = Modifier

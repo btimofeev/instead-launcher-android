@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,12 +26,14 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.NewReleases
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -46,6 +49,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -214,7 +218,9 @@ private fun GamesScreen(
     games: List<RepoGame>,
     onGameClick: (gameName: String) -> Unit,
 ) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = PaddingValues(vertical = 8.dp)
+    ) {
         items(games, key = { it.name }) { item ->
             GameItem(
                 modifier = Modifier.animateItem(),
@@ -226,7 +232,7 @@ private fun GamesScreen(
 }
 
 @Composable
-private fun GameItem(
+fun GameItem(
     modifier: Modifier,
     item: RepoGame,
     onGameClick: (gameName: String) -> Unit,
@@ -247,43 +253,42 @@ private fun GameItem(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .padding(vertical = 12.dp)
                 .width(100.dp)
-                .height(56.dp),
+                .height(64.dp),
         )
-        Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = item.title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-                if (item.isHasNewVersion) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_new_red_16dp),
-                        modifier = Modifier.size(16.dp),
-                        contentDescription = stringResource(R.string.repository_badge_content_description),
-                    )
-                }
-            }
+        Column(
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp).weight(1f),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                text = item.title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Text(
                 text = item.description,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        if (item.isHasNewVersion) {
+            Image(
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .size(24.dp),
+                alignment = Alignment.Center,
+                imageVector = Icons.Rounded.NewReleases,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
+                contentDescription = stringResource(R.string.repository_badge_content_description),
             )
         }
     }
 }
+
 
 @Composable
 fun ErrorDialog(
