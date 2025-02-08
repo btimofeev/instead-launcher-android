@@ -64,6 +64,9 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_repositoryFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <activity
         android:id="@+id/insteadActivity"
@@ -90,4 +93,15 @@
         android:id="@+id/settingsFragment"
         android:name="org.emunix.insteadlauncher.presentation.settings.SettingsFragment"
         android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="org.emunix.insteadlauncher.presentation.search.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_gameFragment"
+            app:destination="@id/gameFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 </navigation>
