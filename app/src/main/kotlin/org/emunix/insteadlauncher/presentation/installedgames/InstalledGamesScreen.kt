@@ -28,12 +28,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Replay
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Replay
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -103,7 +103,7 @@ fun InstalledGamesScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = onAddGameClick) {
                 Icon(
-                    Icons.Filled.Add,
+                    Icons.Rounded.Add,
                     contentDescription = stringResource(R.string.installed_games_screen_fab_content_description)
                 )
             }
@@ -131,7 +131,7 @@ private fun ToolbarMenu(
     var expanded by remember { mutableStateOf(false) }
     Box {
         IconButton(onClick = { expanded = !expanded }) {
-            Icon(Icons.Default.MoreVert, contentDescription = null)
+            Icon(Icons.Rounded.MoreVert, contentDescription = null)
         }
         DropdownMenu(
             expanded = expanded,
@@ -272,7 +272,7 @@ private fun GameActionsSheet(
                 gameActions.onPlayClick(gameName)
             },
             headlineContent = { Text(stringResource(R.string.installed_games_context_menu_play)) },
-            leadingContent = { Icon(Icons.Default.PlayArrow, null) }
+            leadingContent = { Icon(Icons.Rounded.PlayArrow, null) }
         )
         ListItem(
             modifier = Modifier.clickable {
@@ -280,7 +280,7 @@ private fun GameActionsSheet(
                 gameActions.onPlayFromBeginningClick(gameName)
             },
             headlineContent = { Text(stringResource(R.string.installed_games_context_menu_play_from_beginning)) },
-            leadingContent = { Icon(Icons.Default.Replay, null) }
+            leadingContent = { Icon(Icons.Rounded.Replay, null) }
         )
         ListItem(
             modifier = Modifier.clickable {
@@ -288,7 +288,7 @@ private fun GameActionsSheet(
                 gameActions.onDeleteClick(gameName)
             },
             headlineContent = { Text(stringResource(R.string.installed_games_context_menu_delete)) },
-            leadingContent = { Icon(Icons.Default.Delete, null) }
+            leadingContent = { Icon(Icons.Rounded.Delete, null) }
         )
         ListItem(
             modifier = Modifier.clickable {
@@ -296,7 +296,7 @@ private fun GameActionsSheet(
                 gameActions.onAboutClick(gameName)
             },
             headlineContent = { Text(stringResource(R.string.installed_games_context_menu_about)) },
-            leadingContent = { Icon(Icons.Default.Info, null) }
+            leadingContent = { Icon(Icons.Rounded.Info, null) }
         )
     }
 }
