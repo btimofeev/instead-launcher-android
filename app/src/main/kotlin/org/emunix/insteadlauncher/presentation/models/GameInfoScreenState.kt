@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2023, 2025 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -10,23 +10,36 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.model.GameModel
 import org.emunix.insteadlauncher.domain.model.GameState
 import org.emunix.insteadlauncher.domain.model.GameState.INSTALLED
+import org.emunix.insteadlauncher.domain.model.GameState.IN_QUEUE_TO_INSTALL
+import org.emunix.insteadlauncher.domain.model.GameState.IS_DELETE
+import org.emunix.insteadlauncher.domain.model.GameState.IS_INSTALL
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
 
-data class GameInfo(
-    val name: String,
-    val title: String,
-    val author: String,
-    val description: String,
-    val version: String,
-    val size: String,
-    val imageUrl: String,
-    val siteUrl: String,
-    val state: GameState,
-    val isUpdateButtonShow: Boolean,
+data class GameInfoScreenState(
+    val name: String = "",
+    val title: String = "",
+    val author: String = "",
+    val description: String = "",
+    val version: String = "",
+    val size: String = "",
+    val imageUrl: String = "",
+    val siteUrl: String = "",
+    val state: GameState = GameState.NO_INSTALLED,
+    val isUpdateButtonShow: Boolean = false,
+    val showProgress: Boolean = false,
+    val progress: ProgressType = ProgressType.WithValue(0f),
+    val progressMessage: String = "",
 )
 
-fun GameModel.toGameInfo(resourceProvider: ResourceProvider) =
-    GameInfo(
+sealed interface ProgressType {
+
+    data object Indeterminate : ProgressType
+
+    data class WithValue(val value: Float) : ProgressType
+}
+
+fun GameModel.toGameInfoScreenState(resourceProvider: ResourceProvider) =
+    GameInfoScreenState(
         name = this.name,
         title = this.info.title,
         author = this.info.author,
@@ -36,7 +49,8 @@ fun GameModel.toGameInfo(resourceProvider: ResourceProvider) =
         imageUrl = this.url.image,
         siteUrl = this.url.site,
         state = this.state,
-        isUpdateButtonShow = this.state == INSTALLED && this.version.availableOnSite != this.version.installed
+        isUpdateButtonShow = this.state == INSTALLED && this.version.availableOnSite != this.version.installed,
+        showProgress = this.state == IS_INSTALL || this.state == IN_QUEUE_TO_INSTALL || this.state == IS_DELETE || this.state == GameState.IS_UPDATE,
     )
 
 private fun GameModel.getVersionText(resourceProvider: ResourceProvider) =
