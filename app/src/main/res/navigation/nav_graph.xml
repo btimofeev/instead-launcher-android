@@ -76,7 +76,7 @@
         android:id="@+id/gameFragment"
         android:name="org.emunix.insteadlauncher.presentation.game.GameFragment"
         android:label="fragment_game"
-        tools:layout="@layout/fragment_game" >
+        tools:layout="@layout/fragment_compose" >
         <action
             android:id="@+id/action_gameFragment_to_insteadActivity"
             app:destination="@id/insteadActivity" />
