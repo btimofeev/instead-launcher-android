@@ -92,8 +92,6 @@ dependencies {
     implementation libs.material
     implementation libs.androidx.fragment.ktx
     implementation libs.androidx.preference.ktx
-    implementation libs.androidx.recyclerview
-    implementation libs.androidx.swiperefreshlayout
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.legacy.support.v4
 
@@ -127,7 +125,6 @@ dependencies {
 
     // Network
     implementation libs.okhttp
-    implementation libs.coil
     implementation libs.coil.compose
     implementation libs.coil.okhttp
 
