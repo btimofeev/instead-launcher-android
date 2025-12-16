@@ -49,6 +49,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -260,7 +261,8 @@ fun GameItem(
             modifier = Modifier
                 .padding(vertical = 12.dp)
                 .width(100.dp)
-                .height(64.dp),
+                .height(64.dp)
+                .clip(RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
         )
         Column(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp).weight(1f),
