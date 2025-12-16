@@ -70,9 +70,6 @@
     <string name="prefs_enable_game_theme_title">Propra etoso de ludo</string>
     <string name="prefs_enable_game_theme_summary">Uzi enkonstruitan en ludo etoson, anstataŭ defaŭlte etoson.</string>
     <string name="prefs_default_theme_title">Defaŭlte etoso</string>
-    <string-array name="prefs_themes_entries">
-        <item>Etosoj ne estas trovitaj</item>
-    </string-array>
     <string name="prefs_hires_title">Maksimuma distingivo</string>
     <string name="prefs_hires_summary">Uzi optimuman ekranan orientiĝon</string>
     <string name="prefs_text_size_title">Grando de tiparo</string>
