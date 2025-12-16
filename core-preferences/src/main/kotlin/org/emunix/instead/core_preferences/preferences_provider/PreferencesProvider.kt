@@ -7,35 +7,35 @@ package org.emunix.instead.core_preferences.preferences_provider
 
 interface PreferencesProvider {
 
-    val isMusicEnabled: Boolean
+    var isMusicEnabled: Boolean
 
-    val isCursorEnabled: Boolean
+    var isCursorEnabled: Boolean
 
-    val isOwnGameThemeEnabled: Boolean
+    var isOwnGameThemeEnabled: Boolean
 
-    val defaultInsteadTheme: String
+    var defaultInsteadTheme: String
 
-    val isHiresEnabled: Boolean
+    var isHiresEnabled: Boolean
 
-    val defaultInsteadTextSize: String
+    var defaultInsteadTextSize: String
 
-    val keyboardButtonPosition: String
+    var keyboardButtonPosition: String
 
-    val backButton: String
+    var backButton: String
 
-    val isGLHackEnabled: Boolean
+    var isGLHackEnabled: Boolean
 
-    val repositoryUrl: String
+    var repositoryUrl: String
 
-    val isSandboxEnabled: Boolean
+    var isSandboxEnabled: Boolean
 
-    val sandboxUrl: String
+    var sandboxUrl: String
 
-    val updateRepoInBackground: Boolean
+    var updateRepoInBackground: Boolean
 
-    val updateRepoWhenOpenRepositoryScreen: Boolean
+    var updateRepoWhenOpenRepositoryScreen: Boolean
 
-    val appTheme: String
+    var appTheme: String
 
     var resourcesLastUpdate: Long
 

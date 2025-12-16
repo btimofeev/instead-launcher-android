@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="prefs_themes_values">
-        <item>no_themes_found</item>
-    </string-array>
-
     <string-array name="prefs_keyboard_button_values">
         <item>do_not_show_button</item>
         <item>bottom_left</item>

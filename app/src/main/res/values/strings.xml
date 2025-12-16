@@ -39,6 +39,9 @@
 
     <string name="dialog_error_close_button">Close</string>
 
+    <string name="custom_dialog_positive_button">Accept</string>
+    <string name="custom_dialog_negative_button">Cancel</string>
+
     <string name="unpack_resources_fragment_try_again_button">Try again</string>
     <string name="unpack_resources_fragment_error_message">Failed to unpack resources. Check the free space on the internal storage and try again.</string>
 
@@ -70,9 +73,6 @@
     <string name="prefs_enable_game_theme_title">Built-in game theme</string>
     <string name="prefs_enable_game_theme_summary">Use the built-in game theme instead of the default theme</string>
     <string name="prefs_default_theme_title">Default theme</string>
-    <string-array name="prefs_themes_entries">
-        <item>No themes found</item>
-    </string-array>
     <string name="prefs_hires_title">High resolution</string>
     <string name="prefs_hires_summary">Use the best screen orientation</string>
     <string name="prefs_text_size_title">Text size</string>

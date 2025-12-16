@@ -91,7 +91,6 @@ dependencies {
     implementation libs.androidx.appcompat
     implementation libs.material
     implementation libs.androidx.fragment.ktx
-    implementation libs.androidx.preference.ktx
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.legacy.support.v4
 

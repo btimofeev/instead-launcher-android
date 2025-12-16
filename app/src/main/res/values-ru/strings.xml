@@ -39,6 +39,9 @@
 
     <string name="dialog_error_close_button">Закрыть</string>
 
+    <string name="custom_dialog_positive_button">Выбрать</string>
+    <string name="custom_dialog_negative_button">Отмена</string>
+
     <string name="unpack_resources_fragment_try_again_button">Повторить попытку</string>
     <string name="unpack_resources_fragment_error_message">Не удалось распаковать ресурсы. Проверьте свободное место на внутреннем накопителе и повторите попытку.</string>
 
@@ -70,9 +73,6 @@
     <string name="prefs_enable_game_theme_title">Собственная тема игры</string>
     <string name="prefs_enable_game_theme_summary">Использовать встроенную в игру тему, вместо темы по-умолчанию</string>
     <string name="prefs_default_theme_title">Тема по-умолчанию</string>
-    <string-array name="prefs_themes_entries">
-        <item>Темы не найдены</item>
-    </string-array>
     <string name="prefs_hires_title">Максимальное разрешение</string>
     <string name="prefs_hires_summary">Использовать наилучшую ориентацию экрана</string>
     <string name="prefs_text_size_title">Размер текста</string>
