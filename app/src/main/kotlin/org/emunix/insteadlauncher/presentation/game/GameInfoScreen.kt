@@ -62,6 +62,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.model.GameState
+import org.emunix.insteadlauncher.presentation.compose.parseLinks
 import org.emunix.insteadlauncher.presentation.models.GameInfoScreenState
 import org.emunix.insteadlauncher.presentation.models.ProgressType
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
@@ -331,8 +332,10 @@ private fun ProgressBlock(
 private fun TextBlock(
     text: String,
 ) {
+    val linkColor = MaterialTheme.colorScheme.primary
+    val annotatedString = remember(text) { parseLinks(text, linkColor) }
     Text(
-        text = text,
+        text = annotatedString,
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier
             .fillMaxWidth()
