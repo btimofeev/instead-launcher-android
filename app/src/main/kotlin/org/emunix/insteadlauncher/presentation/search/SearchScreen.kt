@@ -34,6 +34,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.presentation.models.RepoGame
 import org.emunix.insteadlauncher.presentation.models.SearchScreenState
@@ -55,6 +57,22 @@ import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 
 @Composable
 fun SearchScreen(
+    onBackClick: () -> Unit,
+    onGameClick: (gameName: String) -> Unit,
+) {
+    val viewModel: SearchViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsState()
+
+    SearchScreenContent(
+        state = state,
+        onSearchQueryChange = { viewModel.searchGames(it) },
+        onBackClick = onBackClick,
+        onGameClick = onGameClick,
+    )
+}
+
+@Composable
+fun SearchScreenContent(
     state: SearchScreenState,
     onSearchQueryChange: (query: String) -> Unit,
     onBackClick: () -> Unit,
@@ -184,9 +202,9 @@ private fun GamesScreen(
 )
 @Preview(showBackground = true, widthDp = 400)
 @Composable
-private fun InstalledGamesScreenPreview() {
+private fun InstalledGamesScreenContentPreview() {
     InsteadLauncherTheme {
-        SearchScreen(
+        SearchScreenContent(
             //state = SearchScreenState.NothingFound,
             state = SearchScreenState.Result(
                 games = listOf(

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2025-2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -49,6 +49,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -70,17 +72,61 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
 import org.emunix.insteadlauncher.presentation.models.InstalledGame
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 import org.emunix.insteadlauncher.presentation.theme.neuchaFontFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InstalledGamesScreen(
+    navigateToGameInfoScreen: (String) -> Unit,
+    navigateToSettingsScreen: () -> Unit,
+    navigateToAboutAppScreen: () -> Unit,
+    navigateToRepositoryScreen: () -> Unit,
+) {
+    val viewModel: InstalledGamesViewModel = hiltViewModel()
+    val games by viewModel.gameItems.collectAsState()
+    val deleteGameName by viewModel.showDeleteGameDialog.collectAsState()
+    val gameActions = remember {
+        GameActions(
+            onPlayClick = { gameName ->
+                viewModel.playGame(gameName = gameName, playFromBeginning = false)
+            },
+            onPlayFromBeginningClick = { gameName ->
+                viewModel.playGame(gameName = gameName, playFromBeginning = true)
+            },
+            onDeleteClick = { gameName -> viewModel.onDeleteGameClicked(gameName) },
+            onAboutClick = { gameName -> navigateToGameInfoScreen(gameName) }
+        )
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.init()
+    }
+
+    InstalledGamesScreenContent(
+        games = games,
+        onSettingsClick = { navigateToSettingsScreen() },
+        onAboutClick = { navigateToAboutAppScreen() },
+        onAddGameClick = { navigateToRepositoryScreen() },
+        gameActions = gameActions,
+    )
+    if (deleteGameName != null) {
+        DeleteGameDialog(
+            onConfirm = { deleteGameName?.let { viewModel.onDeleteGameConfirmed(it) } },
+            onDismiss = { viewModel.onDeleteGameRejected() }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InstalledGamesScreenContent(
     games: List<InstalledGame>?,
     onSettingsClick: () -> Unit,
     onAboutClick: () -> Unit,
@@ -318,9 +364,9 @@ private fun GameActionsSheet(
 )
 @Preview(showBackground = true, widthDp = 400)
 @Composable
-private fun InstalledGamesScreenPreview() {
+private fun InstalledGamesScreenContentPreview() {
     InsteadLauncherTheme {
-        InstalledGamesScreen(
+        InstalledGamesScreenContent(
             games = listOf(
                 InstalledGame(
                     name = "cat",
@@ -354,9 +400,9 @@ private fun InstalledGamesScreenPreview() {
 )
 @Preview(showBackground = true, widthDp = 400)
 @Composable
-private fun InstalledGamesScreenEmptyPreview() {
+private fun InstalledGamesScreenContentEmptyPreview() {
     InsteadLauncherTheme {
-        InstalledGamesScreen(
+        InstalledGamesScreenContent(
             games = emptyList(),
             onSettingsClick = {},
             onAboutClick = {},

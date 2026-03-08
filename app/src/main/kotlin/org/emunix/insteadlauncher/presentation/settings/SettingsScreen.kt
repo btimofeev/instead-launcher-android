@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2025-2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -27,19 +27,55 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.presentation.dialogs.CustomDialog
 import org.emunix.insteadlauncher.presentation.models.SettingsItem
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
+import org.emunix.insteadlauncher.utils.ThemeSwitcherDelegate
+
+@Composable
+fun SettingsScreen(
+    onBackClick: () -> Unit,
+) {
+    val viewModel: SettingsViewModel = hiltViewModel()
+    val items by viewModel.items.collectAsState()
+    val showDialog by viewModel.showDialog.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.init()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.changeAppTheme.collect { themeName ->
+            ThemeSwitcherDelegate().applyTheme(themeName)
+        }
+    }
+
+    SettingsScreenContent(
+        items = items,
+        onBackClick = onBackClick,
+    )
+    showDialog?.let { dialogModel ->
+        CustomDialog(
+            model = dialogModel,
+            onCloseDialog = viewModel::onDialogClosed,
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
+fun SettingsScreenContent(
     items: List<SettingsItem>,
     onBackClick: () -> Unit,
 ) {
@@ -158,9 +194,9 @@ private fun Element(item: SettingsItem.Element) {
 
 @Composable
 @PreviewLightDark
-fun UnpackResourcesErrorScreenPreview() {
+fun UnpackResourcesErrorScreenContentPreview() {
     InsteadLauncherTheme {
-        SettingsScreen(
+        SettingsScreenContent(
             items = listOf(
                 SettingsItem.Category(title = "Game settings"),
                 SettingsItem.Element(

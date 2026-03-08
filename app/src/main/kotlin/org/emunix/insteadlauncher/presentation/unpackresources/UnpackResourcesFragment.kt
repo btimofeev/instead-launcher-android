@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2023, 2025 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021-2023, 2025-2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -31,8 +31,6 @@ import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 @AndroidEntryPoint
 class UnpackResourcesFragment : Fragment() {
 
-    private val viewModel: UnpackResourcesViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,20 +41,10 @@ class UnpackResourcesFragment : Fragment() {
         composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                val state by viewModel.screenState.collectAsState()
-
                 InsteadLauncherTheme {
-                    Scaffold(modifier = Modifier.safeDrawingPadding()) { innerPadding ->
-                        Box(modifier = Modifier.padding(innerPadding)) {
-                            when (state) {
-                                SUCCESS -> navigateToInstalledGamesScreen()
-                                UNPACKING -> UnpackResourcesLoadingScreen()
-                                ERROR -> UnpackResourcesErrorScreen(
-                                    onTryAgainClick = viewModel::tryAgainIsClicked
-                                )
-                            }
-                        }
-                    }
+                    UnpackResourcesScreen(
+                        ::navigateToInstalledGamesScreen
+                    )
                 }
             }
         }

@@ -1,6 +1,11 @@
 package org.emunix.insteadlauncher.presentation.repository
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,6 +48,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,6 +67,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -70,9 +78,63 @@ import org.emunix.insteadlauncher.presentation.models.RepoScreenState
 import org.emunix.insteadlauncher.presentation.models.UpdateRepoState
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RepositoryScreen(
+    zipUriFromAppArgument: Uri?,
+    onBackClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onGameClick: (gameName: String) -> Unit,
+) {
+    val viewModel: RepositoryViewModel = hiltViewModel()
+
+    LaunchedEffect(Unit) {
+        viewModel.init()
+    }
+
+    LaunchedEffect(zipUriFromAppArgument) {
+        if (zipUriFromAppArgument != null) {
+            viewModel.installGame(zipUriFromAppArgument)
+        }
+    }
+
+    val chooseZipFileLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data
+            if (uri != null) {
+                viewModel.installGame(uri)
+            }
+        }
+    }
+
+    val state by viewModel.state.collectAsState()
+    val errorDialog by viewModel.showErrorDialog.collectAsState()
+
+    RepositoryScreenContent(
+        state = state,
+        onBackClick = onBackClick,
+        onSearchClick = onSearchClick,
+        onUpdateRepositoryClick = viewModel::updateRepository,
+        onInstallFromZipClick = {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "application/zip"
+            chooseZipFileLauncher.launch(intent)
+        },
+        onGameClick = onGameClick,
+    )
+    errorDialog?.let { dialogModel ->
+        ErrorDialog(
+            model = dialogModel,
+            onDismiss = viewModel::onErrorDialogDismiss
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RepositoryScreenContent(
     state: RepoScreenState,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
@@ -325,9 +387,9 @@ fun ErrorDialog(
 )
 @Preview(showBackground = true, widthDp = 400)
 @Composable
-private fun InstalledGamesScreenPreview() {
+private fun InstalledGamesScreenContentPreview() {
     InsteadLauncherTheme {
-        RepositoryScreen(
+        RepositoryScreenContent(
             state = RepoScreenState(
                 games = listOf(
                     RepoGame(

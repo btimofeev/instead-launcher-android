@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2022, 2025 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2019-2022, 2025-2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -14,17 +14,11 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import org.emunix.insteadlauncher.BuildConfig
 import org.emunix.insteadlauncher.R
-import org.emunix.insteadlauncher.domain.repository.AppVersionRepository
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AboutFragment : Fragment() {
-
-    @Inject
-    lateinit var appVersion: AppVersionRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,8 +32,6 @@ class AboutFragment : Fragment() {
             setContent {
                 InsteadLauncherTheme {
                     AboutScreen(
-                        insteadVersion = BuildConfig.INSTEAD_VERSION,
-                        insteadLauncherVersion = appVersion.versionName,
                         onBackClick = { findNavController().popBackStack() }
                     )
                 }
