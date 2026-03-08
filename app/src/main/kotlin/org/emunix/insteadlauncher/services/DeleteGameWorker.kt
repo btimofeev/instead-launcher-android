@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2023-2024, 2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -7,11 +7,13 @@ package org.emunix.insteadlauncher.services
 
 import android.annotation.SuppressLint
 import android.app.Notification
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.hilt.work.HiltWorker
 import androidx.navigation.NavDeepLinkBuilder
@@ -32,6 +34,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.usecase.DeleteGameUseCase
 import org.emunix.insteadlauncher.domain.work.DeleteGameWork
 import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
+import org.emunix.insteadlauncher.presentation.navigation.GAME_INFO_SCREEN_DEEPLINK
 import org.emunix.insteadlauncher.services.DeleteGameWorker.Companion.GAME_NAME_KEY
 import org.emunix.insteadlauncher.utils.createForegroundInfoCompat
 import javax.inject.Inject
@@ -67,11 +70,18 @@ class DeleteGameWorker @AssistedInject constructor(
         val notificationIntent = Intent(appContext, LauncherActivity::class.java)
         notificationIntent.putExtra("game_name", gameName)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = NavDeepLinkBuilder(appContext)
-            .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.gameFragment)
-            .setArguments(bundleOf("game_name" to gameName))
-            .createPendingIntent()
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "$GAME_INFO_SCREEN_DEEPLINK/$gameName".toUri(),
+            appContext,
+            LauncherActivity::class.java
+        )
+        val pendingIntent = PendingIntent.getActivity(
+            appContext,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         return NotificationCompat.Builder(appContext, InsteadLauncher.CHANNEL_UNINSTALL)
             .setContentTitle(gameName)
