@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "org.emunix.insteadlauncher"
         minSdkVersion rootProject.min_sdk_version
-        compileSdk rootProject.compile_sdk_version
+        compileSdk = rootProject.compile_sdk_version
         targetSdkVersion rootProject.compile_sdk_version
         versionCode rootProject.version_code
         versionName rootProject.version_name
