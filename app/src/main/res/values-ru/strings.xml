@@ -25,7 +25,7 @@
     <string name="game_activity_message_installing">Загружается&#8230;</string>
 
     <string name="installed_games_screen_title">INSTEAD</string>
-    <string name="installed_games_empty_text">Готовы к приключениям?\nНажмите на красную кнопку для выбора игры.</string>
+    <string name="installed_games_empty_text">Готовы к приключениям?\nНажмите на кнопку \"+\" для выбора игры.</string>
     <string name="installed_games_context_menu_play">Играть</string>
     <string name="installed_games_context_menu_play_from_beginning">Начать новую игру</string>
     <string name="installed_games_context_menu_delete">Удалить</string>

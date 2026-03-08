@@ -25,7 +25,7 @@
     <string name="game_activity_message_installing">Elŝutigas&#8230;</string>
 
     <string name="installed_games_screen_title">INSTEAD</string>
-    <string name="installed_games_empty_text">Vi estas preta por aventuroj?\nPremu la ruĝan butonon por elekti ludon.</string>
+    <string name="installed_games_empty_text">Ĉu vi estas preta por aventuroj?\nPremu la butonon \"+\" por elekti ludon.</string>
     <string name="installed_games_context_menu_play">Ludi</string>
     <string name="installed_games_context_menu_play_from_beginning">Komenci novan ludon</string>
     <string name="installed_games_context_menu_delete">Forigi</string>

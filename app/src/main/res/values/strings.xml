@@ -25,7 +25,7 @@
     <string name="game_activity_message_installing">Downloading&#8230;</string>
 
     <string name="installed_games_screen_title">INSTEAD</string>
-    <string name="installed_games_empty_text">Are you ready for an adventure?\nTap the red button to install games.</string>
+    <string name="installed_games_empty_text">Are you ready for an adventure?\nTap the \"+\" button to install games.</string>
     <string name="installed_games_context_menu_play">Play</string>
     <string name="installed_games_context_menu_play_from_beginning">Restart game</string>
     <string name="installed_games_context_menu_delete">Delete</string>
