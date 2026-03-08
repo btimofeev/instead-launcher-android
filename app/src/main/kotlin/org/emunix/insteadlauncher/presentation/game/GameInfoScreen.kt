@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2025-2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -43,6 +43,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,19 +59,66 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.model.GameState
 import org.emunix.insteadlauncher.presentation.compose.parseLinks
+import org.emunix.insteadlauncher.presentation.dialogs.DeleteGameDialog
+import org.emunix.insteadlauncher.presentation.dialogs.ErrorDialog
 import org.emunix.insteadlauncher.presentation.models.GameInfoScreenState
 import org.emunix.insteadlauncher.presentation.models.ProgressType
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
+import org.emunix.insteadlauncher.utils.launchBrowser
+
+@Composable
+fun GameInfoScreen(
+    gameName: String,
+    onBackClick: () -> Unit,
+) {
+    val context = LocalContext.current
+    val viewModel: GameViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsState()
+    val closeCommand by viewModel.closeScreenCommand.collectAsState(initial = null)
+    val errorDialog by viewModel.showErrorDialog.collectAsState()
+    val deleteGameName by viewModel.showDeleteGameDialog.collectAsState()
+
+    LaunchedEffect(gameName) {
+        viewModel.init(gameName)
+    }
+
+    if (closeCommand != null) {
+        onBackClick()
+    }
+
+    GameInfoScreenContent(
+        state = state,
+        onBackClick = onBackClick,
+        onInstallClick = viewModel::installGame,
+        onRunClick = viewModel::runGame,
+        onUpdateClick = viewModel::installGame,
+        onDeleteClick = viewModel::onDeleteGameClicked,
+        onFeedbackClick = { context.launchBrowser(state.siteUrl) },
+    )
+    deleteGameName?.let { gameName ->
+        DeleteGameDialog(
+            onConfirm = { viewModel.onDeleteGameConfirmed(gameName) },
+            onDismiss = { viewModel.onDeleteGameRejected() }
+        )
+    }
+    errorDialog?.let { dialog ->
+        ErrorDialog(
+            message = dialog.message,
+            onDismiss = { viewModel.onErrorDialogDismissed() }
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameInfoScreen(
+fun GameInfoScreenContent(
     state: GameInfoScreenState,
     onBackClick: () -> Unit,
     onInstallClick: () -> Unit,
@@ -351,9 +400,9 @@ private fun TextBlock(
     name = "Dark"
 )
 @Composable
-private fun GameInfoScreenPreview() {
+private fun GameInfoScreenContentPreview() {
     InsteadLauncherTheme {
-        GameInfoScreen(
+        GameInfoScreenContent(
             state = GameInfoScreenState(
                 name = "cat",
                 title = "Возвращение квантового кота",

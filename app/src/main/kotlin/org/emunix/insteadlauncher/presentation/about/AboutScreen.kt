@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2025-2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -27,6 +27,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,13 +37,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import org.emunix.insteadlauncher.BuildConfig
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.presentation.compose.parseLinks
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
+    onBackClick: () -> Unit
+) {
+    val viewModel: AboutViewModel = hiltViewModel()
+    val appVersion by viewModel.appVersion.collectAsState()
+
+    AboutScreenContent(
+        insteadVersion = BuildConfig.INSTEAD_VERSION,
+        insteadLauncherVersion = appVersion,
+        onBackClick = onBackClick
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AboutScreenContent(
     insteadVersion: String,
     insteadLauncherVersion: String,
     onBackClick: () -> Unit
@@ -107,9 +125,9 @@ private fun TextBlock(
 )
 @Preview(showBackground = true, widthDp = 400)
 @Composable
-private fun AboutScreenPreview() {
+private fun AboutScreenContentPreview() {
     InsteadLauncherTheme {
-        AboutScreen(
+        AboutScreenContent(
             insteadVersion = "3.5",
             insteadLauncherVersion = "0.9.1",
             onBackClick = {},
