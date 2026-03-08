@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeContent
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -83,12 +83,12 @@ fun SearchScreenContent(
         focusRequester.requestFocus()
     }
     Surface(
-        modifier = Modifier
-            .safeDrawingPadding()
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.surfaceContainerHigh
     ) {
-        Column {
+        Column(
+            modifier = Modifier.statusBarsPadding(),
+        ) {
             Row(
                 modifier = Modifier.height(72.dp),
                 verticalAlignment = Alignment.CenterVertically
