@@ -1,16 +1,18 @@
 /*
- * Copyright (c) 2018-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021, 2023, 2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
 package org.emunix.insteadlauncher.presentation.launcher
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import org.emunix.insteadlauncher.databinding.ActivityLauncherBinding
 import org.emunix.insteadlauncher.domain.work.ScanGamesWork
+import org.emunix.insteadlauncher.presentation.navigation.AppNavGraph
+import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,8 +25,6 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityLauncherBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         scanGamesWork.scan()
 
@@ -32,6 +32,12 @@ class LauncherActivity : AppCompatActivity() {
         if (intent.type == "application/zip") {
             intent.data?.let { uri ->
                 appArgumentViewModel.zipUri = uri
+            }
+        }
+
+        setContent {
+            InsteadLauncherTheme {
+                AppNavGraph(appArgumentViewModel)
             }
         }
     }

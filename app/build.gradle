@@ -6,6 +6,7 @@ plugins {
     id 'com.google.devtools.ksp'
     id 'de.mannodermaus.android-junit5'
     alias libs.plugins.compose.compiler
+    alias libs.plugins.kotlin.serialization
 }
 
 android {
@@ -90,9 +91,6 @@ dependencies {
     // Support libraries
     implementation libs.androidx.appcompat
     implementation libs.material
-    implementation libs.androidx.fragment.ktx
-    implementation libs.androidx.constraintlayout
-    implementation libs.androidx.legacy.support.v4
 
     // Compose
     implementation libs.androidx.material.icons.extended
@@ -114,10 +112,9 @@ dependencies {
     // Kotlin
     implementation libs.kotlin.stdlib
     implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.serialization.json
 
     // Navigation
-    implementation libs.androidx.navigation.fragment.ktx
-    implementation libs.androidx.navigation.ui.ktx
     implementation libs.androidx.navigation.compose
     implementation libs.androidx.hilt.navigation.compose
 
@@ -144,9 +141,6 @@ dependencies {
 
     // Logging
     implementation libs.timber
-
-    // ViewBinding Delegate
-    implementation libs.viewbindingpropertydelegate.noreflection
 
     // Test
     testImplementation libs.junit.jupiter.api
