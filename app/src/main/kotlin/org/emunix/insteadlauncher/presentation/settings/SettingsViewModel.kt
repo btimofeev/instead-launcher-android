@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2025-2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -19,6 +19,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_BACK_BUTTON_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_CURSOR_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DEFAULT_THEME_KEY
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DYNAMIC_COLORS_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_ENABLE_GAME_THEME_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_GL_HACK_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_HIRES_KEY
@@ -34,6 +35,7 @@ import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
 import org.emunix.insteadlauncher.domain.usecase.StopUpdateRepositoryWorkUseCase
+import org.emunix.insteadlauncher.presentation.PlatformInfo
 import org.emunix.insteadlauncher.presentation.models.CustomDialogModel
 import org.emunix.insteadlauncher.presentation.models.RadioButtonModel
 import org.emunix.insteadlauncher.presentation.models.SettingsItem
@@ -50,6 +52,7 @@ class SettingsViewModel @Inject constructor(
     private val startUpdateRepositoryWorkUseCase: StartUpdateRepositoryWorkUseCase,
     private val stopUpdateRepositoryWorkUseCase: StopUpdateRepositoryWorkUseCase,
     private val resourceProvider: ResourceProvider,
+    private val platformInfo: PlatformInfo,
 ): ViewModel() {
 
     val items get() = _items.asStateFlow()
@@ -94,7 +97,7 @@ class SettingsViewModel @Inject constructor(
         val defaultKeyboardButtonName = keyboardPositions.getOrDefault(preferencesProvider.keyboardButtonPosition, "")
         val defaultBackButtonName = backButtonBehavior.getOrDefault(preferencesProvider.backButton, "")
         val defaultAppThemeName = appThemes.getOrDefault(preferencesProvider.appTheme, "")
-        _items.value = listOf(
+        _items.value = listOfNotNull(
             Category(
                 title = resourceProvider.getString(R.string.prefs_category_game_settings)
             ),
@@ -255,6 +258,20 @@ class SettingsViewModel @Inject constructor(
                 description = defaultAppThemeName,
                 onClick = ::showAppThemeSelectionDialog,
             ),
+            if (platformInfo.isDynamicColorsAvailable) {
+                Element(
+                    id = PREF_DYNAMIC_COLORS_KEY,
+                    icon = R.drawable.ic_palette_24dp,
+                    title = resourceProvider.getString(R.string.prefs_dynamic_colors),
+                    description = resourceProvider.getString(R.string.prefs_dynamic_colors_summary),
+                    switchState = preferencesProvider.dynamicColors,
+                    onClick = {
+                        val newState = !preferencesProvider.dynamicColors
+                        preferencesProvider.dynamicColors = newState
+                        updateSwitchState(id = PREF_DYNAMIC_COLORS_KEY, switchState = newState)
+                    }
+                )
+            } else null,
         )
     }
 

@@ -10,7 +10,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.domain.work.ScanGamesWork
 import org.emunix.insteadlauncher.presentation.navigation.AppNavGraph
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
@@ -23,6 +26,9 @@ class LauncherActivity : AppCompatActivity() {
 
     @Inject
     lateinit var scanGamesWork: ScanGamesWork
+
+    @Inject
+    lateinit var preferencesProvider: PreferencesProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +44,12 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         setContent {
-            InsteadLauncherTheme {
+            val dynamicColors by preferencesProvider.observeDynamicColorsPrefChanges()
+                .collectAsStateWithLifecycle(PreferencesProvider.DEFAULT_DYNAMIC_COLORS)
+
+            InsteadLauncherTheme(
+                dynamicColor = dynamicColors,
+            ) {
                 AppNavGraph(appArgumentViewModel)
             }
         }

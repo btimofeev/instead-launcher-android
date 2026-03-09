@@ -109,6 +109,8 @@
     <string name="prefs_theme_name_dark">Darka</string>
     <string name="prefs_theme_name_auto_battery">Depende de baterio</string>
     <string name="prefs_theme_name_follow_system">Depende de sistema etoso</string>
+    <string name="prefs_dynamic_colors">Dinamikaj koloroj</string>
+    <string name="prefs_dynamic_colors_summary">Interfacaj koloroj adaptiĝas al via tapeto</string>
 
     <string name="about_activity_title">Pri programo</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Petro Kosiĥ https://instead-hub.github.io/</string>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, 2025 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021, 2025, 2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -7,7 +7,10 @@ package org.emunix.instead.core_preferences.preferences_provider
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.BACK_BUTTON_EXIT_GAME
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_DYNAMIC_COLORS
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_INSTEAD_TEXT_SIZE
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_INSTEAD_THEME
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_KEYBOARD_BUTTON_POSITION
@@ -17,6 +20,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_BACK_BUTTON_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_CURSOR_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DEFAULT_THEME_KEY
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DYNAMIC_COLORS_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_ENABLE_GAME_THEME_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_GL_HACK_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_HIRES_KEY
@@ -30,6 +34,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_UPDATE_REPO_BACKGROUND_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_UPDATE_REPO_STARTUP_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.SANDBOX_REPOSITORY_URL
+import org.emunix.instead.core_preferences.utils.asFlow
 import javax.inject.Inject
 
 class PreferencesProviderImpl @Inject constructor(private val preferences: SharedPreferences) : PreferencesProvider {
@@ -94,9 +99,19 @@ class PreferencesProviderImpl @Inject constructor(private val preferences: Share
         get() = preferences.getString(PREF_APP_THEME_KEY, null) ?: DEFAULT_THEME
         set(value) = preferences.edit { putString(PREF_APP_THEME_KEY, value) }
 
+    override var dynamicColors: Boolean
+        get() = preferences.getBoolean(PREF_DYNAMIC_COLORS_KEY, DEFAULT_DYNAMIC_COLORS)
+        set(value) = preferences.edit { putBoolean(PREF_DYNAMIC_COLORS_KEY, value) }
+
     override var resourcesLastUpdate: Long
         get() = preferences.getLong(PREF_RESOURCES_LAST_UPDATE_KEY, -1)
         set(value) {
             preferences.edit { putLong(PREF_RESOURCES_LAST_UPDATE_KEY, value) }
         }
+
+    override fun observeDynamicColorsPrefChanges(): Flow<Boolean> =
+        preferences.asFlow(
+            key = PREF_DYNAMIC_COLORS_KEY,
+            defaultValue = DEFAULT_DYNAMIC_COLORS
+        ).distinctUntilChanged()
 }
