@@ -65,12 +65,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.presentation.compose.rememberListImageModifier
 import org.emunix.insteadlauncher.presentation.models.ErrorDialogModel
 import org.emunix.insteadlauncher.presentation.models.RepoGame
 import org.emunix.insteadlauncher.presentation.models.RepoScreenState
@@ -304,6 +306,7 @@ fun GameItem(
     item: RepoGame,
     onGameClick: (gameName: String) -> Unit,
 ) {
+    val imageModifier = rememberListImageModifier()
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -319,11 +322,7 @@ fun GameItem(
             error = painterResource(R.drawable.sleeping_cat),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .width(100.dp)
-                .height(64.dp)
-                .clip(RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
+            modifier = imageModifier,
         )
         Column(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp).weight(1f),
@@ -385,6 +384,7 @@ fun ErrorDialog(
     name = "Dark"
 )
 @Preview(showBackground = true, widthDp = 400)
+@PreviewScreenSizes
 @Composable
 private fun InstalledGamesScreenContentPreview() {
     InsteadLauncherTheme {
