@@ -6,6 +6,8 @@
 package org.emunix.insteadlauncher.presentation.settings
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.emunix.insteadlauncher.R
@@ -99,16 +103,24 @@ fun SettingsScreenContent(
             )
         },
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.TopCenter,
         ) {
-            items.forEach { item ->
-                when (item) {
-                    is SettingsItem.Category -> Category(item)
-                    is SettingsItem.Element -> Element(item)
-                    is SettingsItem.Divider -> Divider()
+            Column(
+                modifier = Modifier.widthIn(max = 800.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items.forEach { item ->
+                    when (item) {
+                        is SettingsItem.Category -> Category(item)
+                        is SettingsItem.Element -> Element(item)
+                        is SettingsItem.Divider -> Divider()
+                    }
                 }
             }
         }
@@ -127,6 +139,7 @@ private fun Divider() {
 private fun Category(item: SettingsItem.Category) {
     Text(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(
                 top = 8.dp,
                 bottom = 8.dp,
@@ -194,6 +207,7 @@ private fun Element(item: SettingsItem.Element) {
 
 @Composable
 @PreviewLightDark
+@PreviewScreenSizes
 fun UnpackResourcesErrorScreenContentPreview() {
     InsteadLauncherTheme {
         SettingsScreenContent(

@@ -5,7 +5,7 @@
 
 package org.emunix.insteadlauncher.presentation.game
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -53,10 +53,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
@@ -224,27 +227,88 @@ fun GameInfoContent(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        GameImage(state.imageUrl)
-        PropertiesBlock(state)
-        Spacer(Modifier.height(16.dp))
-        if (state.showProgress) {
-            ProgressBlock(state)
-        } else {
-            ButtonsBlock(
-                state = state,
-                onInstallClick = onInstallClick,
-                onRunClick = onRunClick,
-                onUpdateClick = onUpdateClick,
-            )
+        val screenSize = LocalWindowInfo.current.containerDpSize
+        val configuration = LocalConfiguration.current
+
+        when (configuration.orientation) {
+            Configuration.ORIENTATION_LANDSCAPE -> {
+                Row {
+                    GameImage(
+                        modifier = Modifier
+                            .weight(1f)
+                            .heightIn(max = if (screenSize.height > 600.dp) 450.dp else 200.dp),
+                        url = state.imageUrl
+                    )
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        PropertiesBlock(
+                            modifier = Modifier
+                                .padding(top = 24.dp),
+                            state = state
+                        )
+                        Spacer(Modifier.height(16.dp))
+                        if (state.showProgress) {
+                            ProgressBlock(state)
+                        } else {
+                            ButtonsBlock(
+                                state = state,
+                                onInstallClick = onInstallClick,
+                                onRunClick = onRunClick,
+                                onUpdateClick = onUpdateClick,
+                            )
+                        }
+                    }
+                }
+            }
+
+            else -> {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    GameImage(modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = if (screenSize.height > 600.dp) 450.dp else 300.dp),
+                        url = state.imageUrl
+                    )
+                    PropertiesBlock(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 24.dp),
+                        state = state
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    if (state.showProgress) {
+                        ProgressBlock(state)
+                    } else {
+                        ButtonsBlock(
+                            state = state,
+                            onInstallClick = onInstallClick,
+                            onRunClick = onRunClick,
+                            onUpdateClick = onUpdateClick,
+                        )
+                    }
+                }
+            }
         }
-        Spacer(Modifier.height(16.dp))
-        TextBlock(state.description)
-        Spacer(Modifier.height(16.dp))
+
+        val padding = if (screenSize.width > 600.dp) 32.dp else 16.dp
+
+        Spacer(Modifier.height(padding))
+        TextBlock(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = padding),
+            text = state.description,
+        )
+        Spacer(Modifier.height(padding))
     }
 }
 
 @Composable
 private fun GameImage(
+    modifier: Modifier,
     url: String
 ) {
     AsyncImage(
@@ -256,20 +320,17 @@ private fun GameImage(
         error = painterResource(R.drawable.sleeping_cat),
         contentDescription = null,
         contentScale = ContentScale.FillWidth,
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(max = 300.dp),
+        modifier = modifier,
     )
 }
 
 @Composable
 private fun PropertiesBlock(
+    modifier: Modifier,
     state: GameInfoScreenState,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -380,6 +441,7 @@ private fun ProgressBlock(
 
 @Composable
 private fun TextBlock(
+    modifier: Modifier = Modifier,
     text: String,
 ) {
     val linkColor = MaterialTheme.colorScheme.primary
@@ -387,19 +449,12 @@ private fun TextBlock(
     Text(
         text = annotatedString,
         style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+        modifier = modifier,
     )
 }
 
-@Preview(showBackground = true, widthDp = 400)
-@Preview(
-    showBackground = true,
-    widthDp = 400,
-    uiMode = UI_MODE_NIGHT_YES,
-    name = "Dark"
-)
+@PreviewLightDark
+@PreviewScreenSizes
 @Composable
 private fun GameInfoScreenContentPreview() {
     InsteadLauncherTheme {
