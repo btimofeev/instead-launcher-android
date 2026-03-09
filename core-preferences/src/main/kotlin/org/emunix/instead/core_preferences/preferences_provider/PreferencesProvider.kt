@@ -5,6 +5,8 @@
 
 package org.emunix.instead.core_preferences.preferences_provider
 
+import kotlinx.coroutines.flow.Flow
+
 interface PreferencesProvider {
 
     var isMusicEnabled: Boolean
@@ -37,7 +39,11 @@ interface PreferencesProvider {
 
     var appTheme: String
 
+    var dynamicColors: Boolean
+
     var resourcesLastUpdate: Long
+
+    fun observeDynamicColorsPrefChanges(): Flow<Boolean>
 
     companion object {
 
@@ -48,6 +54,8 @@ interface PreferencesProvider {
 
         const val DEFAULT_INSTEAD_THEME = "mobile"
         const val DEFAULT_INSTEAD_TEXT_SIZE = "130"
+
+        const val DEFAULT_DYNAMIC_COLORS = true
 
         const val DEFAULT_KEYBOARD_BUTTON_POSITION = "bottom_left"
         const val KEYBOARD_BUTTON_BOTTOM_LEFT = "bottom_left"
@@ -67,6 +75,7 @@ interface PreferencesProvider {
         const val PREF_BACK_BUTTON_KEY = "pref_back_button"
         const val PREF_CURSOR_KEY = "pref_cursor"
         const val PREF_DEFAULT_THEME_KEY = "pref_default_theme"
+        const val PREF_DYNAMIC_COLORS_KEY = "pref_dynamic_colors"
         const val PREF_ENABLE_GAME_THEME_KEY = "pref_enable_game_theme"
         const val PREF_GL_HACK_KEY = "pref_gl_hack"
         const val PREF_HIRES_KEY = "pref_hires"

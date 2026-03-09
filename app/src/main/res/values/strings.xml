@@ -112,6 +112,8 @@
     <string name="prefs_theme_name_dark">Dark</string>
     <string name="prefs_theme_name_auto_battery">Set by Battery Saver</string>
     <string name="prefs_theme_name_follow_system">Use system default</string>
+    <string name="prefs_dynamic_colors">Dynamic colors</string>
+    <string name="prefs_dynamic_colors_summary">App colors adapt to your wallpaper</string>
 
     <string name="about_activity_title">About</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Peter Kosyh https://instead-hub.github.io/</string>

@@ -112,6 +112,8 @@
     <string name="prefs_theme_name_dark">Тёмная</string>
     <string name="prefs_theme_name_auto_battery">В зависимости от заряда батареи</string>
     <string name="prefs_theme_name_follow_system">В зависимости от системной темы</string>
+    <string name="prefs_dynamic_colors">Динамические цвета</string>
+    <string name="prefs_dynamic_colors_summary">Цвета интерфейса подстраиваются под ваши обои</string>
 
     <string name="about_activity_title">О программе</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Пётр Косых https://instead-hub.github.io/</string>
