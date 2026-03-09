@@ -84,7 +84,7 @@ fun SearchScreenContent(
     }
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier.statusBarsPadding(),
@@ -118,10 +118,10 @@ fun SearchScreenContent(
                         .weight(1f)
                         .focusRequester(focusRequester),
                     colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainer,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainer,
                     ),
                     placeholder = { Text(stringResource(R.string.search_placeholder)) }
                 )
@@ -139,8 +139,6 @@ fun SearchScreenContent(
                     )
                 }
             }
-
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline)
 
             when (state) {
                 is SearchScreenState.Empty -> Unit

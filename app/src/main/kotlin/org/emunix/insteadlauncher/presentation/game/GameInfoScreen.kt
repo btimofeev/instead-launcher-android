@@ -147,7 +147,8 @@ fun GameInfoScreenContent(
                 actions = {
                     if (state.state == GameState.INSTALLED || state.siteUrl.isNotBlank()) {
                         ToolbarMenu(
-                            state = state,
+                            isGameInstalled = state.state == GameState.INSTALLED,
+                            siteUrl = state.siteUrl,
                             onDeleteClick = onDeleteClick,
                             onFeedbackClick = onFeedbackClick,
                         )
@@ -172,7 +173,8 @@ fun GameInfoScreenContent(
 
 @Composable
 private fun ToolbarMenu(
-    state: GameInfoScreenState,
+    isGameInstalled: Boolean,
+    siteUrl: String,
     onDeleteClick: () -> Unit,
     onFeedbackClick: () -> Unit,
 ) {
@@ -185,7 +187,7 @@ private fun ToolbarMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            if (state.state == GameState.INSTALLED) {
+            if (isGameInstalled) {
                 DropdownMenuItem(
                     leadingIcon = { Icon(Icons.Rounded.DeleteForever, contentDescription = null) },
                     text = { Text(stringResource(R.string.game_activity_button_uninstall)) },
@@ -195,7 +197,7 @@ private fun ToolbarMenu(
                     }
                 )
             }
-            if (state.siteUrl.isNotBlank()) {
+            if (siteUrl.isNotBlank()) {
                 DropdownMenuItem(
                     leadingIcon = { Icon(Icons.Rounded.Feedback, contentDescription = null) },
                     text = { Text(stringResource(R.string.game_activity_button_feedback)) },
@@ -281,7 +283,7 @@ private fun PropertiesBlock(
         ) {
             GameProperty(
                 icon = R.drawable.ic_file_compare_24dp,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.secondary,
                 text = state.version,
             )
             GameProperty(
