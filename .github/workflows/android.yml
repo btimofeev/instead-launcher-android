@@ -6,7 +6,8 @@ on:
       abis:
         description: 'Android ABIs (comma separated)'
         required: false
-        default: 'arm64-v8a,armeabi-v7a,x86,x86_64'
+        # 32-bit ABIs: 'arm64-v8a,armeabi-v7a,x86,x86_64'
+        default: 'arm64-v8a,x86_64'
   push:
     branches: [ SDL3, master, main ]
     tags: [ 'v*' ]
@@ -19,7 +20,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ABIS: ${{ inputs.abis || 'arm64-v8a,armeabi-v7a,x86,x86_64' }}
+      # 32-bit ABIs (armeabi-v7a, x86) additionally need the 32-bit host
+      # toolchain step below and are off by default:
+      # ABIS: ${{ inputs.abis || 'arm64-v8a,armeabi-v7a,x86,x86_64' }}
+      ABIS: ${{ inputs.abis || 'arm64-v8a,x86_64' }}
 
     steps:
       - uses: actions/checkout@v7
@@ -31,10 +35,11 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      - name: Install NDK, CMake, platform and 32-bit host toolchain
+      - name: Install NDK, CMake and platform
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-multilib libc6-dev-i386
+          # 32-bit host toolchain, needed for the armeabi-v7a/x86 ABIs:
+          # sudo apt-get install -y gcc-multilib libc6-dev-i386
           SDKMANAGER="$(command -v sdkmanager || true)"
           if [ -z "$SDKMANAGER" ]; then
             SDKMANAGER="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}/cmdline-tools/latest/bin/sdkmanager"
