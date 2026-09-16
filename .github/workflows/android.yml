@@ -22,10 +22,10 @@ jobs:
       ABIS: ${{ inputs.abis || 'arm64-v8a,armeabi-v7a,x86,x86_64' }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
@@ -47,7 +47,7 @@ jobs:
       # instead/build.gradle change.
       - name: Cache SDL3
         id: cache-sdl
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             instead/src/main/c/SDL3/SDL3
@@ -67,7 +67,7 @@ jobs:
         run: ./gradlew --no-daemon --build-cache assembleDebug -PabiFilters="$ABIS"
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: instead-launcher-debug-apk
           path: app/build/outputs/apk/debug/*.apk
