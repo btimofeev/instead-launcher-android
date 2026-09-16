@@ -16,7 +16,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            // LuaJIT can only be cross-built here for 64-bit ABIs.
+            abiFilters(*((rootProject.findProperty('abiFilters') ?: 'arm64-v8a,x86_64').toString().split(',')))
         }
         externalNativeBuild {
             cmake {
@@ -51,6 +52,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        main.jniLibs.srcDirs += 'src/main/c/luajit-libs'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
     }
@@ -88,96 +90,67 @@ dependencies {
 }
 
 tasks.register('deleteDependencies', Delete) {
-    delete 'src/main/c/Instead/Instead', 'src/main/c/Lua/Lua'
-    delete 'src/main/c/SDL2/SDL2', 'src/main/c/SDL2_image/SDL2_image'
-    delete 'src/main/c/SDL2_mixer/SDL2_mixer', 'src/main/c/SDL2_ttf/SDL2_ttf'
+    delete 'src/main/c/Instead/Instead', 'src/main/c/LuaJIT'
+    delete 'src/main/c/luajit-libs'
+    delete 'src/main/c/SDL3/SDL3', 'src/main/c/SDL3_image/SDL3_image'
+    delete 'src/main/c/SDL3_mixer/SDL3_mixer', 'src/main/c/SDL3_ttf/SDL3_ttf'
     delete 'src/main/c/libiconv/libiconv'
 }
 
 tasks.register('downloadDependencies') {
     dependsOn deleteDependencies
-    def Instead = '3.5.2'
-    def Lua = '5.1.5'
-    def SDL2 = '2.0.22'
-    def SDL2_image = '2.0.5'
-    def SDL2_mixer = '2.0.4'
-    def SDL2_ttf = '2.0.15'
+    def InsteadBranch = 'SDL3'
+    def LuaJitBranch = 'v2.1'
+    def SDL3 = 'release-3.4.10'
+    def SDL3_image = 'release-3.4.6'
+    def SDL3_mixer = 'release-3.2.4'
+    def SDL3_ttf = 'release-3.2.2'
     def Iconv = '1.15'
     def downloadDir = layout.buildDirectory.get().asFile.path
 
     doLast {
         download.run {
-            src "https://github.com/instead-hub/instead/archive/${Instead}.tar.gz"
-            dest new File(downloadDir, "instead-${Instead}.tar.gz")
+            src "https://github.com/instead-hub/instead/archive/refs/heads/${InsteadBranch}.tar.gz"
+            dest new File(downloadDir, "instead-${InsteadBranch}.tar.gz")
         }
         copy {
-            from tarTree(resources.gzip("${downloadDir}/instead-${Instead}.tar.gz"))
+            from tarTree(resources.gzip("${downloadDir}/instead-${InsteadBranch}.tar.gz"))
             into 'src/main/c/Instead/'
         }
-        delete("${downloadDir}/instead-${Instead}.tar.gz")
-        file("src/main/c/Instead/instead-${Instead}").renameTo(file('src/main/c/Instead/Instead'))
-        delete("src/main/c/Instead/instead-${Instead}")
-        delete("src/main/c/Instead/pax_global_header")
+        delete("${downloadDir}/instead-${InsteadBranch}.tar.gz")
+        file("src/main/c/Instead/instead-${InsteadBranch}").renameTo(file('src/main/c/Instead/Instead'))
+        delete("src/main/c/Instead/instead-${InsteadBranch}")
+
+        delete('src/main/c/LuaJIT')
+        exec {
+            commandLine 'git', 'clone', '--depth', '1', '--branch', LuaJitBranch,
+                    'https://github.com/LuaJIT/LuaJIT.git', 'src/main/c/LuaJIT'
+        }
 
         download.run {
-            src "https://www.lua.org/ftp/lua-${Lua}.tar.gz"
+            src "https://github.com/libsdl-org/SDL/archive/refs/tags/${SDL3}.tar.gz"
             dest downloadDir
         }
         copy {
-            from tarTree(resources.gzip("${downloadDir}/lua-${Lua}.tar.gz"))
-            into 'src/main/c/Lua/'
+            from tarTree(resources.gzip("${downloadDir}/${SDL3}.tar.gz"))
+            into 'src/main/c/SDL3/'
         }
-        delete("${downloadDir}/lua-${Lua}.tar.gz")
-        file("src/main/c/Lua/lua-${Lua}").renameTo(file('src/main/c/Lua/Lua'))
-        delete("src/main/c/Lua/lua-${Lua}")
+        delete("${downloadDir}/${SDL3}.tar.gz")
+        file("src/main/c/SDL3/SDL-${SDL3}").renameTo(file('src/main/c/SDL3/SDL3'))
+        delete("src/main/c/SDL3/SDL-${SDL3}")
 
-        download.run {
-            src "https://github.com/libsdl-org/SDL/releases/download/release-${SDL2}/SDL2-${SDL2}.tar.gz"
-            dest downloadDir
+        // The SDL3 satellite libraries keep their third-party decoders as git
+        // submodules, which are not part of the GitHub source tarballs.
+        def gitClone = { repo, tag, dest ->
+            delete(dest)
+            exec {
+                commandLine 'git', 'clone', '--depth', '1', '--branch', tag,
+                        '--recurse-submodules', '--shallow-submodules', repo, dest
+            }
         }
-        copy {
-            from tarTree(resources.gzip("${downloadDir}/SDL2-${SDL2}.tar.gz"))
-            into 'src/main/c/SDL2/'
-        }
-        delete("${downloadDir}/SDL2-${SDL2}.tar.gz")
-        file("src/main/c/SDL2/SDL2-${SDL2}").renameTo(file('src/main/c/SDL2/SDL2'))
-        delete("src/main/c/SDL2/SDL2-${SDL2}")
-
-        download.run {
-            src "https://github.com/libsdl-org/SDL_image/archive/refs/tags/release-${SDL2_image}.tar.gz"
-            dest downloadDir
-        }
-        copy {
-            from tarTree(resources.gzip("${downloadDir}/release-${SDL2_image}.tar.gz"))
-            into 'src/main/c/SDL2_image/'
-        }
-        delete("${downloadDir}/release-${SDL2_image}.tar.gz")
-        file("src/main/c/SDL2_image/SDL_image-release-${SDL2_image}").renameTo(file('src/main/c/SDL2_image/SDL2_image'))
-        delete("src/main/c/SDL2_image/SDL2_image-${SDL2_image}")
-
-        download.run {
-            src "https://github.com/libsdl-org/SDL_mixer/archive/refs/tags/release-${SDL2_mixer}.tar.gz"
-            dest downloadDir
-        }
-        copy {
-            from tarTree(resources.gzip("${downloadDir}/release-${SDL2_mixer}.tar.gz"))
-            into 'src/main/c/SDL2_mixer/'
-        }
-        delete("${downloadDir}/release-${SDL2_mixer}.tar.gz")
-        file("src/main/c/SDL2_mixer/SDL_mixer-release-${SDL2_mixer}").renameTo(file('src/main/c/SDL2_mixer/SDL2_mixer'))
-        delete("src/main/c/SDL2_mixer/SDL2_mixer-${SDL2_mixer}")
-
-        download.run {
-            src "https://github.com/libsdl-org/SDL_ttf/releases/download/release-${SDL2_ttf}/SDL2_ttf-${SDL2_ttf}.tar.gz"
-            dest downloadDir
-        }
-        copy {
-            from tarTree(resources.gzip("${downloadDir}/SDL2_ttf-${SDL2_ttf}.tar.gz"))
-            into 'src/main/c/SDL2_ttf/'
-        }
-        delete("${downloadDir}/SDL2_ttf-${SDL2_ttf}.tar.gz")
-        file("src/main/c/SDL2_ttf/SDL2_ttf-${SDL2_ttf}").renameTo(file('src/main/c/SDL2_ttf/SDL2_ttf'))
-        delete("src/main/c/SDL2_ttf/SDL2_ttf-${SDL2_ttf}")
+        gitClone('https://github.com/libsdl-org/SDL_image.git', SDL3_image, 'src/main/c/SDL3_image/SDL3_image')
+        gitClone('https://github.com/libsdl-org/SDL_mixer.git', SDL3_mixer, 'src/main/c/SDL3_mixer/SDL3_mixer')
+        gitClone('https://github.com/libsdl-org/SDL_ttf.git', SDL3_ttf, 'src/main/c/SDL3_ttf/SDL3_ttf')
 
         download.run {
             src "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${Iconv}.tar.gz"
@@ -190,6 +163,31 @@ tasks.register('downloadDependencies') {
         delete("${downloadDir}/libiconv-${Iconv}.tar.gz")
         file("src/main/c/libiconv/libiconv-${Iconv}").renameTo(file('src/main/c/libiconv/libiconv'))
         delete("src/main/c/libiconv/libiconv-${Iconv}")
+    }
+}
+
+tasks.register('buildLuaJit') {
+    description = 'Builds libluajit.so for the selected ABI(s)'
+    def abis = (rootProject.findProperty('abiFilters') ?: 'arm64-v8a,x86_64').toString().split(',') as List
+    def script = file('src/main/c/scripts/build-luajit.sh')
+    def ljSrc = file('src/main/c/LuaJIT')
+    def outDir = file('src/main/c/luajit-libs')
+    def workDir = layout.buildDirectory.dir('luajit').get().asFile
+    def api = rootProject.min_sdk_version.toString()
+    inputs.file(script)
+    inputs.dir(ljSrc)
+    outputs.dir(outDir)
+    doLast {
+        if (!new File(ljSrc, 'src/Makefile').exists()) {
+            throw new GradleException('LuaJIT sources are missing: run :instead:downloadDependencies first')
+        }
+        abis.each { abi ->
+            exec {
+                commandLine 'sh', script.absolutePath, abi,
+                        new File(outDir, abi).absolutePath, ljSrc.absolutePath,
+                        android.ndkDirectory.absolutePath, workDir.absolutePath, api
+            }
+        }
     }
 }
 
@@ -220,15 +218,21 @@ tasks.register('cleanAssets', Delete) {
 
 tasks.register('fdroidRemoveBinaries', Delete) {
     delete 'src/main/c/Instead/Instead/contrib/'
-    delete 'src/main/c/SDL2/SDL2/Xcode/'
-    delete 'src/main/c/SDL2_image/SDL2_image/Xcode/'
-    delete 'src/main/c/SDL2_image/SDL2_image/external/libwebp-1.0.2/swig/'
-    delete 'src/main/c/SDL2_mixer/SDL2_mixer/Xcode/'
-    delete 'src/main/c/SDL2_ttf/SDL2_ttf/Xcode/'
+    delete 'src/main/c/SDL3/SDL3/Xcode/'
+    delete 'src/main/c/SDL3_image/SDL3_image/Xcode/'
+    delete 'src/main/c/SDL3_mixer/SDL3_mixer/Xcode/'
+    delete 'src/main/c/SDL3_ttf/SDL3_ttf/Xcode/'
     delete 'src/main/c/libiconv/libiconv/tests/'
 }
 
-preBuild.dependsOn copyLangs, copyThemes, copyStead
+preBuild.dependsOn copyLangs, copyThemes, copyStead, buildLuaJit
+
+// LuaJIT must exist before the native INSTEAD library is configured/linked.
+tasks.configureEach { t ->
+    if (t.name.startsWith('configureCMake') || t.name.startsWith('buildCMake')) {
+        t.dependsOn 'buildLuaJit'
+    }
+}
 
 afterEvaluate {
     if (project.hasProperty("packageRelease")) {

@@ -47,11 +47,11 @@ internal class InsteadActivity: SDLActivity() {
 
     override fun getLibraries(): Array<String> {
         return arrayOf(
-                "SDL2",
-                "SDL2_image",
-                "SDL2_mixer",
-                "SDL2_ttf",
-                "lua",
+                "SDL3",
+                "SDL3_image",
+                "SDL3_mixer",
+                "SDL3_ttf",
+                "luajit",
                 "charset",
                 "iconv",
                 "instead")
@@ -132,24 +132,24 @@ internal class InsteadActivity: SDLActivity() {
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (event.keyCode == KeyEvent.KEYCODE_BACK) {
-            if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
-                if (prefBackButton == PreferencesProvider.BACK_BUTTON_OPEN_MENU) {
+            if (prefBackButton == PreferencesProvider.BACK_BUTTON_OPEN_MENU) {
+                if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
                     keyDispatcherState.startTracking(event, this)
-                    return true
-                }
-            } else if (event.action == KeyEvent.ACTION_UP) {
-                keyDispatcherState.handleUpEvent(event)
-                if (event.isTracking && !event.isCanceled) {
-                    if (prefBackButton == PreferencesProvider.BACK_BUTTON_OPEN_MENU) {
+                } else if (event.action == KeyEvent.ACTION_UP) {
+                    keyDispatcherState.handleUpEvent(event)
+                    if (event.isTracking && !event.isCanceled) {
                         toggleMenu()
-                        return true
                     }
                 }
+            } else if (event.action == KeyEvent.ACTION_UP) {
+                // "exit game": SDL3 consumes the back key and forwards it to the
+                // game as SDLK_AC_BACK, so finish the activity ourselves.
+                finish()
             }
-            return super.dispatchKeyEvent(event)
-        } else {
-            return super.dispatchKeyEvent(event)
+            // Consume the back key: otherwise SDL3 passes it to the game.
+            return true
         }
+        return super.dispatchKeyEvent(event)
     }
 
     override fun setOrientationBis(w: Int, h: Int, resizable: Boolean, hint: String) {

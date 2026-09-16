@@ -59,3 +59,7 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+# LuaJIT (downloaded) and prebuilt libraries
+instead/src/main/c/LuaJIT/
+instead/src/main/c/luajit-libs/

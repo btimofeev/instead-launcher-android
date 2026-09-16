@@ -4,9 +4,11 @@
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <jni.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 #include <android/log.h>
 
 static int pfd[2];
@@ -120,8 +122,8 @@ int SDL_main(int argc, char** argv) {
 }
 
 void rotate_landscape() {
-    JNIEnv *env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-    jobject activity = (jobject)SDL_AndroidGetActivity();
+    JNIEnv *env = (JNIEnv*)SDL_GetAndroidJNIEnv();
+    jobject activity = (jobject)SDL_GetAndroidActivity();
     jclass clazz = (*env)->GetObjectClass(env, activity);
 
     jstring jstr = (*env)->NewStringUTF(env, "LandscapeRight LandscapeLeft");
@@ -134,8 +136,8 @@ void rotate_landscape() {
 }
 
 void rotate_portrait() {
-    JNIEnv *env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-    jobject activity = (jobject)SDL_AndroidGetActivity();
+    JNIEnv *env = (JNIEnv*)SDL_GetAndroidJNIEnv();
+    jobject activity = (jobject)SDL_GetAndroidActivity();
     jclass clazz = (*env)->GetObjectClass(env, activity);
 
     jstring jstr = (*env)->NewStringUTF(env, "Portrait PortraitUpsideDown");
@@ -148,8 +150,8 @@ void rotate_portrait() {
 }
 
 void unlock_rotation() {
-    JNIEnv *env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-    jobject activity = (jobject)SDL_AndroidGetActivity();
+    JNIEnv *env = (JNIEnv*)SDL_GetAndroidJNIEnv();
+    jobject activity = (jobject)SDL_GetAndroidActivity();
     jclass clazz = (*env)->GetObjectClass(env, activity);
 
     jmethodID method_id = (*env)->GetStaticMethodID(env, clazz, "unlockRotation", "()V");
@@ -161,8 +163,8 @@ void unlock_rotation() {
 
 void get_screen_size(int *w, int *h) {
     const char *str;
-    JNIEnv *env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-    jobject activity = (jobject)SDL_AndroidGetActivity();
+    JNIEnv *env = (JNIEnv*)SDL_GetAndroidJNIEnv();
+    jobject activity = (jobject)SDL_GetAndroidActivity();
     jclass clazz = (*env)->GetObjectClass(env, activity);
 
     jmethodID method_id = (*env)->GetStaticMethodID(env, clazz, "getScreenSize", "()Ljava/lang/String;");
@@ -180,12 +182,13 @@ void Java_org_emunix_instead_ui_InsteadActivity_toggleMenu(JNIEnv* env, jclass c
     SDL_Event event;
 
     memset(&event, 0, sizeof(event));
-    event.key.type = SDL_KEYDOWN;
-    event.key.state = SDL_PRESSED;
+    event.key.type = SDL_EVENT_KEY_DOWN;
+    event.key.down = true;
+    event.key.repeat = false;
 
-    event.key.keysym.scancode = SDL_SCANCODE_ESCAPE; // from SDL_Keysym
-    event.key.keysym.sym = SDLK_ESCAPE;
-    event.key.keysym.mod = 0; // from SDL_Keymod
+    event.key.scancode = SDL_SCANCODE_ESCAPE;
+    event.key.key = SDLK_ESCAPE;
+    event.key.mod = SDL_KMOD_NONE;
 
     SDL_PushEvent(&event); // Inject key press of the Escape Key
 }
