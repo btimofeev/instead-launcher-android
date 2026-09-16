@@ -60,6 +60,13 @@ freeline.py
 freeline/
 freeline_project_description.json
 
-# LuaJIT (downloaded) and prebuilt libraries
+# Downloaded native sources, build outputs and generated assets
+instead/src/main/c/Instead/Instead/
+instead/src/main/c/libiconv/libiconv/
+instead/src/main/c/SDL3/SDL3/
+instead/src/main/c/SDL3_image/SDL3_image/
+instead/src/main/c/SDL3_mixer/SDL3_mixer/
+instead/src/main/c/SDL3_ttf/SDL3_ttf/
 instead/src/main/c/LuaJIT/
 instead/src/main/c/luajit-libs/
+instead/src/main/assets/

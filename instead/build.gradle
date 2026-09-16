@@ -97,18 +97,17 @@ tasks.register('deleteDependencies', Delete) {
     delete 'src/main/c/libiconv/libiconv'
 }
 
-tasks.register('downloadDependencies') {
-    dependsOn deleteDependencies
+// INSTEAD (tracked branch), LuaJIT and libiconv: always re-fetched so that the
+// current instead branch is used.
+tasks.register('downloadInstead') {
     def InsteadBranch = 'SDL3'
     def LuaJitBranch = 'v2.1'
-    def SDL3 = 'release-3.4.10'
-    def SDL3_image = 'release-3.4.6'
-    def SDL3_mixer = 'release-3.2.4'
-    def SDL3_ttf = 'release-3.2.2'
     def Iconv = '1.15'
     def downloadDir = layout.buildDirectory.get().asFile.path
 
     doLast {
+        delete('src/main/c/Instead/Instead', 'src/main/c/LuaJIT', 'src/main/c/libiconv/libiconv')
+
         download.run {
             src "https://github.com/instead-hub/instead/archive/refs/heads/${InsteadBranch}.tar.gz"
             dest new File(downloadDir, "instead-${InsteadBranch}.tar.gz")
@@ -121,36 +120,10 @@ tasks.register('downloadDependencies') {
         file("src/main/c/Instead/instead-${InsteadBranch}").renameTo(file('src/main/c/Instead/Instead'))
         delete("src/main/c/Instead/instead-${InsteadBranch}")
 
-        delete('src/main/c/LuaJIT')
         exec {
             commandLine 'git', 'clone', '--depth', '1', '--branch', LuaJitBranch,
                     'https://github.com/LuaJIT/LuaJIT.git', 'src/main/c/LuaJIT'
         }
-
-        download.run {
-            src "https://github.com/libsdl-org/SDL/archive/refs/tags/${SDL3}.tar.gz"
-            dest downloadDir
-        }
-        copy {
-            from tarTree(resources.gzip("${downloadDir}/${SDL3}.tar.gz"))
-            into 'src/main/c/SDL3/'
-        }
-        delete("${downloadDir}/${SDL3}.tar.gz")
-        file("src/main/c/SDL3/SDL-${SDL3}").renameTo(file('src/main/c/SDL3/SDL3'))
-        delete("src/main/c/SDL3/SDL-${SDL3}")
-
-        // The SDL3 satellite libraries keep their third-party decoders as git
-        // submodules, which are not part of the GitHub source tarballs.
-        def gitClone = { repo, tag, dest ->
-            delete(dest)
-            exec {
-                commandLine 'git', 'clone', '--depth', '1', '--branch', tag,
-                        '--recurse-submodules', '--shallow-submodules', repo, dest
-            }
-        }
-        gitClone('https://github.com/libsdl-org/SDL_image.git', SDL3_image, 'src/main/c/SDL3_image/SDL3_image')
-        gitClone('https://github.com/libsdl-org/SDL_mixer.git', SDL3_mixer, 'src/main/c/SDL3_mixer/SDL3_mixer')
-        gitClone('https://github.com/libsdl-org/SDL_ttf.git', SDL3_ttf, 'src/main/c/SDL3_ttf/SDL3_ttf')
 
         download.run {
             src "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${Iconv}.tar.gz"
@@ -166,6 +139,49 @@ tasks.register('downloadDependencies') {
     }
 }
 
+// Third-party SDL3 libraries (the satellites carry their decoders as git
+// submodules, so they are slow to fetch and worth caching in CI).
+tasks.register('downloadSdl') {
+    def SDL3 = 'release-3.4.10'
+    def SDL3_image = 'release-3.4.6'
+    def SDL3_mixer = 'release-3.2.4'
+    def SDL3_ttf = 'release-3.2.2'
+    def downloadDir = layout.buildDirectory.get().asFile.path
+
+    doLast {
+        delete('src/main/c/SDL3/SDL3', 'src/main/c/SDL3_image/SDL3_image')
+        delete('src/main/c/SDL3_mixer/SDL3_mixer', 'src/main/c/SDL3_ttf/SDL3_ttf')
+
+        download.run {
+            src "https://github.com/libsdl-org/SDL/archive/refs/tags/${SDL3}.tar.gz"
+            dest downloadDir
+        }
+        copy {
+            from tarTree(resources.gzip("${downloadDir}/${SDL3}.tar.gz"))
+            into 'src/main/c/SDL3/'
+        }
+        delete("${downloadDir}/${SDL3}.tar.gz")
+        file("src/main/c/SDL3/SDL-${SDL3}").renameTo(file('src/main/c/SDL3/SDL3'))
+        delete("src/main/c/SDL3/SDL-${SDL3}")
+
+        def gitClone = { repo, tag, dest ->
+            delete(dest)
+            exec {
+                commandLine 'git', 'clone', '--depth', '1', '--branch', tag,
+                        '--recurse-submodules', '--shallow-submodules', repo, dest
+            }
+        }
+        gitClone('https://github.com/libsdl-org/SDL_image.git', SDL3_image, 'src/main/c/SDL3_image/SDL3_image')
+        gitClone('https://github.com/libsdl-org/SDL_mixer.git', SDL3_mixer, 'src/main/c/SDL3_mixer/SDL3_mixer')
+        gitClone('https://github.com/libsdl-org/SDL_ttf.git', SDL3_ttf, 'src/main/c/SDL3_ttf/SDL3_ttf')
+    }
+}
+
+tasks.register('downloadDependencies') {
+    description = 'Downloads INSTEAD, LuaJIT, libiconv and the SDL3 libraries'
+    dependsOn downloadInstead, downloadSdl
+}
+
 tasks.register('buildLuaJit') {
     description = 'Builds libluajit.so for the selected ABI(s)'
     def abis = (rootProject.findProperty('abiFilters') ?: 'arm64-v8a,x86_64').toString().split(',') as List
@@ -176,6 +192,7 @@ tasks.register('buildLuaJit') {
     def api = rootProject.min_sdk_version.toString()
     inputs.file(script)
     inputs.dir(ljSrc)
+    inputs.property('abis', abis.join(','))
     outputs.dir(outDir)
     doLast {
         if (!new File(ljSrc, 'src/Makefile').exists()) {
