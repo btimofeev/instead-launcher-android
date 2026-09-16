@@ -100,7 +100,7 @@ tasks.register('deleteDependencies', Delete) {
 // INSTEAD (tracked branch), LuaJIT and libiconv: always re-fetched so that the
 // current instead branch is used.
 tasks.register('downloadInstead') {
-    def InsteadBranch = 'SDL3'
+    def InsteadBranch = 'master'
     def LuaJitBranch = 'v2.1'
     def Iconv = '1.15'
     def downloadDir = layout.buildDirectory.get().asFile.path
