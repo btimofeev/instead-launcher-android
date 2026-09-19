@@ -145,8 +145,6 @@ tasks.register('downloadInstead') {
     }
 }
 
-// Third-party SDL3 libraries (the satellites carry their decoders as git
-// submodules, so they are slow to fetch and worth caching in CI).
 tasks.register('downloadSdl') {
     def SDL3 = 'release-3.4.10'
     def SDL3_image = 'release-3.4.6'
@@ -154,32 +152,50 @@ tasks.register('downloadSdl') {
     def SDL3_ttf = 'release-3.2.2'
     def downloadDir = layout.buildDirectory.get().asFile.path
 
+    def sdl = [
+        [repo: 'SDL',       ref: SDL3,       dest: 'SDL3/SDL3'],
+        [repo: 'SDL_image', ref: SDL3_image, dest: 'SDL3_image/SDL3_image'],
+        [repo: 'SDL_mixer', ref: SDL3_mixer, dest: 'SDL3_mixer/SDL3_mixer'],
+        [repo: 'SDL_ttf',   ref: SDL3_ttf,   dest: 'SDL3_ttf/SDL3_ttf'],
+    ]
+    def sdlDeps = [
+        'SDL3_image/SDL3_image/external':
+                [[repo: 'jpeg',    sha: '9db4612eee1913e689f58ce62cd3b8708b290fd3'],
+                 [repo: 'libpng',  sha: '4b9e071b2fc4216369372a3ed260d335dd036f15'],
+                 [repo: 'libwebp', sha: '0b4545ee8210ff72ec47ab1ad56c2e7460663d11'],
+                 [repo: 'zlib',    sha: '0e68590d11e618d60866aa86629fbda128bc068a']],
+        'SDL3_mixer/SDL3_mixer/external':
+                [[repo: 'flac',   sha: '833a260a7bc29f80899d33e8c1beb2fc56b4905b'],
+                 [repo: 'ogg',    sha: '936fdd822a4e4fc963197b3eda931b89b52859a0'],
+                 [repo: 'vorbis', sha: 'eefe62244630a2d2c37ba5e6fb1a1fd8ad93ece5'],
+                 [repo: 'mpg123', sha: '6e97a7fdf112a950977dad73de10be0d17ddb6b8'],
+                 [repo: 'libxmp', sha: '75e85f8a5be65f9f95fb946086bee17da158166f']],
+        'SDL3_ttf/SDL3_ttf/external':
+                [[repo: 'freetype', sha: '9973564cfa63763a3e4ac67c09147899539b1e07']],
+    ]
+
     doLast {
-        delete('src/main/c/SDL3/SDL3', 'src/main/c/SDL3_image/SDL3_image')
-        delete('src/main/c/SDL3_mixer/SDL3_mixer', 'src/main/c/SDL3_ttf/SDL3_ttf')
-
-        download.run {
-            src "https://github.com/libsdl-org/SDL/archive/refs/tags/${SDL3}.tar.gz"
-            dest downloadDir
-        }
-        copy {
-            from tarTree(resources.gzip("${downloadDir}/${SDL3}.tar.gz"))
-            into 'src/main/c/SDL3/'
-        }
-        delete("${downloadDir}/${SDL3}.tar.gz")
-        file("src/main/c/SDL3/SDL-${SDL3}").renameTo(file('src/main/c/SDL3/SDL3'))
-        delete("src/main/c/SDL3/SDL-${SDL3}")
-
-        def gitClone = { repo, tag, dest ->
-            delete(dest)
-            exec {
-                commandLine 'git', 'clone', '--depth', '1', '--branch', tag,
-                        '--recurse-submodules', '--shallow-submodules', repo, dest
+        def fetchTarball = { owner, repo, ref, destRel ->
+            def archive = file("${downloadDir}/${repo}-${ref}.tar.gz")
+            def destDir = file("src/main/c/${destRel}")
+            delete(destDir)
+            download.run {
+                src "https://github.com/${owner}/${repo}/archive/${ref}.tar.gz"
+                dest archive
             }
+            copy {
+                from tarTree(resources.gzip(archive))
+                into destDir.parentFile
+            }
+            delete(archive)
+            file("${destDir.parentFile}/${repo}-${ref}").renameTo(destDir)
+            delete("${destDir.parentFile}/${repo}-${ref}")
         }
-        gitClone('https://github.com/libsdl-org/SDL_image.git', SDL3_image, 'src/main/c/SDL3_image/SDL3_image')
-        gitClone('https://github.com/libsdl-org/SDL_mixer.git', SDL3_mixer, 'src/main/c/SDL3_mixer/SDL3_mixer')
-        gitClone('https://github.com/libsdl-org/SDL_ttf.git', SDL3_ttf, 'src/main/c/SDL3_ttf/SDL3_ttf')
+
+        sdl.each { lib -> fetchTarball('libsdl-org', lib.repo, lib.ref, lib.dest) }
+        sdlDeps.each { dest, deps ->
+            deps.each { dep -> fetchTarball('libsdl-org', dep.repo, dep.sha, "${dest}/${dep.repo}") }
+        }
     }
 }
 
