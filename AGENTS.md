@@ -53,8 +53,8 @@ Important details:
 - LuaJIT is built with the `:instead:buildLuaJit` task (cross-compiled with GNU `make` and the NDK toolchain directly in Gradle, using injected `ExecOperations`) and is wired into `preBuild`.
 - Default ABIs: `arm64-v8a,x86_64`. To override: `./gradlew assembleDebug -PabiFilters="arm64-v8a,armeabi-v7a,x86,x86_64"` (32-bit ABIs require `gcc-multilib`/`libc6-dev-i386` on the host).
 - `keystore.properties` (repo root, not in git) controls release signing; without it the signingConfig is set to null.
-- The app and INSTEAD versions are set in the root `build.gradle` (`version_code`, `version_name`, `build_config_instead_version`).
-- SDL3/INSTEAD/LuaJIT/Lua versions are set by the `downloadSdl`/`downloadInstead` tasks in `instead/build.gradle`.
+- Build config versions (SDK/NDK versions, app versionCode/versionName, INSTEAD version) are set in `gradle/libs.versions.toml` (`minSdk`, `compileSdk`, `ndk`, `appVersionCode`, `appVersionName`, `insteadVersion`).
+- SDL3/INSTEAD/LuaJIT/Lua versions are set by the `downloadSdl`/`downloadInstead` tasks in `instead/build.gradle.kts`.
 
 ## Tests
 

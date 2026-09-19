@@ -1,0 +1,6 @@
+include(":core-storage")
+include(":core-preferences")
+include(":instead")
+include(":app")
+include(":sdl-activity")
+include(":scancode-generator")
