@@ -50,7 +50,7 @@ Or `make all` (README: `deps` → `build` → `install`).
 Important details:
 - Native sources (SDL3, INSTEAD, etc.) are **downloaded into `instead/src/main/c/...`** and are not stored in git (see `.gitignore`). Do not edit them — they get overwritten on the next build. Custom code lives in `instead/src/main/c/Instead/instead_launcher.c`.
 - The `lang/`, `themes/` and `stead/` resources under `instead/src/main/assets/` are generated from the downloaded INSTEAD by the `copyLangs`/`copyThemes`/`copyStead` tasks.
-- LuaJIT is built separately with the `:instead:buildLuaJit` task (script `instead/src/main/c/scripts/build-luajit.sh`) and is wired into `preBuild`.
+- LuaJIT is built with the `:instead:buildLuaJit` task (cross-compiled with GNU `make` and the NDK toolchain directly in Gradle, using injected `ExecOperations`) and is wired into `preBuild`.
 - Default ABIs: `arm64-v8a,x86_64`. To override: `./gradlew assembleDebug -PabiFilters="arm64-v8a,armeabi-v7a,x86,x86_64"` (32-bit ABIs require `gcc-multilib`/`libc6-dev-i386` on the host).
 - `keystore.properties` (repo root, not in git) controls release signing; without it the signingConfig is set to null.
 - The app and INSTEAD versions are set in the root `build.gradle` (`version_code`, `version_name`, `build_config_instead_version`).

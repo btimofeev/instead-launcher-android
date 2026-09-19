@@ -27,6 +27,12 @@ To compile the application, you need to run these commands in the root directory
 
 or just run ```make``` which will run the three commands above in sequence.
 
+On Windows, `make` and a C host compiler are not available by default. Install
+[MSYS2](https://www.msys2.org/) (`pacman -S make gcc`) and add the MSYS2 binary
+directories (e.g. `C:\msys64\usr\bin` and `C:\msys64\mingw64\bin`) to `PATH`.
+Only 64-bit ABIs (`arm64-v8a`, `x86_64`, the default) can be built on Windows;
+32-bit ABIs require a Linux host.
+
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details

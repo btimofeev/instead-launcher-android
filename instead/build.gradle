@@ -6,6 +6,17 @@ plugins {
     id "de.undercouch.download" version "5.6.0"
 }
 
+import org.gradle.process.ExecOperations
+import org.gradle.api.file.FileSystemOperations
+
+interface InsteadBuildOps {
+    @Inject
+    ExecOperations getExecOps()
+
+    @Inject
+    FileSystemOperations getFs()
+}
+
 android {
 
     defaultConfig {
@@ -207,12 +218,36 @@ tasks.register('downloadDependencies') {
 tasks.register('buildLuaJit') {
     description = 'Builds libluajit.so for the selected ABI(s)'
     def abis = (rootProject.findProperty('abiFilters') ?: 'arm64-v8a,x86_64').toString().split(',') as List
-    def script = file('src/main/c/scripts/build-luajit.sh')
     def ljSrc = file('src/main/c/LuaJIT')
     def outDir = file('src/main/c/luajit-libs')
     def workDir = layout.buildDirectory.dir('luajit').get().asFile
     def api = rootProject.min_sdk_version.toString()
-    inputs.file(script)
+    def ndk = android.ndkDirectory
+    def ops = project.objects.newInstance(InsteadBuildOps)
+
+    def archInfo = [
+        'arm64-v8a'   : [triple: 'aarch64-linux-android',    ljarch: 'arm64'],
+        'x86_64'      : [triple: 'x86_64-linux-android',     ljarch: 'x64'],
+        'armeabi-v7a' : [triple: 'armv7a-linux-androideabi', ljarch: 'arm'],
+        'x86'         : [triple: 'i686-linux-android',       ljarch: 'x86'],
+    ]
+
+    def osName = System.getProperty('os.name').toLowerCase(Locale.ROOT)
+    def hostDir
+    if (osName.contains('mac')) {
+        def arch = System.getProperty('os.arch').toLowerCase(Locale.ROOT)
+        hostDir = arch in ['aarch64', 'arm64'] ? 'darwin-arm64' : 'darwin-x86_64'
+    } else if (osName.contains('windows')) {
+        hostDir = 'windows-x86_64'
+    } else {
+        hostDir = 'linux-x86_64'
+    }
+    def tc = file("${ndk}/toolchains/llvm/prebuilt/${hostDir}")
+    def tool = { name ->
+        def candidates = ['.exe', '.cmd', ''].collect { file("${tc}/bin/${name}${it}") }
+        candidates.find { it.exists() }?.path ?: file("${tc}/bin/${name}").path
+    }
+
     inputs.dir(ljSrc)
     inputs.property('abis', abis.join(','))
     outputs.dir(outDir)
@@ -221,10 +256,44 @@ tasks.register('buildLuaJit') {
             throw new GradleException('LuaJIT sources are missing: run :instead:downloadDependencies first')
         }
         abis.each { abi ->
-            exec {
-                commandLine 'sh', script.absolutePath, abi,
-                        new File(outDir, abi).absolutePath, ljSrc.absolutePath,
-                        android.ndkDirectory.absolutePath, workDir.absolutePath, api
+            def info = archInfo[abi]
+            if (!info) {
+                throw new GradleException("Unsupported ABI: ${abi}")
+            }
+            // buildvm must match the target pointer size, so 32-bit targets need
+            // a 32-bit host compiler (gcc-multilib on Debian/Ubuntu).
+            def hostCc = abi in ['arm64-v8a', 'x86_64'] ? 'cc' : 'gcc -m32'
+            def clang = tool("${info.triple}${api}-clang")
+            def ar = tool('llvm-ar')
+            def strip = tool('llvm-strip')
+            def buildDir = file("${workDir}/${abi}")
+            def jobs = Runtime.getRuntime().availableProcessors()
+
+            ops.fs.delete {
+                delete(buildDir)
+            }
+            ops.fs.copy {
+                from ljSrc
+                into buildDir
+            }
+            ops.execOps.exec {
+                commandLine 'make', '-C', file("${buildDir}/src").absolutePath, "-j${jobs}",
+                        "HOST_CC=${hostCc}",
+                        "CC=${clang}",
+                        "TARGET_CC=${clang}",
+                        "TARGET_LD=${clang}",
+                        "TARGET_AR=${ar} rcus",
+                        "TARGET_STRIP=${strip}",
+                        'TARGET_SYS=Linux',
+                        "TARGET_LJARCH=${info.ljarch}",
+                        'TARGET_SONAME=libluajit.so',
+                        'TARGET_FLAGS=-O2 -fPIC',
+                        'TARGET_LDFLAGS=-Wl,-z,max-page-size=16384',
+                        'BUILDMODE=shared'
+            }
+            ops.fs.copy {
+                from file("${buildDir}/src/libluajit.so")
+                into file("${outDir}/${abi}")
             }
         }
     }
