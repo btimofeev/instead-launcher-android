@@ -3,10 +3,43 @@ cmake_minimum_required(VERSION 3.4.1)
 
 project(libinstead)
 
-add_subdirectory( Lua/ )
-add_subdirectory( SDL2/SDL2 )
-add_subdirectory( SDL2_image/ )
-add_subdirectory( SDL2_mixer/ )
-add_subdirectory( SDL2_ttf/ )
+add_subdirectory( SDL3/SDL3 )
+
+# LuaJIT (prebuilt by the :instead:buildLuaJit gradle task)
+add_library(luajit SHARED IMPORTED GLOBAL)
+set_target_properties(luajit PROPERTIES
+    IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/luajit-libs/${ANDROID_ABI}/libluajit.so")
+
+# SDL3_image
+set(SDLIMAGE_VENDORED ON CACHE BOOL "" FORCE)
+set(SDLIMAGE_SAMPLES OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_TESTS OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_AVIF OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_JXL OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_TIF OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_SVG OFF CACHE BOOL "" FORCE)
+add_subdirectory( SDL3_image/SDL3_image )
+
+# SDL3_mixer (tracker music via the full, vendored libxmp)
+set(SDLMIXER_VENDORED ON CACHE BOOL "" FORCE)
+set(SDLMIXER_TESTS OFF CACHE BOOL "" FORCE)
+set(SDLMIXER_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(SDLMIXER_GME OFF CACHE BOOL "" FORCE)
+set(SDLMIXER_MIDI OFF CACHE BOOL "" FORCE)
+set(SDLMIXER_WAVPACK OFF CACHE BOOL "" FORCE)
+set(SDLMIXER_OPUS OFF CACHE BOOL "" FORCE)
+set(SDLMIXER_MOD ON CACHE BOOL "" FORCE)
+set(SDLMIXER_MOD_XMP ON CACHE BOOL "" FORCE)
+set(SDLMIXER_MOD_XMP_LITE OFF CACHE BOOL "" FORCE)
+set(SDLMIXER_MOD_XMP_SHARED OFF CACHE BOOL "" FORCE)
+add_subdirectory( SDL3_mixer/SDL3_mixer )
+
+# SDL3_ttf
+set(SDLTTF_VENDORED ON CACHE BOOL "" FORCE)
+set(SDLTTF_SAMPLES OFF CACHE BOOL "" FORCE)
+set(SDLTTF_HARFBUZZ OFF CACHE BOOL "" FORCE)
+set(SDLTTF_PLUTOSVG OFF CACHE BOOL "" FORCE)
+add_subdirectory( SDL3_ttf/SDL3_ttf )
+
 add_subdirectory( libiconv/ )
 add_subdirectory( Instead/ )
