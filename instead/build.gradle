@@ -97,11 +97,9 @@ tasks.register('deleteDependencies', Delete) {
     delete 'src/main/c/libiconv/libiconv'
 }
 
-// INSTEAD (tracked branch), LuaJIT and libiconv: always re-fetched so that the
-// current instead branch is used.
 tasks.register('downloadInstead') {
-    def InsteadBranch = 'master'
-    def LuaJitBranch = 'v2.1'
+    def InsteadRef = 'b755e7f379deda34deb7dbf0e0b5b30d903a1875'
+    def LuaJitRef = 'c6ffc141a8762b41703f9287d63d93622a13dd8f'
     def Iconv = '1.15'
     def downloadDir = layout.buildDirectory.get().asFile.path
 
@@ -109,21 +107,29 @@ tasks.register('downloadInstead') {
         delete('src/main/c/Instead/Instead', 'src/main/c/LuaJIT', 'src/main/c/libiconv/libiconv')
 
         download.run {
-            src "https://github.com/instead-hub/instead/archive/refs/heads/${InsteadBranch}.tar.gz"
-            dest new File(downloadDir, "instead-${InsteadBranch}.tar.gz")
+            src "https://github.com/instead-hub/instead/archive/${InsteadRef}.tar.gz"
+            dest new File(downloadDir, "instead-${InsteadRef}.tar.gz")
         }
         copy {
-            from tarTree(resources.gzip("${downloadDir}/instead-${InsteadBranch}.tar.gz"))
+            from tarTree(resources.gzip("${downloadDir}/instead-${InsteadRef}.tar.gz"))
             into 'src/main/c/Instead/'
         }
-        delete("${downloadDir}/instead-${InsteadBranch}.tar.gz")
-        file("src/main/c/Instead/instead-${InsteadBranch}").renameTo(file('src/main/c/Instead/Instead'))
-        delete("src/main/c/Instead/instead-${InsteadBranch}")
+        delete("${downloadDir}/instead-${InsteadRef}.tar.gz")
+        file("src/main/c/Instead/instead-${InsteadRef}").renameTo(file('src/main/c/Instead/Instead'))
+        delete("src/main/c/Instead/instead-${InsteadRef}")
 
-        exec {
-            commandLine 'git', 'clone', '--depth', '1', '--branch', LuaJitBranch,
-                    'https://github.com/LuaJIT/LuaJIT.git', 'src/main/c/LuaJIT'
+        download.run {
+            src "https://github.com/LuaJIT/LuaJIT/archive/${LuaJitRef}.tar.gz"
+            dest new File(downloadDir, "LuaJIT-${LuaJitRef}.tar.gz")
         }
+        copy {
+            from tarTree(resources.gzip("${downloadDir}/LuaJIT-${LuaJitRef}.tar.gz"))
+            into 'src/main/c/'
+        }
+        delete("${downloadDir}/LuaJIT-${LuaJitRef}.tar.gz")
+        def luaJitDir = "LuaJIT-${LuaJitRef}"
+        file("src/main/c/${luaJitDir}").renameTo(file('src/main/c/LuaJIT'))
+        delete("src/main/c/${luaJitDir}")
 
         download.run {
             src "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${Iconv}.tar.gz"
