@@ -22,7 +22,7 @@ data class SdlLib(val repo: String, val ref: String, val dest: String)
 
 data class SdlDep(val repo: String, val sha: String)
 
-val abis = (rootProject.findProperty("abiFilters") as? String ?: "arm64-v8a,x86_64").split(",")
+val abis = (rootProject.findProperty("abiFilters") as? String ?: "arm64-v8a,armeabi-v7a,x86_64").split(",")
 
 android {
 
@@ -32,7 +32,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            // LuaJIT can only be cross-built here for 64-bit ABIs.
+            // The 32-bit ABIs (armeabi-v7a, x86) additionally need a 32-bit
+            // host compiler for LuaJIT's buildvm (see buildLuaJit below).
             abiFilters.addAll(abis)
         }
         externalNativeBuild {

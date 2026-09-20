@@ -51,7 +51,7 @@ Important details:
 - Native sources (SDL3, INSTEAD, etc.) are **downloaded into `instead/src/main/c/...`** and are not stored in git (see `.gitignore`). Do not edit them — they get overwritten on the next build. Custom code lives in `instead/src/main/c/Instead/instead_launcher.c`.
 - The `lang/`, `themes/` and `stead/` resources under `instead/src/main/assets/` are generated from the downloaded INSTEAD by the `copyLangs`/`copyThemes`/`copyStead` tasks.
 - LuaJIT is built with the `:instead:buildLuaJit` task (cross-compiled with GNU `make` and the NDK toolchain directly in Gradle, using injected `ExecOperations`) and is wired into `preBuild`.
-- Default ABIs: `arm64-v8a,x86_64`. To override: `./gradlew assembleDebug -PabiFilters="arm64-v8a,armeabi-v7a,x86,x86_64"` (32-bit ABIs require `gcc-multilib`/`libc6-dev-i386` on the host).
+- Default ABIs: `arm64-v8a,armeabi-v7a,x86_64`. `armeabi-v7a` (and `x86`) require a 32-bit host C compiler for LuaJIT (`gcc-multilib`/`libc6-dev-i386` on Debian/Ubuntu). To override: `./gradlew assembleDebug -PabiFilters="arm64-v8a,armeabi-v7a,x86,x86_64"`.
 - `keystore.properties` (repo root, not in git) controls release signing; without it the signingConfig is set to null.
 - Build config versions (SDK/NDK versions, app versionCode/versionName, INSTEAD version) are set in `gradle/libs.versions.toml` (`minSdk`, `compileSdk`, `ndk`, `appVersionCode`, `appVersionName`, `insteadVersion`).
 - SDL3/INSTEAD/LuaJIT/Lua versions are set by the `downloadSdl`/`downloadInstead` tasks in `instead/build.gradle.kts`.

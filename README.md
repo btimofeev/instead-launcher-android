@@ -30,8 +30,16 @@ or just run ```make``` which will run the three commands above in sequence.
 On Windows, `make` and a C host compiler are not available by default. Install
 [MSYS2](https://www.msys2.org/) (`pacman -S make gcc`) and add the MSYS2 binary
 directories (e.g. `C:\msys64\usr\bin` and `C:\msys64\mingw64\bin`) to `PATH`.
-Only 64-bit ABIs (`arm64-v8a`, `x86_64`, the default) can be built on Windows;
-32-bit ABIs require a Linux host.
+Only 64-bit ABIs (`arm64-v8a`, `x86_64`) can be built on Windows; the 32-bit
+`armeabi-v7a` ABI requires a Linux host.
+
+On Linux, 32-bit ABIs are built by default (together with `arm64-v8a` and
+`x86_64`). They need a 32-bit C host compiler to build LuaJIT, so install it
+first. On Debian/Ubuntu and derivatives:
+
+```
+sudo apt-get install gcc-multilib libc6-dev-i386
+```
 
 ### License
 
