@@ -7,7 +7,7 @@ INSTEAD Launcher is an Android app for downloading and running games for the "IN
 - The JVM-layer language is Kotlin. The UI on `master` is built with Android Views + XML layouts (NOT Compose).
 - Architecture: MVVM + Clean Architecture + `singleton android activity`.
 - DI: Hilt (KSP). DB: Room (KSP). Background work: WorkManager + foreground services.
-- SDK versions: `minSdk 25`, `compile/targetSdk 34`, `ndk 27.2.12479018`, Java/JVM 17.
+- SDK versions: `minSdk 25`, `compile/targetSdk 34`, `ndk 27.2.12479018`, Java 21 bytecode (source/target), Gradle runs on JDK 25.
 
 ## Repository structure
 
