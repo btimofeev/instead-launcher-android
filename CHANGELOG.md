@@ -2,6 +2,14 @@
 
 ## Development
 ### Changed
+- INSTEAD updated to version 3.6
+- SDL updated to version 3.4.10
+- Lua replaced with LuaJIT — games should run faster
+- Support Android 7.1.1 - 16
+- The interface is updated — rewritten in Jetpack Compose
+### Added
+- Dynamic colors on Android 12+
+- Monochrome launcher icon
 
 ## [0.9.2] - 2024-10-15
 ### Changed
