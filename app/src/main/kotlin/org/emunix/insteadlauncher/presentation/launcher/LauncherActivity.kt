@@ -8,7 +8,12 @@ package org.emunix.insteadlauncher.presentation.launcher
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import dagger.hilt.android.AndroidEntryPoint
+import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.databinding.ActivityLauncherBinding
 import org.emunix.insteadlauncher.domain.work.ScanGamesWork
 import javax.inject.Inject
@@ -26,6 +31,8 @@ class LauncherActivity : AppCompatActivity() {
         val binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setUpEdgeToEdge(binding)
+
         scanGamesWork.scan()
 
         val intent = intent
@@ -33,6 +40,17 @@ class LauncherActivity : AppCompatActivity() {
             intent.data?.let { uri ->
                 appArgumentViewModel.zipUri = uri
             }
+        }
+    }
+
+    private fun setUpEdgeToEdge(binding: ActivityLauncherBinding) {
+        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val barInsets =
+                insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
+            view.setPadding(barInsets.left, barInsets.top, barInsets.right, barInsets.bottom)
+            insets
         }
     }
 }
