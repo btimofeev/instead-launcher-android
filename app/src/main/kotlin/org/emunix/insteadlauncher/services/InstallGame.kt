@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, 2023 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2018-2021, 2023, 2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -12,8 +12,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.os.bundleOf
-import androidx.navigation.NavDeepLinkBuilder
+import androidx.core.net.toUri
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -33,9 +32,10 @@ import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.UNPA
 import org.emunix.insteadlauncher.domain.repository.NotificationRepository
 import org.emunix.insteadlauncher.domain.usecase.GetDownloadGamesStatusUseCase
 import org.emunix.insteadlauncher.domain.usecase.InstallGameUseCase
+import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
+import org.emunix.insteadlauncher.presentation.navigation.GAME_INFO_SCREEN_DEEPLINK
 import org.emunix.insteadlauncher.utils.NotificationHelper
 import org.emunix.insteadlauncher.utils.writeToLog
-import org.emunix.insteadlauncher.presentation.launcher.LauncherActivity
 import javax.inject.Inject
 
 // TODO Рассмотреть вариант замены IntentService на WorkManager
@@ -104,11 +104,18 @@ class InstallGame : IntentService("InstallGame") {
         val notificationIntent = Intent(this, LauncherActivity::class.java)
         notificationIntent.putExtra(EXTRA_GAME_NAME, gameName)
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        pendingIntent = NavDeepLinkBuilder(this)
-            .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.gameFragment)
-            .setArguments(bundleOf(EXTRA_GAME_NAME to gameName))
-            .createPendingIntent()
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "$GAME_INFO_SCREEN_DEEPLINK/$gameName".toUri(),
+            this,
+            LauncherActivity::class.java
+        )
+        pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         return NotificationCompat.Builder(this, CHANNEL_INSTALL)
             .setContentTitle(gameTitle)

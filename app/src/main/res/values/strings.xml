@@ -24,13 +24,13 @@
     <string name="game_activity_message_downloading">Downloading: %1$s/%2$s</string>
     <string name="game_activity_message_installing">Downloading&#8230;</string>
 
-    <string name="installed_games_activity_title">INSTEAD</string>
-    <string name="installed_games_empty_text">Are you ready for an adventure?\nTap the red button to install games.</string>
-    <string name="installed_games_activity_context_menu_play">Play</string>
-    <string name="installed_games_activity_context_menu_play_from_beginning">Restart game</string>
-    <string name="installed_games_activity_context_menu_delete">Delete</string>
-    <string name="installed_games_activity_context_menu_about">About</string>
-    <string name="installed_games_fragment_fab_content_description">Install games</string>
+    <string name="installed_games_screen_title">INSTEAD</string>
+    <string name="installed_games_empty_text">Are you ready for an adventure?\nTap the \"+\" button to install games.</string>
+    <string name="installed_games_context_menu_play">Play</string>
+    <string name="installed_games_context_menu_play_from_beginning">Restart game</string>
+    <string name="installed_games_context_menu_delete">Delete</string>
+    <string name="installed_games_context_menu_about">About</string>
+    <string name="installed_games_screen_fab_content_description">Install games</string>
 
     <string name="dialog_delete_game_title">Delete game?</string>
     <string name="dialog_delete_game_text">Saved game data will remain on the device</string>
@@ -39,8 +39,13 @@
 
     <string name="dialog_error_close_button">Close</string>
 
+    <string name="custom_dialog_positive_button">Accept</string>
+    <string name="custom_dialog_negative_button">Cancel</string>
+
     <string name="unpack_resources_fragment_try_again_button">Try again</string>
     <string name="unpack_resources_fragment_error_message">Failed to unpack resources. Check the free space on the internal storage and try again.</string>
+
+    <string name="search_placeholder">Search query</string>
 
     <string name="notification_download_game">Downloading</string>
     <string name="notification_install_game">Installing</string>
@@ -68,9 +73,6 @@
     <string name="prefs_enable_game_theme_title">Built-in game theme</string>
     <string name="prefs_enable_game_theme_summary">Use the built-in game theme instead of the default theme</string>
     <string name="prefs_default_theme_title">Default theme</string>
-    <string-array name="prefs_themes_entries">
-        <item>No themes found</item>
-    </string-array>
     <string name="prefs_hires_title">High resolution</string>
     <string name="prefs_hires_summary">Use the best screen orientation</string>
     <string name="prefs_text_size_title">Text size</string>
@@ -110,6 +112,8 @@
     <string name="prefs_theme_name_dark">Dark</string>
     <string name="prefs_theme_name_auto_battery">Set by Battery Saver</string>
     <string name="prefs_theme_name_follow_system">Use system default</string>
+    <string name="prefs_dynamic_colors">Dynamic colors</string>
+    <string name="prefs_dynamic_colors_summary">App colors adapt to your wallpaper</string>
 
     <string name="about_activity_title">About</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Peter Kosyh https://instead-hub.github.io/</string>

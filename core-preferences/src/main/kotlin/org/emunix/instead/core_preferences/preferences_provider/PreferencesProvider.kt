@@ -5,39 +5,45 @@
 
 package org.emunix.instead.core_preferences.preferences_provider
 
+import kotlinx.coroutines.flow.Flow
+
 interface PreferencesProvider {
 
-    val isMusicEnabled: Boolean
+    var isMusicEnabled: Boolean
 
-    val isCursorEnabled: Boolean
+    var isCursorEnabled: Boolean
 
-    val isOwnGameThemeEnabled: Boolean
+    var isOwnGameThemeEnabled: Boolean
 
-    val defaultInsteadTheme: String
+    var defaultInsteadTheme: String
 
-    val isHiresEnabled: Boolean
+    var isHiresEnabled: Boolean
 
-    val defaultInsteadTextSize: String
+    var defaultInsteadTextSize: String
 
-    val keyboardButtonPosition: String
+    var keyboardButtonPosition: String
 
-    val backButton: String
+    var backButton: String
 
-    val isGLHackEnabled: Boolean
+    var isGLHackEnabled: Boolean
 
-    val repositoryUrl: String
+    var repositoryUrl: String
 
-    val isSandboxEnabled: Boolean
+    var isSandboxEnabled: Boolean
 
-    val sandboxUrl: String
+    var sandboxUrl: String
 
-    val updateRepoInBackground: Boolean
+    var updateRepoInBackground: Boolean
 
-    val updateRepoWhenOpenRepositoryScreen: Boolean
+    var updateRepoWhenOpenRepositoryScreen: Boolean
 
-    val appTheme: String
+    var appTheme: String
+
+    var dynamicColors: Boolean
 
     var resourcesLastUpdate: Long
+
+    fun observeDynamicColorsPrefChanges(): Flow<Boolean>
 
     companion object {
 
@@ -48,6 +54,8 @@ interface PreferencesProvider {
 
         const val DEFAULT_INSTEAD_THEME = "mobile"
         const val DEFAULT_INSTEAD_TEXT_SIZE = "130"
+
+        const val DEFAULT_DYNAMIC_COLORS = true
 
         const val DEFAULT_KEYBOARD_BUTTON_POSITION = "bottom_left"
         const val KEYBOARD_BUTTON_BOTTOM_LEFT = "bottom_left"
@@ -67,6 +75,7 @@ interface PreferencesProvider {
         const val PREF_BACK_BUTTON_KEY = "pref_back_button"
         const val PREF_CURSOR_KEY = "pref_cursor"
         const val PREF_DEFAULT_THEME_KEY = "pref_default_theme"
+        const val PREF_DYNAMIC_COLORS_KEY = "pref_dynamic_colors"
         const val PREF_ENABLE_GAME_THEME_KEY = "pref_enable_game_theme"
         const val PREF_GL_HACK_KEY = "pref_gl_hack"
         const val PREF_HIRES_KEY = "pref_hires"

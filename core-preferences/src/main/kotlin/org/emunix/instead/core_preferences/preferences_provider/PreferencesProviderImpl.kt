@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, 2025 Boris Timofeev <btimofeev@emunix.org>
+ * Copyright (c) 2021, 2025, 2026 Boris Timofeev <btimofeev@emunix.org>
  * Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
  */
 
@@ -7,7 +7,10 @@ package org.emunix.instead.core_preferences.preferences_provider
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.BACK_BUTTON_EXIT_GAME
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_DYNAMIC_COLORS
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_INSTEAD_TEXT_SIZE
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_INSTEAD_THEME
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_KEYBOARD_BUTTON_POSITION
@@ -17,6 +20,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_BACK_BUTTON_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_CURSOR_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DEFAULT_THEME_KEY
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DYNAMIC_COLORS_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_ENABLE_GAME_THEME_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_GL_HACK_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_HIRES_KEY
@@ -30,58 +34,84 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_UPDATE_REPO_BACKGROUND_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_UPDATE_REPO_STARTUP_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.SANDBOX_REPOSITORY_URL
+import org.emunix.instead.core_preferences.utils.asFlow
 import javax.inject.Inject
 
 class PreferencesProviderImpl @Inject constructor(private val preferences: SharedPreferences) : PreferencesProvider {
 
-    override val isMusicEnabled: Boolean
+    override var isMusicEnabled: Boolean
         get() = preferences.getBoolean(PREF_MUSIC_KEY, true)
+        set(value) = preferences.edit { putBoolean(PREF_MUSIC_KEY, value) }
 
-    override val isCursorEnabled: Boolean
+    override var isCursorEnabled: Boolean
         get() = preferences.getBoolean(PREF_CURSOR_KEY, false)
+        set(value) = preferences.edit { putBoolean(PREF_CURSOR_KEY, value) }
 
-    override val isOwnGameThemeEnabled: Boolean
+    override var isOwnGameThemeEnabled: Boolean
         get() = preferences.getBoolean(PREF_ENABLE_GAME_THEME_KEY, true)
+        set(value) = preferences.edit { putBoolean(PREF_ENABLE_GAME_THEME_KEY, value) }
 
-    override val defaultInsteadTheme: String
+    override var defaultInsteadTheme: String
         get() = preferences.getString(PREF_DEFAULT_THEME_KEY, null) ?: DEFAULT_INSTEAD_THEME
+        set(value) = preferences.edit { putString(PREF_DEFAULT_THEME_KEY, value) }
 
-    override val isHiresEnabled: Boolean
+    override var isHiresEnabled: Boolean
         get() = preferences.getBoolean(PREF_HIRES_KEY, true)
+        set(value) = preferences.edit { putBoolean(PREF_HIRES_KEY, value) }
 
-    override val defaultInsteadTextSize: String
+    override var defaultInsteadTextSize: String
         get() = preferences.getString(PREF_TEXT_SIZE_KEY, null) ?: DEFAULT_INSTEAD_TEXT_SIZE
+        set(value) = preferences.edit { putString(PREF_TEXT_SIZE_KEY, value) }
 
-    override val keyboardButtonPosition: String
+    override var keyboardButtonPosition: String
         get() = preferences.getString(PREF_KEYBOARD_BUTTON_KEY, null) ?: DEFAULT_KEYBOARD_BUTTON_POSITION
+        set(value) = preferences.edit { putString(PREF_KEYBOARD_BUTTON_KEY, value) }
 
-    override val backButton: String
+    override var backButton: String
         get() = preferences.getString(PREF_BACK_BUTTON_KEY, null) ?: BACK_BUTTON_EXIT_GAME
+        set(value) = preferences.edit { putString(PREF_BACK_BUTTON_KEY, value) }
 
-    override val isGLHackEnabled: Boolean
+    override var isGLHackEnabled: Boolean
         get() = preferences.getBoolean(PREF_GL_HACK_KEY, false)
+        set(value) = preferences.edit { putBoolean(PREF_GL_HACK_KEY, value) }
 
-    override val repositoryUrl: String
+    override var repositoryUrl: String
         get() = preferences.getString(PREF_REPOSITORY_KEY, null) ?: DEFAULT_REPOSITORY_URL
+        set(value) = preferences.edit { putString(PREF_REPOSITORY_KEY, value) }
 
-    override val isSandboxEnabled: Boolean
+    override var isSandboxEnabled: Boolean
         get() = preferences.getBoolean(PREF_SANDBOX_ENABLED_KEY, false)
+        set(value) = preferences.edit { putBoolean(PREF_SANDBOX_ENABLED_KEY, value) }
 
-    override val sandboxUrl: String
+    override var sandboxUrl: String
         get() = preferences.getString(PREF_SANDBOX_KEY, null) ?: SANDBOX_REPOSITORY_URL
+        set(value) = preferences.edit { putString(PREF_SANDBOX_KEY, value) }
 
-    override val updateRepoInBackground: Boolean
+    override var updateRepoInBackground: Boolean
         get() = preferences.getBoolean(PREF_UPDATE_REPO_BACKGROUND_KEY, true)
+        set(value) = preferences.edit { putBoolean(PREF_UPDATE_REPO_BACKGROUND_KEY, value) }
 
-    override val updateRepoWhenOpenRepositoryScreen: Boolean
+    override var updateRepoWhenOpenRepositoryScreen: Boolean
         get() = preferences.getBoolean(PREF_UPDATE_REPO_STARTUP_KEY, false)
+        set(value) = preferences.edit { putBoolean(PREF_UPDATE_REPO_STARTUP_KEY, value) }
 
-    override val appTheme: String
+    override var appTheme: String
         get() = preferences.getString(PREF_APP_THEME_KEY, null) ?: DEFAULT_THEME
+        set(value) = preferences.edit { putString(PREF_APP_THEME_KEY, value) }
+
+    override var dynamicColors: Boolean
+        get() = preferences.getBoolean(PREF_DYNAMIC_COLORS_KEY, DEFAULT_DYNAMIC_COLORS)
+        set(value) = preferences.edit { putBoolean(PREF_DYNAMIC_COLORS_KEY, value) }
 
     override var resourcesLastUpdate: Long
         get() = preferences.getLong(PREF_RESOURCES_LAST_UPDATE_KEY, -1)
         set(value) {
             preferences.edit { putLong(PREF_RESOURCES_LAST_UPDATE_KEY, value) }
         }
+
+    override fun observeDynamicColorsPrefChanges(): Flow<Boolean> =
+        preferences.asFlow(
+            key = PREF_DYNAMIC_COLORS_KEY,
+            defaultValue = DEFAULT_DYNAMIC_COLORS
+        ).distinctUntilChanged()
 }

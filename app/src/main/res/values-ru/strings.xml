@@ -24,13 +24,13 @@
     <string name="game_activity_message_downloading">Загружается: %1$s/%2$s</string>
     <string name="game_activity_message_installing">Загружается&#8230;</string>
 
-    <string name="installed_games_activity_title">INSTEAD</string>
-    <string name="installed_games_empty_text">Готовы к приключениям?\nНажмите на красную кнопку для выбора игры.</string>
-    <string name="installed_games_activity_context_menu_play">Играть</string>
-    <string name="installed_games_activity_context_menu_play_from_beginning">Начать новую игру</string>
-    <string name="installed_games_activity_context_menu_delete">Удалить</string>
-    <string name="installed_games_activity_context_menu_about">Об игре</string>
-    <string name="installed_games_fragment_fab_content_description">Установить игры</string>
+    <string name="installed_games_screen_title">INSTEAD</string>
+    <string name="installed_games_empty_text">Готовы к приключениям?\nНажмите на кнопку \"+\" для выбора игры.</string>
+    <string name="installed_games_context_menu_play">Играть</string>
+    <string name="installed_games_context_menu_play_from_beginning">Начать новую игру</string>
+    <string name="installed_games_context_menu_delete">Удалить</string>
+    <string name="installed_games_context_menu_about">Об игре</string>
+    <string name="installed_games_screen_fab_content_description">Установить игры</string>
 
     <string name="dialog_delete_game_title">Удалить игру?</string>
     <string name="dialog_delete_game_text">Сохранёные данные игры останутся на устройстве</string>
@@ -39,8 +39,13 @@
 
     <string name="dialog_error_close_button">Закрыть</string>
 
+    <string name="custom_dialog_positive_button">Выбрать</string>
+    <string name="custom_dialog_negative_button">Отмена</string>
+
     <string name="unpack_resources_fragment_try_again_button">Повторить попытку</string>
     <string name="unpack_resources_fragment_error_message">Не удалось распаковать ресурсы. Проверьте свободное место на внутреннем накопителе и повторите попытку.</string>
+
+    <string name="search_placeholder">Поисковый запрос</string>
 
     <string name="notification_download_game">Загружаю</string>
     <string name="notification_install_game">Устанавливаю</string>
@@ -68,9 +73,6 @@
     <string name="prefs_enable_game_theme_title">Собственная тема игры</string>
     <string name="prefs_enable_game_theme_summary">Использовать встроенную в игру тему, вместо темы по-умолчанию</string>
     <string name="prefs_default_theme_title">Тема по-умолчанию</string>
-    <string-array name="prefs_themes_entries">
-        <item>Темы не найдены</item>
-    </string-array>
     <string name="prefs_hires_title">Максимальное разрешение</string>
     <string name="prefs_hires_summary">Использовать наилучшую ориентацию экрана</string>
     <string name="prefs_text_size_title">Размер текста</string>
@@ -110,6 +112,8 @@
     <string name="prefs_theme_name_dark">Тёмная</string>
     <string name="prefs_theme_name_auto_battery">В зависимости от заряда батареи</string>
     <string name="prefs_theme_name_follow_system">В зависимости от системной темы</string>
+    <string name="prefs_dynamic_colors">Динамические цвета</string>
+    <string name="prefs_dynamic_colors_summary">Цвета интерфейса подстраиваются под ваши обои</string>
 
     <string name="about_activity_title">О программе</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Пётр Косых https://instead-hub.github.io/</string>

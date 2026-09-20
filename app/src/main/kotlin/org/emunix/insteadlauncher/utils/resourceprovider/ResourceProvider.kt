@@ -5,6 +5,7 @@
 
 package org.emunix.insteadlauncher.utils.resourceprovider
 
+import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 
 interface ResourceProvider {
@@ -28,4 +29,6 @@ interface ResourceProvider {
      *         text information.
      */
     fun getString(@StringRes stringResId: Int, vararg args: Any): String
+
+    fun getStringArray(@ArrayRes stringArrayResId: Int): Array<String>
 }

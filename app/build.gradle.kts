@@ -5,6 +5,8 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
     id("de.mannodermaus.android-junit5")
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -40,7 +42,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
-        viewBinding = true
+        compose = true
         buildConfig = true
     }
     lint {
@@ -82,12 +84,13 @@ dependencies {
     // Support libraries
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.preference.ktx)
-    implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.legacy.support.v4)
+
+    // Compose
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling)
 
     // Architecture components
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -102,17 +105,19 @@ dependencies {
     // Kotlin
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
 
     // Navigation
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
 
     // Network
     implementation(libs.okhttp)
-    implementation(libs.coil)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.okhttp)
 
     // DI
     implementation(libs.hilt.android)
@@ -129,9 +134,6 @@ dependencies {
 
     // Logging
     implementation(libs.timber)
-
-    // ViewBinding Delegate
-    implementation(libs.viewbindingpropertydelegate.noreflection)
 
     // Test
     testImplementation(libs.junit.jupiter.api)
