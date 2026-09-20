@@ -4,7 +4,7 @@
 
 INSTEAD Launcher is an Android app for downloading and running games for the "INSTEAD" text-quest engine. The native engine and SDL3 are built from source directly in this project (the `:instead` module).
 
-- The JVM-layer language is Kotlin. The UI on `master` is built with Android Views + XML layouts (NOT Compose).
+- The JVM-layer language is Kotlin. The UI is built with Jetpack Compose.
 - Architecture: MVVM + Clean Architecture + `singleton android activity`.
 - DI: Hilt (KSP). DB: Room (KSP). Background work: WorkManager + foreground services.
 - SDK versions: `minSdk 25`, `compile/targetSdk 36`, `ndk 27.2.12479018`, Java 21 bytecode (source/target), Gradle runs on JDK 25.
@@ -23,7 +23,7 @@ INSTEAD Launcher is an Android app for downloading and running games for the "IN
 App packages: `org.emunix.insteadlauncher` (app), `org.emunix.instead*` (libraries).
 
 Code layers under `app/src/main/kotlin/org/emunix/insteadlauncher/`:
-- `presentation/` — Fragment/ViewModel/Adapter, states under `presentation/models`
+- `presentation/` — Compose screens, ViewModels, navigation (`presentation/navigation`), theme (`presentation/theme`), states under `presentation/models`
 - `domain/` — entities, repository interfaces, use case classes, work wrappers (`domain/work`)
 - `data/` — repository implementations, Room (`.data/db`), network (`.data/network`), parsers
 - `di/` — Hilt modules
@@ -31,8 +31,8 @@ Code layers under `app/src/main/kotlin/org/emunix/insteadlauncher/`:
 
 ## Branches
 
-- `master` — main branch. Current UI: Android Views/XML.
-- `compose` — work-in-progress port of the UI to Jetpack Compose (Navigation Compose, Hilt Navigation Compose, Coil Compose). Not merged yet; the migration is planned for later. Conventions listed below describe `master`—expect them to shift when the Compose port lands.
+- `master` — main branch. UI: Jetpack Compose (the Visual Views/XML app is the pre-migration state). The `compose` branch is the Compose port rebased on top of `master` and is the active branch for UI work.
+- `compose` — the UI ported to Jetpack Compose (Navigation Compose, Hilt Navigation Compose, Coil Compose), rebased onto `master`. Conventions below describe this branch.
 - `SDL3` — active branch for native SDL3 development.
 
 ## Build
@@ -76,18 +76,18 @@ Tests live in `app/src/test/kotlin/` (see `GameParserImplTest`). Test resources 
 
 ## Code conventions
 
-- MVVM: a Fragment subscribes to the ViewModel's `StateFlow` via `viewModels()`/`by viewModels()`, the state is an immutable data class.
+- MVVM: a Compose screen subscribes to the ViewModel's `StateFlow` via `collectAsStateWithLifecycle()`, the ViewModel is obtained with `hiltViewModel()`, the state is an immutable data class.
 - Repositories are defined as interfaces in `domain/repository`, implementations in `data/repository`.
 - Use case classes live in `domain/usecase` (`...UseCase` interface + `...UseCaseImpl`).
 - Dependency injection is exclusively via Hilt (`@Inject constructor`, `@AndroidEntryPoint`, `di/*Module.kt`).
-- ViewBinding is enabled; use the ViewBindingPropertyDelegate (`viewbindingpropertydelegate-noreflection`).
+- Compose Compiler: the Compose Compiler Gradle plugin is applied (`org.jetbrains.kotlin.plugin.compose`), version tied to the built-in Kotlin in AGP 9. Navigation: Navigation Compose + Hilt Navigation Compose. Images: Coil 3 (`coil-compose`).
 - WorkManager jobs are run through wrapper classes in `domain/work`; the Workers themselves live in `services/`.
 - Logging: Timber. Crash reports: ACRA (release builds only).
 - Launching a game: `InsteadApi.startGame(gameName, playFromBeginning)` → `InsteadActivity` (SDL).
 
 ## CI
 
-GitHub Actions: `.github/workflows/android.yml` — builds a debug APK for all ABIs, caches the downloaded SDL3, uploads the artifact. Runs on push/PR against the `SDL3`, `master` and `main` branches and on `v*` tags. The main branch is `master`; `SDL3` is the active branch for native SDL3 development. The `compose` branch is not yet covered by CI triggers.
+GitHub Actions: `.github/workflows/android.yml` — builds a debug APK for all ABIs, caches the downloaded SDL3, uploads the artifact. Runs on push/PR against the `SDL3`, `master` and `main` branches and on `v*` tags. The main branch is `master`; `SDL3` is the active branch for native SDL3 development. The `compose` branch (the rebased Compose port) is not yet covered by CI triggers.
 
 ## Misc
 
