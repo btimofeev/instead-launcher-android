@@ -6,7 +6,7 @@ INSTEAD Launcher is an Android app for downloading and running games for the "IN
 
 - The JVM-layer language is Kotlin. The UI on `master` is built with Android Views + XML layouts (NOT Compose).
 - Architecture: MVVM + Clean Architecture + `singleton android activity`.
-- DI: Hilt (kapt). DB: Room (KSP). Background work: WorkManager + foreground services.
+- DI: Hilt (KSP). DB: Room (KSP). Background work: WorkManager + foreground services.
 - SDK versions: `minSdk 25`, `compile/targetSdk 34`, `ndk 27.2.12479018`, Java/JVM 17.
 
 ## Repository structure
@@ -70,7 +70,7 @@ Tests live in `app/src/test/kotlin/` (see `GameParserImplTest`). Test resources 
 
 - `lint { abortOnError false }` — lint does not block the build.
 - Kotlin style: standard (4 spaces, trailing commas).
-- `kapt` is used for Hilt and `ksp` for Room in the JVM modules.
+- `kotlin`-stdlib version and `ksp` (KSP2) are used for both Hilt and Room in the JVM modules.
 - NEVER add comments unless necessary; the codebase does contain comments — keep them in place.
 - File header comment format: `Copyright (c) <year> Boris Timofeev <btimofeev@emunix.org>` + MIT license. Use the current year for new files.
 

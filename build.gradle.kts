@@ -7,7 +7,6 @@ buildscript {
     }
     dependencies {
         classpath(libs.gradle)
-        classpath(libs.kotlin.gradle.plugin)
         classpath(libs.hilt.android.gradle.plugin)
         classpath(libs.android.junit5)
     }
@@ -15,7 +14,6 @@ buildscript {
 
 plugins {
     alias(libs.plugins.download.plugin)
-    alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.ksp.plugin) apply false
 }
 

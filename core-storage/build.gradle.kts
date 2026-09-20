@@ -1,8 +1,7 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -20,23 +19,9 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-    sourceSets {
-        getByName("main") {
-            java.srcDir("src/main/kotlin")
-        }
-        getByName("androidTest") {
-            java.srcDir("src/androidTest/kotlin")
-        }
-        getByName("test") {
-            java.srcDir("src/test/kotlin")
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
     }
     namespace = "org.emunix.instead.core_storage_api"
 }
@@ -51,7 +36,7 @@ dependencies {
 
     // DI
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // Files
     implementation(libs.commons.io)

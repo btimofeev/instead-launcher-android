@@ -2,8 +2,6 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
     id("de.mannodermaus.android-junit5")
@@ -37,27 +35,13 @@ android {
             buildConfigField("String", "INSTEAD_VERSION", "\"${libs.versions.insteadVersion.get()}\"")
         }
     }
-    sourceSets {
-        getByName("main") {
-            java.srcDir("src/main/kotlin")
-        }
-        getByName("androidTest") {
-            java.srcDir("src/androidTest/kotlin")
-        }
-        getByName("test") {
-            java.srcDir("src/test/kotlin")
-        }
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     lint {
         abortOnError = false
@@ -132,9 +116,9 @@ dependencies {
 
     // DI
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.work)
-    kapt(libs.androidx.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
 
     // Files
     implementation(libs.commons.io)

@@ -3,9 +3,8 @@ import javax.inject.Inject
 
 plugins {
     id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
     alias(libs.plugins.download.plugin)
 }
 
@@ -56,7 +55,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             buildConfigField("String", "INSTEAD_VERSION", "\"${libs.versions.insteadVersion.get()}\"")
             ndk {
                 debugSymbolLevel = "FULL"
@@ -69,14 +68,7 @@ android {
 
     sourceSets {
         getByName("main") {
-            java.srcDir("src/main/kotlin")
-            jniLibs.srcDir("src/main/c/luajit-libs")
-        }
-        getByName("androidTest") {
-            java.srcDir("src/androidTest/kotlin")
-        }
-        getByName("test") {
-            java.srcDir("src/test/kotlin")
+            jniLibs.directories += "src/main/c/luajit-libs"
         }
     }
 
@@ -90,8 +82,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
+    buildFeatures {
+        buildConfig = true
     }
     namespace = "org.emunix.instead"
 }
@@ -109,7 +101,7 @@ dependencies {
 
     // DI
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 }
 
 val downloadExt = project.extensions.getByName("download") as de.undercouch.gradle.tasks.download.DownloadExtension
@@ -238,7 +230,7 @@ tasks.register("buildLuaJit") {
     val outDir = project.file("src/main/c/luajit-libs")
     val workDir = project.layout.buildDirectory.dir("luajit").get().asFile
     val api = libs.versions.minSdk.get()
-    val ndk = android.ndkDirectory
+    val ndk = androidComponents.sdkComponents.ndkDirectory.get().asFile
     val ops = project.objects.newInstance(InsteadBuildOps::class.java)
 
     val archInfo = mapOf(
