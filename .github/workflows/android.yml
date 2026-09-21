@@ -48,7 +48,7 @@ jobs:
           fi
           yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
           "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0" \
-                        "ndk;27.2.12479018" "cmake;3.31.0"
+                        "ndk;29.0.14206865" "cmake;3.31.0"
 
       # The heavy SDL3 satellite libraries change only when their versions in
       # instead/build.gradle change.

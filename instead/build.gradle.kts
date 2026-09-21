@@ -294,7 +294,6 @@ tasks.register("buildLuaJit") {
                         "TARGET_LJARCH=${info.ljarch}",
                         "TARGET_SONAME=libluajit.so",
                         "TARGET_FLAGS=-O2 -fPIC",
-                        "TARGET_LDFLAGS=-Wl,-z,max-page-size=16384",
                         "BUILDMODE=shared")
             }
             ops.fs.copy {
