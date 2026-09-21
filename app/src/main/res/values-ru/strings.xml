@@ -9,7 +9,6 @@
     <string name="repository_activity_title">Добавить игру</string>
     <string name="repository_unable_to_load">Не удалось загрузить список игр.\nСервер недоступен или отсутствует соединение с интернетом.</string>
     <string name="repository_try_again">Повторить попытку</string>
-    <string name="repository_nothing_found">Игр не найдено</string>
     <string name="repository_badge_content_description">Доступна новая версия игры</string>
 
     <string name="game_activity_button_install">Скачать</string>
@@ -46,7 +45,10 @@
     <string name="unpack_resources_fragment_try_again_button">Повторить попытку</string>
     <string name="unpack_resources_fragment_error_message">Не удалось распаковать ресурсы. Проверьте свободное место на внутреннем накопителе и повторите попытку.</string>
 
-    <string name="search_placeholder">Поисковый запрос</string>
+    <string name="search_placeholder">Найти игру</string>
+    <string name="search_empty_hint">Введите запрос в поле выше. Искать можно по названию, автору или ключевым словам.</string>
+    <string name="search_clear_content_description">Очистить запрос</string>
+    <string name="search_nothing_found">Ничего не нашлось. Попробуйте другие ключевые слова.</string>
 
     <string name="notification_download_game">Загружаю</string>
     <string name="notification_download_games">Загрузка игр: %1$d</string>

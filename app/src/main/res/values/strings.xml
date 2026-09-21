@@ -9,7 +9,6 @@
     <string name="repository_activity_title">Add game</string>
     <string name="repository_unable_to_load">Unable to load the game list.\nServer is unavailable or there is no internet connection.</string>
     <string name="repository_try_again">Try again</string>
-    <string name="repository_nothing_found">Nothing found</string>
     <string name="repository_badge_content_description">New version available</string>
 
     <string name="game_activity_button_install">Download</string>
@@ -46,7 +45,10 @@
     <string name="unpack_resources_fragment_try_again_button">Try again</string>
     <string name="unpack_resources_fragment_error_message">Failed to unpack resources. Check the free space on the internal storage and try again.</string>
 
-    <string name="search_placeholder">Search query</string>
+    <string name="search_placeholder">Find a game</string>
+    <string name="search_empty_hint">Enter a query in the field above. You can search by title, author or keywords.</string>
+    <string name="search_clear_content_description">Clear search query</string>
+    <string name="search_nothing_found">Nothing found. Try different keywords.</string>
 
     <string name="notification_download_game">Downloading</string>
     <string name="notification_download_games">Downloading: %1$d</string>

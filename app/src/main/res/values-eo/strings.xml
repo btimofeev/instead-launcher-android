@@ -9,7 +9,6 @@
     <string name="repository_activity_title">Aldoni ludon</string>
     <string name="repository_unable_to_load">Ne povis ŝargi liston de ludoj.\nServilo ne funkcias aŭ forestas interreta konekto.</string>
     <string name="repository_try_again">Provi denove</string>
-    <string name="repository_nothing_found">Ludoj ne trovitaj</string>
     <string name="repository_badge_content_description">Nova versio estas disponebla</string>
 
     <string name="game_activity_button_install">Elŝuti</string>
@@ -43,7 +42,10 @@
     <string name="unpack_resources_fragment_try_again_button">Provi denove</string>
     <string name="unpack_resources_fragment_error_message">Elpako de risurcoj ne sukcesis. Kontrolu liberan spacon sur aparato kaj provu denove.</string>
 
-    <string name="search_placeholder">Serĉu demandon</string>
+    <string name="search_placeholder">Trovu ludon</string>
+    <string name="search_empty_hint">Enigu demandon en la kampo supre. Serĉi eblas laŭ titolo, aŭtoro aŭ ŝlosilvortoj.</string>
+    <string name="search_clear_content_description">Forigi demandon</string>
+    <string name="search_nothing_found">Nenio trovita. Provu aliajn ŝlosilvortojn.</string>
 
     <string name="notification_download_game">Elŝutas</string>
     <string name="notification_download_games">Elŝutado: %1$d</string>
