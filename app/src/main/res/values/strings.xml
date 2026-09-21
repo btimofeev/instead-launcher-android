@@ -65,6 +65,7 @@
 
     <string name="error">Error</string>
     <string name="error_failed_to_download_file">Failed to download file: %s</string>
+    <string name="error_game_file_not_found">Failed to get the game file. The repository may be out of date — update the game list and try again.</string>
     <string name="error_failed_to_unpack_zip">Unable to unpack game. Make sure you have enough free space on your phone and try again.</string>
     <string name="error_failed_to_install_zip">Failed to install game. The archive may be corrupted or unreadable.</string>
     <string name="error_corrupted_zip">The archive is corrupted or not a valid zip file</string>

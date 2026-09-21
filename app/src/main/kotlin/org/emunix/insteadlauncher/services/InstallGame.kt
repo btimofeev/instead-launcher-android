@@ -36,6 +36,7 @@ import org.emunix.insteadlauncher.domain.model.GameState
 import org.emunix.insteadlauncher.domain.model.InstallGameResult
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.DOWNLOAD_ERROR
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.GAME_NOT_FOUND_IN_DATABASE
+import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.INVALID_GAME_FILE
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.UNPACKING_ERROR
 import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
 import org.emunix.insteadlauncher.domain.repository.NotificationRepository
@@ -186,6 +187,7 @@ class InstallGame : Service() {
         error.throwable?.writeToLog()
         val errorText = when (error.type) {
             DOWNLOAD_ERROR -> getString(R.string.error_failed_to_download_file, request.url)
+            INVALID_GAME_FILE -> getString(R.string.error_game_file_not_found)
             UNPACKING_ERROR -> getString(R.string.error_failed_to_unpack_zip)
             GAME_NOT_FOUND_IN_DATABASE -> getString(R.string.error)
         }

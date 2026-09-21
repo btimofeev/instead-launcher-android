@@ -25,9 +25,12 @@ import org.emunix.insteadlauncher.data.parser.GameListParser
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Success
 import org.emunix.insteadlauncher.domain.model.GameModel
+import org.emunix.insteadlauncher.domain.model.InvalidGameFileException
 import org.emunix.insteadlauncher.domain.repository.NotificationRepository
 import org.emunix.insteadlauncher.domain.repository.RemoteRepository
 import org.emunix.insteadlauncher.data.network.ProgressResponseBody
+import org.emunix.insteadlauncher.utils.ZIP_SIGNATURE_SIZE
+import org.emunix.insteadlauncher.utils.isZipArchive
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
@@ -83,7 +86,21 @@ class RemoteRepositoryImpl @Inject constructor(
                         if (continuation.isCancelled) {
                             response.close()
                         } else {
-                            continuation.resume(responseBody.byteStream())
+                            val header = try {
+                                response.peekBody(ZIP_SIGNATURE_SIZE.toLong()).bytes()
+                            } catch (e: IOException) {
+                                response.close()
+                                continuation.resumeWithException(e)
+                                return
+                            }
+                            if (!header.isZipArchive()) {
+                                response.close()
+                                continuation.resumeWithException(
+                                    InvalidGameFileException("Server response is not a zip archive")
+                                )
+                            } else {
+                                continuation.resume(responseBody.byteStream())
+                            }
                         }
                     }
                 }

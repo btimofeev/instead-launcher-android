@@ -62,6 +62,7 @@
 
     <string name="error">Eraro</string>
     <string name="error_failed_to_download_file">Malsukcesis elŝuti dosieron: %s</string>
+    <string name="error_game_file_not_found">Malsukcesis akiri la lud-dosieron. La deponejo eble estas malnova — ĝisdatigu la ludliston kaj provu denove.</string>
     <string name="error_failed_to_unpack_zip">Malsukcesis malpaki ludon. Kontrolu liberan spacon sur aparato kaj provu denove.</string>
     <string name="error_failed_to_install_zip">Malsukcesis instali ludon. La arkivo eble estas difektita aŭ nelegebla.</string>
     <string name="error_corrupted_zip">La arkivo estas difektita aŭ ne estas valida zip-dosiero</string>

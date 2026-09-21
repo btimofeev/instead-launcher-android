@@ -17,8 +17,10 @@ import org.emunix.insteadlauncher.domain.model.InstallGameResult
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.DOWNLOAD_ERROR
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.GAME_NOT_FOUND_IN_DATABASE
+import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.INVALID_GAME_FILE
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.UNPACKING_ERROR
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Success
+import org.emunix.insteadlauncher.domain.model.InvalidGameFileException
 import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.repository.RemoteRepository
@@ -45,6 +47,9 @@ override suspend fun invoke(gameName: String, originalState: GameState): Install
         } catch (e: CancellationException) {
             game.restoreStateToDatabase(originalState)
             throw e
+        } catch (e: InvalidGameFileException) {
+            game.restoreStateToDatabase(originalState)
+            return Error(type = INVALID_GAME_FILE, throwable = e)
         } catch (e: Throwable) {
             game.restoreStateToDatabase(originalState)
             return Error(type = DOWNLOAD_ERROR, throwable = e)

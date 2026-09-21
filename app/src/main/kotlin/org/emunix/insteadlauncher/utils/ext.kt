@@ -24,6 +24,19 @@ import java.util.zip.ZipInputStream
 
 private const val BUFFER_SIZE = 102400
 
+const val ZIP_SIGNATURE_SIZE = 4
+
+private val ZIP_SIGNATURES = arrayOf(
+    byteArrayOf(0x50, 0x4B, 0x03, 0x04),
+    byteArrayOf(0x50, 0x4B, 0x05, 0x06),
+    byteArrayOf(0x50, 0x4B, 0x07, 0x08),
+)
+
+fun ByteArray.isZipArchive(): Boolean =
+    ZIP_SIGNATURES.any { signature ->
+        size >= signature.size && signature.indices.all { this[it] == signature[it] }
+    }
+
 @Throws(IOException::class)
 suspend fun InputStream.unzip(dir: File) = coroutineScope {
     val targetDir = dir.canonicalFile

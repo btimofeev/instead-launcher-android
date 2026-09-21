@@ -24,7 +24,9 @@ import org.emunix.insteadlauncher.domain.model.GameVersion
 import org.emunix.insteadlauncher.domain.model.InstallGameResult
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.DOWNLOAD_ERROR
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.GAME_NOT_FOUND_IN_DATABASE
+import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.INVALID_GAME_FILE
 import org.emunix.insteadlauncher.domain.model.InstallGameResult.Error.Type.UNPACKING_ERROR
+import org.emunix.insteadlauncher.domain.model.InvalidGameFileException
 import org.emunix.insteadlauncher.domain.repository.DataBaseRepository
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.repository.RemoteRepository
@@ -92,6 +94,20 @@ class InstallGameUseCaseTest {
         assertEquals(UNPACKING_ERROR, error.type)
         coVerify(exactly = 1) { fileSystemRepository.deleteGameFromDisk("game1") }
         assertEquals(listOf(IS_INSTALL, NO_INSTALLED), updates.map { it.state })
+    }
+
+    @Test
+    fun `returns invalid game file error when the server response is not a zip`() = runTest {
+        coEvery { dataBaseRepository.getGame("game1") } returns game()
+        coEvery { remoteRepository.download(any(), "game1") } throws InvalidGameFileException("not a zip")
+
+        val result = useCase("game1", NO_INSTALLED)
+
+        val error = assertInstanceOf(InstallGameResult.Error::class.java, result)
+        assertEquals(INVALID_GAME_FILE, error.type)
+        assertEquals(listOf(IS_INSTALL, NO_INSTALLED), updates.map { it.state })
+        coVerify(exactly = 0) { fileSystemRepository.installGame(any(), any()) }
+        coVerify(exactly = 0) { fileSystemRepository.deleteGameFromDisk(any()) }
     }
 
     @Test

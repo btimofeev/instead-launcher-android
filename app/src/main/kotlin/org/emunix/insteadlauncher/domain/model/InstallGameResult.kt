@@ -18,6 +18,8 @@ sealed interface InstallGameResult {
 
             DOWNLOAD_ERROR,
 
+            INVALID_GAME_FILE,
+
             UNPACKING_ERROR,
 
             GAME_NOT_FOUND_IN_DATABASE,
