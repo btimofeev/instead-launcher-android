@@ -70,6 +70,9 @@ jobs:
       - name: Download INSTEAD, LuaJIT and libiconv
         run: ./gradlew --no-daemon --build-cache :instead:downloadInstead
 
+      - name: Run unit tests
+        run: ./gradlew --no-daemon --build-cache :app:testDebugUnitTest
+
       - name: Build
         run: ./gradlew --no-daemon --build-cache assembleDebug -PabiFilters="$ABIS"
 
