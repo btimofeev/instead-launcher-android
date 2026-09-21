@@ -51,7 +51,7 @@ jobs:
                         "ndk;29.0.14206865" "cmake;3.31.0"
 
       # The heavy SDL3 satellite libraries change only when their versions in
-      # instead/build.gradle change.
+      # instead/build.gradle.kts change.
       - name: Cache SDL3
         id: cache-sdl
         uses: actions/cache@v6
@@ -61,13 +61,26 @@ jobs:
             instead/src/main/c/SDL3_image/SDL3_image
             instead/src/main/c/SDL3_mixer/SDL3_mixer
             instead/src/main/c/SDL3_ttf/SDL3_ttf
-          key: sdl3-${{ runner.os }}-${{ hashFiles('instead/build.gradle') }}
+          key: sdl3-${{ runner.os }}-${{ hashFiles('instead/build.gradle.kts') }}
 
       - name: Download SDL3
         if: steps.cache-sdl.outputs.cache-hit != 'true'
         run: ./gradlew --no-daemon --build-cache :instead:downloadSdl
 
+      # INSTEAD, LuaJIT and libiconv change only when instead/build.gradle.kts
+      # changes (their refs are pinned there).
+      - name: Cache INSTEAD, LuaJIT and libiconv
+        id: cache-instead
+        uses: actions/cache@v6
+        with:
+          path: |
+            instead/src/main/c/Instead/Instead
+            instead/src/main/c/LuaJIT
+            instead/src/main/c/libiconv/libiconv
+          key: instead-${{ runner.os }}-${{ hashFiles('instead/build.gradle.kts') }}
+
       - name: Download INSTEAD, LuaJIT and libiconv
+        if: steps.cache-instead.outputs.cache-hit != 'true'
         run: ./gradlew --no-daemon --build-cache :instead:downloadInstead
 
       - name: Run unit tests
