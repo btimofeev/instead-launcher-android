@@ -41,6 +41,17 @@ first. On Debian/Ubuntu and derivatives:
 sudo apt-get install gcc-multilib libc6-dev-i386
 ```
 
+Alternatively, build in a Docker container to keep the host clean
+([Dockerfile](docker/Dockerfile), no host NDK/SDK needed):
+
+```
+./docker/build.sh
+```
+
+The first run builds the `instead-builder` image automatically. The debug APK
+is placed at `app/build/outputs/apk/debug/`. For details run
+`./docker/build.sh --help`.
+
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details

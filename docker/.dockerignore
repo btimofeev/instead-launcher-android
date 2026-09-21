@@ -1,0 +1,8 @@
+.git
+.gradle
+**/build
+instead/src/main/c
+local.properties
+keystore.properties
+*.apk
+*.zip
