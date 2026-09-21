@@ -64,6 +64,8 @@
     <string name="error">Ошибка</string>
     <string name="error_failed_to_download_file">Не удалось скачать файл: %s</string>
     <string name="error_failed_to_unpack_zip">Не удалось распаковать игру. Убедитесь, что у вас достаточно свободного места на телефоне и попробуйте ещё раз.</string>
+    <string name="error_failed_to_install_zip">Не удалось установить игру. Возможно, архив повреждён или недоступен для чтения.</string>
+    <string name="error_corrupted_zip">Архив повреждён или не является zip-файлом</string>
     <string name="error_not_instead_game_zip">Zip-архив не содержит игры</string>
     <string name="error_failed_to_delete_file">Не удалось удалить файл</string>
     <string name="error_server_return_unexpected_code">Сервер вернул неожиданный код %s</string>

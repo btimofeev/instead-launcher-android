@@ -6,10 +6,7 @@
 package org.emunix.insteadlauncher.domain.parser
 
 import java.io.File
-import java.io.InputStream
 import java.util.regex.Pattern
-import java.util.zip.ZipException
-import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
 class GameParserImpl @Inject constructor() : GameParser {
@@ -18,23 +15,6 @@ class GameParserImpl @Inject constructor() : GameParser {
         val main3 = File(dir, "main3.lua")
         val main = File(dir, "main.lua")
         return main3.exists() or main.exists()
-    }
-
-    @Throws(ZipException::class)
-    override fun isInsteadGameZip(inputStream: InputStream): Boolean {
-        var r = false
-        ZipInputStream(inputStream).use { zis ->
-            while (true) {
-                val entry = zis.nextEntry ?: break
-                val name = entry.name
-                zis.closeEntry()
-                if (name.contains("main3.lua") or name.contains("main.lua")) {
-                    r = true
-                    break
-                }
-            }
-        }
-        return r
     }
 
     override fun getMainGameFile(dir: File): File {

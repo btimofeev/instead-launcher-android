@@ -22,12 +22,6 @@ class GameParserImplTest {
     }
 
     @Test
-    fun `is instead game in zip`() {
-        val gamePath = File(this.javaClass.getResource("/testgame.zip")!!.path)
-        assertTrue(gameParser.isInsteadGameZip(gamePath.inputStream()))
-    }
-
-    @Test
     fun `parse game tags`() {
         val gamePath = File(this.javaClass.getResource("/testgame")!!.path)
         val gameFile = gameParser.getMainGameFile(gamePath)

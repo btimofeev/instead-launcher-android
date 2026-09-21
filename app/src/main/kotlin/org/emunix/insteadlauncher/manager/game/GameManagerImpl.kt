@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.apache.commons.io.FileUtils
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.instead_api.InsteadApi
 import org.emunix.insteadlauncher.domain.model.GameState.IN_QUEUE_TO_INSTALL
@@ -21,6 +22,7 @@ import org.emunix.insteadlauncher.domain.work.DeleteGameWork
 import org.emunix.insteadlauncher.domain.work.ScanGamesWork
 import org.emunix.insteadlauncher.services.InstallGame
 import org.emunix.insteadlauncher.utils.unzip
+import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
@@ -62,28 +64,25 @@ class GameManagerImpl @Inject constructor(
     }
 
     override suspend fun installGameFromZip(uri: Uri) { // todo перенести код метода в usecase
-
-        fun isGameZip(uri: Uri): Boolean {
-            val inputStream = context.contentResolver.openInputStream(uri)
-                ?: throw IOException("inputStream is null")
-            val isInsteadGameZip = gameParser.isInsteadGameZip(inputStream)
-            inputStream.close()
-            return isInsteadGameZip
-        }
-
-        suspend fun unzip(uri: Uri) {
-            val inputStream = context.contentResolver.openInputStream(uri)
-                ?: throw IOException("inputStream is null")
-            val gamesDir = storage.getGamesDirectory()
-            inputStream.unzip(gamesDir)
-            inputStream.close()
-        }
-
         withContext(Dispatchers.IO) {
-            if (isGameZip(uri)) {
-                unzip(uri)
-            } else {
-                throw NotInsteadGameZipException("main.lua not found")
+            val gamesDir = storage.getGamesDirectory()
+            val tmpDir = File(storage.getAppFilesDirectory(), ".tmp-zip-install")
+            tmpDir.deleteRecursively()
+            FileUtils.forceMkdir(tmpDir)
+            try {
+                val inputStream = context.contentResolver.openInputStream(uri)
+                    ?: throw IOException("inputStream is null")
+                inputStream.use { it.unzip(tmpDir) }
+
+                val isGame = tmpDir.listFiles()?.any { it.isDirectory && gameParser.isInsteadGame(it) } == true
+                if (!isGame) {
+                    throw NotInsteadGameZipException("main.lua not found")
+                }
+
+                FileUtils.forceMkdir(gamesDir)
+                FileUtils.copyDirectory(tmpDir, gamesDir)
+            } finally {
+                tmpDir.deleteRecursively()
             }
         }
     }

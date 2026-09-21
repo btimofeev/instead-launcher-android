@@ -6,14 +6,11 @@
 package org.emunix.insteadlauncher.domain.parser
 
 import java.io.File
-import java.io.InputStream
 import java.lang.IllegalStateException
 
 interface GameParser {
 
     fun isInsteadGame(dir: File): Boolean
-
-    fun isInsteadGameZip(inputStream: InputStream): Boolean
 
     @Throws(IllegalStateException::class)
     fun getMainGameFile(dir: File): File

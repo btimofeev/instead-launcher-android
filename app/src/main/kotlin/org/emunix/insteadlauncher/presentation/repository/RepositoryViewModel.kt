@@ -27,6 +27,7 @@ import org.emunix.insteadlauncher.presentation.models.UpdateRepoState
 import org.emunix.insteadlauncher.presentation.models.toRepoGames
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
 import timber.log.Timber
+import java.util.zip.ZipException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,8 +73,12 @@ class RepositoryViewModel @Inject constructor(
             gameManager.installGameFromZip(uri)
         } catch (e: NotInsteadGameZipException) {
             showErrorDialog(text = resourceProvider.getString(string.error_not_instead_game_zip))
+        } catch (e: ZipException) {
+            Timber.e(e)
+            showErrorDialog(text = resourceProvider.getString(string.error_corrupted_zip))
         } catch (e: Throwable) {
-            showErrorDialog(text = resourceProvider.getString(string.error_failed_to_unpack_zip))
+            Timber.e(e)
+            showErrorDialog(text = resourceProvider.getString(string.error_failed_to_install_zip))
         }
         _state.update { it.copy(installGameProgress = false) }
         gameManager.scanGames()

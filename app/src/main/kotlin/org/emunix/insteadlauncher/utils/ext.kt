@@ -9,41 +9,48 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
 import timber.log.Timber
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipException
 import java.util.zip.ZipInputStream
 
 private const val BUFFER_SIZE = 102400
 
-@Throws(ZipException::class)
+@Throws(IOException::class)
 suspend fun InputStream.unzip(dir: File) = coroutineScope {
+    val targetDir = dir.canonicalFile
     ZipInputStream(this@unzip).use { zis ->
         while (true) {
             ensureActive()
             val entry = zis.nextEntry ?: break
-            val entryFile = File(dir, entry.name)
+            val entryFile = File(targetDir, entry.name).canonicalFile
+            if (!entryFile.path.startsWith(targetDir.path + File.separator)) {
+                throw ZipException("Illegal entry path: ${entry.name}")
+            }
             if (entry.isDirectory) {
-                entryFile.mkdirs()
+                if (!entryFile.isDirectory && !entryFile.mkdirs()) {
+                    throw IOException("Unable to create directory: ${entryFile.path}")
+                }
             } else {
-                entryFile.parentFile?.mkdirs()
+                val parent = entryFile.parentFile
+                if (parent != null && !parent.isDirectory && !parent.mkdirs()) {
+                    throw IOException("Unable to create directory: ${parent.path}")
+                }
                 FileOutputStream(entryFile).use { output ->
                     val buf = ByteArray(BUFFER_SIZE)
                     while (true) {
                         ensureActive()
                         val count = zis.read(buf, 0, BUFFER_SIZE)
                         if (count == -1) break
-                        val buffer = ByteArrayInputStream(buf, 0, count)
-                        IOUtils.copy(buffer, output)
+                        output.write(buf, 0, count)
                     }
                 }
             }
