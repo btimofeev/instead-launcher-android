@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import org.emunix.insteadlauncher.domain.DownloadConfig
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus
 import org.emunix.insteadlauncher.domain.repository.NotificationRepository
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class NotificationRepositoryImpl @Inject constructor(): NotificationRepository {
     private val _downloadGame = MutableSharedFlow<DownloadGameStatus>(
         replay = 0,
         onBufferOverflow = DROP_OLDEST,
-        extraBufferCapacity = 1
+        extraBufferCapacity = DownloadConfig.PROGRESS_EVENTS_BUFFER_CAPACITY
     )
 
     override val downloadGame: Flow<DownloadGameStatus> = _downloadGame.asSharedFlow()

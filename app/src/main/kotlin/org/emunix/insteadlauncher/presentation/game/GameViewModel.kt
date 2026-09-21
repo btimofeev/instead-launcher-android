@@ -64,6 +64,10 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    fun cancelInstallGame() {
+        gameModel?.let { gameManager.cancelInstallGame(it.name) }
+    }
+
     fun runGame() {
         val gameToRun = _state.value
         if (gameToRun.name.isNotBlank() && gameToRun.state == INSTALLED) {

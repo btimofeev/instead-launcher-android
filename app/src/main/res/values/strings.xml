@@ -17,6 +17,7 @@
     <string name="game_activity_button_update">Update</string>
     <string name="game_activity_button_run">Run</string>
     <string name="game_activity_button_feedback">Write feedback</string>
+    <string name="game_activity_button_cancel_download">Cancel</string>
     <string name="game_activity_label_author">Author: %s</string>
     <string name="game_activity_label_version">Version: %s</string>
     <string name="game_activity_label_size">Size: %s</string>
@@ -48,7 +49,9 @@
     <string name="search_placeholder">Search query</string>
 
     <string name="notification_download_game">Downloading</string>
+    <string name="notification_download_games">Downloading: %1$d</string>
     <string name="notification_install_game">Installing</string>
+    <string name="notification_games_in_queue">%1$d in queue</string>
     <string name="notification_delete_game">Deleting the game, please wait&#8230;</string>
     <string name="notification_updating_repository">Updating the repository, please wait&#8230;</string>
     <string name="notification_scan_games">Search for local changes in the game directory</string>

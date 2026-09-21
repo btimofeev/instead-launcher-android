@@ -17,6 +17,7 @@
     <string name="game_activity_button_update">Обновить</string>
     <string name="game_activity_button_run">Играть</string>
     <string name="game_activity_button_feedback">Написать отзыв</string>
+    <string name="game_activity_button_cancel_download">Отмена</string>
     <string name="game_activity_label_author">Автор: %s</string>
     <string name="game_activity_label_version">Версия: %s</string>
     <string name="game_activity_label_size">Размер: %s</string>
@@ -48,7 +49,9 @@
     <string name="search_placeholder">Поисковый запрос</string>
 
     <string name="notification_download_game">Загружаю</string>
+    <string name="notification_download_games">Загрузка игр: %1$d</string>
     <string name="notification_install_game">Устанавливаю</string>
+    <string name="notification_games_in_queue">В очереди: %1$d</string>
     <string name="notification_delete_game">Удаляю игру, подождите&#8230;</string>
     <string name="notification_updating_repository">Обновляю репозиторий, подождите&#8230;</string>
     <string name="notification_scan_games">Поиск локальных изменений в директории с играми</string>

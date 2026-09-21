@@ -6,10 +6,18 @@
 package org.emunix.insteadlauncher.data.repository
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.data.network.fetcher.GameListFetcher
 import org.emunix.insteadlauncher.data.mapper.DownloadProgress
@@ -32,10 +40,11 @@ class RemoteRepositoryImpl @Inject constructor(
     private val parser: GameListParser,
 ) : RemoteRepository {
 
+    @OptIn(InternalCoroutinesApi::class)
     override suspend fun download(
         url: String,
         gameName: String,
-    ): InputStream = withContext(Dispatchers.IO) {
+    ): InputStream {
         val request = Request.Builder().url(url).build()
         val client = httpClient
             .addNetworkInterceptor { chain ->
@@ -52,12 +61,34 @@ class RemoteRepositoryImpl @Inject constructor(
                 }
             }
             .build()
-        val response = async { client.newCall(request).execute() }.await()
-        val responseBody = response.body
-        if (!response.isSuccessful || responseBody == null) {
-            throw IOException("Failed to download file")
+        val call = client.newCall(request)
+        val job = currentCoroutineContext()[Job]
+        job?.invokeOnCompletion(onCancelling = true) { call.cancel() }
+        return suspendCancellableCoroutine { continuation ->
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    if (!continuation.isCancelled) {
+                        continuation.resumeWithException(e)
+                    }
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body
+                    if (!response.isSuccessful || responseBody == null) {
+                        response.close()
+                        if (!continuation.isCancelled) {
+                            continuation.resumeWithException(IOException("Failed to download file"))
+                        }
+                    } else {
+                        if (continuation.isCancelled) {
+                            response.close()
+                        } else {
+                            continuation.resume(responseBody.byteStream())
+                        }
+                    }
+                }
+            })
         }
-        return@withContext responseBody.byteStream()
     }
 
     override suspend fun getGameList(): List<GameModel> = withContext(Dispatchers.IO) {

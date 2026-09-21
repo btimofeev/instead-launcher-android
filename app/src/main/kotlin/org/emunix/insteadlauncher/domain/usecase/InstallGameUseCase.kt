@@ -5,7 +5,11 @@
 
 package org.emunix.insteadlauncher.domain.usecase
 
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 import org.emunix.insteadlauncher.domain.model.GameModel
+import org.emunix.insteadlauncher.domain.model.GameState
 import org.emunix.insteadlauncher.domain.model.GameState.INSTALLED
 import org.emunix.insteadlauncher.domain.model.GameState.IS_INSTALL
 import org.emunix.insteadlauncher.domain.model.GameState.NO_INSTALLED
@@ -22,7 +26,7 @@ import javax.inject.Inject
 
 interface InstallGameUseCase {
 
-    suspend operator fun invoke(gameName: String): InstallGameResult
+    suspend operator fun invoke(gameName: String, originalState: GameState): InstallGameResult
 }
 
 class InstallGameUseCaseImpl @Inject constructor(
@@ -31,21 +35,29 @@ class InstallGameUseCaseImpl @Inject constructor(
     private val fileSystemRepository: FileSystemRepository,
 ) : InstallGameUseCase {
 
-    override suspend fun invoke(gameName: String): InstallGameResult {
+override suspend fun invoke(gameName: String, originalState: GameState): InstallGameResult {
         val game = dataBaseRepository.getGame(gameName) ?: return Error(type = GAME_NOT_FOUND_IN_DATABASE)
         val url = game.url.download
         game.saveInstallStateToDatabase()
 
         val stream = try {
             remoteRepository.download(url, gameName)
+        } catch (e: CancellationException) {
+            game.restoreStateToDatabase(originalState)
+            throw e
         } catch (e: Throwable) {
-            game.saveNotInstalledStateToDatabase()
+            game.restoreStateToDatabase(originalState)
             return Error(type = DOWNLOAD_ERROR, throwable = e)
         }
 
         try {
             fileSystemRepository.installGame(gameName, stream)
+        } catch (e: CancellationException) {
+            deletePartialInstall(gameName)
+            game.saveNotInstalledStateToDatabase()
+            throw e
         } catch (e: Throwable) {
+            deletePartialInstall(gameName)
             game.saveNotInstalledStateToDatabase()
             return Error(type = UNPACKING_ERROR, throwable = e)
         }
@@ -57,8 +69,23 @@ class InstallGameUseCaseImpl @Inject constructor(
     private suspend fun GameModel.saveInstallStateToDatabase() =
         dataBaseRepository.updateGame(this.copy(state = IS_INSTALL))
 
-    private suspend fun GameModel.saveNotInstalledStateToDatabase() =
-        dataBaseRepository.updateGame(this.copy(state = NO_INSTALLED))
+    private suspend fun GameModel.restoreStateToDatabase(originalState: GameState) {
+        withContext(NonCancellable) {
+            dataBaseRepository.updateGame(this@restoreStateToDatabase.copy(state = originalState))
+        }
+    }
+
+    private suspend fun deletePartialInstall(gameName: String) =
+        withContext(NonCancellable) {
+            fileSystemRepository.deleteGameFromDisk(gameName)
+        }
+
+    private suspend fun GameModel.saveNotInstalledStateToDatabase() {
+        val notInstalledModel = copy(state = NO_INSTALLED)
+        withContext(NonCancellable) {
+            dataBaseRepository.updateGame(notInstalledModel)
+        }
+    }
 
     private suspend fun GameModel.saveInstalledVersionToDatabase(newVersion: String) =
         dataBaseRepository.updateGame(

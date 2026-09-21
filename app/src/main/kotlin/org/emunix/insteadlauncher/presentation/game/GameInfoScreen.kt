@@ -8,6 +8,8 @@ package org.emunix.insteadlauncher.presentation.game
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,11 +21,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.DeleteForever
 import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.MoreVert
@@ -50,6 +56,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -103,6 +110,7 @@ fun GameInfoScreen(
         onUpdateClick = viewModel::installGame,
         onDeleteClick = viewModel::onDeleteGameClicked,
         onFeedbackClick = { context.launchBrowser(state.siteUrl) },
+        onCancelClick = viewModel::cancelInstallGame,
     )
     deleteGameName?.let { gameName ->
         DeleteGameDialog(
@@ -128,6 +136,7 @@ fun GameInfoScreenContent(
     onUpdateClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onFeedbackClick: () -> Unit,
+    onCancelClick: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -168,6 +177,7 @@ fun GameInfoScreenContent(
                     onInstallClick = onInstallClick,
                     onRunClick = onRunClick,
                     onUpdateClick = onUpdateClick,
+                    onCancelClick = onCancelClick,
                 )
             }
         }
@@ -220,6 +230,7 @@ fun GameInfoContent(
     onInstallClick: () -> Unit,
     onRunClick: () -> Unit,
     onUpdateClick: () -> Unit,
+    onCancelClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -250,7 +261,7 @@ fun GameInfoContent(
                         )
                         Spacer(Modifier.height(16.dp))
                         if (state.showProgress) {
-                            ProgressBlock(state)
+                            ProgressBlock(state, onCancelClick)
                         } else {
                             ButtonsBlock(
                                 state = state,
@@ -280,7 +291,7 @@ fun GameInfoContent(
                     )
                     Spacer(Modifier.height(16.dp))
                     if (state.showProgress) {
-                        ProgressBlock(state)
+                        ProgressBlock(state, onCancelClick)
                     } else {
                         ButtonsBlock(
                             state = state,
@@ -421,6 +432,7 @@ private fun ButtonsBlock(
 @Composable
 private fun ProgressBlock(
     state: GameInfoScreenState,
+    onCancelClick: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -431,11 +443,47 @@ private fun ProgressBlock(
             animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
         )
         Text(text = state.progressMessage)
-        if (state.progress is ProgressType.Indeterminate) {
-            LinearProgressIndicator()
-        } else {
-            LinearProgressIndicator(progress = { animatedProgress })
+        Row(
+            modifier = Modifier
+                .widthIn(max = 400.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(modifier = Modifier.weight(1f)) {
+                if (state.progress is ProgressType.Indeterminate) {
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                } else {
+                    LinearProgressIndicator(
+                        progress = { animatedProgress },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
+            if (state.progress !is ProgressType.Indeterminate) {
+                CancelDownloadButton(onClick = onCancelClick)
+            }
         }
+    }
+}
+
+@Composable
+private fun CancelDownloadButton(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(32.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.Close,
+            contentDescription = stringResource(R.string.game_activity_button_cancel_download),
+            modifier = Modifier.size(16.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -498,6 +546,7 @@ private fun GameInfoScreenContentPreview() {
             onUpdateClick = {},
             onDeleteClick = {},
             onFeedbackClick = {},
+            onCancelClick = {},
         )
     }
 }

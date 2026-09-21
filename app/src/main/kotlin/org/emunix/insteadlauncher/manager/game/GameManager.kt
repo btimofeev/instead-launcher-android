@@ -27,6 +27,13 @@ interface GameManager {
     fun installGame(gameName: String, gameUrl: String, gameTitle: String)
 
     /**
+     * Cancel the download and installation of the game
+     *
+     * @param gameName technical name of the game (name of the directory with the game)
+     */
+    fun cancelInstallGame(gameName: String)
+
+    /**
      * Install local game from zip file
      *
      * @param uri [Uri] to zip file

@@ -44,9 +44,13 @@ class GameManagerImpl @Inject constructor(
         coroutineScope.launch {
             dataBaseRepository.getGame(gameName)?.let { game ->
                 dataBaseRepository.updateGame(game.copy(state = IN_QUEUE_TO_INSTALL))
+                InstallGame.start(context, gameName, gameUrl, gameTitle, game.state)
             }
         }
-        InstallGame.start(context, gameName, gameUrl, gameTitle)
+    }
+
+    override fun cancelInstallGame(gameName: String) {
+        InstallGame.cancel(context, gameName)
     }
 
     override fun deleteGame(gameName: String) {
@@ -67,7 +71,7 @@ class GameManagerImpl @Inject constructor(
             return isInsteadGameZip
         }
 
-        fun unzip(uri: Uri) {
+        suspend fun unzip(uri: Uri) {
             val inputStream = context.contentResolver.openInputStream(uri)
                 ?: throw IOException("inputStream is null")
             val gamesDir = storage.getGamesDirectory()

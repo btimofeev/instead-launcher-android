@@ -13,6 +13,8 @@ import org.apache.commons.io.IOUtils
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.ensureActive
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -24,9 +26,10 @@ import java.util.zip.ZipInputStream
 private const val BUFFER_SIZE = 102400
 
 @Throws(ZipException::class)
-fun InputStream.unzip(dir: File) {
-    ZipInputStream(this).use { zis ->
+suspend fun InputStream.unzip(dir: File) = coroutineScope {
+    ZipInputStream(this@unzip).use { zis ->
         while (true) {
+            ensureActive()
             val entry = zis.nextEntry ?: break
             val entryFile = File(dir, entry.name)
             if (entry.isDirectory) {
@@ -36,6 +39,7 @@ fun InputStream.unzip(dir: File) {
                 FileOutputStream(entryFile).use { output ->
                     val buf = ByteArray(BUFFER_SIZE)
                     while (true) {
+                        ensureActive()
                         val count = zis.read(buf, 0, BUFFER_SIZE)
                         if (count == -1) break
                         val buffer = ByteArrayInputStream(buf, 0, count)

@@ -17,6 +17,7 @@
     <string name="game_activity_button_update">Ĝisdatigi</string>
     <string name="game_activity_button_run">Ludi</string>
     <string name="game_activity_button_feedback">Ekskribi recenzon</string>
+    <string name="game_activity_button_cancel_download">Nuligi</string>
     <string name="game_activity_label_author">Aŭtoro: %s</string>
     <string name="game_activity_label_version">Versio: %s</string>
     <string name="game_activity_label_size">Grando: %s</string>
@@ -45,7 +46,9 @@
     <string name="search_placeholder">Serĉu demandon</string>
 
     <string name="notification_download_game">Elŝutas</string>
+    <string name="notification_download_games">Elŝutado: %1$d</string>
     <string name="notification_install_game">Instalas</string>
+    <string name="notification_games_in_queue">%1$d en atendovico</string>
     <string name="notification_delete_game">Forigas ludon, atendu&#8230;</string>
     <string name="notification_updating_repository">Ĝisdatigas deponejon, atendu&#8230;</string>
     <string name="notification_scan_games">Serĉo de lokaj ŝanĝoj en dosierujo kun ludoj</string>
