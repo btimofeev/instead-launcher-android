@@ -45,6 +45,10 @@ class DataBaseRepositoryImpl @Inject constructor(
         gameDao.getInstalledGames().map { it.toDomain() }
     }
 
+    override suspend fun getStuckGames(): List<GameModel> = withContext(Dispatchers.IO) {
+        gameDao.getStuckGames().map { it.toDomain() }
+    }
+
     override suspend fun observeGames(): Flow<List<GameModel>> = withContext(Dispatchers.IO) {
         return@withContext gameDao.observeAllFlow().map { list ->
             list.map { it.toDomain() }

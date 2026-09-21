@@ -16,6 +16,8 @@ interface FileSystemRepository {
     @Throws(IOException::class)
     suspend fun deleteGameFromDisk(gameName: String)
 
+    suspend fun cleanupGameTempFiles(gameName: String)
+
     @Throws(IOException::class)
     suspend fun copyResourcesFromAssets()
 

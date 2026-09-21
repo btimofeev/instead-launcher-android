@@ -26,6 +26,7 @@ import kotlinx.coroutines.withContext
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.CHANNEL_INSTALL
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.R
+import org.emunix.insteadlauncher.domain.ActiveDownloadsRegistry
 import org.emunix.insteadlauncher.domain.DownloadConfig
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus
 import org.emunix.insteadlauncher.domain.model.DownloadGameStatus.Downloading
@@ -83,6 +84,9 @@ class InstallGame : Service() {
     @Inject
     lateinit var installGameUseCase: InstallGameUseCase
 
+    @Inject
+    lateinit var activeDownloadsRegistry: ActiveDownloadsRegistry
+
     override fun onCreate() {
         super.onCreate()
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -105,6 +109,7 @@ class InstallGame : Service() {
                 } ?: return START_NOT_STICKY
                 if (isQueued(request.gameName)) return START_NOT_STICKY
                 pendingRequests.addLast(request)
+                activeDownloadsRegistry.add(request.gameName)
                 notificationGameName = request.gameName
             }
         }
@@ -148,6 +153,7 @@ class InstallGame : Service() {
             activeJobs.remove(request.gameName)
             activeRequests.remove(request.gameName)
             downloadStatuses.remove(request.gameName)
+            activeDownloadsRegistry.remove(request.gameName)
             startDownloads()
         }
     }
@@ -158,6 +164,7 @@ class InstallGame : Service() {
         val pendingRequest = pendingRequests.firstOrNull { it.gameName == gameName }
         if (pendingRequest != null) {
             pendingRequests.remove(pendingRequest)
+            activeDownloadsRegistry.remove(pendingRequest.gameName)
             restoreOriginalState(pendingRequest)
         }
         if (cancelledActive || pendingRequest != null) {

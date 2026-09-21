@@ -23,6 +23,9 @@ interface GameDao {
     @Query("SELECT * FROM games WHERE state = 1")
     fun getInstalledGames(): List<Game>
 
+    @Query("SELECT * FROM games WHERE state IN (2, 3, 4, 5)")
+    fun getStuckGames(): List<Game>
+
     @Query("SELECT * FROM games WHERE (name || title || author || description) LIKE :query")
     fun search(query: String): List<Game>
 

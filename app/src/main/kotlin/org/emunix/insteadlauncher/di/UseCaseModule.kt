@@ -24,6 +24,8 @@ import org.emunix.insteadlauncher.domain.usecase.GetGamesFlowUseCase
 import org.emunix.insteadlauncher.domain.usecase.GetGamesFlowUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.InstallGameUseCase
 import org.emunix.insteadlauncher.domain.usecase.InstallGameUseCaseImpl
+import org.emunix.insteadlauncher.domain.usecase.RecoverInterruptedOperationsUseCase
+import org.emunix.insteadlauncher.domain.usecase.RecoverInterruptedOperationsUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCase
 import org.emunix.insteadlauncher.domain.usecase.ScanAndUpdateLocalGamesUseCaseImpl
 import org.emunix.insteadlauncher.domain.usecase.SearchGamesUseCase
@@ -100,4 +102,7 @@ interface UseCaseSingletonModule {
 
     @Binds
     fun bindDeleteGameUseCase(impl: DeleteGameUseCaseImpl): DeleteGameUseCase
+
+    @Binds
+    fun bindRecoverInterruptedOperationsUseCase(impl: RecoverInterruptedOperationsUseCaseImpl): RecoverInterruptedOperationsUseCase
 }

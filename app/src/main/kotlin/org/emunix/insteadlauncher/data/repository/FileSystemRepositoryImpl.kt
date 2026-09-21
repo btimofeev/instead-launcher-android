@@ -7,6 +7,7 @@ package org.emunix.insteadlauncher.data.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.apache.commons.io.FileUtils
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.utils.unzip
@@ -25,6 +26,13 @@ class FileSystemRepositoryImpl @Inject constructor(
     override suspend fun deleteGameFromDisk(gameName: String) = withContext(Dispatchers.IO) {
         val gameDir = File(storage.getGamesDirectory(), gameName)
         gameDir.deleteRecursively()
+        cleanupGameTempFiles(gameName)
+        return@withContext
+    }
+
+    override suspend fun cleanupGameTempFiles(gameName: String) = withContext(Dispatchers.IO) {
+        getTempZipFile(gameName).delete()
+        getTempInstallDir(gameName).deleteRecursively()
         return@withContext
     }
 
@@ -54,10 +62,32 @@ class FileSystemRepositoryImpl @Inject constructor(
     }
 
     override suspend fun installGame(gameName: String, zipStream: InputStream) = withContext(Dispatchers.IO) {
+        val tmpDir = getTempInstallDir(gameName)
         val gameDir = File(storage.getGamesDirectory(), gameName)
-        gameDir.deleteRecursively()
-        zipStream.unzip(storage.getGamesDirectory())
+
+        FileUtils.forceMkdir(gameDir.parentFile)
+        tmpDir.deleteRecursively()
+        FileUtils.forceMkdir(tmpDir)
+        try {
+            zipStream.unzip(tmpDir)
+            val children = tmpDir.listFiles() ?: emptyArray()
+            if (children.size == 1 && children[0].isDirectory) {
+                gameDir.deleteRecursively()
+                FileUtils.moveDirectory(children[0], gameDir)
+            } else {
+                gameDir.deleteRecursively()
+                FileUtils.copyDirectory(tmpDir, gameDir)
+            }
+        } finally {
+            cleanupGameTempFiles(gameName)
+        }
     }
+
+    private fun getTempZipFile(gameName: String) =
+        File(storage.getAppFilesDirectory(), "$gameName.zip")
+
+    private fun getTempInstallDir(gameName: String) =
+        File(storage.getAppFilesDirectory(), ".tmp-$gameName")
 
     private fun getInstalledThemeNamesFrom(path: File): List<String> {
         val themes = mutableListOf<String>()
