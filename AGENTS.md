@@ -31,9 +31,7 @@ Code layers under `app/src/main/kotlin/org/emunix/insteadlauncher/`:
 
 ## Branches
 
-- `master` — main branch. UI: Jetpack Compose (the Visual Views/XML app is the pre-migration state). The `compose` branch is the Compose port rebased on top of `master` and is the active branch for UI work.
-- `compose` — the UI ported to Jetpack Compose (Navigation Compose, Hilt Navigation Compose, Coil Compose), rebased onto `master`. Conventions below describe this branch.
-- `SDL3` — active branch for native SDL3 development.
+- `master` — the only branch. UI: Jetpack Compose; native SDL3 development happens here too.
 
 ## Build
 
@@ -87,7 +85,7 @@ Tests live in `app/src/test/kotlin/` (see `GameParserImplTest`). Test resources 
 
 ## CI
 
-GitHub Actions: `.github/workflows/android.yml` — builds a debug APK for all ABIs, caches the downloaded SDL3, uploads the artifact. Runs on push/PR against the `SDL3`, `master` and `main` branches and on `v*` tags. The main branch is `master`; `SDL3` is the active branch for native SDL3 development. The `compose` branch (the rebased Compose port) is not yet covered by CI triggers.
+GitHub Actions: `.github/workflows/android.yml` — builds a debug APK for all ABIs, runs JVM unit tests, caches the downloaded native dependencies (SDL3, INSTEAD, LuaJIT, libiconv), uploads the artifact. Runs on push/PR against the `master` and `main` branches and on `v*` tags. The main branch is `master`.
 
 ## Misc
 

@@ -10,10 +10,10 @@ on:
         # below); the 32-bit ABIs need the gcc-multilib toolchain step below.
         default: 'arm64-v8a,armeabi-v7a,x86,x86_64'
   push:
-    branches: [ SDL3, master, main ]
+    branches: [ master, main ]
     tags: [ 'v*' ]
   pull_request:
-    branches: [ SDL3, master, main ]
+    branches: [ master, main ]
 
 jobs:
   build:
