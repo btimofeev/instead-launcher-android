@@ -7,14 +7,29 @@ import android.view.*;
 import android.view.inputmethod.BaseInputConnection;
 import android.widget.EditText;
 
-class SDLInputConnection extends BaseInputConnection
+import org.emunix.instead.utils.OnKeyCodeHandler;
+import org.emunix.instead.utils.ScancodeGenerator;
+
+class SDLInputConnection extends BaseInputConnection implements OnKeyCodeHandler
 {
     protected EditText mEditText;
     protected String mCommittedText = "";
+    private final ScancodeGenerator scancodeGenerator;
 
     SDLInputConnection(View targetView, boolean fullEditor) {
         super(targetView, fullEditor);
         mEditText = new EditText(SDL.getContext());
+        scancodeGenerator = new ScancodeGenerator(this);
+    }
+
+    @Override
+    public void onKeyDown(final int keyCode) {
+        SDLActivity.onNativeKeyDown(keyCode);
+    }
+
+    @Override
+    public void onKeyUp(final int keyCode) {
+        SDLActivity.onNativeKeyUp(keyCode);
     }
 
     @Override
@@ -117,9 +132,13 @@ class SDLInputConnection extends BaseInputConnection
                             return;
                         }
                     }
-                    /* Higher code points don't generate simulated scancodes */
                     if (codePoint > 0 && codePoint < 128) {
                         nativeGenerateScancodeForUnichar((char)codePoint);
+                    } else if (codePoint > 0 && codePoint <= 0xFFFF) {
+                        /* Non-ASCII characters have no simulated scancodes; for
+                           Cyrillic emulate the physical keys, so games relying
+                           on a keyboard layout (instead of TEXT_INPUT) work. */
+                        scancodeGenerator.sendScancode((char)codePoint);
                     }
                     offset += Character.charCount(codePoint);
                 }
