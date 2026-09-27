@@ -1,6 +1,6 @@
 # Changelog
 
-## Development
+## [0.10] - 2026-09-27
 ### Added
 - Downloading several games at once, with the ability to cancel a download
 - Dynamic colors on Android 12+

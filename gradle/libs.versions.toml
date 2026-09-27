@@ -2,8 +2,8 @@
 acra = "5.13.1"
 androidJunit5 = "1.14.0.0"
 appcompat = "1.8.0"
-appVersionCode = "90300"
-appVersionName = "0.9.3"
+appVersionCode = "100000"
+appVersionName = "0.10"
 coil3 = "3.4.0"
 commonsIo = "2.5" # 2.6 crashes the application on Android below 8, because java.nio.file is not available in these versions
 compileSdk = "36"
