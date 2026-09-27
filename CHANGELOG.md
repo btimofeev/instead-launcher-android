@@ -6,7 +6,7 @@
 - Dynamic colors on Android 12+
 - Monochrome launcher icon
 ### Changed
-- INSTEAD updated to version 3.6
+- INSTEAD updated to version 3.6.0
 - SDL updated to version 3.4.10
 - Lua replaced with LuaJIT — games should run faster
 - Support Android 7.1.1 - 16
