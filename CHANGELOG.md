@@ -1,15 +1,19 @@
 # Changelog
 
 ## Development
+### Added
+- Downloading several games at once, with the ability to cancel a download
+- Dynamic colors on Android 12+
+- Monochrome launcher icon
 ### Changed
 - INSTEAD updated to version 3.6
 - SDL updated to version 3.4.10
 - Lua replaced with LuaJIT — games should run faster
 - Support Android 7.1.1 - 16
 - The interface is updated — rewritten in Jetpack Compose
-### Added
-- Dynamic colors on Android 12+
-- Monochrome launcher icon
+### Fixed
+- Interrupted game installation no longer breaks the game list
+- Error messages when a game cannot be installed are now clearer
 
 ## [0.9.2] - 2024-10-15
 ### Changed
