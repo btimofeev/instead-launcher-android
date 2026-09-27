@@ -340,6 +340,8 @@ tasks.register<Delete>("fdroidRemoveBinaries") {
     delete("src/main/c/SDL3_mixer/SDL3_mixer/Xcode/")
     delete("src/main/c/SDL3_ttf/SDL3_ttf/Xcode/")
     delete("src/main/c/libiconv/libiconv/tests/")
+    delete("src/main/c/SDL3_image/SDL3_image/external/libwebp/swig/")
+    delete("src/main/c/SDL3_mixer/SDL3_mixer/external/libxmp/test-dev/")
 }
 
 tasks.named("preBuild") {
