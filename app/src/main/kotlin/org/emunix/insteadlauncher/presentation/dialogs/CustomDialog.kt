@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -35,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.emunix.insteadlauncher.R
@@ -73,11 +71,6 @@ private fun EditTextDialog(
                 value = textInput,
                 onValueChange = { textInput = it },
                 singleLine = true,
-                keyboardOptions = if (model.digitsOnly) {
-                    KeyboardOptions(keyboardType = KeyboardType.Number)
-                } else {
-                    KeyboardOptions.Default
-                },
                 trailingIcon = {
                     if (textInput.isNotEmpty()) {
                         IconButton(

@@ -22,5 +22,18 @@ sealed interface SettingsItem {
         val onClick: () -> Unit,
     ): SettingsItem
 
+    data class Slider(
+        val id: String,
+        @DrawableRes
+        val icon: Int? = null,
+        val title: String,
+        val description: String? = null,
+        val value: Int,
+        val valueRange: IntRange,
+        val steps: Int = 0,
+        val isEnabled: Boolean = true,
+        val onValueChange: (value: Int) -> Unit,
+    ): SettingsItem
+
     data object Divider: SettingsItem
 }

@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.INSTEAD_TEXT_SIZE_STEP
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.MAX_INSTEAD_TEXT_SIZE
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.MIN_INSTEAD_TEXT_SIZE
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_APP_THEME_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_BACK_BUTTON_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_CURSOR_KEY
@@ -43,7 +46,9 @@ import org.emunix.insteadlauncher.presentation.models.SettingsItem
 import org.emunix.insteadlauncher.presentation.models.SettingsItem.Category
 import org.emunix.insteadlauncher.presentation.models.SettingsItem.Divider
 import org.emunix.insteadlauncher.presentation.models.SettingsItem.Element
+import org.emunix.insteadlauncher.presentation.models.SettingsItem.Slider
 import org.emunix.insteadlauncher.utils.resourceprovider.ResourceProvider
+import org.emunix.insteadlauncher.utils.snapTextSize
 import javax.inject.Inject
 
 @HiltViewModel
@@ -158,12 +163,14 @@ class SettingsViewModel @Inject constructor(
                     updateSwitchState(id = PREF_HIRES_KEY, switchState = newState)
                 }
             ),
-            Element(
+            Slider(
                 id = PREF_TEXT_SIZE_KEY,
                 icon = R.drawable.ic_format_size_24dp,
                 title = resourceProvider.getString(R.string.prefs_text_size_title),
-                description = resourceProvider.getString(R.string.prefs_text_size_summary),
-                onClick = ::showTextSizeInputDialog
+                value = snapTextSize(gameDefaultsApi.resolveTextScale()),
+                valueRange = MIN_INSTEAD_TEXT_SIZE..MAX_INSTEAD_TEXT_SIZE,
+                steps = (MAX_INSTEAD_TEXT_SIZE - MIN_INSTEAD_TEXT_SIZE) / INSTEAD_TEXT_SIZE_STEP - 1,
+                onValueChange = ::changeTextSize
             ),
             Element(
                 id = PREF_KEYBOARD_BUTTON_KEY,
@@ -335,16 +342,15 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun showTextSizeInputDialog() {
-        val defaultTextSize = gameDefaultsApi.resolveTextScale()
-        _showDialog.value = CustomDialogModel.EditTextDialogModel(
-            title = resourceProvider.getString(R.string.prefs_text_size_title),
-            initialText = defaultTextSize,
-            digitsOnly = true,
-            onTextChanged = { newText ->
-                preferencesProvider.defaultInsteadTextSize = newText
+    private fun changeTextSize(value: Int) {
+        preferencesProvider.defaultInsteadTextSize = value.toString()
+        _items.value = _items.value.map { item ->
+            if (item is SettingsItem.Slider && item.id == PREF_TEXT_SIZE_KEY) {
+                item.copy(value = value)
+            } else {
+                item
             }
-        )
+        }
     }
 
     private fun showKeyboardButtonPositionSelectionDialog() {

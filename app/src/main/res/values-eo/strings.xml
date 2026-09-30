@@ -39,6 +39,9 @@
 
     <string name="dialog_error_close_button">Fermu</string>
 
+    <string name="custom_dialog_positive_button">Akcepti</string>
+    <string name="custom_dialog_negative_button">Nuligi</string>
+
     <string name="unpack_resources_fragment_try_again_button">Provi denove</string>
     <string name="unpack_resources_fragment_error_message">Elpako de risurcoj ne sukcesis. Kontrolu liberan spacon sur aparato kaj provu denove.</string>
 
@@ -81,7 +84,7 @@
     <string name="prefs_hires_title">Maksimuma distingivo</string>
     <string name="prefs_hires_summary">Uzi optimuman ekranan orientiĝon</string>
     <string name="prefs_text_size_title">Grando de tiparo</string>
-    <string name="prefs_text_size_summary">En procentoj de baza grando</string>
+    <string name="slider_value_percent">%1$d%%</string>
     <string name="prefs_keyboard_button_title">Malferma butono por klavaro</string>
     <string-array name="prefs_keyboard_button_entries">
         <item>Ne aperigi</item>

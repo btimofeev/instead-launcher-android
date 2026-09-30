@@ -98,35 +98,18 @@ class GameDefaultsImplTest {
     }
 
     @Test
-    fun `treats a watch as a small screen despite the device type`() {
-        setUiModeType(Configuration.UI_MODE_TYPE_WATCH)
+    fun `treats a watch, a headset, a desk and a car as small screens`() {
+        listOf(
+            Configuration.UI_MODE_TYPE_WATCH,
+            Configuration.UI_MODE_TYPE_VR_HEADSET,
+            Configuration.UI_MODE_TYPE_DESK,
+            Configuration.UI_MODE_TYPE_CAR,
+        ).forEach { uiModeType ->
+            setUiModeType(uiModeType)
 
-        assertEquals(INSTEAD_THEME_MOBILE, defaults().resolveTheme())
-        assertEquals(DEFAULT_INSTEAD_TEXT_SIZE, defaults().resolveTextScale())
-    }
-
-    @Test
-    fun `treats a vr headset as a small screen despite the device type`() {
-        setUiModeType(Configuration.UI_MODE_TYPE_VR_HEADSET)
-
-        assertEquals(INSTEAD_THEME_MOBILE, defaults().resolveTheme())
-        assertEquals(DEFAULT_INSTEAD_TEXT_SIZE, defaults().resolveTextScale())
-    }
-
-    @Test
-    fun `treats a desk as a phone screen`() {
-        setUiModeType(Configuration.UI_MODE_TYPE_DESK)
-
-        assertEquals(INSTEAD_THEME_MOBILE, defaults().resolveTheme())
-        assertEquals(DEFAULT_INSTEAD_TEXT_SIZE, defaults().resolveTextScale())
-    }
-
-    @Test
-    fun `treats a car as a phone screen`() {
-        setUiModeType(Configuration.UI_MODE_TYPE_CAR)
-
-        assertEquals(INSTEAD_THEME_MOBILE, defaults().resolveTheme())
-        assertEquals(DEFAULT_INSTEAD_TEXT_SIZE, defaults().resolveTextScale())
+            assertEquals(INSTEAD_THEME_MOBILE, defaults().resolveTheme(), "uiModeType $uiModeType")
+            assertEquals(DEFAULT_INSTEAD_TEXT_SIZE, defaults().resolveTextScale(), "uiModeType $uiModeType")
+        }
     }
 
     @Test

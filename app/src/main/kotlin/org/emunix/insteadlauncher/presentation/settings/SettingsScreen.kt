@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -46,6 +47,7 @@ import org.emunix.insteadlauncher.presentation.dialogs.CustomDialog
 import org.emunix.insteadlauncher.presentation.models.SettingsItem
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 import org.emunix.insteadlauncher.utils.ThemeSwitcherDelegate
+import org.emunix.insteadlauncher.utils.snapToSliderStep
 
 @Composable
 fun SettingsScreen(
@@ -119,6 +121,7 @@ fun SettingsScreenContent(
                     when (item) {
                         is SettingsItem.Category -> Category(item)
                         is SettingsItem.Element -> Element(item)
+                        is SettingsItem.Slider -> SliderElement(item)
                         is SettingsItem.Divider -> Divider()
                     }
                 }
@@ -206,6 +209,58 @@ private fun Element(item: SettingsItem.Element) {
 }
 
 @Composable
+private fun SliderElement(item: SettingsItem.Slider) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp, end = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (item.icon != null) {
+                Icon(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 24.dp),
+                    painter = painterResource(item.icon),
+                    contentDescription = null,
+                )
+            } else {
+                Spacer(modifier = Modifier.width(64.dp))
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = item.title,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                if (item.description != null) {
+                    Text(
+                        text = item.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = stringResource(R.string.slider_value_percent, item.value),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        Slider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 64.dp, end = 16.dp, bottom = 12.dp),
+            value = item.value.toFloat(),
+            onValueChange = { item.onValueChange(snapToSliderStep(it, item.valueRange, item.steps)) },
+            valueRange = item.valueRange.first.toFloat()..item.valueRange.last.toFloat(),
+            steps = item.steps,
+            enabled = item.isEnabled,
+        )
+    }
+}
+
+@Composable
 @PreviewLightDark
 @PreviewScreenSizes
 fun UnpackResourcesErrorScreenContentPreview() {
@@ -245,6 +300,15 @@ fun UnpackResourcesErrorScreenContentPreview() {
                     description = "click me if you want show cursor in the game",
                     switchState = false,
                     onClick = { },
+                ),
+                SettingsItem.Slider(
+                    id = "5",
+                    icon = R.drawable.ic_format_size_24dp,
+                    title = "Text size",
+                    value = 130,
+                    valueRange = 50..400,
+                    steps = 34,
+                    onValueChange = { },
                 ),
             ),
             onBackClick = { }

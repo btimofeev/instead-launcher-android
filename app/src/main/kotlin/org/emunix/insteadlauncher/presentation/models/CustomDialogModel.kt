@@ -11,7 +11,6 @@ sealed interface CustomDialogModel {
     data class EditTextDialogModel(
         val title: String,
         val initialText: String,
-        val digitsOnly: Boolean = false,
         val onTextChanged: (text: String) -> Unit,
     ): CustomDialogModel
 }

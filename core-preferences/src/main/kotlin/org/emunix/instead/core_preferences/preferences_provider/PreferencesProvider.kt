@@ -64,6 +64,11 @@ interface PreferencesProvider {
         const val DEFAULT_INSTEAD_TEXT_SIZE = "130"
         const val LARGE_SCREEN_INSTEAD_TEXT_SIZE = "100"
 
+        // Bounds and granularity of defaultInsteadTextSize, from FONT_MIN_SZ and FONT_MAX_SZ in the engine.
+        const val MIN_INSTEAD_TEXT_SIZE = 50
+        const val MAX_INSTEAD_TEXT_SIZE = 400
+        const val INSTEAD_TEXT_SIZE_STEP = 10
+
         const val DEFAULT_DYNAMIC_COLORS = true
 
         const val DEFAULT_KEYBOARD_BUTTON_POSITION = "bottom_left"
