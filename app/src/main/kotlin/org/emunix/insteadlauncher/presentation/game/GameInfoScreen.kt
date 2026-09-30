@@ -453,7 +453,7 @@ private fun ProgressBlock(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Box(modifier = Modifier.weight(1f)) {
-                if (state.progress is ProgressType.Indeterminate) {
+                if (state.showIndeterminateProgress) {
                     LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                 } else {
                     LinearProgressIndicator(
@@ -462,7 +462,7 @@ private fun ProgressBlock(
                     )
                 }
             }
-            if (state.progress !is ProgressType.Indeterminate) {
+            if (state.showCancelButton) {
                 CancelDownloadButton(onClick = onCancelClick)
             }
         }

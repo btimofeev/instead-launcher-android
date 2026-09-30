@@ -29,7 +29,14 @@ data class GameInfoScreenState(
     val showProgress: Boolean = false,
     val progress: ProgressType = ProgressType.WithValue(0f),
     val progressMessage: String = "",
-)
+) {
+
+    val showCancelButton: Boolean
+        get() = showProgress && state != IS_DELETE && progress !is ProgressType.Indeterminate
+
+    val showIndeterminateProgress: Boolean
+        get() = progress is ProgressType.Indeterminate || state == IS_DELETE
+}
 
 sealed interface ProgressType {
 
