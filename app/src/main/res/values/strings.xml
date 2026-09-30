@@ -79,7 +79,7 @@
     <string name="prefs_music_title">Play music</string>
     <string name="prefs_cursor_title">Show cursor</string>
     <string name="prefs_enable_game_theme_title">Built-in game theme</string>
-    <string name="prefs_enable_game_theme_summary">Use the built-in game theme instead of the default theme</string>
+    <string name="prefs_enable_game_theme_summary">Use the theme built into the game, otherwise the default theme below is used</string>
     <string name="prefs_default_theme_title">Default theme</string>
     <string name="prefs_hires_title">High resolution</string>
     <string name="prefs_hires_summary">Use the best screen orientation</string>

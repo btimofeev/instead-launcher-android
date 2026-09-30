@@ -28,6 +28,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_TOP_LEFT
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_TOP_RIGHT
 import org.emunix.instead.core_storage_api.data.Storage
+import org.emunix.instead_api.GameDefaultsApi
 import org.libsdl.app.SDLActivity
 import java.util.*
 import javax.inject.Inject
@@ -37,6 +38,7 @@ internal class InsteadActivity: SDLActivity() {
 
     @Inject lateinit var preferenceProvider: PreferencesProvider
     @Inject lateinit var storage: Storage
+    @Inject lateinit var gameDefaultsApi: GameDefaultsApi
 
     private var game : String? = ""
     private var playFromBeginning = false
@@ -67,9 +69,9 @@ internal class InsteadActivity: SDLActivity() {
         args[5] = if (preferenceProvider.isMusicEnabled) "y" else "n"
         args[6] = if (preferenceProvider.isCursorEnabled) "y" else "n"
         args[7] = if (preferenceProvider.isOwnGameThemeEnabled) "y" else "n"
-        args[8] = preferenceProvider.defaultInsteadTheme
+        args[8] = gameDefaultsApi.resolveTheme()
         args[9] = if (preferenceProvider.isHiresEnabled) "y" else "n"
-        args[10] = preferenceProvider.defaultInsteadTextSize
+        args[10] = gameDefaultsApi.resolveTextScale()
         args[11] = if (playFromBeginning) "y" else "n"
         args[12] = if (preferenceProvider.isGLHackEnabled) "y" else "n"
         args[13] = game ?: ""

@@ -55,6 +55,9 @@ class PreferencesProviderImpl @Inject constructor(private val preferences: Share
         get() = preferences.getString(PREF_DEFAULT_THEME_KEY, null) ?: DEFAULT_INSTEAD_THEME
         set(value) = preferences.edit { putString(PREF_DEFAULT_THEME_KEY, value) }
 
+    override val isDefaultInsteadThemeSet: Boolean
+        get() = preferences.contains(PREF_DEFAULT_THEME_KEY)
+
     override var isHiresEnabled: Boolean
         get() = preferences.getBoolean(PREF_HIRES_KEY, true)
         set(value) = preferences.edit { putBoolean(PREF_HIRES_KEY, value) }
@@ -62,6 +65,9 @@ class PreferencesProviderImpl @Inject constructor(private val preferences: Share
     override var defaultInsteadTextSize: String
         get() = preferences.getString(PREF_TEXT_SIZE_KEY, null) ?: DEFAULT_INSTEAD_TEXT_SIZE
         set(value) = preferences.edit { putString(PREF_TEXT_SIZE_KEY, value) }
+
+    override val isDefaultInsteadTextSizeSet: Boolean
+        get() = preferences.contains(PREF_TEXT_SIZE_KEY)
 
     override var keyboardButtonPosition: String
         get() = preferences.getString(PREF_KEYBOARD_BUTTON_KEY, null) ?: DEFAULT_KEYBOARD_BUTTON_POSITION

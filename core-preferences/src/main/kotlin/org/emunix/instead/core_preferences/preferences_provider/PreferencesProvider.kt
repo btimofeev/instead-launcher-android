@@ -17,9 +17,13 @@ interface PreferencesProvider {
 
     var defaultInsteadTheme: String
 
+    val isDefaultInsteadThemeSet: Boolean
+
     var isHiresEnabled: Boolean
 
     var defaultInsteadTextSize: String
+
+    val isDefaultInsteadTextSizeSet: Boolean
 
     var keyboardButtonPosition: String
 
@@ -52,8 +56,13 @@ interface PreferencesProvider {
 
         const val DEFAULT_THEME = "default"
 
-        const val DEFAULT_INSTEAD_THEME = "mobile"
+        const val INSTEAD_THEME_DEFAULT = "default"
+        const val INSTEAD_THEME_MOBILE = "mobile"
+        const val INSTEAD_THEME_WIDE = "wide"
+
+        const val DEFAULT_INSTEAD_THEME = INSTEAD_THEME_MOBILE
         const val DEFAULT_INSTEAD_TEXT_SIZE = "130"
+        const val LARGE_SCREEN_INSTEAD_TEXT_SIZE = "100"
 
         const val DEFAULT_DYNAMIC_COLORS = true
 

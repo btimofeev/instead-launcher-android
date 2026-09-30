@@ -76,7 +76,7 @@
     <string name="prefs_music_title">Ŝalti muzikon</string>
     <string name="prefs_cursor_title">Montri kursoron</string>
     <string name="prefs_enable_game_theme_title">Propra etoso de ludo</string>
-    <string name="prefs_enable_game_theme_summary">Uzi enkonstruitan en ludo etoson, anstataŭ defaŭlte etoson.</string>
+    <string name="prefs_enable_game_theme_summary">Uzi enkonstruitan en ludo etoson, alie la defaŭlta etoso estas uzata.</string>
     <string name="prefs_default_theme_title">Defaŭlte etoso</string>
     <string name="prefs_hires_title">Maksimuma distingivo</string>
     <string name="prefs_hires_summary">Uzi optimuman ekranan orientiĝon</string>

@@ -12,7 +12,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.emunix.instead.GameDefaultsImpl
 import org.emunix.instead.InsteadApiImpl
+import org.emunix.instead_api.GameDefaultsApi
 import org.emunix.instead_api.InsteadApi
 import org.emunix.insteadlauncher.presentation.AndroidPlatformInfo
 import org.emunix.insteadlauncher.presentation.PlatformInfo
@@ -27,6 +29,10 @@ interface AppModule {
     @Binds
     @Singleton
     fun bindPlatformInfo(impl: AndroidPlatformInfo): PlatformInfo
+
+    @Binds
+    @Singleton
+    fun bindGameDefaultsApi(impl: GameDefaultsImpl): GameDefaultsApi
 
     companion object {
         @Provides

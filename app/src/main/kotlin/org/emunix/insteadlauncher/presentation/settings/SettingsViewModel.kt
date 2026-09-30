@@ -31,6 +31,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_TEXT_SIZE_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_UPDATE_REPO_BACKGROUND_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_UPDATE_REPO_STARTUP_KEY
+import org.emunix.instead_api.GameDefaultsApi
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.domain.repository.FileSystemRepository
 import org.emunix.insteadlauncher.domain.usecase.StartUpdateRepositoryWorkUseCase
@@ -48,6 +49,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val preferencesProvider: PreferencesProvider,
+    private val gameDefaultsApi: GameDefaultsApi,
     private val fileSystemRepository: FileSystemRepository,
     private val startUpdateRepositoryWorkUseCase: StartUpdateRepositoryWorkUseCase,
     private val stopUpdateRepositoryWorkUseCase: StopUpdateRepositoryWorkUseCase,
@@ -93,7 +95,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun loadSettings() = viewModelScope.launch(Dispatchers.IO) {
         insteadThemes = fileSystemRepository.getInstalledThemeNames()
-        val defaultInsteadTheme = preferencesProvider.defaultInsteadTheme
+        val defaultInsteadTheme = gameDefaultsApi.resolveTheme()
         val defaultKeyboardButtonName = keyboardPositions.getOrDefault(preferencesProvider.keyboardButtonPosition, "")
         val defaultBackButtonName = backButtonBehavior.getOrDefault(preferencesProvider.backButton, "")
         val defaultAppThemeName = appThemes.getOrDefault(preferencesProvider.appTheme, "")
@@ -312,7 +314,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun showInsteadThemesSelectionDialog() {
         if (insteadThemes.isNotEmpty()) {
-            val defaultTheme = preferencesProvider.defaultInsteadTheme
+            val defaultTheme = gameDefaultsApi.resolveTheme()
             val buttons = insteadThemes.map { theme ->
                 RadioButtonModel(
                     id = theme,
@@ -334,7 +336,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun showTextSizeInputDialog() {
-        val defaultTextSize = preferencesProvider.defaultInsteadTextSize
+        val defaultTextSize = gameDefaultsApi.resolveTextScale()
         _showDialog.value = CustomDialogModel.EditTextDialogModel(
             title = resourceProvider.getString(R.string.prefs_text_size_title),
             initialText = defaultTextSize,

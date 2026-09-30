@@ -79,7 +79,7 @@
     <string name="prefs_music_title">Включить музыку</string>
     <string name="prefs_cursor_title">Отображать курсор</string>
     <string name="prefs_enable_game_theme_title">Собственная тема игры</string>
-    <string name="prefs_enable_game_theme_summary">Использовать встроенную в игру тему, вместо темы по-умолчанию</string>
+    <string name="prefs_enable_game_theme_summary">Использовать встроенную в игру тему, иначе используется тема по-умолчанию</string>
     <string name="prefs_default_theme_title">Тема по-умолчанию</string>
     <string name="prefs_hires_title">Максимальное разрешение</string>
     <string name="prefs_hires_summary">Использовать наилучшую ориентацию экрана</string>
