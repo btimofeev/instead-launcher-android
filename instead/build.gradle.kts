@@ -116,7 +116,7 @@ tasks.register<Delete>("deleteDependencies") {
 }
 
 tasks.register("downloadInstead") {
-    val insteadVer = "3.6.0"
+    val insteadRef = "1b9b21d16e9e43c9df040a7f7c10041f22b3814a"
     val luaJitRef = "c6ffc141a8762b41703f9287d63d93622a13dd8f"
     val iconv = "1.15"
     val downloadDir = project.layout.buildDirectory.get().asFile.path
@@ -125,16 +125,16 @@ tasks.register("downloadInstead") {
         project.delete("src/main/c/Instead/Instead", "src/main/c/LuaJIT", "src/main/c/libiconv/libiconv")
 
         downloadExt.run {
-            src("https://github.com/instead-hub/instead/releases/download/${insteadVer}/instead_${insteadVer}.tar.gz")
-            dest(project.file("$downloadDir/instead-${insteadVer}.tar.gz"))
+            src("https://codeload.github.com/instead-hub/instead/tar.gz/${insteadRef}")
+            dest(project.file("$downloadDir/instead-${insteadRef}.tar.gz"))
         }
         project.copy {
-            from(project.tarTree(project.resources.gzip("$downloadDir/instead-${insteadVer}.tar.gz")))
+            from(project.tarTree(project.resources.gzip("$downloadDir/instead-${insteadRef}.tar.gz")))
             into("src/main/c/Instead/")
         }
-        project.delete("$downloadDir/instead-${insteadVer}.tar.gz")
-        project.file("src/main/c/Instead/instead-${insteadVer}").renameTo(project.file("src/main/c/Instead/Instead"))
-        project.delete("src/main/c/Instead/instead-${insteadVer}")
+        project.delete("$downloadDir/instead-${insteadRef}.tar.gz")
+        val insteadDir = project.file("src/main/c/Instead").listFiles()!!.single { it.isDirectory && it.name != "Instead" }
+        insteadDir.renameTo(project.file("src/main/c/Instead/Instead"))
 
         downloadExt.run {
             src("https://github.com/LuaJIT/LuaJIT/archive/${luaJitRef}.tar.gz")

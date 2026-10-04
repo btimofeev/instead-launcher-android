@@ -55,6 +55,8 @@ class GameDefaultsImpl @Inject constructor(
         return preferenceProvider.keyboardButtonPosition
     }
 
+    override fun resolveKeyboardMode(): String = if (isTelevision()) KBD_SMART else ""
+
     override fun isTelevision(): Boolean = uiModeType() == Configuration.UI_MODE_TYPE_TELEVISION
 
     private fun uiModeType(): Int? =
@@ -91,5 +93,6 @@ class GameDefaultsImpl @Inject constructor(
     companion object {
         private const val TABLET_SMALLEST_WIDTH_DP = 600
         private const val THEME_FILE = "theme.ini"
+        private const val KBD_SMART = "0"
     }
 }

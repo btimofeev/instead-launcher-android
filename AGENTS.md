@@ -52,7 +52,7 @@ Important details:
 - Default ABIs: `arm64-v8a,armeabi-v7a,x86_64`. `armeabi-v7a` (and `x86`) require a 32-bit host C compiler for LuaJIT (`gcc-multilib`/`libc6-dev-i386` on Debian/Ubuntu). To override: `./gradlew assembleDebug -PabiFilters="arm64-v8a,armeabi-v7a,x86,x86_64"`.
 - `keystore.properties` (repo root, not in git) controls release signing; without it the signingConfig is set to null.
 - Build config versions (SDK/NDK versions, app versionCode/versionName, INSTEAD version) are set in `gradle/libs.versions.toml` (`minSdk`, `compileSdk`, `ndk`, `appVersionCode`, `appVersionName`, `insteadVersion`).
-- SDL3/INSTEAD/LuaJIT/Lua versions are set by the `downloadSdl`/`downloadInstead` tasks in `instead/build.gradle.kts`.
+- SDL3/INSTEAD/LuaJIT/Lua versions are set by the `downloadSdl`/`downloadInstead` tasks in `instead/build.gradle.kts`. INSTEAD is currently pinned to a commit (`insteadRef`, a `codeload.github.com` archive) rather than a release tarball, because `-kbd` only exists after 3.6.0; switch it back to the release tarball once 3.6.1 is out.
 
 ## Tests
 
@@ -89,7 +89,8 @@ Tests live in `app/src/test/kotlin/` (see `GameParserImplTest`). Test resources 
 - Device-type-dependent defaults are resolved in **`GameDefaultsImpl`** (`instead/src/main/kotlin/org/emunix/instead/GameDefaultsImpl.kt`, interface `instead_api/GameDefaultsApi.kt`, bound in `app/di/AppModule.kt`). It picks a sane default for the current device class (phone / tablet / TV / appliance — see `isLargeScreen()`, `isTelevision()`), writes it into `PreferencesProvider` **only if the user has not chosen a value yet**, and returns it:
   - `resolveTheme()` → wide theme on large screens, mobile otherwise;
   - `resolveTextScale()` → enlarged text on large screens;
-  - `resolveKeyboardButtonPosition()` → `KEYBOARD_DO_NOT_SHOW_BUTTON` on TV, corner position elsewhere.
+  - `resolveKeyboardButtonPosition()` → `KEYBOARD_DO_NOT_SHOW_BUTTON` on TV, corner position elsewhere;
+  - `resolveKeyboardMode()` → INSTEAD `kbd` mode (`0` smart) on TV, empty string elsewhere — there is no launcher preference for it, so unlike the resolvers above it writes nothing into `PreferencesProvider` and simply leaves the mode alone when it returns an empty string.
 - Pattern for every "default depends on the device" setting:
   1. add `val isXxxSet: Boolean` to `PreferencesProvider` (`preferences.contains(PREF_X_KEY)`) next to the setting;
   2. add `resolveXxx(): String` to `GameDefaultsApi` and implement it in `GameDefaultsImpl` guarded by `isXxxSet`;
