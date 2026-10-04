@@ -24,7 +24,6 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DEFAULT_THEME_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DYNAMIC_COLORS_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_ENABLE_GAME_THEME_KEY
-import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_GL_HACK_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_HIRES_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_KEYBOARD_BUTTON_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_MUSIC_KEY
@@ -185,18 +184,6 @@ class SettingsViewModel @Inject constructor(
                 title = resourceProvider.getString(R.string.prefs_back_button_title),
                 description = defaultBackButtonName,
                 onClick = ::showBackButtonBehaviorSelectionDialog
-            ),
-            Element(
-                id = PREF_GL_HACK_KEY,
-                icon = R.drawable.ic_image_broken_24dp,
-                title = resourceProvider.getString(R.string.prefs_gl_hack_title),
-                description = resourceProvider.getString(R.string.prefs_gl_hack_summary),
-                switchState = preferencesProvider.isGLHackEnabled,
-                onClick = {
-                    val newState = !preferencesProvider.isGLHackEnabled
-                    preferencesProvider.isGLHackEnabled = newState
-                    updateSwitchState(id = PREF_GL_HACK_KEY, switchState = newState)
-                }
             ),
             Divider,
             Category(

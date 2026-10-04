@@ -109,8 +109,6 @@
         <item>Eliri el ludo</item>
         <item>Aperti menuo de Instead</item>
     </string-array>
-    <string name="prefs_gl_hack_title">GL Hack</string>
-    <string name="prefs_gl_hack_summary">Li korektas problemojn de bildbildigo en iuj telefonoj</string>
     <string name="prefs_category_repositories">Deponejoj</string>
     <string name="prefs_repository_title">Baza deponejo</string>
     <string name="prefs_repository_summary">Almontru adreson de XML-dosiero</string>

@@ -22,7 +22,6 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DEFAULT_THEME_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DYNAMIC_COLORS_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_ENABLE_GAME_THEME_KEY
-import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_GL_HACK_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_HIRES_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_KEYBOARD_BUTTON_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_MUSIC_KEY
@@ -80,9 +79,6 @@ class PreferencesProviderImpl @Inject constructor(private val preferences: Share
         get() = preferences.getString(PREF_BACK_BUTTON_KEY, null) ?: BACK_BUTTON_EXIT_GAME
         set(value) = preferences.edit { putString(PREF_BACK_BUTTON_KEY, value) }
 
-    override var isGLHackEnabled: Boolean
-        get() = preferences.getBoolean(PREF_GL_HACK_KEY, false)
-        set(value) = preferences.edit { putBoolean(PREF_GL_HACK_KEY, value) }
 
     override var repositoryUrl: String
         get() = preferences.getString(PREF_REPOSITORY_KEY, null) ?: DEFAULT_REPOSITORY_URL

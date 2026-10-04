@@ -46,7 +46,6 @@ private val tvExcludedSettingsIds = setOf(
     PreferencesProvider.PREF_CURSOR_KEY,
     PreferencesProvider.PREF_KEYBOARD_BUTTON_KEY,
     PreferencesProvider.PREF_BACK_BUTTON_KEY,
-    PreferencesProvider.PREF_GL_HACK_KEY,
     PreferencesProvider.PREF_APP_THEME_KEY,
     PreferencesProvider.PREF_DYNAMIC_COLORS_KEY,
     PreferencesProvider.PREF_UPDATE_REPO_BACKGROUND_KEY,
