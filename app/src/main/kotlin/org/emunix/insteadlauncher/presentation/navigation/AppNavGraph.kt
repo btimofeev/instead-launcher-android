@@ -58,6 +58,7 @@ fun AppNavGraph(appArgumentViewModel: AppArgumentViewModel) {
             UnpackResourcesScreen(
                 navigateToInstalledGamesScreen = {
                     navController.navigate(AppScreen.InstalledGamesScreen) {
+                        launchSingleTop = true
                         popUpTo(AppScreen.UnpackResourcesScreen) {
                             inclusive = true
                         }
@@ -70,16 +71,16 @@ fun AppNavGraph(appArgumentViewModel: AppArgumentViewModel) {
             val uri = appArgumentViewModel.zipUri
             LaunchedEffect(uri) {
                 if (uri != null) {
-                    navController.navigate(AppScreen.RepositoryScreen)
+                    navController.navigate(AppScreen.RepositoryScreen) { launchSingleTop = true }
                 }
             }
             InstalledGamesScreen(
                 navigateToGameInfoScreen = { gameName ->
-                    navController.navigate(AppScreen.GameInfoScreen(gameName))
+                    navController.navigate(AppScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
                 },
-                navigateToSettingsScreen = { navController.navigate(AppScreen.SettingsScreen)},
-                navigateToAboutAppScreen = { navController.navigate(AppScreen.AboutAppScreen) },
-                navigateToRepositoryScreen = { navController.navigate(AppScreen.RepositoryScreen)}
+                navigateToSettingsScreen = { navController.navigate(AppScreen.SettingsScreen) { launchSingleTop = true }},
+                navigateToAboutAppScreen = { navController.navigate(AppScreen.AboutAppScreen) { launchSingleTop = true } },
+                navigateToRepositoryScreen = { navController.navigate(AppScreen.RepositoryScreen) { launchSingleTop = true }}
             )
         }
 
@@ -101,9 +102,9 @@ fun AppNavGraph(appArgumentViewModel: AppArgumentViewModel) {
             RepositoryScreen(
                 zipUriFromAppArgument = uri,
                 onBackClick = { navController.popBackStack() },
-                onSearchClick = { navController.navigate(AppScreen.SearchScreen) },
+                onSearchClick = { navController.navigate(AppScreen.SearchScreen) { launchSingleTop = true } },
                 onGameClick = { gameName ->
-                    navController.navigate(AppScreen.GameInfoScreen(gameName))
+                    navController.navigate(AppScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
                 },
             )
         }
@@ -112,7 +113,7 @@ fun AppNavGraph(appArgumentViewModel: AppArgumentViewModel) {
             SearchScreen(
                 onBackClick = { navController.popBackStack() },
                 onGameClick = { gameName ->
-                    navController.navigate(AppScreen.GameInfoScreen(gameName))
+                    navController.navigate(AppScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
                 },
             )
         }

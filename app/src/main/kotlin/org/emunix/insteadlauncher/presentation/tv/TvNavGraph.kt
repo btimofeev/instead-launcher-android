@@ -59,6 +59,7 @@ fun TvNavGraph(appArgumentViewModel: AppArgumentViewModel) {
                     UnpackResourcesScreen(
                         navigateToInstalledGamesScreen = {
                             navController.navigate(TvScreen.GamesScreen) {
+                                launchSingleTop = true
                                 popUpTo(TvScreen.UnpackResourcesScreen) {
                                     inclusive = true
                                 }
@@ -73,10 +74,10 @@ fun TvNavGraph(appArgumentViewModel: AppArgumentViewModel) {
                     TvGamesScreen(
                         zipUri = uri,
                         onGameClick = { gameName ->
-                            navController.navigate(TvScreen.GameInfoScreen(gameName))
+                            navController.navigate(TvScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
                         },
-                        onSearchClick = { navController.navigate(TvScreen.SearchScreen) },
-                        onSettingsClick = { navController.navigate(TvScreen.SettingsScreen) },
+                        onSearchClick = { navController.navigate(TvScreen.SearchScreen) { launchSingleTop = true } },
+                        onSettingsClick = { navController.navigate(TvScreen.SettingsScreen) { launchSingleTop = true } },
                     )
                 }
 
@@ -92,7 +93,7 @@ fun TvNavGraph(appArgumentViewModel: AppArgumentViewModel) {
                     TvSearchScreen(
                         onBackClick = { navController.popBackStack() },
                         onGameClick = { gameName ->
-                            navController.navigate(TvScreen.GameInfoScreen(gameName))
+                            navController.navigate(TvScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
                         },
                     )
                 }
@@ -100,7 +101,7 @@ fun TvNavGraph(appArgumentViewModel: AppArgumentViewModel) {
                 composable<TvScreen.SettingsScreen> {
                     TvSettingsScreen(
                         onBackClick = { navController.popBackStack() },
-                        onAboutClick = { navController.navigate(TvScreen.AboutScreen) },
+                        onAboutClick = { navController.navigate(TvScreen.AboutScreen) { launchSingleTop = true } },
                     )
                 }
 
