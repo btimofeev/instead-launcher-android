@@ -33,6 +33,10 @@ Code layers under `app/src/main/kotlin/org/emunix/insteadlauncher/`:
 
 - `master` — the only branch. UI: Jetpack Compose; native SDL3 development happens here too.
 
+## Commits
+
+- Commit messages are a single short lowercase imperative line, like the existing history ("hide download cancel button while a game is being deleted"). Do not add a body explaining what changed and why unless the user asks for one.
+
 ## Build
 
 ```sh
