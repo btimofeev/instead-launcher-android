@@ -10,4 +10,8 @@ interface GameDefaultsApi {
     fun resolveTheme(): String
 
     fun resolveTextScale(): String
+
+    fun resolveKeyboardButtonPosition(): String
+
+    fun isTelevision(): Boolean
 }

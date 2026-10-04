@@ -192,3 +192,18 @@ void Java_org_emunix_instead_ui_InsteadActivity_toggleMenu(JNIEnv* env, jclass c
 
     SDL_PushEvent(&event); // Inject key press of the Escape Key
 }
+
+void Java_org_emunix_instead_ui_InsteadActivity_toggleFrame(JNIEnv* env, jclass cls) {
+    SDL_Event event;
+
+    memset(&event, 0, sizeof(event));
+    event.key.type = SDL_EVENT_KEY_DOWN;
+    event.key.down = true;
+    event.key.repeat = false;
+
+    event.key.scancode = SDL_SCANCODE_TAB;
+    event.key.key = SDLK_TAB;
+    event.key.mod = SDL_KMOD_NONE;
+
+    SDL_PushEvent(&event); // Inject key press of the Tab Key
+}

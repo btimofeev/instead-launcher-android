@@ -110,6 +110,7 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.tv.material)
 
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)

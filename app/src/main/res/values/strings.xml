@@ -11,6 +11,13 @@
     <string name="repository_try_again">Try again</string>
     <string name="repository_badge_content_description">New version available</string>
 
+    <string name="tv_games_section_installed">Installed</string>
+    <string name="tv_games_section_not_installed">Not installed</string>
+    <string name="tv_games_empty">No games yet.\nThe repository will be loaded automatically.</string>
+
+    <string name="tv_settings_switch_on">On</string>
+    <string name="tv_settings_switch_off">Off</string>
+
     <string name="game_activity_button_install">Download</string>
     <string name="game_activity_button_uninstall">Delete</string>
     <string name="game_activity_button_update">Update</string>

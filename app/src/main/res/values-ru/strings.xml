@@ -11,6 +11,13 @@
     <string name="repository_try_again">Повторить попытку</string>
     <string name="repository_badge_content_description">Доступна новая версия игры</string>
 
+    <string name="tv_games_section_installed">Установленные</string>
+    <string name="tv_games_section_not_installed">Не установленные</string>
+    <string name="tv_games_empty">Игр пока нет.\nРепозиторий загрузится автоматически.</string>
+
+    <string name="tv_settings_switch_on">Вкл</string>
+    <string name="tv_settings_switch_off">Выкл</string>
+
     <string name="game_activity_button_install">Скачать</string>
     <string name="game_activity_button_uninstall">Удалить</string>
     <string name="game_activity_button_update">Обновить</string>

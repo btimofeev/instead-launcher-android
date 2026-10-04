@@ -73,6 +73,9 @@ class PreferencesProviderImpl @Inject constructor(private val preferences: Share
         get() = preferences.getString(PREF_KEYBOARD_BUTTON_KEY, null) ?: DEFAULT_KEYBOARD_BUTTON_POSITION
         set(value) = preferences.edit { putString(PREF_KEYBOARD_BUTTON_KEY, value) }
 
+    override val isKeyboardButtonPositionSet: Boolean
+        get() = preferences.contains(PREF_KEYBOARD_BUTTON_KEY)
+
     override var backButton: String
         get() = preferences.getString(PREF_BACK_BUTTON_KEY, null) ?: BACK_BUTTON_EXIT_GAME
         set(value) = preferences.edit { putString(PREF_BACK_BUTTON_KEY, value) }

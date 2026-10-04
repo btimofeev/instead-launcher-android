@@ -7,6 +7,7 @@ package org.emunix.insteadlauncher.presentation.about
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -34,9 +36,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,12 +56,14 @@ import org.emunix.insteadlauncher.BuildConfig
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.presentation.compose.LayoutType
 import org.emunix.insteadlauncher.presentation.compose.parseLinks
+import kotlinx.coroutines.launch
 import org.emunix.insteadlauncher.presentation.compose.rememberLayoutType
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 
 @Composable
 fun AboutScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    showTopBar: Boolean = true
 ) {
     val viewModel: AboutViewModel = hiltViewModel()
     val appVersion by viewModel.appVersion.collectAsState()
@@ -60,7 +71,8 @@ fun AboutScreen(
     AboutScreenContent(
         insteadVersion = BuildConfig.INSTEAD_VERSION,
         insteadLauncherVersion = appVersion,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        showTopBar = showTopBar
     )
 }
 
@@ -69,32 +81,58 @@ fun AboutScreen(
 fun AboutScreenContent(
     insteadVersion: String,
     insteadLauncherVersion: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    showTopBar: Boolean = true
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(stringResource(R.string.about_activity_title))
-                },
-                navigationIcon = {
-                    IconButton(onClick = { onBackClick.invoke() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = null
-                        )
-                    }
-                },
-            )
+            if (showTopBar) {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(stringResource(R.string.about_activity_title))
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { onBackClick.invoke() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                )
+            }
         }
     ) { innerPadding ->
         val layoutType = rememberLayoutType()
+        val scrollState = rememberScrollState()
+        val coroutineScope = rememberCoroutineScope()
+        val scrollStep = with(LocalDensity.current) { 240.dp.toPx() }
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState()),
+                .focusable()
+                .onPreviewKeyEvent { event ->
+                    val key = event.key
+                    if (key != Key.DirectionDown && key != Key.DirectionUp) {
+                        return@onPreviewKeyEvent false
+                    }
+                    val canScroll = if (key == Key.DirectionDown) {
+                        scrollState.canScrollForward
+                    } else {
+                        scrollState.canScrollBackward
+                    }
+                    if (!canScroll) {
+                        return@onPreviewKeyEvent false
+                    }
+                    if (event.type == KeyEventType.KeyDown) {
+                        val delta = if (key == Key.DirectionDown) scrollStep else -scrollStep
+                        coroutineScope.launch { scrollState.animateScrollBy(delta) }
+                    }
+                    true
+                }
+                .verticalScroll(scrollState),
             contentAlignment = Alignment.TopCenter,
         ) {
             val isLandscape =

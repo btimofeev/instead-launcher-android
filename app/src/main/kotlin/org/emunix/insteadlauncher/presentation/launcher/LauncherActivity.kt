@@ -12,6 +12,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,8 +22,10 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.domain.usecase.RecoverInterruptedOperationsUseCase
 import org.emunix.insteadlauncher.domain.work.ScanGamesWork
+import org.emunix.insteadlauncher.presentation.compose.isTv
 import org.emunix.insteadlauncher.presentation.navigation.AppNavGraph
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
+import org.emunix.insteadlauncher.presentation.tv.TvNavGraph
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -62,11 +65,17 @@ class LauncherActivity : AppCompatActivity() {
         setContent {
             val dynamicColors by preferencesProvider.observeDynamicColorsPrefChanges()
                 .collectAsStateWithLifecycle(PreferencesProvider.DEFAULT_DYNAMIC_COLORS)
+            val tvMode = isTv()
 
             InsteadLauncherTheme(
-                dynamicColor = dynamicColors,
+                darkTheme = tvMode || isSystemInDarkTheme(),
+                dynamicColor = !tvMode && dynamicColors,
             ) {
-                AppNavGraph(appArgumentViewModel)
+                if (tvMode) {
+                    TvNavGraph(appArgumentViewModel)
+                } else {
+                    AppNavGraph(appArgumentViewModel)
+                }
             }
         }
     }

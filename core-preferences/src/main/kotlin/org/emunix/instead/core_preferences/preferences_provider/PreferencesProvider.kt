@@ -27,6 +27,8 @@ interface PreferencesProvider {
 
     var keyboardButtonPosition: String
 
+    val isKeyboardButtonPositionSet: Boolean
+
     var backButton: String
 
     var isGLHackEnabled: Boolean

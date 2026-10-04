@@ -10,9 +10,11 @@ import android.content.Context
 import android.content.res.Configuration
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_INSTEAD_TEXT_SIZE
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_KEYBOARD_BUTTON_POSITION
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.INSTEAD_THEME_DEFAULT
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.INSTEAD_THEME_MOBILE
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.INSTEAD_THEME_WIDE
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_DO_NOT_SHOW_BUTTON
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.LARGE_SCREEN_INSTEAD_TEXT_SIZE
 import org.emunix.instead.core_storage_api.data.Storage
 import org.emunix.instead_api.GameDefaultsApi
@@ -42,6 +44,22 @@ class GameDefaultsImpl @Inject constructor(
         return preferenceProvider.defaultInsteadTextSize
     }
 
+    override fun resolveKeyboardButtonPosition(): String {
+        if (!preferenceProvider.isKeyboardButtonPositionSet) {
+            preferenceProvider.keyboardButtonPosition = if (isTelevision()) {
+                KEYBOARD_DO_NOT_SHOW_BUTTON
+            } else {
+                DEFAULT_KEYBOARD_BUTTON_POSITION
+            }
+        }
+        return preferenceProvider.keyboardButtonPosition
+    }
+
+    override fun isTelevision(): Boolean = uiModeType() == Configuration.UI_MODE_TYPE_TELEVISION
+
+    private fun uiModeType(): Int? =
+        (context.getSystemService(Context.UI_MODE_SERVICE) as? UiModeManager)?.currentModeType
+
     private fun detectTheme(): String {
         val landscape = isLargeScreen()
         val preferred = if (landscape) INSTEAD_THEME_WIDE else INSTEAD_THEME_MOBILE
@@ -53,15 +71,17 @@ class GameDefaultsImpl @Inject constructor(
     }
 
     private fun isLargeScreen(): Boolean {
-        val uiModeType = (context.getSystemService(Context.UI_MODE_SERVICE) as? UiModeManager)
-            ?.currentModeType
+        val uiModeType = uiModeType()
         return uiModeType == Configuration.UI_MODE_TYPE_TELEVISION ||
-            uiModeType == Configuration.UI_MODE_TYPE_APPLIANCE ||
-            context.resources.configuration.smallestScreenWidthDp >= TABLET_SMALLEST_WIDTH_DP
+                uiModeType == Configuration.UI_MODE_TYPE_APPLIANCE ||
+                context.resources.configuration.smallestScreenWidthDp >= TABLET_SMALLEST_WIDTH_DP
     }
 
     private fun isThemeInstalled(name: String): Boolean =
-        hasTheme(storage.getThemesDirectory(), name) || hasTheme(storage.getUserThemesDirectory(), name)
+        hasTheme(storage.getThemesDirectory(), name) || hasTheme(
+            storage.getUserThemesDirectory(),
+            name
+        )
 
     private fun hasTheme(themesDir: File, name: String): Boolean {
         val themeDir = File(themesDir, name)

@@ -14,15 +14,21 @@ import io.mockk.every
 import io.mockk.mockk
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_INSTEAD_TEXT_SIZE
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.DEFAULT_KEYBOARD_BUTTON_POSITION
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.INSTEAD_THEME_DEFAULT
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.INSTEAD_THEME_MOBILE
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.INSTEAD_THEME_WIDE
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_BUTTON_BOTTOM_CENTER
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.KEYBOARD_DO_NOT_SHOW_BUTTON
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.LARGE_SCREEN_INSTEAD_TEXT_SIZE
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DEFAULT_THEME_KEY
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_KEYBOARD_BUTTON_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_TEXT_SIZE_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProviderImpl
 import org.emunix.instead.core_storage_api.data.Storage
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -227,6 +233,73 @@ class GameDefaultsImplTest {
 
         assertEquals(defaults().resolveTheme(), defaults().resolveTheme())
         assertEquals(defaults().resolveTextScale(), defaults().resolveTextScale())
+        assertEquals(defaults().resolveKeyboardButtonPosition(), defaults().resolveKeyboardButtonPosition())
+    }
+
+    @Test
+    fun `hides the keyboard button on a television and stores it`() {
+        setUiModeType(Configuration.UI_MODE_TYPE_TELEVISION)
+
+        assertEquals(KEYBOARD_DO_NOT_SHOW_BUTTON, defaults().resolveKeyboardButtonPosition())
+        assertEquals(KEYBOARD_DO_NOT_SHOW_BUTTON, preferences.getString(PREF_KEYBOARD_BUTTON_KEY, null))
+    }
+
+    @Test
+    fun `keeps the keyboard button on a phone`() {
+        assertEquals(DEFAULT_KEYBOARD_BUTTON_POSITION, defaults().resolveKeyboardButtonPosition())
+        assertEquals(DEFAULT_KEYBOARD_BUTTON_POSITION, preferences.getString(PREF_KEYBOARD_BUTTON_KEY, null))
+    }
+
+    @Test
+    fun `keeps the keyboard button on a tablet`() {
+        setSmallestWidthDp(TABLET_SMALLEST_WIDTH_DP)
+
+        assertEquals(DEFAULT_KEYBOARD_BUTTON_POSITION, defaults().resolveKeyboardButtonPosition())
+    }
+
+    @Test
+    fun `keeps a keyboard button position the user picked`() {
+        preferencesProvider.keyboardButtonPosition = KEYBOARD_BUTTON_BOTTOM_CENTER
+        setUiModeType(Configuration.UI_MODE_TYPE_TELEVISION)
+
+        assertEquals(KEYBOARD_BUTTON_BOTTOM_CENTER, defaults().resolveKeyboardButtonPosition())
+        assertEquals(KEYBOARD_BUTTON_BOTTOM_CENTER, preferences.getString(PREF_KEYBOARD_BUTTON_KEY, null))
+    }
+
+    @Test
+    fun `picking the theme does not mark the keyboard button as set`() {
+        setUiModeType(Configuration.UI_MODE_TYPE_TELEVISION)
+
+        defaults().resolveTheme()
+
+        assertEquals(KEYBOARD_DO_NOT_SHOW_BUTTON, defaults().resolveKeyboardButtonPosition())
+    }
+
+    @Test
+    fun `isTelevision is true on a television`() {
+        setUiModeType(Configuration.UI_MODE_TYPE_TELEVISION)
+
+        assertTrue(defaults().isTelevision())
+    }
+
+    @Test
+    fun `isTelevision is false on other devices`() {
+        listOf(
+            Configuration.UI_MODE_TYPE_NORMAL,
+            Configuration.UI_MODE_TYPE_APPLIANCE,
+            Configuration.UI_MODE_TYPE_CAR,
+        ).forEach { uiModeType ->
+            setUiModeType(uiModeType)
+
+            assertFalse(defaults().isTelevision(), "uiModeType $uiModeType")
+        }
+    }
+
+    @Test
+    fun `isTelevision is false without a ui mode manager`() {
+        uiModeManager = null
+
+        assertFalse(defaults().isTelevision())
     }
 
     private fun defaults() = GameDefaultsImpl(context, preferencesProvider, storage)

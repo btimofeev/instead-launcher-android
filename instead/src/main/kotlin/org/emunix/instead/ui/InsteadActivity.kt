@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.Window
 import android.widget.ImageButton
 import android.widget.RelativeLayout
@@ -43,6 +44,14 @@ internal class InsteadActivity: SDLActivity() {
     private var game : String? = ""
     private var playFromBeginning = false
 
+    private var isTelevision = false
+
+    private val tvOkKeyCodes = intArrayOf(
+            KeyEvent.KEYCODE_DPAD_CENTER,
+            KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_NUMPAD_ENTER,
+    )
+
     private lateinit var keyboardButton : ImageButton
 
     private var prefBackButton: String = ""
@@ -67,7 +76,7 @@ internal class InsteadActivity: SDLActivity() {
         args[3] = storage.getUserThemesDirectory().absolutePath
         args[4] = Locale.getDefault().language
         args[5] = if (preferenceProvider.isMusicEnabled) "y" else "n"
-        args[6] = if (preferenceProvider.isCursorEnabled) "y" else "n"
+        args[6] = if (preferenceProvider.isCursorEnabled || gameDefaultsApi.isTelevision()) "y" else "n"
         args[7] = if (preferenceProvider.isOwnGameThemeEnabled) "y" else "n"
         args[8] = gameDefaultsApi.resolveTheme()
         args[9] = if (preferenceProvider.isHiresEnabled) "y" else "n"
@@ -86,12 +95,13 @@ internal class InsteadActivity: SDLActivity() {
         game = intent.extras?.getString("game_name")
         playFromBeginning = intent.extras?.getBoolean("play_from_beginning", false) ?: false
 
+        isTelevision = gameDefaultsApi.isTelevision()
         prefBackButton = preferenceProvider.backButton
         initKeyboard()
     }
 
     private fun initKeyboard() {
-        val prefKeyboardButton = preferenceProvider.keyboardButtonPosition
+        val prefKeyboardButton = gameDefaultsApi.resolveKeyboardButtonPosition()
         val keyboardLayout = RelativeLayout(this)
         val rlp = RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -134,24 +144,59 @@ internal class InsteadActivity: SDLActivity() {
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (event.keyCode == KeyEvent.KEYCODE_BACK) {
-            if (prefBackButton == PreferencesProvider.BACK_BUTTON_OPEN_MENU) {
-                if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
+            when {
+                event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0 -> {
                     keyDispatcherState.startTracking(event, this)
-                } else if (event.action == KeyEvent.ACTION_UP) {
+                }
+                event.action == KeyEvent.ACTION_UP -> {
                     keyDispatcherState.handleUpEvent(event)
                     if (event.isTracking && !event.isCanceled) {
-                        toggleMenu()
+                        if (isTelevision && !isLongPress(event)) {
+                            toggleFrame()
+                        } else {
+                            performBackAction()
+                        }
                     }
                 }
-            } else if (event.action == KeyEvent.ACTION_UP) {
-                // "exit game": SDL3 consumes the back key and forwards it to the
-                // game as SDLK_AC_BACK, so finish the activity ourselves.
-                finish()
             }
-            // Consume the back key: otherwise SDL3 passes it to the game.
             return true
         }
+        if (isTelevision && event.keyCode in tvOkKeyCodes) {
+            when (event.action) {
+                KeyEvent.ACTION_DOWN -> {
+                    if (event.repeatCount == 0) {
+                        keyDispatcherState.startTracking(event, this)
+                    }
+                    return true
+                }
+                KeyEvent.ACTION_UP -> {
+                    keyDispatcherState.handleUpEvent(event)
+                    if (event.isTracking && !event.isCanceled) {
+                        if (isLongPress(event)) {
+                            toggleMenu()
+                        } else {
+                            onNativeKeyDown(event.keyCode)
+                            onNativeKeyUp(event.keyCode)
+                        }
+                    }
+                    return true
+                }
+            }
+        }
         return super.dispatchKeyEvent(event)
+    }
+
+    private fun isLongPress(event: KeyEvent): Boolean =
+            event.eventTime - event.downTime >= ViewConfiguration.getLongPressTimeout()
+
+    private fun performBackAction() {
+        if (prefBackButton == PreferencesProvider.BACK_BUTTON_OPEN_MENU) {
+            toggleMenu()
+        } else {
+            // "exit game": SDL3 consumes the back key and forwards it to the
+            // game as SDLK_AC_BACK, so finish the activity ourselves.
+            finish()
+        }
     }
 
     override fun setOrientationBis(w: Int, h: Int, resizable: Boolean, hint: String) {
@@ -181,6 +226,8 @@ internal class InsteadActivity: SDLActivity() {
     }
 
     private external fun toggleMenu()
+
+    private external fun toggleFrame()
 
     companion object {
         // This method is called by native instead_launcher.c using JNI.

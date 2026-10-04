@@ -83,6 +83,22 @@ Tests live in `app/src/test/kotlin/` (see `GameParserImplTest`). Test resources 
 - Logging: Timber. Crash reports: ACRA (release builds only).
 - Launching a game: `InsteadApi.startGame(gameName, playFromBeginning)` → `InsteadActivity` (SDL).
 
+## Settings-driven behaviour (prefer settings over branches)
+
+- **Prefer expressing behaviour through settings over `if (isTv())` / device checks in code.** Every extra device-type branch is duplicated logic; a preference is read in exactly one place and stays overridable by the user.
+- Device-type-dependent defaults are resolved in **`GameDefaultsImpl`** (`instead/src/main/kotlin/org/emunix/instead/GameDefaultsImpl.kt`, interface `instead_api/GameDefaultsApi.kt`, bound in `app/di/AppModule.kt`). It picks a sane default for the current device class (phone / tablet / TV / appliance — see `isLargeScreen()`, `isTelevision()`), writes it into `PreferencesProvider` **only if the user has not chosen a value yet**, and returns it:
+  - `resolveTheme()` → wide theme on large screens, mobile otherwise;
+  - `resolveTextScale()` → enlarged text on large screens;
+  - `resolveKeyboardButtonPosition()` → `KEYBOARD_DO_NOT_SHOW_BUTTON` on TV, corner position elsewhere.
+- Pattern for every "default depends on the device" setting:
+  1. add `val isXxxSet: Boolean` to `PreferencesProvider` (`preferences.contains(PREF_X_KEY)`) next to the setting;
+  2. add `resolveXxx(): String` to `GameDefaultsApi` and implement it in `GameDefaultsImpl` guarded by `isXxxSet`;
+  3. consume `gameDefaultsApi.resolveXxx()` where the value is needed (e.g. `InsteadActivity`), not `preferencesProvider` directly.
+- Consumers must go through `resolveXxx()`; the static default in `PreferencesProviderImpl` is only a last-resort fallback.
+- Cover new resolvers in `app/src/test/kotlin/org/emunix/instead/GameDefaultsImplTest.kt` (phone / tablet / TV / user-picked value / idempotency).
+- TV-only *UI* differences (hiding settings rows, extra settings rows) still belong to `presentation/tv/` (`TvSettingsScreen.filterForTv()`), not to the engine modules.
+- Never write a user's preference from a `LaunchedEffect`/composable just to simulate a default — that is what the resolver is for.
+
 ## CI
 
 GitHub Actions: `.github/workflows/android.yml` — builds a debug APK for all ABIs, runs JVM unit tests, caches the downloaded native dependencies (SDL3, INSTEAD, LuaJIT, libiconv), uploads the artifact. Runs on push/PR against the `master` and `main` branches and on `v*` tags. The main branch is `master`.

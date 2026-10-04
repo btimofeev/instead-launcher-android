@@ -7,6 +7,8 @@ package org.emunix.insteadlauncher.domain.usecase
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import org.emunix.insteadlauncher.domain.model.GameModel
 import org.emunix.insteadlauncher.domain.model.GameState
@@ -52,6 +54,7 @@ override suspend fun invoke(gameName: String, originalState: GameState): Install
             return Error(type = INVALID_GAME_FILE, throwable = e)
         } catch (e: Throwable) {
             game.restoreStateToDatabase(originalState)
+            currentCoroutineContext().ensureActive()
             return Error(type = DOWNLOAD_ERROR, throwable = e)
         }
 
@@ -64,6 +67,7 @@ override suspend fun invoke(gameName: String, originalState: GameState): Install
         } catch (e: Throwable) {
             deletePartialInstall(gameName)
             game.saveNotInstalledStateToDatabase()
+            currentCoroutineContext().ensureActive()
             return Error(type = UNPACKING_ERROR, throwable = e)
         }
 
