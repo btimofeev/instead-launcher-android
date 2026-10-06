@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Instead</string>
+    <string name="input_mode_mouse">Mouse mode. D-pad moves the cursor, OK clicks</string>
+    <string name="input_mode_links">Navigation mode. D-pad moves between links</string>
 </resources>

@@ -9,6 +9,8 @@ package org.emunix.instead.ui
 import android.content.pm.ActivityInfo
 import android.graphics.Point
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
@@ -17,6 +19,7 @@ import android.view.ViewConfiguration
 import android.view.Window
 import android.widget.ImageButton
 import android.widget.RelativeLayout
+import android.widget.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import org.emunix.instead.R
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
@@ -51,6 +54,19 @@ internal class InsteadActivity: SDLActivity() {
             KeyEvent.KEYCODE_ENTER,
             KeyEvent.KEYCODE_NUMPAD_ENTER,
     )
+
+    private val tvDpadKeyCodes = mapOf(
+            KeyEvent.KEYCODE_DPAD_UP to intArrayOf(0, -1),
+            KeyEvent.KEYCODE_DPAD_DOWN to intArrayOf(0, 1),
+            KeyEvent.KEYCODE_DPAD_LEFT to intArrayOf(-1, 0),
+            KeyEvent.KEYCODE_DPAD_RIGHT to intArrayOf(1, 0),
+    )
+
+    private var mouseMode = false
+    private var okTapClick: Runnable? = null
+    private var okTapDouble = false
+
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     private lateinit var keyboardButton : ImageButton
 
@@ -98,6 +114,11 @@ internal class InsteadActivity: SDLActivity() {
         isTelevision = gameDefaultsApi.isTelevision()
         prefBackButton = preferenceProvider.backButton
         initKeyboard()
+    }
+
+    override fun onDestroy() {
+        resetOkTap()
+        super.onDestroy()
     }
 
     private fun initKeyboard() {
@@ -159,6 +180,9 @@ internal class InsteadActivity: SDLActivity() {
                 if (isLongPress(event)) performBackAction() else toggleFrame()
             }
             in tvOkKeyCodes -> handleTvOkKey(event)
+            in tvDpadKeyCodes -> if (!handleMouseModeDpad(event)) {
+                return super.dispatchKeyEvent(event)
+            }
             else -> return super.dispatchKeyEvent(event)
         }
         return true
@@ -182,20 +206,79 @@ internal class InsteadActivity: SDLActivity() {
             KeyEvent.ACTION_DOWN -> {
                 if (event.repeatCount == 0) {
                     keyDispatcherState.startTracking(event, this)
+                    cancelOkTapClick()
                 }
             }
             KeyEvent.ACTION_UP -> {
                 keyDispatcherState.handleUpEvent(event)
                 if (event.isTracking && !event.isCanceled) {
-                    if (isLongPress(event)) {
-                        toggleMenu()
-                    } else {
-                        onNativeKeyDown(event.keyCode)
-                        onNativeKeyUp(event.keyCode)
+                    when {
+                        isLongPress(event) -> {
+                            resetOkTap()
+                            toggleMenu()
+                        }
+                        okTapDouble -> {
+                            resetOkTap()
+                            toggleInputMode()
+                        }
+                        else -> scheduleOkClick(event.keyCode)
                     }
+                } else {
+                    resetOkTap()
                 }
             }
         }
+    }
+
+    private fun handleMouseModeDpad(event: KeyEvent): Boolean {
+        if (!mouseMode || isTextInputActive()) return false
+        if (event.action == KeyEvent.ACTION_DOWN) {
+            val direction = tvDpadKeyCodes.getValue(event.keyCode)
+            val speed = (event.repeatCount / SPEED_REPEAT_STEP + 1).coerceAtMost(MAX_CURSOR_SPEED)
+            moveCursor(direction[0], direction[1], speed)
+        }
+        return true
+    }
+
+    private fun cancelOkTapClick() {
+        val click = okTapClick ?: return
+        uiHandler.removeCallbacks(click)
+        okTapClick = null
+        okTapDouble = true
+    }
+
+    private fun resetOkTap() {
+        okTapClick?.let { uiHandler.removeCallbacks(it) }
+        okTapClick = null
+        okTapDouble = false
+    }
+
+    private fun scheduleOkClick(keyCode: Int) {
+        val click = Runnable {
+            okTapClick = null
+            sendOkClick(keyCode)
+        }
+        okTapClick = click
+        uiHandler.postDelayed(click, ViewConfiguration.getDoubleTapTimeout().toLong())
+    }
+
+    private fun sendOkClick(keyCode: Int) {
+        if (mouseMode) {
+            clickCursor(true)
+            clickCursor(false)
+        } else {
+            onNativeKeyDown(keyCode)
+            onNativeKeyUp(keyCode)
+        }
+    }
+
+    private fun toggleInputMode() {
+        mouseMode = !mouseMode
+        Toast.makeText(
+                this,
+                if (mouseMode) R.string.input_mode_mouse else R.string.input_mode_links,
+                Toast.LENGTH_SHORT,
+        ).show()
     }
 
     private fun isLongPress(event: KeyEvent): Boolean =
@@ -247,7 +330,16 @@ internal class InsteadActivity: SDLActivity() {
         onNativeKeyUp(KeyEvent.KEYCODE_TAB)
     }
 
+    private external fun moveCursor(dx: Int, dy: Int, speed: Int)
+
+    private external fun clickCursor(down: Boolean)
+
+    private external fun isTextInputActive(): Boolean
+
     companion object {
+        private const val SPEED_REPEAT_STEP = 4
+        private const val MAX_CURSOR_SPEED = 5
+
         // This method is called by native instead_launcher.c using JNI.
         @JvmStatic
         fun unlockRotation() {

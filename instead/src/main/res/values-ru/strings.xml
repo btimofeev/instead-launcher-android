@@ -1,0 +1,4 @@
+<resources>
+    <string name="input_mode_mouse">Режим мыши. Курсор управляется крестовиной, ОК — клик</string>
+    <string name="input_mode_links">Режим навигации. Крестовина переключает ссылки</string>
+</resources>

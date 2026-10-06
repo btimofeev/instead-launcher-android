@@ -16,6 +16,12 @@ static const char *tag = "InsteadLauncher";
 
 int instead_main(int argc, char** argv);
 
+extern int gfx_width;
+extern int gfx_height;
+extern int gfx_cursor(int *xp, int *yp);
+extern void gfx_warp_cursor(int x, int y);
+extern int input_text(int start);
+
 int SDL_main(int argc, char** argv) {
     const char* path = argv[1];
     const char* appdata = argv[2];
@@ -175,4 +181,80 @@ void get_screen_size(int *w, int *h) {
 
     (*env)->DeleteLocalRef(env, clazz);
     (*env)->DeleteLocalRef(env, activity);
+}
+
+#define CURSOR_STEPS 32
+#define CURSOR_STEP_MIN 8
+#define CURSOR_MAX_SPEED 5
+
+static void push_cursor_motion(int x, int y) {
+    SDL_Event event;
+
+    memset(&event, 0, sizeof(event));
+    event.type = SDL_EVENT_MOUSE_MOTION;
+    event.motion.x = x;
+    event.motion.y = y;
+
+    SDL_PushEvent(&event);
+}
+
+static void push_cursor_button(int down, int x, int y) {
+    SDL_Event event;
+
+    memset(&event, 0, sizeof(event));
+    event.type = down ? SDL_EVENT_MOUSE_BUTTON_DOWN : SDL_EVENT_MOUSE_BUTTON_UP;
+    event.button.x = x;
+    event.button.y = y;
+    event.button.button = SDL_BUTTON_LEFT;
+    event.button.clicks = 1;
+
+    SDL_PushEvent(&event);
+}
+
+void Java_org_emunix_instead_ui_InsteadActivity_moveCursor(JNIEnv* env, jobject thiz, jint dx, jint dy, jint speed) {
+    int x, y;
+    int step;
+
+    if (gfx_width <= 0 || gfx_height <= 0)
+        return;
+
+    step = gfx_height < gfx_width ? gfx_height : gfx_width;
+    step /= CURSOR_STEPS;
+    if (step < CURSOR_STEP_MIN)
+        step = CURSOR_STEP_MIN;
+    if (speed > CURSOR_MAX_SPEED)
+        speed = CURSOR_MAX_SPEED;
+
+    gfx_cursor(&x, &y);
+    x += dx * step * speed;
+    y += dy * step * speed;
+    if (x < 0)
+        x = 0;
+    else if (x >= gfx_width)
+        x = gfx_width - 1;
+    if (y < 0)
+        y = 0;
+    else if (y >= gfx_height)
+        y = gfx_height - 1;
+
+    // Mirrors the gamepad mouse path from Instead's input.c: the event is left
+    // with windowID 0, so mouse_watcher() skips the window-to-render conversion
+    // and takes the render coordinates as is. The warp has no effect on the
+    // Android video driver, the pushed event is what moves the cursor.
+    gfx_warp_cursor(x, y);
+    push_cursor_motion(x, y);
+}
+
+void Java_org_emunix_instead_ui_InsteadActivity_clickCursor(JNIEnv* env, jobject thiz, jboolean down) {
+    int x, y;
+
+    if (gfx_width <= 0 || gfx_height <= 0)
+        return;
+
+    gfx_cursor(&x, &y);
+    push_cursor_button(down ? 1 : 0, x, y);
+}
+
+jboolean Java_org_emunix_instead_ui_InsteadActivity_isTextInputActive(JNIEnv* env, jobject thiz) {
+    return input_text(-1) ? JNI_TRUE : JNI_FALSE;
 }
