@@ -116,7 +116,7 @@ tasks.register<Delete>("deleteDependencies") {
 }
 
 tasks.register("downloadInstead") {
-    val insteadRef = "1b9b21d16e9e43c9df040a7f7c10041f22b3814a"
+    val insteadRef = "1a07e0ffc0a1e8402b9d47a104d88d3f33204a7e"
     val luaJitRef = "c6ffc141a8762b41703f9287d63d93622a13dd8f"
     val iconv = "1.15"
     val downloadDir = project.layout.buildDirectory.get().asFile.path

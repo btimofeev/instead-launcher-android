@@ -13,11 +13,5 @@ interface GameDefaultsApi {
 
     fun resolveKeyboardButtonPosition(): String
 
-    /**
-     * INSTEAD keyboard mode to force for this device: 0 smart, 1 links, 2 scroll,
-     * empty string leaves the mode saved by the game alone.
-     */
-    fun resolveKeyboardMode(): String
-
     fun isTelevision(): Boolean
 }

@@ -302,26 +302,6 @@ class GameDefaultsImplTest {
         assertFalse(defaults().isTelevision())
     }
 
-    @Test
-    fun `forces the smart keyboard mode on a television`() {
-        setUiModeType(Configuration.UI_MODE_TYPE_TELEVISION)
-
-        assertEquals("0", defaults().resolveKeyboardMode())
-    }
-
-    @Test
-    fun `keeps the keyboard mode chosen by the game on other devices`() {
-        listOf(
-            Configuration.UI_MODE_TYPE_NORMAL,
-            Configuration.UI_MODE_TYPE_APPLIANCE,
-            Configuration.UI_MODE_TYPE_CAR,
-        ).forEach { uiModeType ->
-            setUiModeType(uiModeType)
-
-            assertEquals("", defaults().resolveKeyboardMode(), "uiModeType $uiModeType")
-        }
-    }
-
     private fun defaults() = GameDefaultsImpl(context, preferencesProvider, storage)
 
     private fun setUiModeType(type: Int) {

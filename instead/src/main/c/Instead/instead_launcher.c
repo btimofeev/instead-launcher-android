@@ -36,7 +36,6 @@ int SDL_main(int argc, char** argv) {
     const char* textsize = argv[11];
     const char* noautosave = argv[12];
     const char* game = argv[13];
-    const char* kbd = argv[14];
 
     __android_log_write(ANDROID_LOG_DEBUG, tag, argv[0]);
     __android_log_write(ANDROID_LOG_DEBUG, tag, path);
@@ -85,11 +84,6 @@ int SDL_main(int argc, char** argv) {
     if (strlen(lang) > 0) {
         _argv[n++] = SDL_strdup("-lang");
         _argv[n++] = SDL_strdup(lang);
-    }
-
-    if (strlen(kbd) > 0) {
-        _argv[n++] = SDL_strdup("-kbd");
-        _argv[n++] = SDL_strdup(kbd);
     }
 
     _argv[n++] = SDL_strdup("-appdata");

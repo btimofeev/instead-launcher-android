@@ -85,7 +85,7 @@ internal class InsteadActivity: SDLActivity() {
     }
 
     override fun getArguments(): Array<String> {
-        val args : Array<String> = Array(14){""}
+        val args : Array<String> = Array(13){""}
         args[0] = storage.getDataDirectory().absolutePath
         args[1] = storage.getAppFilesDirectory().absolutePath
         args[2] = storage.getGamesDirectory().absolutePath
@@ -99,7 +99,6 @@ internal class InsteadActivity: SDLActivity() {
         args[10] = gameDefaultsApi.resolveTextScale()
         args[11] = if (playFromBeginning) "y" else "n"
         args[12] = game ?: ""
-        args[13] = gameDefaultsApi.resolveKeyboardMode()
         return args
     }
 
