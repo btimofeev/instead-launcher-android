@@ -142,48 +142,60 @@ internal class InsteadActivity: SDLActivity() {
         }
     }
 
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode == KeyEvent.KEYCODE_BACK) {
-            when {
-                event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0 -> {
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean =
+            if (isTelevision) dispatchTvKeyEvent(event) else dispatchPhoneKeyEvent(event)
+
+    private fun dispatchPhoneKeyEvent(event: KeyEvent): Boolean {
+        if (event.keyCode != KeyEvent.KEYCODE_BACK) {
+            return super.dispatchKeyEvent(event)
+        }
+        handleBackKey(event) { performBackAction() }
+        return true
+    }
+
+    private fun dispatchTvKeyEvent(event: KeyEvent): Boolean {
+        when (event.keyCode) {
+            KeyEvent.KEYCODE_BACK -> handleBackKey(event) {
+                if (isLongPress(event)) performBackAction() else toggleFrame()
+            }
+            in tvOkKeyCodes -> handleTvOkKey(event)
+            else -> return super.dispatchKeyEvent(event)
+        }
+        return true
+    }
+
+    private fun handleBackKey(event: KeyEvent, onBackPressed: () -> Unit) {
+        when {
+            event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0 ->
+                keyDispatcherState.startTracking(event, this)
+            event.action == KeyEvent.ACTION_UP -> {
+                keyDispatcherState.handleUpEvent(event)
+                if (event.isTracking && !event.isCanceled) {
+                    onBackPressed()
+                }
+            }
+        }
+    }
+
+    private fun handleTvOkKey(event: KeyEvent) {
+        when (event.action) {
+            KeyEvent.ACTION_DOWN -> {
+                if (event.repeatCount == 0) {
                     keyDispatcherState.startTracking(event, this)
                 }
-                event.action == KeyEvent.ACTION_UP -> {
-                    keyDispatcherState.handleUpEvent(event)
-                    if (event.isTracking && !event.isCanceled) {
-                        if (isTelevision && !isLongPress(event)) {
-                            toggleFrame()
-                        } else {
-                            performBackAction()
-                        }
+            }
+            KeyEvent.ACTION_UP -> {
+                keyDispatcherState.handleUpEvent(event)
+                if (event.isTracking && !event.isCanceled) {
+                    if (isLongPress(event)) {
+                        toggleMenu()
+                    } else {
+                        onNativeKeyDown(event.keyCode)
+                        onNativeKeyUp(event.keyCode)
                     }
                 }
             }
-            return true
         }
-        if (isTelevision && event.keyCode in tvOkKeyCodes) {
-            when (event.action) {
-                KeyEvent.ACTION_DOWN -> {
-                    if (event.repeatCount == 0) {
-                        keyDispatcherState.startTracking(event, this)
-                    }
-                    return true
-                }
-                KeyEvent.ACTION_UP -> {
-                    keyDispatcherState.handleUpEvent(event)
-                    if (event.isTracking && !event.isCanceled) {
-                        if (isLongPress(event)) {
-                            toggleMenu()
-                        } else {
-                            onNativeKeyDown(event.keyCode)
-                            onNativeKeyUp(event.keyCode)
-                        }
-                    }
-                    return true
-                }
-            }
-        }
-        return super.dispatchKeyEvent(event)
     }
 
     private fun isLongPress(event: KeyEvent): Boolean =
@@ -225,9 +237,15 @@ internal class InsteadActivity: SDLActivity() {
         }
     }
 
-    private external fun toggleMenu()
+    private fun toggleMenu() {
+        onNativeKeyDown(KeyEvent.KEYCODE_ESCAPE)
+        onNativeKeyUp(KeyEvent.KEYCODE_ESCAPE)
+    }
 
-    private external fun toggleFrame()
+    private fun toggleFrame() {
+        onNativeKeyDown(KeyEvent.KEYCODE_TAB)
+        onNativeKeyUp(KeyEvent.KEYCODE_TAB)
+    }
 
     companion object {
         // This method is called by native instead_launcher.c using JNI.
