@@ -86,12 +86,24 @@ fun TvNavGraph(appArgumentViewModel: AppArgumentViewModel) {
                     TvGameInfoScreen(
                         gameName = route.gameName,
                         onBackClick = { navController.popBackStack() },
+                        onShowHintClick = {
+                            navController.navigate(TvScreen.ControlsHintScreen(route.gameName)) {
+                                launchSingleTop = true
+                            }
+                        },
+                    )
+                }
+
+                composable<TvScreen.ControlsHintScreen> { backStackEntry ->
+                    val route = backStackEntry.toRoute<TvScreen.ControlsHintScreen>()
+                    TvControlsHintScreen(
+                        gameName = route.gameName,
+                        onBackClick = { navController.popBackStack() },
                     )
                 }
 
                 composable<TvScreen.SearchScreen> {
                     TvSearchScreen(
-                        onBackClick = { navController.popBackStack() },
                         onGameClick = { gameName ->
                             navController.navigate(TvScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
                         },
@@ -100,7 +112,6 @@ fun TvNavGraph(appArgumentViewModel: AppArgumentViewModel) {
 
                 composable<TvScreen.SettingsScreen> {
                     TvSettingsScreen(
-                        onBackClick = { navController.popBackStack() },
                         onAboutClick = { navController.navigate(TvScreen.AboutScreen) { launchSingleTop = true } },
                     )
                 }

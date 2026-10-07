@@ -18,6 +18,18 @@
     <string name="tv_settings_switch_on">Enŝaltita</string>
     <string name="tv_settings_switch_off">Elŝaltita</string>
 
+    <string name="tv_controls_hint_title">Konsilo pri regado</string>
+    <string name="tv_controls_hint_intro">INSTEAD-ludoj estis kreitaj por komputilo kaj estas faritaj por klavaro kaj muso, do regi ilin per teleregilo estas iom nekutime.</string>
+    <string name="tv_controls_hint_modes">La ludo havas du regajn reĝimojn, inter kiuj vi povas ŝanĝi iam ajn — dufoje premante OK (la elektbutono en la mezo de la sagokruco):</string>
+    <string name="tv_controls_hint_links_mode">Ligila reĝimo — la sagokruco movas la kursoron inter ligiloj, OK elektas la ligilon.</string>
+    <string name="tv_controls_hint_cursor_mode">Kursora reĝimo — la sagokruco movas la kursoron al ajna loko de la ekrano, OK alklakas tie.</string>
+    <string name="tv_controls_hint_fallback">Se la ludo ne funkcias en ligila reĝimo, ŝanĝu al kursora reĝimo.</string>
+    <string name="tv_controls_hint_back_short">Mallonga premo de la butono Reen ŝanĝas inter la ĉefa luda teksto kaj la inventaro.</string>
+    <string name="tv_controls_hint_back_long">Longa premo de la butono Reen eliras el la ludo.</string>
+    <string name="tv_controls_hint_menu">La INSTEAD-menuo malfermiĝas tenante la butonon OK.</string>
+    <string name="tv_controls_hint_got_it">Komprenite</string>
+    <string name="tv_controls_hint_dont_show_again">Ne plu montri</string>
+
     <string name="game_activity_button_install">Elŝuti</string>
     <string name="game_activity_button_uninstall">Forigi</string>
     <string name="game_activity_button_update">Ĝisdatigi</string>
@@ -119,6 +131,7 @@
     <string name="pref_update_repo_when_open">Ĝisdatigi deponejon je malfermo</string>
 
     <string name="prefs_category_interface">Uzulinterfaco</string>
+    <string name="prefs_category_other">Alia</string>
     <string name="prefs_theme">Etoso de aplikaĵo</string>
     <string name="prefs_theme_dialog_title">Elektu etoson</string>
     <string name="prefs_theme_name_light">Hela</string>
@@ -127,6 +140,8 @@
     <string name="prefs_theme_name_follow_system">Depende de sistema etoso</string>
     <string name="prefs_dynamic_colors">Dinamikaj koloroj</string>
     <string name="prefs_dynamic_colors_summary">Interfacaj koloroj adaptiĝas al via tapeto</string>
+    <string name="prefs_game_controls_hint_title">Konsilo pri regado</string>
+    <string name="prefs_game_controls_hint_summary">Montri regajn konsilojn antaŭ ol ludi</string>
 
     <string name="about_activity_title">Pri programo</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Petro Kosiĥ https://instead-hub.github.io/</string>

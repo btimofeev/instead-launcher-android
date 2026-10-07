@@ -176,7 +176,7 @@ internal class InsteadActivity: SDLActivity() {
     private fun dispatchTvKeyEvent(event: KeyEvent): Boolean {
         when (event.keyCode) {
             KeyEvent.KEYCODE_BACK -> handleBackKey(event) {
-                if (isLongPress(event)) performBackAction() else toggleFrame()
+                if (isLongPress(event)) finish() else toggleFrame()
             }
             in tvOkKeyCodes -> handleTvOkKey(event)
             in tvDpadKeyCodes -> if (!handleMouseModeDpad(event)) {

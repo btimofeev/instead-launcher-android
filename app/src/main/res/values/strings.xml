@@ -18,6 +18,18 @@
     <string name="tv_settings_switch_on">On</string>
     <string name="tv_settings_switch_off">Off</string>
 
+    <string name="tv_controls_hint_title">Controls hint</string>
+    <string name="tv_controls_hint_intro">INSTEAD games were made for the computer and are designed for a keyboard and mouse, so controlling them with a remote takes a little getting used to.</string>
+    <string name="tv_controls_hint_modes">The game has two control modes, and you can switch between them any time by pressing OK twice (the select button in the middle of the remote\'s D-pad):</string>
+    <string name="tv_controls_hint_links_mode">Links mode — the D-pad moves the cursor between links, OK selects the link.</string>
+    <string name="tv_controls_hint_cursor_mode">Cursor mode — the D-pad moves the cursor anywhere on the screen, OK clicks there.</string>
+    <string name="tv_controls_hint_fallback">If the game does not work in links mode, switch to cursor mode.</string>
+    <string name="tv_controls_hint_back_short">A short press of the Back button switches between the main game text and the inventory.</string>
+    <string name="tv_controls_hint_back_long">A long press of the Back button exits the game.</string>
+    <string name="tv_controls_hint_menu">The INSTEAD menu opens by holding the OK button.</string>
+    <string name="tv_controls_hint_got_it">Got it</string>
+    <string name="tv_controls_hint_dont_show_again">Don\'t show again</string>
+
     <string name="game_activity_button_install">Download</string>
     <string name="game_activity_button_uninstall">Delete</string>
     <string name="game_activity_button_update">Update</string>
@@ -119,6 +131,7 @@
     <string name="pref_update_repo_when_open">Update repository on startup</string>
 
     <string name="prefs_category_interface">User interface</string>
+    <string name="prefs_category_other">Other</string>
     <string name="prefs_theme">Launcher theme</string>
     <string name="prefs_theme_dialog_title">Select theme</string>
     <string name="prefs_theme_name_light">Light</string>
@@ -127,6 +140,8 @@
     <string name="prefs_theme_name_follow_system">Use system default</string>
     <string name="prefs_dynamic_colors">Dynamic colors</string>
     <string name="prefs_dynamic_colors_summary">App colors adapt to your wallpaper</string>
+    <string name="prefs_game_controls_hint_title">Controls hint</string>
+    <string name="prefs_game_controls_hint_summary">Show control tips before starting a game</string>
 
     <string name="about_activity_title">About</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Peter Kosyh https://instead-hub.github.io/</string>

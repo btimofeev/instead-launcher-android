@@ -55,16 +55,25 @@ private val tvExcludedSettingsIds = setOf(
 
 @Composable
 fun TvSettingsScreen(
-    onBackClick: () -> Unit,
     onAboutClick: () -> Unit,
 ) {
     val viewModel: SettingsViewModel = hiltViewModel()
     val items by viewModel.items.collectAsState()
     val showDialog by viewModel.showDialog.collectAsState()
+    val gameControlsHint by viewModel.gameControlsHint.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.init()
     }
+
+    val hintItem = SettingsItem.Element(
+        id = PreferencesProvider.PREF_GAME_CONTROLS_HINT_KEY,
+        icon = R.drawable.ic_help_24dp,
+        title = stringResource(R.string.prefs_game_controls_hint_title),
+        description = stringResource(R.string.prefs_game_controls_hint_summary),
+        switchState = gameControlsHint,
+        onClick = viewModel::toggleGameControlsHint,
+    )
 
     val aboutItem = SettingsItem.Element(
         id = TV_ABOUT_ID,
@@ -73,7 +82,13 @@ fun TvSettingsScreen(
         onClick = onAboutClick,
     )
 
-    val tvItems = remember(items) { items.filterForTv() + aboutItem }
+    val otherCategory = SettingsItem.Category(
+        title = stringResource(R.string.prefs_category_other),
+    )
+
+    val tvItems = remember(items, gameControlsHint) {
+        items.filterForTv() + otherCategory + hintItem + aboutItem
+    }
     TvSettingsScreenContent(items = tvItems)
     CustomDialog(
         model = showDialog,

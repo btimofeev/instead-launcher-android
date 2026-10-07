@@ -49,7 +49,6 @@ import org.emunix.insteadlauncher.presentation.search.SearchViewModel
 
 @Composable
 fun TvSearchScreen(
-    onBackClick: () -> Unit,
     onGameClick: (String) -> Unit,
 ) {
     val viewModel: SearchViewModel = hiltViewModel()

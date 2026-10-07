@@ -5,7 +5,7 @@
 
 package org.emunix.insteadlauncher.presentation.tv
 
-import androidx.compose.foundation.Image
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
@@ -62,7 +62,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.Button
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
-import androidx.compose.animation.core.animateFloatAsState
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -79,8 +78,10 @@ import org.emunix.insteadlauncher.presentation.models.ProgressType
 fun TvGameInfoScreen(
     gameName: String,
     onBackClick: () -> Unit,
+    onShowHintClick: () -> Unit,
 ) {
     val viewModel: GameViewModel = hiltViewModel()
+    val hintViewModel: TvControlsHintViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
     val closeCommand by viewModel.closeScreenCommand.collectAsState(initial = null)
     val errorDialog by viewModel.showErrorDialog.collectAsState()
@@ -97,7 +98,13 @@ fun TvGameInfoScreen(
     TvGameInfoScreenContent(
         state = state,
         onInstallClick = viewModel::installGame,
-        onRunClick = viewModel::runGame,
+        onRunClick = {
+            if (hintViewModel.shouldShowGameControlsHint()) {
+                onShowHintClick()
+            } else {
+                viewModel.runGame()
+            }
+        },
         onUpdateClick = viewModel::installGame,
         onDeleteClick = viewModel::onDeleteGameClicked,
         onCancelClick = viewModel::cancelInstallGame,

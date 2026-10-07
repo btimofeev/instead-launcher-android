@@ -21,6 +21,8 @@ interface PreferencesProvider {
 
     var isHiresEnabled: Boolean
 
+    var isGameControlsHintEnabled: Boolean
+
     var defaultInsteadTextSize: String
 
     val isDefaultInsteadTextSizeSet: Boolean
@@ -91,6 +93,7 @@ interface PreferencesProvider {
         const val PREF_DEFAULT_THEME_KEY = "pref_default_theme"
         const val PREF_DYNAMIC_COLORS_KEY = "pref_dynamic_colors"
         const val PREF_ENABLE_GAME_THEME_KEY = "pref_enable_game_theme"
+        const val PREF_GAME_CONTROLS_HINT_KEY = "pref_game_controls_hint"
         const val PREF_HIRES_KEY = "pref_hires"
         const val PREF_MUSIC_KEY = "pref_music"
         const val PREF_KEYBOARD_BUTTON_KEY = "pref_keyboard_button"

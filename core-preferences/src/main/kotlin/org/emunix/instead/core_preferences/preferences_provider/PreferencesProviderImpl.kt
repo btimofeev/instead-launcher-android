@@ -22,6 +22,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DEFAULT_THEME_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_DYNAMIC_COLORS_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_ENABLE_GAME_THEME_KEY
+import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_GAME_CONTROLS_HINT_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_HIRES_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_KEYBOARD_BUTTON_KEY
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider.Companion.PREF_MUSIC_KEY
@@ -60,6 +61,10 @@ class PreferencesProviderImpl @Inject constructor(private val preferences: Share
     override var isHiresEnabled: Boolean
         get() = preferences.getBoolean(PREF_HIRES_KEY, true)
         set(value) = preferences.edit { putBoolean(PREF_HIRES_KEY, value) }
+
+    override var isGameControlsHintEnabled: Boolean
+        get() = preferences.getBoolean(PREF_GAME_CONTROLS_HINT_KEY, true)
+        set(value) = preferences.edit { putBoolean(PREF_GAME_CONTROLS_HINT_KEY, value) }
 
     override var defaultInsteadTextSize: String
         get() = preferences.getString(PREF_TEXT_SIZE_KEY, null) ?: DEFAULT_INSTEAD_TEXT_SIZE

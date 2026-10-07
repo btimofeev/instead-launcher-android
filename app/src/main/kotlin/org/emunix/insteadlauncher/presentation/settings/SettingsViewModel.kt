@@ -64,10 +64,12 @@ class SettingsViewModel @Inject constructor(
     val items get() = _items.asStateFlow()
     val showDialog get() = _showDialog.asStateFlow()
     val changeAppTheme get() = _changeAppTheme.asSharedFlow()
+    val gameControlsHint get() = _gameControlsHint.asStateFlow()
 
     private val _items = MutableStateFlow<List<SettingsItem>>(emptyList())
     private val _showDialog = MutableStateFlow<CustomDialogModel?>(null)
     private val _changeAppTheme = MutableSharedFlow<String>()
+    private val _gameControlsHint = MutableStateFlow(preferencesProvider.isGameControlsHintEnabled)
 
     private val keyboardPositions: Map<String, String> by lazy {
         val keys = resourceProvider.getStringArray(R.array.prefs_keyboard_button_values)
@@ -95,6 +97,12 @@ class SettingsViewModel @Inject constructor(
 
     fun onDialogClosed() {
         _showDialog.value = null
+    }
+
+    fun toggleGameControlsHint() {
+        val newState = !preferencesProvider.isGameControlsHintEnabled
+        preferencesProvider.isGameControlsHintEnabled = newState
+        _gameControlsHint.value = newState
     }
 
     private fun loadSettings() = viewModelScope.launch(Dispatchers.IO) {

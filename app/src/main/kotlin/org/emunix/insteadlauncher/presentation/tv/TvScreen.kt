@@ -20,6 +20,9 @@ sealed interface TvScreen {
     data class GameInfoScreen(val gameName: String) : TvScreen
 
     @Serializable
+    data class ControlsHintScreen(val gameName: String) : TvScreen
+
+    @Serializable
     data object SearchScreen : TvScreen
 
     @Serializable

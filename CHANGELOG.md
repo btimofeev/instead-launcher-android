@@ -3,6 +3,7 @@
 ## [Development]
 ### Added
 - Android TV mode with its own navigation, game list, game info, search and settings screens
+- A controls hint screen before launching a game on Android TV, with a setting to turn it off
 ### Changed
 - Default theme and text size are now chosen for the device instead of being fixed for phones
 ### Removed

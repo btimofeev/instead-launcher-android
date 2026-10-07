@@ -18,6 +18,18 @@
     <string name="tv_settings_switch_on">Вкл</string>
     <string name="tv_settings_switch_off">Выкл</string>
 
+    <string name="tv_controls_hint_title">Подсказка по управлению</string>
+    <string name="tv_controls_hint_intro">Игры INSTEAD создавались для компьютера и рассчитаны на клавиатуру и мышь, поэтому управление с пульта немного непривычное.</string>
+    <string name="tv_controls_hint_modes">В игре есть два режима управления, между которыми можно переключаться в любой момент, дважды нажав OK (центральная кнопка крестовины на пульте):</string>
+    <string name="tv_controls_hint_links_mode">Режим ссылок — крестовина перемещает курсор между ссылками, OK выбирает нужную ссылку.</string>
+    <string name="tv_controls_hint_cursor_mode">Режим курсора — крестовина двигает курсор в любое место на экране, OK делает клик в этом месте.</string>
+    <string name="tv_controls_hint_fallback">Если игра не работает в режиме ссылок, переключитесь на режим курсора.</string>
+    <string name="tv_controls_hint_back_short">Короткое нажатие кнопки «Назад» переключает между основным текстом игры и инвентарём.</string>
+    <string name="tv_controls_hint_back_long">Долгое нажатие кнопки «Назад» выходит из игры.</string>
+    <string name="tv_controls_hint_menu">Меню INSTEAD открывается долгим нажатием кнопки OK.</string>
+    <string name="tv_controls_hint_got_it">Понятно</string>
+    <string name="tv_controls_hint_dont_show_again">Больше не показывать</string>
+
     <string name="game_activity_button_install">Скачать</string>
     <string name="game_activity_button_uninstall">Удалить</string>
     <string name="game_activity_button_update">Обновить</string>
@@ -119,6 +131,7 @@
     <string name="pref_update_repo_when_open">Обновлять репозиторий при открытии</string>
 
     <string name="prefs_category_interface">Внешний вид</string>
+    <string name="prefs_category_other">Другое</string>
     <string name="prefs_theme">Тема приложения</string>
     <string name="prefs_theme_dialog_title">Выберите тему</string>
     <string name="prefs_theme_name_light">Светлая</string>
@@ -127,6 +140,8 @@
     <string name="prefs_theme_name_follow_system">В зависимости от системной темы</string>
     <string name="prefs_dynamic_colors">Динамические цвета</string>
     <string name="prefs_dynamic_colors_summary">Цвета интерфейса подстраиваются под ваши обои</string>
+    <string name="prefs_game_controls_hint_title">Подсказка по управлению</string>
+    <string name="prefs_game_controls_hint_summary">Показывать подсказку по управлению перед запуском игры</string>
 
     <string name="about_activity_title">О программе</string>
     <string name="about_activity_about_instead"><b>INSTEAD</b> v%1$s, &#169; Пётр Косых https://instead-hub.github.io/</string>
