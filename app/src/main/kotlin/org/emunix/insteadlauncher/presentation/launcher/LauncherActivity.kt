@@ -8,6 +8,7 @@ package org.emunix.insteadlauncher.presentation.launcher
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -22,6 +23,7 @@ import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvi
 import org.emunix.insteadlauncher.InsteadLauncher.Companion.INSTALL_NOTIFICATION_ID
 import org.emunix.insteadlauncher.domain.usecase.RecoverInterruptedOperationsUseCase
 import org.emunix.insteadlauncher.domain.work.ScanGamesWork
+import org.emunix.insteadlauncher.presentation.compose.isTelevisionUiMode
 import org.emunix.insteadlauncher.presentation.compose.isTv
 import org.emunix.insteadlauncher.presentation.navigation.AppNavGraph
 import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
@@ -41,6 +43,17 @@ class LauncherActivity : AppCompatActivity() {
 
     @Inject
     lateinit var recoverInterruptedOperationsUseCase: RecoverInterruptedOperationsUseCase
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        val tvMode = isTelevisionUiMode(resources.configuration.uiMode)
+        if (tvMode && event.keyCode == KeyEvent.KEYCODE_ESCAPE) {
+            if (event.action == KeyEvent.ACTION_UP) {
+                onBackPressedDispatcher.onBackPressed()
+            }
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
