@@ -10,9 +10,27 @@
 #include <stdlib.h>
 #include <string.h>
 #include <android/log.h>
+#include "instead.h"
 
 static int pfd[2];
 static const char *tag = "InsteadLauncher";
+
+static int tv_mode = 0;
+
+// autotheme (used by some games) treats PLATFORM == "ANDROID" as "mobile"
+// and picks a vertical theme even on a TV. Override it before the game's
+// scripts run so the theme is chosen by the real screen orientation.
+static int tv_ext_init(void) {
+    if (tv_mode) {
+        instead_eval("PLATFORM='ANDROID_TV'");
+        instead_clear();
+    }
+    return 0;
+}
+
+static struct instead_ext tv_ext = {
+    .init = tv_ext_init,
+};
 
 int instead_main(int argc, char** argv);
 
@@ -36,6 +54,9 @@ int SDL_main(int argc, char** argv) {
     const char* textsize = argv[11];
     const char* noautosave = argv[12];
     const char* game = argv[13];
+    const char* tv = argc > 14 ? argv[14] : "";
+
+    tv_mode = SDL_strcmp(tv, "y") == 0;
 
     __android_log_write(ANDROID_LOG_DEBUG, tag, argv[0]);
     __android_log_write(ANDROID_LOG_DEBUG, tag, path);
@@ -104,6 +125,8 @@ int SDL_main(int argc, char** argv) {
 
     _argv[n] = NULL;
 
+
+    instead_extension(&tv_ext);
 
     status = instead_main(n, _argv);
 
