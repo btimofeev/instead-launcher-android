@@ -5,18 +5,11 @@
 
 package org.emunix.insteadlauncher.presentation.tv
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme as AppMaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
-import androidx.tv.material3.darkColorScheme
 import org.emunix.insteadlauncher.presentation.about.AboutScreen
 import org.emunix.insteadlauncher.presentation.launcher.AppArgumentViewModel
 import org.emunix.insteadlauncher.presentation.unpackresources.UnpackResourcesScreen
@@ -24,104 +17,78 @@ import org.emunix.insteadlauncher.presentation.unpackresources.UnpackResourcesSc
 @Composable
 fun TvNavGraph(appArgumentViewModel: AppArgumentViewModel) {
     val navController = rememberNavController()
-    val appColors = AppMaterialTheme.colorScheme
 
-    MaterialTheme(
-        colorScheme = darkColorScheme(
-            primary = appColors.primary,
-            onPrimary = appColors.onPrimary,
-            background = appColors.background,
-            onBackground = appColors.onBackground,
-            surface = appColors.surface,
-            onSurface = appColors.onSurface,
-            surfaceVariant = appColors.surfaceVariant,
-            onSurfaceVariant = appColors.onSurfaceVariant,
-            secondary = appColors.secondary,
-            onSecondary = appColors.onSecondary,
-            tertiary = appColors.tertiary,
-            onTertiary = appColors.onTertiary,
-            error = appColors.error,
-            onError = appColors.onError,
-        ),
-    ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            colors = SurfaceDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.onBackground,
-            ),
+    TvTheme {
+        NavHost(
+            navController = navController,
+            startDestination = TvScreen.UnpackResourcesScreen,
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = TvScreen.UnpackResourcesScreen,
-            ) {
-                composable<TvScreen.UnpackResourcesScreen> {
-                    UnpackResourcesScreen(
-                        navigateToInstalledGamesScreen = {
-                            navController.navigate(TvScreen.GamesScreen) {
-                                launchSingleTop = true
-                                popUpTo(TvScreen.UnpackResourcesScreen) {
-                                    inclusive = true
-                                }
+            composable<TvScreen.UnpackResourcesScreen> {
+                UnpackResourcesScreen(
+                    navigateToInstalledGamesScreen = {
+                        navController.navigate(TvScreen.GamesScreen) {
+                            launchSingleTop = true
+                            popUpTo(TvScreen.UnpackResourcesScreen) {
+                                inclusive = true
                             }
                         }
-                    )
-                }
+                    }
+                )
+            }
 
-                composable<TvScreen.GamesScreen> {
-                    val uri = appArgumentViewModel.zipUri
-                    appArgumentViewModel.zipUri = null
-                    TvGamesScreen(
-                        zipUri = uri,
-                        onGameClick = { gameName ->
-                            navController.navigate(TvScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
-                        },
-                        onSearchClick = { navController.navigate(TvScreen.SearchScreen) { launchSingleTop = true } },
-                        onSettingsClick = { navController.navigate(TvScreen.SettingsScreen) { launchSingleTop = true } },
-                    )
-                }
+            composable<TvScreen.GamesScreen> {
+                val uri = appArgumentViewModel.zipUri
+                appArgumentViewModel.zipUri = null
+                TvGamesScreen(
+                    zipUri = uri,
+                    onGameClick = { gameName ->
+                        navController.navigate(TvScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
+                    },
+                    onSearchClick = { navController.navigate(TvScreen.SearchScreen) { launchSingleTop = true } },
+                    onSettingsClick = { navController.navigate(TvScreen.SettingsScreen) { launchSingleTop = true } },
+                )
+            }
 
-                composable<TvScreen.GameInfoScreen> { backStackEntry ->
-                    val route = backStackEntry.toRoute<TvScreen.GameInfoScreen>()
-                    TvGameInfoScreen(
-                        gameName = route.gameName,
-                        onBackClick = { navController.popBackStack() },
-                        onShowHintClick = {
-                            navController.navigate(TvScreen.ControlsHintScreen(route.gameName)) {
-                                launchSingleTop = true
-                            }
-                        },
-                    )
-                }
+            composable<TvScreen.GameInfoScreen> { backStackEntry ->
+                val route = backStackEntry.toRoute<TvScreen.GameInfoScreen>()
+                TvGameInfoScreen(
+                    gameName = route.gameName,
+                    onBackClick = { navController.popBackStack() },
+                    onShowHintClick = {
+                        navController.navigate(TvScreen.ControlsHintScreen(route.gameName)) {
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
 
-                composable<TvScreen.ControlsHintScreen> { backStackEntry ->
-                    val route = backStackEntry.toRoute<TvScreen.ControlsHintScreen>()
-                    TvControlsHintScreen(
-                        gameName = route.gameName,
-                        onBackClick = { navController.popBackStack() },
-                    )
-                }
+            composable<TvScreen.ControlsHintScreen> { backStackEntry ->
+                val route = backStackEntry.toRoute<TvScreen.ControlsHintScreen>()
+                TvControlsHintScreen(
+                    gameName = route.gameName,
+                    onBackClick = { navController.popBackStack() },
+                )
+            }
 
-                composable<TvScreen.SearchScreen> {
-                    TvSearchScreen(
-                        onGameClick = { gameName ->
-                            navController.navigate(TvScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
-                        },
-                    )
-                }
+            composable<TvScreen.SearchScreen> {
+                TvSearchScreen(
+                    onGameClick = { gameName ->
+                        navController.navigate(TvScreen.GameInfoScreen(gameName)) { launchSingleTop = true }
+                    },
+                )
+            }
 
-                composable<TvScreen.SettingsScreen> {
-                    TvSettingsScreen(
-                        onAboutClick = { navController.navigate(TvScreen.AboutScreen) { launchSingleTop = true } },
-                    )
-                }
+            composable<TvScreen.SettingsScreen> {
+                TvSettingsScreen(
+                    onAboutClick = { navController.navigate(TvScreen.AboutScreen) { launchSingleTop = true } },
+                )
+            }
 
-                composable<TvScreen.AboutScreen> {
-                    AboutScreen(
-                        onBackClick = { navController.popBackStack() },
-                        showTopBar = false,
-                    )
-                }
+            composable<TvScreen.AboutScreen> {
+                AboutScreen(
+                    onBackClick = { navController.popBackStack() },
+                    showTopBar = false,
+                )
             }
         }
     }

@@ -13,6 +13,8 @@
 
     <string name="tv_games_section_installed">Установленные</string>
     <string name="tv_games_section_not_installed">Не установленные</string>
+    <string name="tv_games_section_updating">Обновление каталога игр&#8230;</string>
+    <string name="tv_games_section_catalog">Каталог игр</string>
     <string name="tv_games_empty">Игр пока нет.\nРепозиторий загрузится автоматически.</string>
 
     <string name="tv_settings_switch_on">Вкл</string>

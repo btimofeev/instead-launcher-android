@@ -13,6 +13,8 @@
 
     <string name="tv_games_section_installed">Instalitaj</string>
     <string name="tv_games_section_not_installed">Ne instalitaj</string>
+    <string name="tv_games_section_updating">Ĝisdatigante la lud-katalogon&#8230;</string>
+    <string name="tv_games_section_catalog">Luda katalogo</string>
     <string name="tv_games_empty">Ankoraŭ ne estas ludoj.\nLa deponejo ŝargiĝos aŭtomate.</string>
 
     <string name="tv_settings_switch_on">Enŝaltita</string>

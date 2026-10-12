@@ -5,16 +5,15 @@
 
 package org.emunix.insteadlauncher.presentation.tv
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,7 +26,6 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,10 +40,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.Button
+import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil3.SingletonImageLoader
@@ -54,6 +53,7 @@ import kotlinx.coroutines.flow.first
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.presentation.dialogs.ErrorDialog
 import org.emunix.insteadlauncher.presentation.models.UpdateRepoState
+import org.emunix.insteadlauncher.presentation.theme.InsteadLauncherTheme
 
 @Composable
 fun TvGamesScreen(
@@ -156,10 +156,6 @@ private fun TvGamesScreenContent(
     onSettingsClick: () -> Unit,
     onRetryClick: () -> Unit,
 ) {
-    val showEmptyState = state.installedGames.isEmpty() &&
-            state.catalogGames.isEmpty() &&
-            state.updateRepo != UpdateRepoState.UPDATING
-
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 260.dp),
         state = gridState,
@@ -211,9 +207,14 @@ private fun TvGamesScreenContent(
         }
 
         if (state.catalogGames.isNotEmpty() || state.updateRepo != UpdateRepoState.HIDDEN) {
+            val sectionTitle = when (state.updateRepo) {
+                UpdateRepoState.UPDATING -> R.string.tv_games_section_updating
+                UpdateRepoState.ERROR -> R.string.tv_games_section_catalog
+                UpdateRepoState.HIDDEN -> R.string.tv_games_section_not_installed
+            }
             item(span = { GridItemSpan(maxLineSpan) }, contentType = "section") {
                 Text(
-                    text = stringResource(R.string.tv_games_section_not_installed),
+                    text = stringResource(sectionTitle),
                     style = MaterialTheme.typography.headlineSmall,
                 )
             }
@@ -239,51 +240,36 @@ private fun TvGamesScreenContent(
                         }
                     }
                 }
+                item(span = { GridItemSpan(maxLineSpan) }, contentType = "error_image") {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 24.dp),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.boy_and_cat),
+                            contentDescription = null,
+                            modifier = Modifier.size(280.dp),
+                            contentScale = ContentScale.Fit,
+                        )
+                    }
+                }
             }
-            items(state.catalogGames, key = { "catalog_${it.name}" }, contentType = { "game" }) { game ->
-                val key = "catalog_${game.name}"
-                TvGameCard(
-                    item = game,
-                    onClick = { onGameClick(key, state.indexOfGameKey(key) ?: -1, game.name) },
-                    focusRequester = focusRequesters.getOrPut(key) { FocusRequester() },
-                )
+            if (state.updateRepo == UpdateRepoState.HIDDEN) {
+                items(state.catalogGames, key = { "catalog_${it.name}" }, contentType = { "game" }) { game ->
+                    val key = "catalog_${game.name}"
+                    TvGameCard(
+                        item = game,
+                        onClick = { onGameClick(key, state.indexOfGameKey(key) ?: -1, game.name) },
+                        focusRequester = focusRequesters.getOrPut(key) { FocusRequester() },
+                    )
+                }
             }
-        }
-
-        if (showEmptyState) {
-            item(span = { GridItemSpan(maxLineSpan) }, contentType = "empty") {
-                TvGamesEmptyState(onRetryClick = onRetryClick)
-            }
-        }
-    }
-}
-
-@Composable
-private fun TvGamesEmptyState(onRetryClick: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 48.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Image(
-            painter = painterResource(R.drawable.boy_and_cat),
-            contentDescription = null,
-            modifier = Modifier.size(280.dp),
-            contentScale = ContentScale.Fit,
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = stringResource(R.string.tv_games_empty),
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = onRetryClick) {
-            Text(text = stringResource(R.string.action_update_repo))
         }
     }
 }
+
 
 private fun TvGamesState.indexOfGameKey(key: String): Int? {
     var index = 1
@@ -314,3 +300,81 @@ private fun TvGamesState.indexOfGameKey(key: String): Int? {
 }
 
 private const val IMAGE_PREFETCH_INTERVAL_MS = 120L
+
+private val previewInstalledGames = listOf(
+    TvGameItem(name = "quantum_cat", title = "Возвращение квантового кота", imageUrl = ""),
+    TvGameItem(name = "alpha_centauri", title = "Полёт квантового кота на Альфа-Центавра", imageUrl = ""),
+    TvGameItem(name = "old_castle", title = "Старый замок", imageUrl = ""),
+)
+
+private val previewCatalogGames = listOf(
+    TvGameItem(name = "lighthouse", title = "Тайна старого маяка", imageUrl = ""),
+    TvGameItem(name = "colony", title = "Колония", imageUrl = ""),
+    TvGameItem(name = "moon", title = "Путешествие на Луну", imageUrl = ""),
+)
+
+@Composable
+private fun TvGamesScreenPreview(state: TvGamesState) {
+    InsteadLauncherTheme(darkTheme = true, dynamicColor = false) {
+        TvTheme {
+            TvGamesScreenContent(
+                state = state,
+                gridState = rememberLazyGridState(),
+                focusRequesters = remember { mutableMapOf() },
+                onGameClick = { _, _, _ -> },
+                onSearchClick = {},
+                onSettingsClick = {},
+                onRetryClick = {},
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 960, heightDp = 540, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun TvGamesScreenLoadedPreview() {
+    TvGamesScreenPreview(
+        TvGamesState(
+            installedGames = previewInstalledGames,
+            catalogGames = previewCatalogGames,
+        ),
+    )
+}
+
+@Preview(showBackground = true, widthDp = 960, heightDp = 540, uiMode = UI_MODE_NIGHT_YES, name = "Loading")
+@Composable
+private fun TvGamesScreenLoadingPreview() {
+    TvGamesScreenPreview(
+        TvGamesState(
+            installedGames = previewInstalledGames,
+            updateRepo = UpdateRepoState.UPDATING,
+        ),
+    )
+}
+
+@Preview(showBackground = true, widthDp = 960, heightDp = 540, uiMode = UI_MODE_NIGHT_YES, name = "Loading empty")
+@Composable
+private fun TvGamesScreenLoadingEmptyPreview() {
+    TvGamesScreenPreview(
+        TvGamesState(updateRepo = UpdateRepoState.UPDATING),
+    )
+}
+
+@Preview(showBackground = true, widthDp = 960, heightDp = 540, uiMode = UI_MODE_NIGHT_YES, name = "Error")
+@Composable
+private fun TvGamesScreenErrorPreview() {
+    TvGamesScreenPreview(
+        TvGamesState(
+            installedGames = previewInstalledGames,
+            updateRepo = UpdateRepoState.ERROR,
+        ),
+    )
+}
+
+@Preview(showBackground = true, widthDp = 960, heightDp = 540, uiMode = UI_MODE_NIGHT_YES, name = "Error empty")
+@Composable
+private fun TvGamesScreenErrorEmptyPreview() {
+    TvGamesScreenPreview(
+        TvGamesState(updateRepo = UpdateRepoState.ERROR),
+    )
+}
