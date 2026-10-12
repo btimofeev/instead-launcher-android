@@ -74,9 +74,10 @@ private fun TvControlsHintScreenContent(
     onGotItClick: () -> Unit,
     onDontShowAgainClick: () -> Unit,
 ) {
+    val textFocus = remember { FocusRequester() }
     val gotItFocus = remember { FocusRequester() }
     LaunchedEffect(Unit) {
-        gotItFocus.requestFocus()
+        textFocus.requestFocus()
     }
 
     Column(
@@ -90,6 +91,8 @@ private fun TvControlsHintScreenContent(
         )
         Spacer(modifier = Modifier.height(24.dp))
         TvControlsHintText(
+            focusRequester = textFocus,
+            onDownAtEnd = { gotItFocus.requestFocus() },
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -110,7 +113,11 @@ private fun TvControlsHintScreenContent(
 }
 
 @Composable
-private fun TvControlsHintText(modifier: Modifier = Modifier) {
+private fun TvControlsHintText(
+    focusRequester: FocusRequester,
+    onDownAtEnd: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val scrollStep = with(LocalDensity.current) { 200.dp.toPx() }
@@ -120,12 +127,16 @@ private fun TvControlsHintText(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .onFocusChanged { isFocused = it.isFocused }
+            .focusRequester(focusRequester)
             .focusable()
             .onPreviewKeyEvent { event ->
                 when (event.key) {
                     Key.DirectionDown -> {
                         if (!scrollState.canScrollForward) {
-                            false
+                            if (event.type == KeyEventType.KeyDown) {
+                                onDownAtEnd()
+                            }
+                            true
                         } else {
                             if (event.type == KeyEventType.KeyDown) {
                                 scope.launch { scrollState.animateScrollBy(scrollStep) }
@@ -176,6 +187,7 @@ private fun TvControlsHintText(modifier: Modifier = Modifier) {
             HintParagraph(text = stringResource(R.string.tv_controls_hint_back_short))
             HintParagraph(text = stringResource(R.string.tv_controls_hint_back_long))
             HintParagraph(text = stringResource(R.string.tv_controls_hint_menu))
+            HintParagraph(text = stringResource(R.string.tv_controls_hint_parser))
         }
     }
 }
