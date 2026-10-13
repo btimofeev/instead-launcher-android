@@ -66,7 +66,9 @@ class LauncherActivity : AppCompatActivity() {
                 notificationManager.cancel(INSTALL_NOTIFICATION_ID)
             }
         }
-        scanGamesWork.scan()
+        if (savedInstanceState == null) {
+            scanGamesWork.scan()
+        }
 
         val intent = intent
         if (intent.type == "application/zip") {
