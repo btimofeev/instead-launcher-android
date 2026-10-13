@@ -19,3 +19,8 @@ data class TvGameItem(
     val title: String,
     val imageUrl: String,
 )
+
+data class TvFocusedItem(
+    val key: String,
+    val index: Int,
+)

@@ -38,16 +38,18 @@ class TvGamesViewModel @Inject constructor(
     private val _state = MutableStateFlow(TvGamesState())
     val state = _state.asStateFlow()
 
-    var lastOpenedGameKey: String? = null
-        private set
+    private var focusedItem: TvFocusedItem? = null
+    private var pendingFocusItem: TvFocusedItem? = null
 
-    var lastOpenedGameIndex: Int = -1
-        private set
-
-    fun rememberOpenedGame(key: String, index: Int) {
-        lastOpenedGameKey = key
-        lastOpenedGameIndex = index
+    fun onItemFocused(key: String, index: Int) {
+        focusedItem = TvFocusedItem(key = key, index = index)
     }
+
+    fun onScreenDisposed() {
+        pendingFocusItem = focusedItem
+    }
+
+    fun consumePendingFocusItem(): TvFocusedItem? = pendingFocusItem.also { pendingFocusItem = null }
 
     private var initialized = false
 

@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -65,6 +66,7 @@ internal fun TvGameCard(
     item: TvGameItem,
     onClick: () -> Unit,
     focusRequester: FocusRequester? = null,
+    onFocused: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val imageRequest = remember(item.imageUrl) { gameImageRequest(context, item.imageUrl) }
@@ -75,6 +77,13 @@ internal fun TvGameCard(
             .then(
                 if (focusRequester != null) {
                     Modifier.focusRequester(focusRequester)
+                } else {
+                    Modifier
+                },
+            )
+            .then(
+                if (onFocused != null) {
+                    Modifier.onFocusChanged { if (it.isFocused) onFocused() }
                 } else {
                     Modifier
                 },

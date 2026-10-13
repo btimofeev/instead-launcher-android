@@ -28,6 +28,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,6 +38,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -87,32 +90,33 @@ fun TvGamesScreen(
         }
     }
 
-    val restoreKey = viewModel.lastOpenedGameKey
-    LaunchedEffect(restoreKey) {
-        if (restoreKey == null) {
-            return@LaunchedEffect
-        }
-        snapshotFlow { state.installedGames.isNotEmpty() || state.catalogGames.isNotEmpty() }
-            .first { it }
-        val index = state.indexOfGameKey(restoreKey)
-        val targetIndex = if (index != null) {
-            index
+    DisposableEffect(Unit) {
+        onDispose { viewModel.onScreenDisposed() }
+    }
+
+    val pendingFocusItem = remember { viewModel.consumePendingFocusItem() }
+    LaunchedEffect(pendingFocusItem, state.installedGames, state.catalogGames) {
+        val focused = pendingFocusItem ?: return@LaunchedEffect
+        val targetIndex = if (focused.key.isUiKey()) {
+            HEADER_ITEM_INDEX
         } else {
-            val oldIndex = viewModel.lastOpenedGameIndex
-            val total = gridState.layoutInfo.totalItemsCount
-            if (oldIndex < 0 || total <= 0) {
-                return@LaunchedEffect
-            }
-            oldIndex.coerceIn(0, total - 1)
+            snapshotFlow { state.installedGames.isNotEmpty() || state.catalogGames.isNotEmpty() }
+                .first { it }
+            state.indexOfGameKey(focused.key) ?: focused.index
         }
-        gridState.scrollToItem(targetIndex)
+        val totalItemsCount = snapshotFlow { gridState.layoutInfo.totalItemsCount }
+            .first { it > 0 }
+        val safeIndex = targetIndex.coerceIn(0, totalItemsCount - 1)
+        if (gridState.layoutInfo.visibleItemsInfo.none { it.index == safeIndex }) {
+            gridState.scrollToItem(safeIndex)
+        }
         snapshotFlow { gridState.layoutInfo.visibleItemsInfo }
-            .first { visible -> visible.any { it.index == targetIndex } }
+            .first { visible -> visible.any { it.index == safeIndex } }
         val visible = gridState.layoutInfo.visibleItemsInfo
-        val focusKey = if (index != null) {
-            restoreKey
+        val focusKey = if (focused.key.isUiKey() || state.indexOfGameKey(focused.key) != null) {
+            focused.key
         } else {
-            val target = visible.firstOrNull { it.index == targetIndex }
+            val target = visible.firstOrNull { it.index == safeIndex }
             val candidates = buildList {
                 if (target != null) {
                     visible.filter { it.row == target.row }
@@ -130,10 +134,8 @@ fun TvGamesScreen(
         state = state,
         gridState = gridState,
         focusRequesters = focusRequesters,
-        onGameClick = { key, index, name ->
-            viewModel.rememberOpenedGame(key, index)
-            onGameClick(name)
-        },
+        onItemFocused = viewModel::onItemFocused,
+        onGameClick = { key, name -> onGameClick(name) },
         onSearchClick = onSearchClick,
         onSettingsClick = onSettingsClick,
         onRetryClick = { viewModel.updateRepository() },
@@ -151,7 +153,8 @@ private fun TvGamesScreenContent(
     state: TvGamesState,
     gridState: LazyGridState,
     focusRequesters: MutableMap<String, FocusRequester>,
-    onGameClick: (key: String, index: Int, name: String) -> Unit,
+    onItemFocused: (key: String, index: Int) -> Unit,
+    onGameClick: (key: String, name: String) -> Unit,
     onSearchClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onRetryClick: () -> Unit,
@@ -175,12 +178,26 @@ private fun TvGamesScreenContent(
                     style = MaterialTheme.typography.displaySmall,
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Button(onClick = onSearchClick) {
+                    Button(
+                        onClick = onSearchClick,
+                        modifier = Modifier
+                            .focusRequester(focusRequesters.getOrPut(SEARCH_BUTTON_KEY) { FocusRequester() })
+                            .onFocusChanged {
+                                if (it.isFocused) onItemFocused(SEARCH_BUTTON_KEY, HEADER_ITEM_INDEX)
+                            },
+                    ) {
                         Icon(Icons.Rounded.Search, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(text = stringResource(R.string.action_search))
                     }
-                    Button(onClick = onSettingsClick) {
+                    Button(
+                        onClick = onSettingsClick,
+                        modifier = Modifier
+                            .focusRequester(focusRequesters.getOrPut(SETTINGS_BUTTON_KEY) { FocusRequester() })
+                            .onFocusChanged {
+                                if (it.isFocused) onItemFocused(SETTINGS_BUTTON_KEY, HEADER_ITEM_INDEX)
+                            },
+                    ) {
                         Icon(Icons.Rounded.Settings, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(text = stringResource(R.string.action_settings))
@@ -200,8 +217,9 @@ private fun TvGamesScreenContent(
                 val key = "installed_${game.name}"
                 TvGameCard(
                     item = game,
-                    onClick = { onGameClick(key, state.indexOfGameKey(key) ?: -1, game.name) },
+                    onClick = { onGameClick(key, game.name) },
                     focusRequester = focusRequesters.getOrPut(key) { FocusRequester() },
+                    onFocused = { onItemFocused(key, state.indexOfGameKey(key) ?: -1) },
                 )
             }
         }
@@ -261,8 +279,9 @@ private fun TvGamesScreenContent(
                     val key = "catalog_${game.name}"
                     TvGameCard(
                         item = game,
-                        onClick = { onGameClick(key, state.indexOfGameKey(key) ?: -1, game.name) },
+                        onClick = { onGameClick(key, game.name) },
                         focusRequester = focusRequesters.getOrPut(key) { FocusRequester() },
+                        onFocused = { onItemFocused(key, state.indexOfGameKey(key) ?: -1) },
                     )
                 }
             }
@@ -300,6 +319,11 @@ private fun TvGamesState.indexOfGameKey(key: String): Int? {
 }
 
 private const val IMAGE_PREFETCH_INTERVAL_MS = 120L
+private const val SEARCH_BUTTON_KEY = "search_button"
+private const val SETTINGS_BUTTON_KEY = "settings_button"
+private const val HEADER_ITEM_INDEX = 0
+
+private fun String.isUiKey() = this == SEARCH_BUTTON_KEY || this == SETTINGS_BUTTON_KEY
 
 private val previewInstalledGames = listOf(
     TvGameItem(name = "quantum_cat", title = "Возвращение квантового кота", imageUrl = ""),
@@ -321,7 +345,8 @@ private fun TvGamesScreenPreview(state: TvGamesState) {
                 state = state,
                 gridState = rememberLazyGridState(),
                 focusRequesters = remember { mutableMapOf() },
-                onGameClick = { _, _, _ -> },
+                onItemFocused = { _, _ -> },
+                onGameClick = { _, _ -> },
                 onSearchClick = {},
                 onSettingsClick = {},
                 onRetryClick = {},
