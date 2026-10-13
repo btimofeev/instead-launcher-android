@@ -1,13 +1,12 @@
 # Changelog
 
-## [Development]
+## [0.11] - 2026-10-13
 ### Added
-- Android TV mode with its own navigation, game list, game info, search and settings screens
-- A controls hint screen before launching a game on Android TV, with a setting to turn it off
+- Android TV mode
 ### Changed
 - Default theme and text size are now chosen for the device instead of being fixed for phones
 ### Removed
-- The GL Hack setting — it was a workaround for old Samsung phones under SDL2 and does nothing under SDL3
+- The GL Hack setting
 
 ## [0.10] - 2026-09-27
 ### Added
