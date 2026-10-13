@@ -16,16 +16,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,6 +41,7 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.Card
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import kotlinx.coroutines.flow.first
 import org.emunix.instead.core_preferences.preferences_provider.PreferencesProvider
 import org.emunix.insteadlauncher.R
 import org.emunix.insteadlauncher.presentation.dialogs.CustomDialog
@@ -66,6 +74,15 @@ fun TvSettingsScreen(
         viewModel.init()
     }
 
+    val listState = rememberLazyListState()
+    val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
+
+    DisposableEffect(Unit) {
+        onDispose { viewModel.onScreenDisposed() }
+    }
+
+    val pendingFocusItemId = remember { viewModel.consumePendingFocusItemId() }
+
     val hintItem = SettingsItem.Element(
         id = PreferencesProvider.PREF_GAME_CONTROLS_HINT_KEY,
         icon = R.drawable.ic_help_24dp,
@@ -89,12 +106,42 @@ fun TvSettingsScreen(
     val tvItems = remember(items, gameControlsHint) {
         items.filterForTv() + otherCategory + hintItem + aboutItem
     }
-    TvSettingsScreenContent(items = tvItems)
+
+    LaunchedEffect(pendingFocusItemId, tvItems) {
+        val itemId = pendingFocusItemId ?: return@LaunchedEffect
+        val index = tvItems.indexOfFirst { it.itemId == itemId }
+        if (index < 0) {
+            return@LaunchedEffect
+        }
+        if (listState.layoutInfo.visibleItemsInfo.none { it.index == index }) {
+            listState.scrollToItem(index)
+        }
+        val focusRequester = snapshotFlow {
+            listState.layoutInfo.visibleItemsInfo
+                .firstOrNull { it.index == index }
+                ?.let { focusRequesters[itemId] }
+        }.first { it != null }
+        focusRequester?.requestFocus()
+    }
+
+    TvSettingsScreenContent(
+        items = tvItems,
+        listState = listState,
+        focusRequesters = focusRequesters,
+        onItemFocused = viewModel::onItemFocused,
+    )
     CustomDialog(
         model = showDialog,
         onCloseDialog = viewModel::onDialogClosed,
     )
 }
+
+private val SettingsItem.itemId: String?
+    get() = when (this) {
+        is SettingsItem.Element -> id
+        is SettingsItem.Slider -> id
+        else -> null
+    }
 
 private fun List<SettingsItem>.filterForTv(): List<SettingsItem> {
     val filtered = filterNot { it is SettingsItem.Element && it.id in tvExcludedSettingsIds }
@@ -127,8 +174,14 @@ private fun List<SettingsItem>.filterForTv(): List<SettingsItem> {
 }
 
 @Composable
-private fun TvSettingsScreenContent(items: List<SettingsItem>) {
+private fun TvSettingsScreenContent(
+    items: List<SettingsItem>,
+    listState: LazyListState,
+    focusRequesters: MutableMap<String, FocusRequester>,
+    onItemFocused: (String) -> Unit,
+) {
     LazyColumn(
+        state = listState,
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 48.dp, vertical = 32.dp),
     ) {
@@ -151,11 +204,27 @@ private fun TvSettingsScreenContent(items: List<SettingsItem>) {
                 }
 
                 is SettingsItem.Element -> {
-                    TvSettingsRow(item = item)
+                    TvSettingsRow(
+                        item = item,
+                        focusRequester = if (item.isEnabled) {
+                            focusRequesters.getOrPut(item.id) { FocusRequester() }
+                        } else {
+                            null
+                        },
+                        onFocused = { onItemFocused(item.id) },
+                    )
                 }
 
                 is SettingsItem.Slider -> {
-                    TvTextSizeRow(item = item)
+                    TvTextSizeRow(
+                        item = item,
+                        focusRequester = if (item.isEnabled) {
+                            focusRequesters.getOrPut(item.id) { FocusRequester() }
+                        } else {
+                            null
+                        },
+                        onFocused = { onItemFocused(item.id) },
+                    )
                 }
             }
         }
@@ -163,13 +232,25 @@ private fun TvSettingsScreenContent(items: List<SettingsItem>) {
 }
 
 @Composable
-private fun TvSettingsRow(item: SettingsItem.Element) {
+private fun TvSettingsRow(
+    item: SettingsItem.Element,
+    focusRequester: FocusRequester?,
+    onFocused: () -> Unit,
+) {
     if (item.isEnabled) {
         Card(
             onClick = item.onClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 6.dp),
+                .padding(vertical = 6.dp)
+                .then(
+                    if (focusRequester != null) {
+                        Modifier.focusRequester(focusRequester)
+                    } else {
+                        Modifier
+                    },
+                )
+                .onFocusChanged { if (it.isFocused) onFocused() },
             colors = tvCardColors(),
             border = tvCardFocusBorder(),
         ) {
@@ -239,11 +320,28 @@ private fun TvSettingsRowContent(
 }
 
 @Composable
-private fun TvTextSizeRow(item: SettingsItem.Slider) {
+private fun TvTextSizeRow(
+    item: SettingsItem.Slider,
+    focusRequester: FocusRequester?,
+    onFocused: () -> Unit,
+) {
+    val canDecrease = item.isEnabled && item.value > item.valueRange.first
+    val canIncrease = item.isEnabled && item.value < item.valueRange.last
+    val decreaseModifier = if (canDecrease && focusRequester != null) {
+        Modifier.focusRequester(focusRequester)
+    } else {
+        Modifier
+    }
+    val increaseModifier = if (!canDecrease && canIncrease && focusRequester != null) {
+        Modifier.focusRequester(focusRequester)
+    } else {
+        Modifier
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp),
+            .padding(vertical = 12.dp)
+            .onFocusChanged { if (it.isFocused) onFocused() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
@@ -261,13 +359,14 @@ private fun TvTextSizeRow(item: SettingsItem.Slider) {
             modifier = Modifier.weight(1f),
         )
         Button(
-            enabled = item.isEnabled && item.value > item.valueRange.first,
+            enabled = canDecrease,
             onClick = {
                 item.onValueChange(
                     (item.value - PreferencesProvider.INSTEAD_TEXT_SIZE_STEP)
                         .coerceIn(item.valueRange)
                 )
             },
+            modifier = decreaseModifier,
         ) {
             Text(text = "−")
         }
@@ -276,13 +375,14 @@ private fun TvTextSizeRow(item: SettingsItem.Slider) {
             style = MaterialTheme.typography.titleMedium,
         )
         Button(
-            enabled = item.isEnabled && item.value < item.valueRange.last,
+            enabled = canIncrease,
             onClick = {
                 item.onValueChange(
                     (item.value + PreferencesProvider.INSTEAD_TEXT_SIZE_STEP)
                         .coerceIn(item.valueRange)
                 )
             },
+            modifier = increaseModifier,
         ) {
             Text(text = "+")
         }

@@ -71,6 +71,19 @@ class SettingsViewModel @Inject constructor(
     private val _changeAppTheme = MutableSharedFlow<String>()
     private val _gameControlsHint = MutableStateFlow(preferencesProvider.isGameControlsHintEnabled)
 
+    private var focusedItemId: String? = null
+    private var pendingFocusItemId: String? = null
+
+    fun onItemFocused(id: String) {
+        focusedItemId = id
+    }
+
+    fun onScreenDisposed() {
+        pendingFocusItemId = focusedItemId
+    }
+
+    fun consumePendingFocusItemId(): String? = pendingFocusItemId.also { pendingFocusItemId = null }
+
     private val keyboardPositions: Map<String, String> by lazy {
         val keys = resourceProvider.getStringArray(R.array.prefs_keyboard_button_values)
         val names = resourceProvider.getStringArray(R.array.prefs_keyboard_button_entries)
